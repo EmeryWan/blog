@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>技术 on 一层</title><link>https://emerywan.github.io/blog/categories/%E6%8A%80%E6%9C%AF/</link><description>Recent content in 技术 on 一层</description><generator>Hugo -- gohugo.io</generator><lastBuildDate>Sat, 01 Jan 2022 01:00:00 +0800</lastBuildDate><atom:link href="https://emerywan.github.io/blog/categories/%E6%8A%80%E6%9C%AF/index.xml" rel="self" type="application/rss+xml"/><item><title>使用 Github Actions 在腾讯云 CloudBase 部署 Hugo</title><link>https://emerywan.github.io/blog/p/hugo-in-cloudbase/</link><pubDate>Sun, 01 May 2022 21:14:45 +0800</pubDate><guid>https://emerywan.github.io/blog/p/hugo-in-cloudbase/</guid><description>&lt;h2 id="-介绍">🌱 介绍&lt;/h2>
-&lt;p>许多平台都提供了静态页面托管的服务，如 &lt;code>Github Pages&lt;/code>，&lt;code>Vercel&lt;/code>，&lt;code>Netlify&lt;/code>等。但在国内由于一些“原因”，这些国外的服务在国内的访问并不稳定。&lt;/p>
-&lt;p>国内的托管平台如 &lt;code>Gitee&lt;/code> 限制很多，不可以自定义域名而且之前出现了防盗链问题，作为托管博客不太推荐。&lt;/p>
-&lt;p>腾讯云推出的云开发 &lt;code>CloudBase&lt;/code> 也有静态页面托管服务，虽然是付费，但是在按量付费的情况下资费不是很高，在博客访问量不是很高的情况下十分适合。&lt;/p>
+&lt;p>许多平台都提供了免费的静态页面托管的服务，如 &lt;code>Github Pages&lt;/code>，&lt;code>Vercel&lt;/code>，&lt;code>Netlify&lt;/code>等。但在国内由于一些“原因”，这些国外的服务在国内的访问并不稳定。&lt;/p>
+&lt;p>国内的免费托管平台如 &lt;code>Gitee&lt;/code> 限制很多，不可以自定义域名而且之前出现了防盗链问题，访问也不是很快，不太推荐作为托管平台。&lt;/p>
+&lt;p>腾讯云推出的云开发 &lt;code>CloudBase&lt;/code> 也有静态页面托管服务，虽然是付费，但是在按量付费的情况下资费不是很高，在博客访问量不是很高的情况下十分合适。&lt;/p>
 &lt;p>目前在腾讯云中暂时还没有 &lt;code>Hugo&lt;/code> 的模板。目前有两种方式可以达到自动部署的功能：&lt;/p>
 &lt;ul>
 &lt;li>
@@ -211,7 +211,7 @@ data-flex-basis="1059px"
 &lt;/div>&lt;blockquote>
 &lt;p>🚧 提示：&lt;/p>
 &lt;p>这里也可以选择 &lt;code> Tencent CloudBase Github Action V1&lt;/code>。&lt;/p>
-&lt;p>V2 比 V1 有更多功能，比如生成静态文件，但目前没有 Hugo 模板，都需要在 Github Actions 生成今天文件，所以目前来说，没什么区别，甚至 V1 更简洁一点。&lt;/p>
+&lt;p>V2 比 V1 有更多功能，比如拉取代码编译静态文件，但目前没有 Hugo 模板，都需要在 Github Actions 生产静态文件再推送。所以目前来看，没什么区别，使用甚至 V1 更简洁一点。&lt;/p>
 &lt;/blockquote>
 &lt;div class="highlight">&lt;div class="chroma">
 &lt;table class="lntable">&lt;tr>&lt;td class="lntd">
@@ -249,7 +249,7 @@ class="gallery-image"
 data-flex-grow="201"
 data-flex-basis="483px"
 >&lt;/p>
-&lt;p>在 &lt;code>应用列表 -&amp;gt; 应用设置&lt;/code> 中配置仓库信息，并根据自身情况选择部署分支。（没有生成静态页面分支，可完成后面操作后再进行此步骤）。&lt;/p>
+&lt;p>在 &lt;code>应用列表 -&amp;gt; 应用设置&lt;/code> 中配置仓库信息，并根据自身情况选择静态文件的部署分支。（如果当前没有生成静态页面的分支，可完成后面操作后再进行此步骤）。&lt;/p>
 &lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/hugo-in-cloudbase/webify_info.png"
 width="1896"
 height="1164"
