@@ -1426,7 +1426,12 @@ data-flex-basis="306px"
 &lt;/div>&lt;blockquote>
 &lt;p>Tip:&lt;/p>
 &lt;p>使用 &lt;code>.to(device)&lt;/code> 并没有复制 nn / tensor 到 GPU 上，而是返回了一个 copy。需要赋值到一个新的变量后在 GPU 上使用这个 nn / tensor。&lt;/p>
-&lt;/blockquote></description></item><item><title>Spring Cloud Hystrix 服务容错</title><link>https://emerywan.github.io/blog/p/spring-cloud-hystrix/</link><pubDate>Wed, 29 Jul 2020 21:14:45 +0800</pubDate><guid>https://emerywan.github.io/blog/p/spring-cloud-hystrix/</guid><description>&lt;h1 id="spring-cloud-hystrix">Spring Cloud Hystrix&lt;/h1>
+&lt;/blockquote>
+&lt;h2 id="参考">参考&lt;/h2>
+&lt;ul>
+&lt;li>&lt;a class="link" href="https://pytorch.apachecn.org/#/docs/1.7/02" target="_blank" rel="noopener"
+>https://pytorch.apachecn.org/#/docs/1.7/02&lt;/a>&lt;/li>
+&lt;/ul></description></item><item><title>Spring Cloud Hystrix 服务容错</title><link>https://emerywan.github.io/blog/p/spring-cloud-hystrix/</link><pubDate>Wed, 29 Jul 2020 21:14:45 +0800</pubDate><guid>https://emerywan.github.io/blog/p/spring-cloud-hystrix/</guid><description>&lt;h1 id="spring-cloud-hystrix">Spring Cloud Hystrix&lt;/h1>
 &lt;p>在微服务架构中，我们将系统拆分成了一个个的服务单元，各单元应用间通过服务注册与订阅的方式互相依赖。由于每个单元都在不同的进程中运行，如果某个服务不可用，可能导致级联故障，造成整个系统不可用的情况（雪崩效应）。为了解决这样的问题，产生了断路器等一系列的服务保护机制。&lt;/p>
 &lt;h1 id="简介">简介&lt;/h1>
 &lt;p>Spring Cloud Hystrix，它是一个基于 Netflix 的开源框架，具有如下功能：&lt;/p>

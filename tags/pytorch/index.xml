@@ -1062,4 +1062,9 @@ data-flex-basis="306px"
 &lt;/div>&lt;blockquote>
 &lt;p>Tip:&lt;/p>
 &lt;p>使用 &lt;code>.to(device)&lt;/code> 并没有复制 nn / tensor 到 GPU 上，而是返回了一个 copy。需要赋值到一个新的变量后在 GPU 上使用这个 nn / tensor。&lt;/p>
-&lt;/blockquote></description></item></channel></rss>
+&lt;/blockquote>
+&lt;h2 id="参考">参考&lt;/h2>
+&lt;ul>
+&lt;li>&lt;a class="link" href="https://pytorch.apachecn.org/#/docs/1.7/02" target="_blank" rel="noopener"
+>https://pytorch.apachecn.org/#/docs/1.7/02&lt;/a>&lt;/li>
+&lt;/ul></description></item></channel></rss>
