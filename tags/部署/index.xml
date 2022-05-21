@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>部署 on 一层</title><link>https://emerywan.github.io/blog/tags/%E9%83%A8%E7%BD%B2/</link><description>Recent content in 部署 on 一层</description><generator>Hugo -- gohugo.io</generator><lastBuildDate>Sun, 01 May 2022 21:14:45 +0800</lastBuildDate><atom:link href="https://emerywan.github.io/blog/tags/%E9%83%A8%E7%BD%B2/index.xml" rel="self" type="application/rss+xml"/><item><title>使用 Github Actions 在腾讯云 CloudBase 部署 Hugo</title><link>https://emerywan.github.io/blog/p/hugo-in-cloudbase/</link><pubDate>Sun, 01 May 2022 21:14:45 +0800</pubDate><guid>https://emerywan.github.io/blog/p/hugo-in-cloudbase/</guid><description>&lt;h2 id="-介绍">🌱 介绍&lt;/h2>
 &lt;p>许多平台都提供了免费的静态页面托管的服务，如 &lt;code>Github Pages&lt;/code>，&lt;code>Vercel&lt;/code>，&lt;code>Netlify&lt;/code>等。但在国内由于一些“原因”，这些国外的服务在国内的访问并不稳定。&lt;/p>
 &lt;p>国内的免费托管平台如 &lt;code>Gitee&lt;/code> 限制很多，不可以自定义域名而且之前出现了防盗链问题，访问也不是很快，不太推荐作为托管平台。&lt;/p>
-&lt;p>腾讯云推出的云开发 &lt;code>CloudBase&lt;/code> 也有静态页面托管服务，虽然是付费，但是在按量付费的情况下资费不是很高，在博客访问量不是很高的情况下十分合适。&lt;/p>
+&lt;p>腾讯云推出的云开发 &lt;code>CloudBase&lt;/code> 也有静态页面托管服务。其实它相比这些静态托管平台，有更多强大的功能，甚至能够搭一整套系统。虽然是付费服务，但是在按量付费的情况下资费不是很高，在博客访问量不是很高的情况下十分合适。&lt;/p>
 &lt;p>目前在腾讯云中暂时还没有 &lt;code>Hugo&lt;/code> 的模板。目前有两种方式可以达到自动部署的功能：&lt;/p>
 &lt;ul>
 &lt;li>
-&lt;p>🌰 使用 &lt;code>Github Actions&lt;/code> 通过 &lt;code>Tencent CloudBase Github Action&lt;/code> 自动部署到 &lt;code>CloudBase&lt;/code>。&lt;/p>
+&lt;p>🌰 使用 &lt;code>Github Actions&lt;/code> 编译，通过 &lt;code>Tencent CloudBase Github Action&lt;/code> 自动部署到 &lt;code>CloudBase&lt;/code>。&lt;/p>
 &lt;/li>
 &lt;li>
-&lt;p>🌰 使用 &lt;code>Github Actions&lt;/code> 推送到 &lt;code>Web 应用托管（webify）&lt;/code> 的简易静态页面模板。&lt;/p>
+&lt;p>🌰 使用 &lt;code>Github Actions&lt;/code> 编译，推送到 &lt;code>Web 应用托管（webify）&lt;/code> 的简易静态页面模板。&lt;/p>
 &lt;/li>
 &lt;/ul>
 &lt;h2 id="-使用-cloudbase">🏖 使用 CloudBase&lt;/h2>
@@ -210,8 +210,8 @@ data-flex-basis="1059px"
 &lt;/div>
 &lt;/div>&lt;blockquote>
 &lt;p>🚧 提示：&lt;/p>
-&lt;p>这里也可以选择 &lt;code> Tencent CloudBase Github Action V1&lt;/code>。&lt;/p>
-&lt;p>V2 比 V1 有更多功能，比如拉取代码编译静态文件，但目前没有 Hugo 模板，都需要在 Github Actions 生产静态文件再推送。所以目前来看，没什么区别，使用甚至 V1 更简洁一点。&lt;/p>
+&lt;p>这里也可以选择 &lt;code> Tencent CloudBase Github Action V1&lt;/code>。🙋‍♂️ &lt;strong>（推荐）&lt;/strong>&lt;/p>
+&lt;p>V2 比 V1 有更多功能，比如拉取代码在腾讯云端编译，但目前没有 Hugo 模板。我们已经在 Github Actions 产出了静态文件，直接推送即可。所以目前对于 hugo 来说，没什么区别，使用甚至 V1 更快更简洁。&lt;/p>
 &lt;/blockquote>
 &lt;div class="highlight">&lt;div class="chroma">
 &lt;table class="lntable">&lt;tr>&lt;td class="lntd">
@@ -227,8 +227,8 @@ data-flex-basis="1059px"
 &lt;td class="lntd">
 &lt;pre tabindex="0" class="chroma">&lt;code class="language-yaml" data-lang="yaml">&lt;span class="line">&lt;span class="cl">&lt;span class="c"># 将上述 jobs 内替换为&lt;/span>&lt;span class="w">
 &lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>- &lt;span class="nt">name&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">Deploy to Tencent CloudBase&lt;/span>&lt;span class="w">
-&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="nt">uses&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">TencentCloudBase/cloudbase-action@v1.1.1&lt;/span>&lt;span class="w">
-&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="nt">with&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">uses&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">TencentCloudBase/cloudbase-action@v1.1.1&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">with&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
 &lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">secretId&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">${{ secrets.QCLOUD_SECRET_ID }}&lt;/span>&lt;span class="w">
 &lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">secretKey&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">${{ secrets.QCLOUD_SECRET_KEY }}&lt;/span>&lt;span class="w">
 &lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">envId&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">${{ secrets.QCLOUD_ENV_ID }}&lt;/span>&lt;span class="w">
