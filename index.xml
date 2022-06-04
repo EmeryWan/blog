@@ -362,7 +362,97 @@ data-flex-basis="642px"
 >https://github.com/TencentCloudBase/cloudbase-action&lt;/a>&lt;/li>
 &lt;li>🔗 &lt;a class="link" href="https://github.com/TencentCloudBase/cloudbase-action/blob/3354b442713265aa9d7c5bf03b0b8cb0173f546f/README.md" target="_blank" rel="noopener"
 >https://github.com/TencentCloudBase/cloudbase-action/blob/3354b442713265aa9d7c5bf03b0b8cb0173f546f/README.md&lt;/a>&lt;/li>
-&lt;/ul></description></item><item><title>通用程序设计</title><link>https://emerywan.github.io/blog/p/effective-java/general-programming/</link><pubDate>Wed, 30 Mar 2022 14:02:02 +0800</pubDate><guid>https://emerywan.github.io/blog/p/effective-java/general-programming/</guid><description>&lt;img src="https://emerywan.github.io/blog/p/effective-java/general-programming/effective-java.png" alt="Featured image of post 通用程序设计" />&lt;h1 id="-通用程序设计">☘️ 通用程序设计&lt;/h1>
+&lt;/ul></description></item><item><title>Java 并发 - 锁机制</title><link>https://emerywan.github.io/blog/p/thread/lock/</link><pubDate>Wed, 30 Mar 2022 14:02:02 +0800</pubDate><guid>https://emerywan.github.io/blog/p/thread/lock/</guid><description>&lt;p>在并发情况下，多个线程会对同一个资源进行争抢，可能会导致数据不一致的问题。&lt;/p>
+&lt;p>为了解决这个问题，通过引入&lt;strong>锁机制&lt;/strong>，使用一种抽象的锁，对资源进行锁定，达到同步访问。&lt;/p>
+&lt;h2 id="实现">实现&lt;/h2>
+&lt;p>Java 采用了两种实现方式：&lt;/p>
+&lt;ul>
+&lt;li>
+&lt;p>基于 &lt;code>Object&lt;/code> 的悲观锁&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>基于 &lt;code>CAS&lt;/code> 的乐观锁&lt;/p>
+&lt;/li>
+&lt;/ul>
+&lt;h2 id="悲观锁">悲观锁&lt;/h2>
+&lt;p>在 Java 中，每个对象（Object），都拥有一把锁，存放在对象头中，记录了当前对象被哪个线程所占用。&lt;/p>
+&lt;h3 id="synchronized">synchronized&lt;/h3>
+&lt;p>synchronized 关键字可以用来同步线程，其被编译后，会生成 &lt;code>monitorenter&lt;/code> 和 &lt;code>moniterexit&lt;/code> 两个字节码指令，用来进行线程的同步。&lt;/p>
+&lt;p>synchronized 是非公平锁。一把锁只能被一个线程获取，没有获得锁的线程只能等待。&lt;/p>
+&lt;p>加锁方式：&lt;/p>
+&lt;ul>
+&lt;li>
+&lt;p>对象锁（锁住 this）&lt;/p>
+&lt;ul>
+&lt;li>
+&lt;p>修饰实例方法 &lt;code>pubilc sychronized void method() { ... }&lt;/code>&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>代码块锁住当前对象 &lt;code>synchronized(this)&lt;/code>&lt;/p>
+&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>
+&lt;p>类锁&lt;/p>
+&lt;ul>
+&lt;li>
+&lt;p>修饰静态方法 &lt;code>public static sychronized void method() { ... }&lt;/code>&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>代码块锁定 class 对象 &lt;code>synchronized(MyClass.class) { ... }&lt;/code>&lt;/p>
+&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;p>synchronized 修饰的方法，无论方法正常执行完还是抛出异常，都会释放锁。&lt;/p>
+&lt;h4 id="jdk-16-对-synchronized-的优化">JDK 1.6 对 synchronized 的优化&lt;/h4>
+&lt;p>synchronized 依赖于 JVM，使用的是操作系统底层的 &lt;code>Mutex Lock&lt;/code> 实现。&lt;/p>
+&lt;p>Java 线程的实现是对操作系统线程的映射，每当唤醒或挂起一个线程的时候，都要切换到操作系统的内核态，代价是非常昂贵的。&lt;/p>
+&lt;p>JDK 1.6 对锁的实现引入了大量的优化，如 &lt;code>锁粗化&lt;/code>，&lt;code>锁消除&lt;/code>，&lt;code>轻量级锁&lt;/code>，&lt;code>偏向锁&lt;/code>，&lt;code>适应性自旋&lt;/code>等。&lt;/p>
+&lt;p>对象锁一共有四种状态：&lt;/p>
+&lt;blockquote>
+&lt;p>无锁 -&amp;gt; 偏向锁 -&amp;gt; 轻量级锁 -&amp;gt; 重量级锁&lt;/p>
+&lt;/blockquote>
+&lt;p>会随着竞争情况逐渐升级（不可以降级），提高获取锁和释放锁的效率。&lt;/p>
+&lt;ul>
+&lt;li>无锁状态&lt;/li>
+&lt;/ul>
+&lt;p>不对资源进行操作系统级别的锁定。&lt;/p>
+&lt;ul>
+&lt;li>
+&lt;p>某些资源不会出现多线程竞争的情况，随意多个线程调用&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>利用其他一些方式控制同步。如：CAS&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>偏向锁&lt;/p>
+&lt;ul>
+&lt;li>适合只有一个线程访问同步代码块的场景&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;p>在一些情况下，没有多线程的竞争，每次都是同一个线程多次获取锁，那么对象锁会“记住”这个线程，只要是这个线程过来，就直接把锁交出去。&lt;/p>
+&lt;p>如果对象发现目前不是只有一个线程，而是有多个线程在竞争锁，偏向锁就会升级为轻量级锁。&lt;/p>
+&lt;ul>
+&lt;li>
+&lt;p>轻量级锁&lt;/p>
+&lt;ul>
+&lt;li>适合同步代码块的执行速度非常快的场景&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;p>当锁升级为轻量级锁的时候，其他线程会通过 CAS 进行自旋等待来获取锁，不会阻塞，从而提高性能。&lt;/p>
+&lt;ul>
+&lt;li>
+&lt;p>重量级锁&lt;/p>
+&lt;ul>
+&lt;li>适合同步代码块执行速度较长的场景&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;p>对象锁状态被标记为重量级锁，需要通过 Monitor 来对线程进行控制。&lt;/p>
+&lt;h2 id="乐观锁">乐观锁&lt;/h2></description></item><item><title>通用程序设计</title><link>https://emerywan.github.io/blog/p/effective-java/general-programming/</link><pubDate>Wed, 30 Mar 2022 14:02:02 +0800</pubDate><guid>https://emerywan.github.io/blog/p/effective-java/general-programming/</guid><description>&lt;img src="https://emerywan.github.io/blog/p/effective-java/general-programming/effective-java.png" alt="Featured image of post 通用程序设计" />&lt;h1 id="-通用程序设计">☘️ 通用程序设计&lt;/h1>
 &lt;p>Effective Java 阅读笔记。本章主要讨论了 &lt;code>Java&lt;/code> 语言的具体细节。包括：&lt;/p>
 &lt;ul>
 &lt;li>局部变量&lt;/li>
