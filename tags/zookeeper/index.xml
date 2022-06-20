@@ -288,9 +288,15 @@ data-flex-basis="391px"
 &lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
 &lt;/div>
 &lt;/div>&lt;h2 id="curator">Curator&lt;/h2>
-&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/curator.png"
+&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/distributed-lock/zookeeper/curator.png"
+width="537"
+height="87"
+srcset="https://emerywan.github.io/blog/blog/p/distributed-lock/zookeeper/curator_hu690a82169c4c3fdc258308de88a2c62f_35331_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/distributed-lock/zookeeper/curator_hu690a82169c4c3fdc258308de88a2c62f_35331_1024x0_resize_box_3.png 1024w"
 loading="lazy"
 alt="curator"
+class="gallery-image"
+data-flex-grow="617"
+data-flex-basis="1481px"
 >&lt;/p>
 &lt;h3 id="依赖配置">依赖配置&lt;/h3>
 &lt;div class="highlight">&lt;div class="chroma">
