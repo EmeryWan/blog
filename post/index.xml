@@ -1,4 +1,98 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Posts on 一层</title><link>https://emerywan.github.io/blog/post/</link><description>Recent content in Posts on 一层</description><generator>Hugo -- gohugo.io</generator><lastBuildDate>Wed, 11 May 2022 21:14:45 +0800</lastBuildDate><atom:link href="https://emerywan.github.io/blog/post/index.xml" rel="self" type="application/rss+xml"/><item><title>使用 ZooKeeper 实现分布式锁</title><link>https://emerywan.github.io/blog/p/distributed-lock/zookeeper/</link><pubDate>Wed, 11 May 2022 21:14:45 +0800</pubDate><guid>https://emerywan.github.io/blog/p/distributed-lock/zookeeper/</guid><description>&lt;h2 id="使用-zookeeper-实现">使用 ZooKeeper 实现&lt;/h2>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Posts on 一层</title><link>https://emerywan.github.io/blog/post/</link><description>Recent content in Posts on 一层</description><generator>Hugo -- gohugo.io</generator><lastBuildDate>Thu, 02 Jun 2022 02:02:02 +0800</lastBuildDate><atom:link href="https://emerywan.github.io/blog/post/index.xml" rel="self" type="application/rss+xml"/><item><title>Ubuntu 安装软件推荐方式</title><link>https://emerywan.github.io/blog/p/ubuntu-software-install/</link><pubDate>Thu, 02 Jun 2022 02:02:02 +0800</pubDate><guid>https://emerywan.github.io/blog/p/ubuntu-software-install/</guid><description>&lt;h2 id="说明">说明&lt;/h2>
+&lt;p>Ubuntu 有些第三方软件只提供二进制执行文件（压缩包或 AppImage），而不是安装包或者 apt 源，这时候需要我们去自己解压文件，放在自定义目录，并进行配置。&lt;/p>
+&lt;p>平常使用桌面环境的话，这样安装后，更新还是有点麻烦的，一更新就要修改很多地方。&lt;/p>
+&lt;p>这里介绍我平常的配置方式，每次更新后，只需要修改软链接即可，感觉还是挺方便的。&lt;/p>
+&lt;h2 id="方式">方式&lt;/h2>
+&lt;p>以 &lt;a class="link" href="https://github.com/Fndroid/clash_for_windows_pkg/releases" target="_blank" rel="noopener"
+>cfw&lt;/a> 安装为例，Linux 提供 &lt;code>.tar.gz&lt;/code> 的执行文件。&lt;/p>
+&lt;p>我通常都把这样的软件都统一放到 &lt;code>~/Applications&lt;/code> 中。&lt;/p>
+&lt;ul>
+&lt;li>🏕️ 首先创建一个安装的软件的文件夹&lt;/li>
+&lt;/ul>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-sh" data-lang="sh">&lt;span class="line">&lt;span class="cl">mkdir -p ~/Application/clash
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;ul>
+&lt;li>🏞️ 将下载的文件解压到该文件夹中&lt;/li>
+&lt;/ul>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-sh" data-lang="sh">&lt;span class="line">&lt;span class="cl">tar -xzvf Clash.for.Windows-0.19.12 -C ~/Application/clash
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;ul>
+&lt;li>🏜️ 创建启动文件的软连接&lt;/li>
+&lt;/ul>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-sh" data-lang="sh">&lt;span class="line">&lt;span class="cl">ln -s ./Clash&lt;span class="se">\ &lt;/span>&lt;span class="k">for&lt;/span>&lt;span class="se">\ &lt;/span>Windows-0.19.12-x64-linux/cfw ./clash
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>通过这种方式，每次启动应用都使用这个软链接进行操作，当需要升级应用时，只需要创建新的软链接，指向新的启动文件。最后的效果如下：&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;span class="lnt">4
+&lt;/span>&lt;span class="lnt">5
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-fallback" data-lang="fallback">&lt;span class="line">&lt;span class="cl">$ tree . -L 1
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">.
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">├── clash -&amp;gt; ./Clash for Windows-0.19.12-x64-linux/cfw
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">├── Clash for Windows-0.19.12-x64-linux
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">└── Clash for Windows-0.19.2-x64-linux
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;ul>
+&lt;li>🏖️ 添加桌面图标&lt;/li>
+&lt;/ul>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-sh" data-lang="sh">&lt;span class="line">&lt;span class="cl">vim ~/.local/share/applications/clw.desktop
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>添加以下内容：&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;span class="lnt">4
+&lt;/span>&lt;span class="lnt">5
+&lt;/span>&lt;span class="lnt">6
+&lt;/span>&lt;span class="lnt">7
+&lt;/span>&lt;span class="lnt">8
+&lt;/span>&lt;span class="lnt">9
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-fallback" data-lang="fallback">&lt;span class="line">&lt;span class="cl">[Desktop Entry]
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">Name=Clash for Linux
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">Icon=/home/emery/Applications/icon/clash_icon.png # 替换为自己的目录
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">Comment=Clash for Linux
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">Exec=&amp;#34;/home/emery/Applications/Clash/clash&amp;#34; %u # 替换为自己的目录
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">Type=Application
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">Categories=Network
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">Terminal=false
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">StartupNotify=true
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div></description></item><item><title>使用 ZooKeeper 实现分布式锁</title><link>https://emerywan.github.io/blog/p/distributed-lock/zookeeper/</link><pubDate>Wed, 11 May 2022 21:14:45 +0800</pubDate><guid>https://emerywan.github.io/blog/p/distributed-lock/zookeeper/</guid><description>&lt;h2 id="使用-zookeeper-实现">使用 ZooKeeper 实现&lt;/h2>
 &lt;h3 id="原理">原理&lt;/h3>
 &lt;ul>
 &lt;li>
@@ -3680,7 +3774,39 @@ data-flex-basis="306px"
 &lt;ul>
 &lt;li>&lt;a class="link" href="https://pytorch.apachecn.org/#/docs/1.7/02" target="_blank" rel="noopener"
 >https://pytorch.apachecn.org/#/docs/1.7/02&lt;/a>&lt;/li>
-&lt;/ul></description></item><item><title>机器学习基础</title><link>https://emerywan.github.io/blog/p/mechine-learning-basics/</link><pubDate>Mon, 28 Sep 2020 14:02:02 +0800</pubDate><guid>https://emerywan.github.io/blog/p/mechine-learning-basics/</guid><description>&lt;h1 id="机器学习">机器学习&lt;/h1>
+&lt;/ul></description></item><item><title>Ubuntu 耳机没有声音</title><link>https://emerywan.github.io/blog/p/ubuntu-sound/</link><pubDate>Sat, 02 Jan 2021 02:02:02 +0800</pubDate><guid>https://emerywan.github.io/blog/p/ubuntu-sound/</guid><description>&lt;h2 id="ubuntu-耳机没有声音">Ubuntu 耳机没有声音&lt;/h2>
+&lt;p>笔记本使用 Ubuntu 插有线耳机后，并没有反应，该外放还是外放。&lt;/p>
+&lt;p>感觉是适配问题，windows 下没有问题。找了一圈办法，只能通过软件手动切换了，效果还不错。&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-fallback" data-lang="fallback">&lt;span class="line">&lt;span class="cl">sudo apt install pavucontrol
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>可以在这里切换输出设备：&lt;/p>
+&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/ubuntu-sound/output.png"
+width="514"
+height="446"
+srcset="https://emerywan.github.io/blog/blog/p/ubuntu-sound/output_hubad1730db6fbe32ffe9d254c812a9365_52081_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/ubuntu-sound/output_hubad1730db6fbe32ffe9d254c812a9365_52081_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+alt="output"
+class="gallery-image"
+data-flex-grow="115"
+data-flex-basis="276px"
+>&lt;/p>
+&lt;p>切换输入设备：&lt;/p>
+&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/ubuntu-sound/input.png"
+width="517"
+height="448"
+srcset="https://emerywan.github.io/blog/blog/p/ubuntu-sound/input_hufb6fce95f1bcffd19d35ec16e321d778_54938_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/ubuntu-sound/input_hufb6fce95f1bcffd19d35ec16e321d778_54938_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+alt="input"
+class="gallery-image"
+data-flex-grow="115"
+data-flex-basis="276px"
+>&lt;/p></description></item><item><title>机器学习基础</title><link>https://emerywan.github.io/blog/p/mechine-learning-basics/</link><pubDate>Mon, 28 Sep 2020 14:02:02 +0800</pubDate><guid>https://emerywan.github.io/blog/p/mechine-learning-basics/</guid><description>&lt;h1 id="机器学习">机器学习&lt;/h1>
 &lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/mechine-learning-basics/machinelearning.png"
 width="887"
 height="316"
