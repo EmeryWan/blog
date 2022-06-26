@@ -5,12 +5,7 @@
 &lt;li>控制结构&lt;/li>
 &lt;li>类库&lt;/li>
 &lt;li>数据结构&lt;/li>
-&lt;li>两种不是由语言本身提供的机制：
-&lt;ul>
-&lt;li>反射&lt;/li>
-&lt;li>本地方法&lt;/li>
-&lt;/ul>
-&lt;/li>
+&lt;li>不是由语言本身提供的机制&lt;/li>
 &lt;li>优化和命名惯例。&lt;/li>
 &lt;/ul>
 &lt;h2 id="57-将局部变量的作用域最小化">57. 将局部变量的作用域最小化&lt;/h2>
@@ -200,8 +195,12 @@
 &lt;li>
 &lt;p>💐 从 Java 7 开始，就不应该再使用 Random。&lt;/p>
 &lt;ul>
-&lt;li>🌰 在大多数情况下，选择的随机数生成器现在是 &lt;code>ThreadLocalRandom&lt;/code>。 它能产生更高质量的随机数，而且速度非常快。&lt;/li>
-&lt;li>🌰 对于 &lt;code>Fork Join Pool&lt;/code> 和并行 &lt;code>Stream&lt;/code>，使用 &lt;code>SplittableRandom&lt;/code>。&lt;/li>
+&lt;li>
+&lt;p>🌰 在大多数情况下，选择的随机数生成器现在是 &lt;code>ThreadLocalRandom&lt;/code>。 它能产生更高质量的随机数，而且速度非常快。&lt;code>ThreadLocalRandom.current().nextInt(100)&lt;/code>&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>🌰 对于 &lt;code>Fork Join Pool&lt;/code> 和并行 &lt;code>Stream&lt;/code>，使用 &lt;code>SplittableRandom&lt;/code>。&lt;/p>
+&lt;/li>
 &lt;/ul>
 &lt;p>假设你想要生成 0 到某个上界之间的随机整数，许多程序员会编写一个类似这样的小方法：&lt;/p>
 &lt;div class="highlight">&lt;div class="chroma">
@@ -226,7 +225,7 @@
 &lt;li>🌩 如果 n 不是 2 的幂，那么平均而言，一些数字将比其他数字更频繁地返回&lt;/li>
 &lt;li>🌩 在极少数情况下会返回超出指定范围的数字 &lt;code>Integer.MAX_VALUE&lt;/code>&lt;/li>
 &lt;/ul>
-&lt;p>&lt;strong>直接使用 &lt;code>Ramdom.nextInt(n)&lt;/code> 即可。&lt;/strong>&lt;/p>
+&lt;p>&lt;strong>应该直接使用类库 &lt;code>Ramdom.nextInt(n)&lt;/code> ，而不是自己封装&lt;/strong>&lt;/p>
 &lt;div class="highlight">&lt;div class="chroma">
 &lt;table class="lntable">&lt;tr>&lt;td class="lntd">
 &lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1

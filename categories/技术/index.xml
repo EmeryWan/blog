@@ -9,9 +9,9 @@
 &lt;/li>
 &lt;/ul>
 &lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/distributed-lock/zookeeper/node.png"
-width="630"
-height="718"
-srcset="https://emerywan.github.io/blog/blog/p/distributed-lock/zookeeper/node_hu2de7e6219e45c40f11ee31fb5368f0b5_92897_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/distributed-lock/zookeeper/node_hu2de7e6219e45c40f11ee31fb5368f0b5_92897_1024x0_resize_box_3.png 1024w"
+width="542"
+height="618"
+srcset="https://emerywan.github.io/blog/blog/p/distributed-lock/zookeeper/node_hubb94f897927986ed284f5e5898a8688d_78967_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/distributed-lock/zookeeper/node_hubb94f897927986ed284f5e5898a8688d_78967_1024x0_resize_box_3.png 1024w"
 loading="lazy"
 alt="node"
 class="gallery-image"
@@ -1082,7 +1082,382 @@ data-flex-basis="642px"
 >https://github.com/TencentCloudBase/cloudbase-action&lt;/a>&lt;/li>
 &lt;li>🔗 &lt;a class="link" href="https://github.com/TencentCloudBase/cloudbase-action/blob/3354b442713265aa9d7c5bf03b0b8cb0173f546f/README.md" target="_blank" rel="noopener"
 >https://github.com/TencentCloudBase/cloudbase-action/blob/3354b442713265aa9d7c5bf03b0b8cb0173f546f/README.md&lt;/a>&lt;/li>
-&lt;/ul></description></item><item><title>Java 并发 - 锁机制</title><link>https://emerywan.github.io/blog/p/thread/lock/</link><pubDate>Wed, 30 Mar 2022 14:02:02 +0800</pubDate><guid>https://emerywan.github.io/blog/p/thread/lock/</guid><description>&lt;p>在并发情况下，多个线程会对同一个资源进行争抢，可能会导致数据不一致的问题。&lt;/p>
+&lt;/ul></description></item><item><title>Java 并发 - AQS</title><link>https://emerywan.github.io/blog/p/thread/aqs/</link><pubDate>Sun, 03 Apr 2022 14:02:02 +0800</pubDate><guid>https://emerywan.github.io/blog/p/thread/aqs/</guid><description>&lt;h2 id="aqs">AQS&lt;/h2>
+&lt;p>AQS &lt;code>AbstractQueuedSynchronized&lt;/code> 是一个用来构建锁和同步器的框架，是对 CAS 的一种封装和丰富，AQS 引入了独占锁，共享锁等性质。&lt;/p>
+&lt;p>使用 AQS 能够基于 Java API，简单高效地构建出应用广泛的大量同步器，用于 Java 多线程之间的同步。&lt;/p>
+&lt;h2 id="核心思想">核心思想&lt;/h2>
+&lt;p>AQS 使用一个 &lt;code>int&lt;/code> 成员变量表示同步状态。&lt;/p>
+&lt;p>使用 CAS 对该同步状态进行原子操作，实现对其值的修改。&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-java" data-lang="java">&lt;span class="line">&lt;span class="cl">&lt;span class="c1">// 共享变量，使用 volatile 保障可见性
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span>&lt;span class="kd">private&lt;/span> &lt;span class="kd">volatile&lt;/span> &lt;span class="kt">int&lt;/span> &lt;span class="n">state&lt;/span>&lt;span class="o">;&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>AQS 通过内置的 &lt;code>FIFO&lt;/code> 双向队列来完成获取资源线程的排队工作。&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-java" data-lang="java">&lt;span class="line">&lt;span class="cl">&lt;span class="kd">private&lt;/span> &lt;span class="kd">transient&lt;/span> &lt;span class="kd">volatile&lt;/span> &lt;span class="n">Node&lt;/span> &lt;span class="n">head&lt;/span>&lt;span class="o">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="kd">private&lt;/span> &lt;span class="kd">transient&lt;/span> &lt;span class="kd">volatile&lt;/span> &lt;span class="n">Node&lt;/span> &lt;span class="n">tail&lt;/span>&lt;span class="o">;&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>当请求的共享资源空闲时，将当前请求资源的线程设置为有效的工作线程，并将共享资源设置为锁定状态。&lt;/p>
+&lt;p>如果被请求的共享资源被占用，将暂时获取不到锁的线程加入到队列中。&lt;/p>
+&lt;h2 id="资源的共享方式">资源的共享方式&lt;/h2>
+&lt;h3 id="独占">独占&lt;/h3>
+&lt;p>当一个线程以独占模式获取锁时，其他任何线程都必须等待。&lt;/p>
+&lt;ul>
+&lt;li>ReentrantLock&lt;/li>
+&lt;/ul>
+&lt;h3 id="共享">共享&lt;/h3>
+&lt;p>当一个线程以共享模式获取锁时，其他也想以共享模式获取锁的线程也能够一起访问共享资源，但其他想以独占模式获取锁的线程需要等待。&lt;/p>
+&lt;ul>
+&lt;li>CountDownLatch&lt;/li>
+&lt;li>CyclicBarrier&lt;/li>
+&lt;li>Semaphore&lt;/li>
+&lt;/ul>
+&lt;h2 id="实现">实现&lt;/h2>
+&lt;h3 id="countdownlatch">CountDownLatch&lt;/h3>
+&lt;p>&lt;code>CountDownLatch&lt;/code> 同步工具允许一条或多条线程，等待其他线程中的一组操作完成后，再继续执行。&lt;/p>
+&lt;p>&lt;code>CountDownLatch&lt;/code> 任务分为 &lt;code>n&lt;/code> 个子线程执行，&lt;code>state&lt;/code> 将被初始化为 &lt;code>n&lt;/code>，这 &lt;code>n&lt;/code> 个线程将会并发执行，每个子线程执行完后调用 &lt;code>countDown()&lt;/code> 方法，&lt;code>state&lt;/code> 会通过 &lt;code>CAS - 1&lt;/code>。当所有的子线程都执行完之后，&lt;code>state=0&lt;/code>，会 unpack 主线程，继续后续动作。&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;span class="lnt">11
+&lt;/span>&lt;span class="lnt">12
+&lt;/span>&lt;span class="lnt">13
+&lt;/span>&lt;span class="lnt">14
+&lt;/span>&lt;span class="lnt">15
+&lt;/span>&lt;span class="lnt">16
+&lt;/span>&lt;span class="lnt">17
+&lt;/span>&lt;span class="lnt">18
+&lt;/span>&lt;span class="lnt">19
+&lt;/span>&lt;span class="lnt">20
+&lt;/span>&lt;span class="lnt">21
+&lt;/span>&lt;span class="lnt">22
+&lt;/span>&lt;span class="lnt">23
+&lt;/span>&lt;span class="lnt">24
+&lt;/span>&lt;span class="lnt">25
+&lt;/span>&lt;span class="lnt">26
+&lt;/span>&lt;span class="lnt">27
+&lt;/span>&lt;span class="lnt">28
+&lt;/span>&lt;span class="lnt">29
+&lt;/span>&lt;span class="lnt">30
+&lt;/span>&lt;span class="lnt">31
+&lt;/span>&lt;span class="lnt">32
+&lt;/span>&lt;span class="lnt">33
+&lt;/span>&lt;span class="lnt">34
+&lt;/span>&lt;span class="lnt">35
+&lt;/span>&lt;span class="lnt">36
+&lt;/span>&lt;span class="lnt">37
+&lt;/span>&lt;span class="lnt">38
+&lt;/span>&lt;span class="lnt">39
+&lt;/span>&lt;span class="lnt">40
+&lt;/span>&lt;span class="lnt">41
+&lt;/span>&lt;span class="lnt">42
+&lt;/span>&lt;span class="lnt">43
+&lt;/span>&lt;span class="lnt">44
+&lt;/span>&lt;span class="lnt">45
+&lt;/span>&lt;span class="lnt">46
+&lt;/span>&lt;span class="lnt">47
+&lt;/span>&lt;span class="lnt">48
+&lt;/span>&lt;span class="lnt">49
+&lt;/span>&lt;span class="lnt">50
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-java" data-lang="java">&lt;span class="line">&lt;span class="cl">&lt;span class="kd">public&lt;/span> &lt;span class="kd">class&lt;/span> &lt;span class="nc">Demo&lt;/span> &lt;span class="o">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kd">static&lt;/span> &lt;span class="kd">class&lt;/span> &lt;span class="nc">SearchTask&lt;/span> &lt;span class="kd">implements&lt;/span> &lt;span class="n">Runnable&lt;/span> &lt;span class="o">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kd">private&lt;/span> &lt;span class="n">Integer&lt;/span> &lt;span class="n">id&lt;/span>&lt;span class="o">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kd">private&lt;/span> &lt;span class="n">CountDownLatch&lt;/span> &lt;span class="n">latch&lt;/span>&lt;span class="o">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kd">public&lt;/span> &lt;span class="nf">SearchTask&lt;/span>&lt;span class="o">(&lt;/span>&lt;span class="kt">int&lt;/span> &lt;span class="n">id&lt;/span>&lt;span class="o">,&lt;/span> &lt;span class="n">CountDownLatch&lt;/span> &lt;span class="n">latch&lt;/span>&lt;span class="o">)&lt;/span> &lt;span class="o">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">this&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">id&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">id&lt;/span>&lt;span class="o">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">this&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">latch&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">latch&lt;/span>&lt;span class="o">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="o">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c1">// **子线程**
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span> &lt;span class="c1">// 各自寻找相应目标的龙珠
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span> &lt;span class="nd">@Override&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kd">public&lt;/span> &lt;span class="kt">void&lt;/span> &lt;span class="nf">run&lt;/span>&lt;span class="o">()&lt;/span> &lt;span class="o">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">System&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">out&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">println&lt;/span>&lt;span class="o">(&lt;/span>&lt;span class="s">&amp;#34;开始寻找&amp;#34;&lt;/span> &lt;span class="o">+&lt;/span> &lt;span class="n">id&lt;/span> &lt;span class="o">+&lt;/span> &lt;span class="s">&amp;#34;号龙珠&amp;#34;&lt;/span>&lt;span class="o">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kt">int&lt;/span> &lt;span class="n">seconds&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">ThreadLocalRandom&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">current&lt;/span>&lt;span class="o">().&lt;/span>&lt;span class="na">nextInt&lt;/span>&lt;span class="o">(&lt;/span>&lt;span class="n">20&lt;/span>&lt;span class="o">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">try&lt;/span> &lt;span class="o">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">Thread&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">sleep&lt;/span>&lt;span class="o">(&lt;/span>&lt;span class="n">seconds&lt;/span> &lt;span class="o">*&lt;/span> &lt;span class="n">1000&lt;/span>&lt;span class="o">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="o">}&lt;/span> &lt;span class="k">catch&lt;/span> &lt;span class="o">(&lt;/span>&lt;span class="n">InterruptedException&lt;/span> &lt;span class="n">e&lt;/span>&lt;span class="o">)&lt;/span> &lt;span class="o">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">e&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">printStackTrace&lt;/span>&lt;span class="o">();&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="o">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">System&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">out&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">println&lt;/span>&lt;span class="o">(&lt;/span>&lt;span class="s">&amp;#34;花了&amp;#34;&lt;/span> &lt;span class="o">+&lt;/span> &lt;span class="n">seconds&lt;/span> &lt;span class="o">+&lt;/span> &lt;span class="s">&amp;#34;秒，找到了&amp;#34;&lt;/span> &lt;span class="o">+&lt;/span> &lt;span class="n">id&lt;/span> &lt;span class="o">+&lt;/span> &lt;span class="s">&amp;#34;号龙珠&amp;#34;&lt;/span>&lt;span class="o">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c1">// 每当一个任务完成，就调用一个 countDown() 方法
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span> &lt;span class="n">latch&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">countDown&lt;/span>&lt;span class="o">();&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="o">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="o">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c1">// **主线程**
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span> &lt;span class="c1">// 等子线程都执行完毕后，找到所有龙珠，召唤神龙
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span> &lt;span class="kd">public&lt;/span> &lt;span class="kd">static&lt;/span> &lt;span class="kt">void&lt;/span> &lt;span class="nf">main&lt;/span>&lt;span class="o">(&lt;/span>&lt;span class="n">String&lt;/span>&lt;span class="o">[]&lt;/span> &lt;span class="n">args&lt;/span>&lt;span class="o">)&lt;/span> &lt;span class="o">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">List&lt;/span>&lt;span class="o">&amp;lt;&lt;/span>&lt;span class="n">Integer&lt;/span>&lt;span class="o">&amp;gt;&lt;/span> &lt;span class="n">idList&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">Arrays&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">asList&lt;/span>&lt;span class="o">(&lt;/span>&lt;span class="n">1&lt;/span>&lt;span class="o">,&lt;/span> &lt;span class="n">2&lt;/span>&lt;span class="o">,&lt;/span> &lt;span class="n">3&lt;/span>&lt;span class="o">,&lt;/span> &lt;span class="n">4&lt;/span>&lt;span class="o">,&lt;/span> &lt;span class="n">5&lt;/span>&lt;span class="o">,&lt;/span> &lt;span class="n">6&lt;/span>&lt;span class="o">,&lt;/span> &lt;span class="n">7&lt;/span>&lt;span class="o">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c1">// state 初始化为任务的个数
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span> &lt;span class="n">CountDownLatch&lt;/span> &lt;span class="n">latch&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="k">new&lt;/span> &lt;span class="n">CountDownLatch&lt;/span>&lt;span class="o">(&lt;/span>&lt;span class="n">idList&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">size&lt;/span>&lt;span class="o">());&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">for&lt;/span> &lt;span class="o">(&lt;/span>&lt;span class="kt">int&lt;/span> &lt;span class="n">id&lt;/span> &lt;span class="o">:&lt;/span> &lt;span class="n">idList&lt;/span>&lt;span class="o">)&lt;/span> &lt;span class="o">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">Thead&lt;/span> &lt;span class="n">thread&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="k">new&lt;/span> &lt;span class="n">Thead&lt;/span>&lt;span class="o">(&lt;/span>&lt;span class="k">new&lt;/span> &lt;span class="n">SearchTask&lt;/span>&lt;span class="o">(&lt;/span>&lt;span class="n">id&lt;/span>&lt;span class="o">,&lt;/span> &lt;span class="n">latch&lt;/span>&lt;span class="o">));&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">thread&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">start&lt;/span>&lt;span class="o">();&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="o">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">try&lt;/span> &lt;span class="o">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">latch&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">await&lt;/span>&lt;span class="o">();&lt;/span> &lt;span class="c1">// 等待其他线程完成
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span> &lt;span class="o">}&lt;/span> &lt;span class="k">catch&lt;/span> &lt;span class="o">(&lt;/span>&lt;span class="n">InterruptedException&lt;/span> &lt;span class="n">e&lt;/span>&lt;span class="o">)&lt;/span> &lt;span class="o">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">e&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">printStackTrace&lt;/span>&lt;span class="o">();&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="o">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">System&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">out&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">println&lt;/span>&lt;span class="o">(&lt;/span>&lt;span class="s">&amp;#34;找到所有龙珠了！召唤神龙&amp;#34;&lt;/span>&lt;span class="o">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="o">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">}&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>在这个例子中，任务分为 7 个子线程执行，将 &lt;code>CountDownLatch&lt;/code> 的值初始化为与线程相同的次数。主线程通过 &lt;code>await()&lt;/code> 等待其他任务完成。&lt;/p>
+&lt;p>这几个子任务并发执行，每个子线程执行完成后 &lt;code>countDown()&lt;/code> 一次，&lt;code>state&lt;/code> 会通过 CAS 操作 &lt;code>-1&lt;/code>。&lt;/p>
+&lt;p>直到所有的子线程都执行完毕之后，&lt;code>state=0&lt;/code>，主线程会被 unpark，继续执行后续任务。&lt;/p>
+&lt;h3 id="cyclicbarrier">CyclicBarrier&lt;/h3>
+&lt;p>&lt;code>CyclicBarrier&lt;/code> 用于多个线程相互等待对方执行到某个状态后，这些线程再继续执行。&lt;/p>
+&lt;h3 id="semaphore">Semaphore&lt;/h3>
+&lt;h3 id="reentrantlock">ReentrantLock&lt;/h3>
+&lt;h3 id="reentrantreadwritelock">ReentrantReadWriteLock&lt;/h3></description></item><item><title>线程安全的单例模式</title><link>https://emerywan.github.io/blog/p/thread/singleton/</link><pubDate>Fri, 01 Apr 2022 14:02:02 +0800</pubDate><guid>https://emerywan.github.io/blog/p/thread/singleton/</guid><description>&lt;h2 id="单例模式">单例模式&lt;/h2>
+&lt;p>单例模式所要实现的目标：保持一个类有且只有一个实例。&lt;/p>
+&lt;p>出于性能的考虑，不少单例模式都会采用延迟加载的方式。&lt;/p>
+&lt;p>根据是否延迟加载，可以分为：&lt;/p>
+&lt;ul>
+&lt;li>
+&lt;p>饿汉式&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>懒汉式&lt;/p>
+&lt;/li>
+&lt;/ul>
+&lt;h3 id="单线程的单例模式">单线程的单例模式&lt;/h3>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;span class="lnt">11
+&lt;/span>&lt;span class="lnt">12
+&lt;/span>&lt;span class="lnt">13
+&lt;/span>&lt;span class="lnt">14
+&lt;/span>&lt;span class="lnt">15
+&lt;/span>&lt;span class="lnt">16
+&lt;/span>&lt;span class="lnt">17
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-java" data-lang="java">&lt;span class="line">&lt;span class="cl">&lt;span class="kd">public&lt;/span> &lt;span class="kd">class&lt;/span> &lt;span class="nc">Singleton&lt;/span> &lt;span class="o">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kd">private&lt;/span> &lt;span class="kd">static&lt;/span> &lt;span class="n">Singleton&lt;/span> &lt;span class="n">instance&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="kc">null&lt;/span>&lt;span class="o">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c1">// 构造器私有，其他类无法通过 new 初始化
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span> &lt;span class="kd">private&lt;/span> &lt;span class="nf">Singleton&lt;/span>&lt;span class="o">()&lt;/span> &lt;span class="o">{&lt;/span> &lt;span class="o">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c1">// 创建并返回该类的唯一实例
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span> &lt;span class="kd">public&lt;/span> &lt;span class="kd">static&lt;/span> &lt;span class="n">Singleton&lt;/span> &lt;span class="nf">getInstance&lt;/span>&lt;span class="o">()&lt;/span> &lt;span class="o">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">if&lt;/span> &lt;span class="o">(&lt;/span>&lt;span class="kc">null&lt;/span> &lt;span class="o">==&lt;/span> &lt;span class="n">instance&lt;/span>&lt;span class="o">)&lt;/span> &lt;span class="o">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">instance&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="k">new&lt;/span> &lt;span class="n">Singleton&lt;/span>&lt;span class="o">();&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="o">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="o">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kd">public&lt;/span> &lt;span class="kt">void&lt;/span> &lt;span class="nf">someService&lt;/span>&lt;span class="o">()&lt;/span> &lt;span class="o">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c1">// 一些业务代码
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span> &lt;span class="o">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">}&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;h3 id="加锁的单例模式">加锁的单例模式&lt;/h3>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;span class="lnt">11
+&lt;/span>&lt;span class="lnt">12
+&lt;/span>&lt;span class="lnt">13
+&lt;/span>&lt;span class="lnt">14
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-java" data-lang="java">&lt;span class="line">&lt;span class="cl">&lt;span class="kd">public&lt;/span> &lt;span class="kd">class&lt;/span> &lt;span class="nc">Singleton&lt;/span> &lt;span class="o">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kd">private&lt;/span> &lt;span class="kd">static&lt;/span> &lt;span class="n">Singleton&lt;/span> &lt;span class="n">instance&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="kc">null&lt;/span>&lt;span class="o">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kd">private&lt;/span> &lt;span class="nf">Singleton&lt;/span>&lt;span class="o">()&lt;/span> &lt;span class="o">{&lt;/span> &lt;span class="o">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kd">public&lt;/span> &lt;span class="kd">static&lt;/span> &lt;span class="n">Singleton&lt;/span> &lt;span class="nf">getInstance&lt;/span>&lt;span class="o">()&lt;/span> &lt;span class="o">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">sychronized&lt;/span> &lt;span class="o">(&lt;/span>&lt;span class="n">Singleton&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">class&lt;/span>&lt;span class="o">)&lt;/span> &lt;span class="o">{&lt;/span> &lt;span class="c1">// 每次判空操作，都要获取锁，开销极大
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span> &lt;span class="k">if&lt;/span> &lt;span class="o">(&lt;/span>&lt;span class="kc">null&lt;/span> &lt;span class="o">==&lt;/span> &lt;span class="n">instance&lt;/span>&lt;span class="o">)&lt;/span> &lt;span class="o">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">instance&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="k">new&lt;/span> &lt;span class="n">Singleton&lt;/span>&lt;span class="o">();&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="o">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="o">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">return&lt;/span> &lt;span class="n">instance&lt;/span>&lt;span class="o">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="o">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">}&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>&lt;strong>使用双重检验判断&lt;/strong>&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;span class="lnt">11
+&lt;/span>&lt;span class="lnt">12
+&lt;/span>&lt;span class="lnt">13
+&lt;/span>&lt;span class="lnt">14
+&lt;/span>&lt;span class="lnt">15
+&lt;/span>&lt;span class="lnt">16
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-java" data-lang="java">&lt;span class="line">&lt;span class="cl">&lt;span class="kd">public&lt;/span> &lt;span class="kd">class&lt;/span> &lt;span class="nc">Singleton&lt;/span> &lt;span class="o">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kd">private&lt;/span> &lt;span class="kd">volatile&lt;/span> &lt;span class="kd">static&lt;/span> &lt;span class="n">Singleton&lt;/span> &lt;span class="n">instance&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="kc">null&lt;/span>&lt;span class="o">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kd">private&lt;/span> &lt;span class="nf">Singleton&lt;/span>&lt;span class="o">()&lt;/span> &lt;span class="o">{&lt;/span> &lt;span class="o">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kd">public&lt;/span> &lt;span class="kd">static&lt;/span> &lt;span class="n">Singleton&lt;/span> &lt;span class="nf">getInstance&lt;/span>&lt;span class="o">()&lt;/span> &lt;span class="o">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">if&lt;/span> &lt;span class="o">(&lt;/span>&lt;span class="n">instance&lt;/span> &lt;span class="o">==&lt;/span> &lt;span class="kc">null&lt;/span>&lt;span class="o">)&lt;/span> &lt;span class="o">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kd">synchronized&lt;/span> &lt;span class="o">(&lt;/span>&lt;span class="n">Singleton&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">class&lt;/span>&lt;span class="o">)&lt;/span> &lt;span class="o">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">if&lt;/span> &lt;span class="o">(&lt;/span>&lt;span class="n">instance&lt;/span> &lt;span class="o">==&lt;/span> &lt;span class="kc">null&lt;/span>&lt;span class="o">)&lt;/span> &lt;span class="o">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">instance&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="k">new&lt;/span> &lt;span class="n">Singleton&lt;/span>&lt;span class="o">();&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="o">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="o">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="o">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">return&lt;/span> &lt;span class="n">instance&lt;/span>&lt;span class="o">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="o">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">}&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>使用 &lt;code>volatile&lt;/code> 修饰实例，利用了以下两个作用：&lt;/p>
+&lt;p>(1) 保障可见性：&lt;/p>
+&lt;p>一个线程初始化了 &lt;code>instance&lt;/code> 的值，其他线程可以读取到相应的值。&lt;/p>
+&lt;p>(2) 保障有序性：&lt;/p>
+&lt;p>保障一个线程读取到的 &lt;code>instance&lt;/code> 引用的实例已经初始化完毕。&lt;/p>
+&lt;p>对象实例化会分解成以下几个子操作：&lt;/p>
+&lt;ul>
+&lt;li>分配对象所需的空间&lt;/li>
+&lt;li>初始化 instance 引用的对象&lt;/li>
+&lt;li>将对象的应用写入共享变量&lt;/li>
+&lt;/ul>
+&lt;p>由于 JVM 具有指令重排的特性，执行顺序有可能变成 &lt;code>1-&amp;gt;3-&amp;gt;2&lt;/code>。指令重排在单线程环境下不会出现问题，但是在多线程环境下会导致一个线程获得还没有初始化的实例。&lt;/p>
+&lt;p>例如：线程 T1 执行了 1 和 3 后，此时 T2 调用 &lt;code>getInstance()&lt;/code> 后发现 &lt;code>instance&lt;/code> 不为空，因此直接返回，但此时 &lt;code>instance&lt;/code> 还未被初始化。&lt;/p>
+&lt;h3 id="静态内部类的单例模式">静态内部类的单例模式&lt;/h3>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;span class="lnt">11
+&lt;/span>&lt;span class="lnt">12
+&lt;/span>&lt;span class="lnt">13
+&lt;/span>&lt;span class="lnt">14
+&lt;/span>&lt;span class="lnt">15
+&lt;/span>&lt;span class="lnt">16
+&lt;/span>&lt;span class="lnt">17
+&lt;/span>&lt;span class="lnt">18
+&lt;/span>&lt;span class="lnt">19
+&lt;/span>&lt;span class="lnt">20
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-java" data-lang="java">&lt;span class="line">&lt;span class="cl">&lt;span class="kd">public&lt;/span> &lt;span class="kd">class&lt;/span> &lt;span class="nc">Singleton&lt;/span> &lt;span class="o">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kd">private&lt;/span> &lt;span class="nf">Singleton&lt;/span>&lt;span class="o">()&lt;/span> &lt;span class="o">{&lt;/span> &lt;span class="o">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kd">private&lt;/span> &lt;span class="kd">static&lt;/span> &lt;span class="kd">class&lt;/span> &lt;span class="nc">InstanceHolder&lt;/span> &lt;span class="o">{&lt;/span> &lt;span class="c1">// 静态内部类
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span> &lt;span class="c1">// 保存外部类的唯一实例
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span> &lt;span class="kd">final&lt;/span> &lt;span class="kd">static&lt;/span> &lt;span class="n">Singleton&lt;/span> &lt;span class="n">INSTANCE&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="k">new&lt;/span> &lt;span class="n">Singleton&lt;/span>&lt;span class="o">();&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="o">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kd">public&lt;/span> &lt;span class="kd">static&lt;/span> &lt;span class="n">Singleton&lt;/span> &lt;span class="nf">getInstance&lt;/span>&lt;span class="o">()&lt;/span> &lt;span class="o">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">return&lt;/span> &lt;span class="n">InstanceHolder&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">INSTANCE&lt;/span>&lt;span class="o">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="o">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kd">public&lt;/span> &lt;span class="kt">void&lt;/span> &lt;span class="nf">someService&lt;/span>&lt;span class="o">()&lt;/span> &lt;span class="o">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c1">// ...
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span> &lt;span class="o">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kd">public&lt;/span> &lt;span class="kd">static&lt;/span> &lt;span class="kt">void&lt;/span> &lt;span class="nf">main&lt;/span>&lt;span class="o">(&lt;/span>&lt;span class="n">String&lt;/span>&lt;span class="o">[]&lt;/span> &lt;span class="n">args&lt;/span>&lt;span class="o">)&lt;/span> &lt;span class="o">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">Singleton&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">getInstace&lt;/span>&lt;span class="o">().&lt;/span>&lt;span class="na">someService&lt;/span>&lt;span class="o">();&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="o">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">}&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>当外部类加载时，内部类不会加载，并且静态变量只会有默认值（null）。&lt;/p>
+&lt;p>类的静态变量被初次访问才会触发 Java 虚拟机对该类进行初始化，会变为其初始值。&lt;/p>
+&lt;h3 id="枚举单例">枚举单例&lt;/h3>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-java" data-lang="java">&lt;span class="line">&lt;span class="cl">&lt;span class="kd">public&lt;/span> &lt;span class="kd">static&lt;/span> &lt;span class="kd">enum&lt;/span> &lt;span class="n">Singleton&lt;/span> &lt;span class="o">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">INSTANCE&lt;/span>&lt;span class="o">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">Singleton&lt;/span>&lt;span class="o">()&lt;/span> &lt;span class="o">{&lt;/span> &lt;span class="c1">// 私有构造器
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span> &lt;span class="o">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">pubilc&lt;/span> &lt;span class="kt">void&lt;/span> &lt;span class="nf">someService&lt;/span>&lt;span class="o">()&lt;/span> &lt;span class="o">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c1">// 业务到吗
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span> &lt;span class="o">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">}&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>字段 &lt;code>INSTANCE&lt;/code> 是枚举类的唯一实例。在 &lt;code>Singleton.INSTANCE&lt;/code> 初次被引用时才会被初始化。&lt;/p></description></item><item><title>Java 并发 - 锁机制</title><link>https://emerywan.github.io/blog/p/thread/lock/</link><pubDate>Wed, 30 Mar 2022 14:02:02 +0800</pubDate><guid>https://emerywan.github.io/blog/p/thread/lock/</guid><description>&lt;p>在并发情况下，多个线程会对同一个资源进行争抢，可能会导致数据不一致的问题。&lt;/p>
 &lt;p>为了解决这个问题，通过引入&lt;strong>锁机制&lt;/strong>，使用一种抽象的锁，对资源进行锁定，达到同步访问。&lt;/p>
 &lt;h2 id="实现">实现&lt;/h2>
 &lt;p>Java 采用了两种实现方式：&lt;/p>
@@ -1096,13 +1471,13 @@ data-flex-basis="642px"
 &lt;/ul>
 &lt;h2 id="悲观锁">悲观锁&lt;/h2>
 &lt;p>在 Java 中，每个对象（Object），都拥有一把锁，存放在对象头中，记录了当前对象被哪个线程所占用。&lt;/p>
-&lt;h3 id="synchronized">synchronized&lt;/h3>
-&lt;p>synchronized 关键字可以用来同步线程，其被编译后，会生成 &lt;code>monitorenter&lt;/code> 和 &lt;code>moniterexit&lt;/code> 两个字节码指令，用来进行线程的同步。&lt;/p>
-&lt;p>synchronized 是非公平锁。一把锁只能被一个线程获取，没有获得锁的线程只能等待。&lt;/p>
+&lt;h3 id="内部锁-synchronized">内部锁 synchronized&lt;/h3>
+&lt;p>&lt;code>synchronized&lt;/code> 关键字可以用来同步线程，其被编译后，会生成 &lt;code>monitorenter&lt;/code> 和 &lt;code>moniterexit&lt;/code> 两个字节码指令，用来进行线程的同步。&lt;/p>
+&lt;p>&lt;code>synchronized&lt;/code> 是非公平锁。一把锁只能被一个线程获取，没有获得锁的线程只能等待。线程对内部锁的申请和释放由 Java 虚拟机负责实施。&lt;/p>
 &lt;p>加锁方式：&lt;/p>
 &lt;ul>
 &lt;li>
-&lt;p>对象锁（锁住 this）&lt;/p>
+&lt;p>对象锁&lt;/p>
 &lt;ul>
 &lt;li>
 &lt;p>修饰实例方法 &lt;code>pubilc sychronized void method() { ... }&lt;/code>&lt;/p>
@@ -1116,7 +1491,7 @@ data-flex-basis="642px"
 &lt;p>类锁&lt;/p>
 &lt;ul>
 &lt;li>
-&lt;p>修饰静态方法 &lt;code>public static sychronized void method() { ... }&lt;/code>&lt;/p>
+&lt;p>修饰静态方法 &lt;code>public static synchronized void method() { ... }&lt;/code>&lt;/p>
 &lt;/li>
 &lt;li>
 &lt;p>代码块锁定 class 对象 &lt;code>synchronized(MyClass.class) { ... }&lt;/code>&lt;/p>
@@ -1124,9 +1499,9 @@ data-flex-basis="642px"
 &lt;/ul>
 &lt;/li>
 &lt;/ul>
-&lt;p>synchronized 修饰的方法，无论方法正常执行完还是抛出异常，都会释放锁。&lt;/p>
+&lt;p>&lt;code>synchronized&lt;/code> 修饰的方法，无论方法正常执行完还是抛出异常，都会释放锁。&lt;/p>
 &lt;h4 id="jdk-16-对-synchronized-的优化">JDK 1.6 对 synchronized 的优化&lt;/h4>
-&lt;p>synchronized 依赖于 JVM，使用的是操作系统底层的 &lt;code>Mutex Lock&lt;/code> 实现。&lt;/p>
+&lt;p>&lt;code>synchronized&lt;/code> 依赖于 JVM，使用的是操作系统底层的 &lt;code>Mutex Lock&lt;/code> 实现。&lt;/p>
 &lt;p>Java 线程的实现是对操作系统线程的映射，每当唤醒或挂起一个线程的时候，都要切换到操作系统的内核态，代价是非常昂贵的。&lt;/p>
 &lt;p>JDK 1.6 对锁的实现引入了大量的优化，如 &lt;code>锁粗化&lt;/code>，&lt;code>锁消除&lt;/code>，&lt;code>轻量级锁&lt;/code>，&lt;code>偏向锁&lt;/code>，&lt;code>适应性自旋&lt;/code>等。&lt;/p>
 &lt;p>对象锁一共有四种状态：&lt;/p>
@@ -1135,9 +1510,8 @@ data-flex-basis="642px"
 &lt;/blockquote>
 &lt;p>会随着竞争情况逐渐升级（不可以降级），提高获取锁和释放锁的效率。&lt;/p>
 &lt;ul>
-&lt;li>无锁状态&lt;/li>
-&lt;/ul>
-&lt;p>不对资源进行操作系统级别的锁定。&lt;/p>
+&lt;li>
+&lt;p>🔒 无锁状态&lt;/p>
 &lt;ul>
 &lt;li>
 &lt;p>某些资源不会出现多线程竞争的情况，随意多个线程调用&lt;/p>
@@ -1145,8 +1519,13 @@ data-flex-basis="642px"
 &lt;li>
 &lt;p>利用其他一些方式控制同步。如：CAS&lt;/p>
 &lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;p>不对资源进行操作系统级别的锁定。&lt;/p>
+&lt;ul>
 &lt;li>
-&lt;p>偏向锁&lt;/p>
+&lt;p>🔒 偏向锁&lt;/p>
 &lt;ul>
 &lt;li>适合只有一个线程访问同步代码块的场景&lt;/li>
 &lt;/ul>
@@ -1156,7 +1535,7 @@ data-flex-basis="642px"
 &lt;p>如果对象发现目前不是只有一个线程，而是有多个线程在竞争锁，偏向锁就会升级为轻量级锁。&lt;/p>
 &lt;ul>
 &lt;li>
-&lt;p>轻量级锁&lt;/p>
+&lt;p>🔒 轻量级锁&lt;/p>
 &lt;ul>
 &lt;li>适合同步代码块的执行速度非常快的场景&lt;/li>
 &lt;/ul>
@@ -1165,26 +1544,391 @@ data-flex-basis="642px"
 &lt;p>当锁升级为轻量级锁的时候，其他线程会通过 CAS 进行自旋等待来获取锁，不会阻塞，从而提高性能。&lt;/p>
 &lt;ul>
 &lt;li>
-&lt;p>重量级锁&lt;/p>
+&lt;p>🔒 重量级锁&lt;/p>
 &lt;ul>
 &lt;li>适合同步代码块执行速度较长的场景&lt;/li>
 &lt;/ul>
 &lt;/li>
 &lt;/ul>
 &lt;p>对象锁状态被标记为重量级锁，需要通过 Monitor 来对线程进行控制。&lt;/p>
-&lt;h2 id="乐观锁">乐观锁&lt;/h2></description></item><item><title>通用程序设计</title><link>https://emerywan.github.io/blog/p/effective-java/general-programming/</link><pubDate>Wed, 30 Mar 2022 14:02:02 +0800</pubDate><guid>https://emerywan.github.io/blog/p/effective-java/general-programming/</guid><description>&lt;img src="https://emerywan.github.io/blog/p/effective-java/general-programming/effective-java.png" alt="Featured image of post 通用程序设计" />&lt;h1 id="-通用程序设计">☘️ 通用程序设计&lt;/h1>
+&lt;h2 id="乐观锁-cas">乐观锁 CAS&lt;/h2>
+&lt;p>在一些情况下，同步代码块执行的时间远远小于线程切换的耗时。所以希望能够在用户态中对线程的切换进行管理，这样效率更高。&lt;/p>
+&lt;p>我们让线程“乐观地”反复尝试获取共享资源，当发现空闲时便进行使用，否则继续“乐观地”进行重试。&lt;/p>
+&lt;p>基于以上想法，诞生了 &lt;code>CAS (Compare And Swap)&lt;/code> 算法：比较并交换。&lt;/p>
+&lt;p>CAS算法涉及到三个操作数：&lt;/p>
+&lt;ul>
+&lt;li>需要读写的内存值 addr&lt;/li>
+&lt;li>进行比较的值 oldValue&lt;/li>
+&lt;li>要写入的新值 newValue&lt;/li>
+&lt;/ul>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;span class="lnt">4
+&lt;/span>&lt;span class="lnt">5
+&lt;/span>&lt;span class="lnt">6
+&lt;/span>&lt;span class="lnt">7
+&lt;/span>&lt;span class="lnt">8
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-c++" data-lang="c++">&lt;span class="line">&lt;span class="cl">&lt;span class="kt">int&lt;/span> &lt;span class="nf">cas&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="kt">long&lt;/span> &lt;span class="o">*&lt;/span>&lt;span class="n">addr&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="kt">long&lt;/span> &lt;span class="n">oldValue&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="kt">long&lt;/span> &lt;span class="n">newValue&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="cm">/* Executes atomically. */&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">if&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="o">*&lt;/span>&lt;span class="n">addr&lt;/span> &lt;span class="o">!=&lt;/span> &lt;span class="n">old&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">return&lt;/span> &lt;span class="mi">0&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="o">*&lt;/span>&lt;span class="n">addr&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="k">new&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">return&lt;/span> &lt;span class="mi">1&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>这个 cas 函数看起来没有任何同步措施，似乎还是存在线程不安全的问题。&lt;/p>
+&lt;p>当 A 线程比较了 oldValue 的值是想要的，但是这个瞬间，B 线程突然抢到了时间片，更改了值；但是 A 线程并不知道，将值改成了 newValue，这就出现了线程安全问题，A B 两个线程同时获得了资源。&lt;/p>
+&lt;p>所以，&lt;code>CAS&lt;/code> 的操作必须是 &lt;code>原子性&lt;/code> 的。这个原子操作，&lt;strong>由计算机处理器指令集提供，直接由硬件保障。&lt;/strong>&lt;/p>
+&lt;h3 id="原子变量类">原子变量类&lt;/h3>
+&lt;ul>
+&lt;li>
+&lt;p>基础数据类型&lt;/p>
+&lt;ul>
+&lt;li>AtomicInteger&lt;/li>
+&lt;li>AtomicLong&lt;/li>
+&lt;li>AtomicBoolean&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>
+&lt;p>数组型&lt;/p>
+&lt;ul>
+&lt;li>AtomicIntegerArray&lt;/li>
+&lt;li>AtomicLongArray&lt;/li>
+&lt;li>AtomicReferenceArray&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>
+&lt;p>字段更新型&lt;/p>
+&lt;ul>
+&lt;li>AtomicIntegerFieldUpdater&lt;/li>
+&lt;li>AtomicLongFieldUpdater&lt;/li>
+&lt;li>AtomicReferenceFieldUpdater&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>
+&lt;p>引用型&lt;/p>
+&lt;ul>
+&lt;li>AtomicReference&lt;/li>
+&lt;li>AtomicStampedReference&lt;/li>
+&lt;li>AtomicMarkableReference&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;span class="lnt">11
+&lt;/span>&lt;span class="lnt">12
+&lt;/span>&lt;span class="lnt">13
+&lt;/span>&lt;span class="lnt">14
+&lt;/span>&lt;span class="lnt">15
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-java" data-lang="java">&lt;span class="line">&lt;span class="cl">&lt;span class="kd">public&lt;/span> &lt;span class="kd">class&lt;/span> &lt;span class="nc">Demo&lt;/span> &lt;span class="o">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kd">static&lt;/span> &lt;span class="n">AtomicInteger&lt;/span> &lt;span class="n">num&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="k">new&lt;/span> &lt;span class="n">AtomicInteger&lt;/span>&lt;span class="o">(&lt;/span>&lt;span class="n">0&lt;/span>&lt;span class="o">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kd">public&lt;/span> &lt;span class="kd">static&lt;/span> &lt;span class="kt">void&lt;/span> &lt;span class="nf">main&lt;/span>&lt;span class="o">(&lt;/span>&lt;span class="n">String&lt;/span>&lt;span class="o">[]&lt;/span> &lt;span class="n">args&lt;/span>&lt;span class="o">)&lt;/span> &lt;span class="o">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">for&lt;/span> &lt;span class="o">(&lt;/span>&lt;span class="kt">int&lt;/span> &lt;span class="n">i&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">0&lt;/span>&lt;span class="o">;&lt;/span> &lt;span class="n">i&lt;/span> &lt;span class="o">&amp;lt;&lt;/span> &lt;span class="n">3&lt;/span>&lt;span class="o">;&lt;/span> &lt;span class="n">i&lt;/span>&lt;span class="o">++)&lt;/span> &lt;span class="o">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">Thread&lt;/span> &lt;span class="n">t&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="k">new&lt;/span> &lt;span class="n">Thread&lt;/span>&lt;span class="o">(()&lt;/span> &lt;span class="o">=&amp;gt;&lt;/span> &lt;span class="o">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">while&lt;/span> &lt;span class="o">(&lt;/span>&lt;span class="n">num&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">get&lt;/span>&lt;span class="o">()&lt;/span> &lt;span class="o">&amp;lt;&lt;/span> &lt;span class="n">10000&lt;/span>&lt;span class="o">)&lt;/span> &lt;span class="o">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">System&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">out&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">println&lt;/span>&lt;span class="o">(&lt;/span>&lt;span class="n">Thread&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">currentThread&lt;/span>&lt;span class="o">().&lt;/span>&lt;span class="na">getName&lt;/span>&lt;span class="o">()&lt;/span> &lt;span class="o">+&lt;/span> &lt;span class="s">&amp;#34;:&amp;#34;&lt;/span> &lt;span class="o">+&lt;/span> &lt;span class="n">num&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">incrementAndGet&lt;/span>&lt;span class="o">());&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="o">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="o">});&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">t&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">start&lt;/span>&lt;span class="o">();&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="o">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="o">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">}&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>&lt;code>AtomicInteger&lt;/code> 主要由一个 &lt;code>Unsafe&lt;/code> 类型的实例 &lt;code>unsafe&lt;/code> 和 &lt;code>Long&lt;/code> 类型的 &lt;code>offset&lt;/code> 实现，Java 通过 &lt;code>Unsafe&lt;/code> 的 CAS 操作来对值进行更新，执行一些底层，和平台相关的方法。&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-java" data-lang="java">&lt;span class="line">&lt;span class="cl">&lt;span class="c1">// setup to use Unsafe.compareAndSwapInt for updates
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span>&lt;span class="kd">private&lt;/span> &lt;span class="kd">static&lt;/span> &lt;span class="kd">final&lt;/span> &lt;span class="n">Unsafe&lt;/span> &lt;span class="n">unsafe&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">Unsafe&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">getUnsafe&lt;/span>&lt;span class="o">();&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="kd">private&lt;/span> &lt;span class="kd">static&lt;/span> &lt;span class="kd">final&lt;/span> &lt;span class="kt">long&lt;/span> &lt;span class="n">valueOffset&lt;/span>&lt;span class="o">;&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>例如 &lt;code>incrementAndGet()&lt;/code>。&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;span class="lnt">11
+&lt;/span>&lt;span class="lnt">12
+&lt;/span>&lt;span class="lnt">13
+&lt;/span>&lt;span class="lnt">14
+&lt;/span>&lt;span class="lnt">15
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-java" data-lang="java">&lt;span class="line">&lt;span class="cl">&lt;span class="c1">// AtomicInteger.java
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span>&lt;span class="kd">public&lt;/span> &lt;span class="kd">final&lt;/span> &lt;span class="kt">int&lt;/span> &lt;span class="nf">incrementAndGet&lt;/span>&lt;span class="o">()&lt;/span> &lt;span class="o">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">return&lt;/span> &lt;span class="n">unsafe&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">getAndAddInt&lt;/span>&lt;span class="o">(&lt;/span>&lt;span class="k">this&lt;/span>&lt;span class="o">,&lt;/span> &lt;span class="n">valueOffset&lt;/span>&lt;span class="o">,&lt;/span> &lt;span class="n">1&lt;/span>&lt;span class="o">)&lt;/span> &lt;span class="o">+&lt;/span> &lt;span class="n">1&lt;/span>&lt;span class="o">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">// Unsafe.java
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span>&lt;span class="kd">public&lt;/span> &lt;span class="kd">final&lt;/span> &lt;span class="kt">int&lt;/span> &lt;span class="nf">getAndAddInt&lt;/span>&lt;span class="o">(&lt;/span>&lt;span class="n">Object&lt;/span> &lt;span class="n">o&lt;/span>&lt;span class="o">,&lt;/span> &lt;span class="kt">long&lt;/span> &lt;span class="n">offset&lt;/span>&lt;span class="o">,&lt;/span> &lt;span class="kt">int&lt;/span> &lt;span class="n">delta&lt;/span>&lt;span class="o">)&lt;/span> &lt;span class="o">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kt">int&lt;/span> &lt;span class="n">v&lt;/span>&lt;span class="o">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">do&lt;/span> &lt;span class="o">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">v&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">getIntVolatile&lt;/span>&lt;span class="o">(&lt;/span>&lt;span class="n">o&lt;/span>&lt;span class="o">,&lt;/span> &lt;span class="n">offset&lt;/span>&lt;span class="o">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="o">}&lt;/span> &lt;span class="k">while&lt;/span> &lt;span class="o">(!&lt;/span>&lt;span class="n">compareAndSwapInt&lt;/span>&lt;span class="o">(&lt;/span>&lt;span class="n">o&lt;/span>&lt;span class="o">,&lt;/span> &lt;span class="n">offset&lt;/span>&lt;span class="o">,&lt;/span> &lt;span class="n">v&lt;/span>&lt;span class="o">,&lt;/span> &lt;span class="n">v&lt;/span> &lt;span class="o">+&lt;/span> &lt;span class="n">delta&lt;/span>&lt;span class="o">));&lt;/span> &lt;span class="c1">// 自旋，可以通过启动参数配置，默认是 10
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span> &lt;span class="k">return&lt;/span> &lt;span class="n">v&lt;/span>&lt;span class="o">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="kd">public&lt;/span> &lt;span class="kd">final&lt;/span> &lt;span class="kd">native&lt;/span> &lt;span class="kt">boolean&lt;/span> &lt;span class="nf">compareAndSwapInt&lt;/span>&lt;span class="o">(&lt;/span>&lt;span class="n">Object&lt;/span> &lt;span class="n">o&lt;/span>&lt;span class="o">,&lt;/span> &lt;span class="kt">long&lt;/span> &lt;span class="n">offset&lt;/span>&lt;span class="o">,&lt;/span> &lt;span class="kt">int&lt;/span> &lt;span class="n">expected&lt;/span>&lt;span class="o">,&lt;/span> &lt;span class="kt">int&lt;/span> &lt;span class="n">x&lt;/span>&lt;span class="o">);&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;h3 id="aba-问题">ABA 问题&lt;/h3>
+&lt;p>CAS 需要在操作值的时候检查内存值是否发生变化，没有发生变化才会更新内存值。&lt;/p>
+&lt;p>如果内存值原来是 A，后来变成了 B，然后又变成了 A，那么 CAS 进行检查时会发现值没有发生变化，但是实际上是有变化的。&lt;/p>
+&lt;p>&lt;code>A -&amp;gt; B -&amp;gt; A&lt;/code>&lt;/p>
+&lt;p>可以为共享变量引入一个修订号（时间戳），每次更新都会更新相应的修订号，判断变量的值是否被其他线程给修改过。&lt;code>AtomicStampedReference&lt;/code>&lt;/p>
+&lt;p>&lt;code>[A, 0] -&amp;gt; [B, 1] -&amp;gt; [A, 2]&lt;/code>&lt;/p></description></item><item><title>Java 多线程</title><link>https://emerywan.github.io/blog/p/thread/</link><pubDate>Wed, 30 Mar 2022 14:02:02 +0800</pubDate><guid>https://emerywan.github.io/blog/p/thread/</guid><description>&lt;h2 id="进程与线程">进程与线程&lt;/h2>
+&lt;p>&lt;strong>进程&lt;/strong>是程序向操作系统申请资源的基本单位。&lt;/p>
+&lt;p>&lt;strong>线程&lt;/strong>是进程中可独立执行的最小单位。&lt;/p>
+&lt;p>一个进程可以包括多个线程，同一进程中所有线程共享该进程中的资源。&lt;/p>
+&lt;h3 id="无处不在的线程">无处不在的线程&lt;/h3>
+&lt;ul>
+&lt;li>main 线程&lt;/li>
+&lt;li>垃圾回收线程&lt;/li>
+&lt;li>Web 服务器请求处理线程&lt;/li>
+&lt;/ul>
+&lt;h2 id="线程的创建">线程的创建&lt;/h2>
+&lt;h3 id="extends-thread">extends Thread&lt;/h3>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;span class="lnt">4
+&lt;/span>&lt;span class="lnt">5
+&lt;/span>&lt;span class="lnt">6
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-java" data-lang="java">&lt;span class="line">&lt;span class="cl">&lt;span class="kd">class&lt;/span> &lt;span class="nc">MyThread&lt;/span> &lt;span class="kd">extends&lt;/span> &lt;span class="n">Thread&lt;/span> &lt;span class="o">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nd">@Override&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kd">public&lt;/span> &lt;span class="kt">void&lt;/span> &lt;span class="nf">run&lt;/span>&lt;span class="o">()&lt;/span> &lt;span class="o">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">System&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">out&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">println&lt;/span>&lt;span class="o">(&lt;/span>&lt;span class="n">Thread&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">currentThread&lt;/span>&lt;span class="o">().&lt;/span>&lt;span class="na">getName&lt;/span>&lt;span class="o">());&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="o">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">}&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;h3 id="implement-runnable">implement Runnable&lt;/h3>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-java" data-lang="java">&lt;span class="line">&lt;span class="cl">&lt;span class="kd">class&lt;/span> &lt;span class="nc">RunnableThread&lt;/span> &lt;span class="n">implement&lt;/span> &lt;span class="n">Runnable&lt;/span> &lt;span class="o">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nd">@Override&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kd">public&lt;/span> &lt;span class="kt">void&lt;/span> &lt;span class="nf">run&lt;/span>&lt;span class="o">()&lt;/span> &lt;span class="o">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">System&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">out&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">println&lt;/span>&lt;span class="o">(&lt;/span>&lt;span class="n">Thread&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">currentThread&lt;/span>&lt;span class="o">().&lt;/span>&lt;span class="na">getName&lt;/span>&lt;span class="o">());&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="o">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kd">public&lt;/span> &lt;span class="kd">static&lt;/span> &lt;span class="kt">void&lt;/span> &lt;span class="nf">main&lt;/span>&lt;span class="o">(&lt;/span>&lt;span class="n">String&lt;/span>&lt;span class="o">[]&lt;/span> &lt;span class="n">args&lt;/span>&lt;span class="o">)&lt;/span> &lt;span class="o">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">new&lt;/span> &lt;span class="n">Thread&lt;/span>&lt;span class="o">(&lt;/span>&lt;span class="k">new&lt;/span> &lt;span class="n">RunnableThread&lt;/span>&lt;span class="o">()).&lt;/span>&lt;span class="na">start&lt;/span>&lt;span class="o">();&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="o">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">}&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;h3 id="implement-callable">implement Callable&amp;lt;&amp;gt;&lt;/h3>
+&lt;p>Callable 可以有返回值，返回值通过 &lt;code>FutureTask&lt;/code> 进行封装。&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;span class="lnt">11
+&lt;/span>&lt;span class="lnt">12
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-java" data-lang="java">&lt;span class="line">&lt;span class="cl">&lt;span class="kd">class&lt;/span> &lt;span class="nc">CallbaleThead&lt;/span> &lt;span class="n">implement&lt;/span> &lt;span class="n">Callbale&lt;/span>&lt;span class="o">&amp;lt;&lt;/span>&lt;span class="n">Integer&lt;/span>&lt;span class="o">&amp;gt;&lt;/span> &lt;span class="o">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nd">@Override&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kd">public&lt;/span> &lt;span class="n">Integer&lt;/span> &lt;span class="nf">call&lt;/span>&lt;span class="o">()&lt;/span> &lt;span class="kd">throws&lt;/span> &lt;span class="n">Exception&lt;/span> &lt;span class="o">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">return&lt;/span> &lt;span class="n">666&lt;/span>&lt;span class="o">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="o">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kd">public&lt;/span> &lt;span class="kd">static&lt;/span> &lt;span class="kt">void&lt;/span> &lt;span class="nf">main&lt;/span>&lt;span class="o">(&lt;/span>&lt;span class="n">String&lt;/span>&lt;span class="o">[]&lt;/span> &lt;span class="n">args&lt;/span>&lt;span class="o">)&lt;/span> &lt;span class="o">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">FutureTask&lt;/span>&lt;span class="o">&amp;lt;&lt;/span>&lt;span class="n">Integer&lt;/span>&lt;span class="o">&amp;gt;&lt;/span> &lt;span class="n">futureTask&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="k">new&lt;/span> &lt;span class="n">FutureTask&lt;/span>&lt;span class="o">&amp;lt;&amp;gt;(&lt;/span>&lt;span class="k">new&lt;/span> &lt;span class="n">CallbaleThead&lt;/span>&lt;span class="o">());&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">new&lt;/span> &lt;span class="n">Thread&lt;/span>&lt;span class="o">(&lt;/span>&lt;span class="n">futureTask&lt;/span>&lt;span class="o">).&lt;/span>&lt;span class="na">start&lt;/span>&lt;span class="o">();&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kt">int&lt;/span> &lt;span class="n">result&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">futureTask&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">get&lt;/span>&lt;span class="o">();&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="o">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">}&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/thread/FutureTask.png"
+width="964"
+height="706"
+srcset="https://emerywan.github.io/blog/blog/p/thread/FutureTask_hu6b05634f3a5f84702cb4db413d8bbef5_51410_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/thread/FutureTask_hu6b05634f3a5f84702cb4db413d8bbef5_51410_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+alt="FutureTask"
+class="gallery-image"
+data-flex-grow="136"
+data-flex-basis="327px"
+>&lt;/p>
+&lt;h3 id="线程池">线程池&lt;/h3>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;span class="lnt">4
+&lt;/span>&lt;span class="lnt">5
+&lt;/span>&lt;span class="lnt">6
+&lt;/span>&lt;span class="lnt">7
+&lt;/span>&lt;span class="lnt">8
+&lt;/span>&lt;span class="lnt">9
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-java" data-lang="java">&lt;span class="line">&lt;span class="cl">&lt;span class="kd">public&lt;/span> &lt;span class="kd">class&lt;/span> &lt;span class="nc">Demo&lt;/span> &lt;span class="o">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kd">public&lt;/span> &lt;span class="kd">static&lt;/span> &lt;span class="kt">void&lt;/span> &lt;span class="nf">main&lt;/span>&lt;span class="o">(&lt;/span>&lt;span class="n">String&lt;/span>&lt;span class="o">[]&lt;/span> &lt;span class="n">args&lt;/span>&lt;span class="o">)&lt;/span> &lt;span class="o">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">ExecutorService&lt;/span> &lt;span class="n">executorService&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">Executors&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">newFixThreadPool&lt;/span>&lt;span class="o">(&lt;/span>&lt;span class="n">10&lt;/span>&lt;span class="o">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">for&lt;/span> &lt;span class="o">(&lt;/span>&lt;span class="kt">int&lt;/span> &lt;span class="n">i&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">0&lt;/span>&lt;span class="o">;&lt;/span> &lt;span class="n">i&lt;/span> &lt;span class="o">&amp;lt;&lt;/span> &lt;span class="n">10&lt;/span>&lt;span class="o">;&lt;/span> &lt;span class="n">i&lt;/span>&lt;span class="o">++)&lt;/span> &lt;span class="o">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">executorService&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">execute&lt;/span>&lt;span class="o">(()&lt;/span> &lt;span class="o">-&amp;gt;&lt;/span> &lt;span class="n">System&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">out&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">println&lt;/span>&lt;span class="o">(&lt;/span>&lt;span class="n">Thread&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">currentThread&lt;/span>&lt;span class="o">().&lt;/span>&lt;span class="na">getName&lt;/span>&lt;span class="o">()));&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="o">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="o">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">}&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;span class="lnt">11
+&lt;/span>&lt;span class="lnt">12
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-java" data-lang="java">&lt;span class="line">&lt;span class="cl">&lt;span class="kd">public&lt;/span> &lt;span class="kd">class&lt;/span> &lt;span class="nc">Demo&lt;/span> &lt;span class="o">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kd">public&lt;/span> &lt;span class="kd">static&lt;/span> &lt;span class="kt">void&lt;/span> &lt;span class="nf">main&lt;/span>&lt;span class="o">(&lt;/span>&lt;span class="n">String&lt;/span>&lt;span class="o">[]&lt;/span> &lt;span class="n">args&lt;/span>&lt;span class="o">)&lt;/span> &lt;span class="o">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">ExecutorService&lt;/span> &lt;span class="n">executorService&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">Executors&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">newFixThreadPool&lt;/span>&lt;span class="o">(&lt;/span>&lt;span class="n">10&lt;/span>&lt;span class="o">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">Future&lt;/span>&lt;span class="o">&amp;lt;&lt;/span>&lt;span class="n">Integer&lt;/span>&lt;span class="o">&amp;gt;&lt;/span> &lt;span class="n">future&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">executorService&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">submit&lt;/span>&lt;span class="o">(()&lt;/span> &lt;span class="o">-&amp;gt;&lt;/span> &lt;span class="o">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">Thread&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">sleep&lt;/span>&lt;span class="o">(&lt;/span>&lt;span class="n">1000&lt;/span>&lt;span class="o">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">return&lt;/span> &lt;span class="n">666&lt;/span>&lt;span class="o">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="o">});&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kt">int&lt;/span> &lt;span class="n">result&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">future&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">get&lt;/span>&lt;span class="o">();&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="o">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">}&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;h2 id="线程的生命周期">线程的生命周期&lt;/h2>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-java" data-lang="java">&lt;span class="line">&lt;span class="cl">&lt;span class="kd">public&lt;/span> &lt;span class="kd">class&lt;/span> &lt;span class="nc">Thread&lt;/span> &lt;span class="kd">implements&lt;/span> &lt;span class="n">Runnable&lt;/span> &lt;span class="o">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kd">public&lt;/span> &lt;span class="kd">enum&lt;/span> &lt;span class="n">State&lt;/span> &lt;span class="o">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">NEW&lt;/span>&lt;span class="o">,&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">RUNNABLE&lt;/span>&lt;span class="o">,&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">BLOCKED&lt;/span>&lt;span class="o">,&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">WAITING&lt;/span>&lt;span class="o">,&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">TIMED_WAITING&lt;/span>&lt;span class="o">,&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">TErMINATED&lt;/span>&lt;span class="o">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="o">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">}&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;ul>
+&lt;li>新建 &lt;code>New&lt;/code>&lt;/li>
+&lt;/ul>
+&lt;p>创建后尚未启动。&lt;/p>
+&lt;ul>
+&lt;li>可运行 &lt;code>Runnable&lt;/code>&lt;/li>
+&lt;/ul>
+&lt;p>可能正在运行，也可能正在等待 CPU 时间片。&lt;/p>
+&lt;ul>
+&lt;li>阻塞 &lt;code>Blocking&lt;/code>&lt;/li>
+&lt;/ul>
+&lt;p>等待获取一个排它锁，如果其线程释放了锁就会结束此状态。&lt;/p>
+&lt;ul>
+&lt;li>无限期等待 &lt;code>Waiting&lt;/code>&lt;/li>
+&lt;/ul>
+&lt;p>等待其它线程显式地唤醒，否则不会被分配 CPU 时间片。&lt;/p>
+&lt;ul>
+&lt;li>限期等待 &lt;code>Timed Waiting&lt;/code>&lt;/li>
+&lt;/ul>
+&lt;p>无需等待其它线程显式地唤醒，在一定时间之后会被系统自动唤醒。&lt;/p>
+&lt;ul>
+&lt;li>死亡 &lt;code>Terminated&lt;/code>&lt;/li>
+&lt;/ul>
+&lt;p>线程结束任务之后自己结束，或者产生了异常而结束。&lt;/p>
+&lt;h2 id="参考">参考&lt;/h2>
+&lt;ul>
+&lt;li>&lt;a class="link" href="https://pdai.tech/md/java/thread/java-thread-x-thread-basic.html#%e5%ae%9e%e7%8e%b0-callable-%e6%8e%a5%e5%8f%a3" target="_blank" rel="noopener"
+>https://pdai.tech/md/java/thread/java-thread-x-thread-basic.html#%e5%ae%9e%e7%8e%b0-callable-%e6%8e%a5%e5%8f%a3&lt;/a>&lt;/li>
+&lt;/ul></description></item><item><title>通用程序设计</title><link>https://emerywan.github.io/blog/p/effective-java/general-programming/</link><pubDate>Wed, 30 Mar 2022 14:02:02 +0800</pubDate><guid>https://emerywan.github.io/blog/p/effective-java/general-programming/</guid><description>&lt;img src="https://emerywan.github.io/blog/p/effective-java/general-programming/effective-java.png" alt="Featured image of post 通用程序设计" />&lt;h1 id="-通用程序设计">☘️ 通用程序设计&lt;/h1>
 &lt;p>Effective Java 阅读笔记。本章主要讨论了 &lt;code>Java&lt;/code> 语言的具体细节。包括：&lt;/p>
 &lt;ul>
 &lt;li>局部变量&lt;/li>
 &lt;li>控制结构&lt;/li>
 &lt;li>类库&lt;/li>
 &lt;li>数据结构&lt;/li>
-&lt;li>两种不是由语言本身提供的机制：
-&lt;ul>
-&lt;li>反射&lt;/li>
-&lt;li>本地方法&lt;/li>
-&lt;/ul>
-&lt;/li>
+&lt;li>不是由语言本身提供的机制&lt;/li>
 &lt;li>优化和命名惯例。&lt;/li>
 &lt;/ul>
 &lt;h2 id="57-将局部变量的作用域最小化">57. 将局部变量的作用域最小化&lt;/h2>
@@ -1374,8 +2118,12 @@ data-flex-basis="642px"
 &lt;li>
 &lt;p>💐 从 Java 7 开始，就不应该再使用 Random。&lt;/p>
 &lt;ul>
-&lt;li>🌰 在大多数情况下，选择的随机数生成器现在是 &lt;code>ThreadLocalRandom&lt;/code>。 它能产生更高质量的随机数，而且速度非常快。&lt;/li>
-&lt;li>🌰 对于 &lt;code>Fork Join Pool&lt;/code> 和并行 &lt;code>Stream&lt;/code>，使用 &lt;code>SplittableRandom&lt;/code>。&lt;/li>
+&lt;li>
+&lt;p>🌰 在大多数情况下，选择的随机数生成器现在是 &lt;code>ThreadLocalRandom&lt;/code>。 它能产生更高质量的随机数，而且速度非常快。&lt;code>ThreadLocalRandom.current().nextInt(100)&lt;/code>&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>🌰 对于 &lt;code>Fork Join Pool&lt;/code> 和并行 &lt;code>Stream&lt;/code>，使用 &lt;code>SplittableRandom&lt;/code>。&lt;/p>
+&lt;/li>
 &lt;/ul>
 &lt;p>假设你想要生成 0 到某个上界之间的随机整数，许多程序员会编写一个类似这样的小方法：&lt;/p>
 &lt;div class="highlight">&lt;div class="chroma">
@@ -1400,7 +2148,7 @@ data-flex-basis="642px"
 &lt;li>🌩 如果 n 不是 2 的幂，那么平均而言，一些数字将比其他数字更频繁地返回&lt;/li>
 &lt;li>🌩 在极少数情况下会返回超出指定范围的数字 &lt;code>Integer.MAX_VALUE&lt;/code>&lt;/li>
 &lt;/ul>
-&lt;p>&lt;strong>直接使用 &lt;code>Ramdom.nextInt(n)&lt;/code> 即可。&lt;/strong>&lt;/p>
+&lt;p>&lt;strong>应该直接使用类库 &lt;code>Ramdom.nextInt(n)&lt;/code> ，而不是自己封装&lt;/strong>&lt;/p>
 &lt;div class="highlight">&lt;div class="chroma">
 &lt;table class="lntable">&lt;tr>&lt;td class="lntd">
 &lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
@@ -1907,62 +2655,8 @@ data-flex-basis="642px"
 &lt;/ul>
 &lt;p>除非特殊需要，尽量使用后 3 种遍历方式，使用 &lt;code>Iterator&lt;/code> 可能更容易造成一些错误（Effective Java - 58：&lt;code>for-each&lt;/code> 优先于 &lt;code>for&lt;/code> 循环）。&lt;/p>
 &lt;p>在一些 &lt;code>for-each&lt;/code> 不能胜任的地方，其实也有很对内置方法能够完成操作，不仅更加直观，而且非常易用。比如删除操作：&lt;code>Collection#removeIf()&lt;/code> &lt;code>Java 1.8+&lt;/code>。&lt;/p>
-&lt;h3 id="interator">Interator&lt;/h3>
+&lt;h3 id="foreach">ForEach&lt;/h3>
 &lt;h4 id="entryset">EntrySet&lt;/h4>
-&lt;div class="highlight">&lt;div class="chroma">
-&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
-&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
-&lt;/span>&lt;span class="lnt">2
-&lt;/span>&lt;span class="lnt">3
-&lt;/span>&lt;span class="lnt">4
-&lt;/span>&lt;span class="lnt">5
-&lt;/span>&lt;span class="lnt">6
-&lt;/span>&lt;span class="lnt">7
-&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
-&lt;td class="lntd">
-&lt;pre tabindex="0" class="chroma">&lt;code class="language-java" data-lang="java">&lt;span class="line">&lt;span class="cl">&lt;span class="n">Iterator&lt;/span>&lt;span class="o">&amp;lt;&lt;/span>&lt;span class="n">Map&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">Entry&lt;/span>&lt;span class="o">&amp;lt;&lt;/span>&lt;span class="n">String&lt;/span>&lt;span class="o">,&lt;/span> &lt;span class="n">String&lt;/span>&lt;span class="o">&amp;gt;&amp;gt;&lt;/span> &lt;span class="n">iterator&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">map&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">entrySet&lt;/span>&lt;span class="o">().&lt;/span>&lt;span class="na">iterator&lt;/span>&lt;span class="o">();&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="k">while&lt;/span>&lt;span class="o">(&lt;/span>&lt;span class="n">iterator&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">hasNext&lt;/span>&lt;span class="o">())&lt;/span> &lt;span class="o">{&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">Map&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">Entry&lt;/span>&lt;span class="o">&amp;lt;&lt;/span>&lt;span class="n">String&lt;/span>&lt;span class="o">,&lt;/span> &lt;span class="n">String&lt;/span>&lt;span class="o">&amp;gt;&lt;/span> &lt;span class="n">entry&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">iterator&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">next&lt;/span>&lt;span class="o">();&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">String&lt;/span> &lt;span class="n">key&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">entry&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">getKey&lt;/span>&lt;span class="o">();&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">String&lt;/span> &lt;span class="n">value&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">entry&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">getValue&lt;/span>&lt;span class="o">();&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">}&lt;/span>
-&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
-&lt;/div>
-&lt;/div>&lt;p>根据 Effective Java - 57，更推荐以下这种写法：&lt;/p>
-&lt;div class="highlight">&lt;div class="chroma">
-&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
-&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
-&lt;/span>&lt;span class="lnt">2
-&lt;/span>&lt;span class="lnt">3
-&lt;/span>&lt;span class="lnt">4
-&lt;/span>&lt;span class="lnt">5
-&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
-&lt;td class="lntd">
-&lt;pre tabindex="0" class="chroma">&lt;code class="language-java" data-lang="java">&lt;span class="line">&lt;span class="cl">&lt;span class="k">for&lt;/span> &lt;span class="o">(&lt;/span>&lt;span class="n">Iterator&lt;/span>&lt;span class="o">&amp;lt;&lt;/span>&lt;span class="n">Map&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">Entry&lt;/span>&lt;span class="o">&amp;lt;&lt;/span>&lt;span class="n">String&lt;/span>&lt;span class="o">,&lt;/span> &lt;span class="n">String&lt;/span>&lt;span class="o">&amp;gt;&amp;gt;&lt;/span> &lt;span class="n">iterator&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">map&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">entrySet&lt;/span>&lt;span class="o">().&lt;/span>&lt;span class="na">iterator&lt;/span>&lt;span class="o">();&lt;/span> &lt;span class="n">iterator&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">hasNext&lt;/span>&lt;span class="o">();&lt;/span> &lt;span class="o">)&lt;/span> &lt;span class="o">{&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">Map&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">Entry&lt;/span>&lt;span class="o">&amp;lt;&lt;/span>&lt;span class="n">String&lt;/span>&lt;span class="o">,&lt;/span> &lt;span class="n">String&lt;/span>&lt;span class="o">&amp;gt;&lt;/span> &lt;span class="n">entry&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">iterator&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">next&lt;/span>&lt;span class="o">();&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">String&lt;/span> &lt;span class="n">key&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">entry&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">getKey&lt;/span>&lt;span class="o">();&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">String&lt;/span> &lt;span class="n">value&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">entry&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">getValue&lt;/span>&lt;span class="o">();&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">}&lt;/span>
-&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
-&lt;/div>
-&lt;/div>&lt;h4 id="keyset">KeySet&lt;/h4>
-&lt;div class="highlight">&lt;div class="chroma">
-&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
-&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
-&lt;/span>&lt;span class="lnt">2
-&lt;/span>&lt;span class="lnt">3
-&lt;/span>&lt;span class="lnt">4
-&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
-&lt;td class="lntd">
-&lt;pre tabindex="0" class="chroma">&lt;code class="language-java" data-lang="java">&lt;span class="line">&lt;span class="cl">&lt;span class="k">for&lt;/span> &lt;span class="o">(&lt;/span>&lt;span class="n">Iteator&lt;/span>&lt;span class="o">&amp;lt;&lt;/span>&lt;span class="n">String&lt;/span>&lt;span class="o">&amp;gt;&lt;/span> &lt;span class="n">iterator&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">map&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">keySet&lt;/span>&lt;span class="o">().&lt;/span>&lt;span class="na">iterator&lt;/span>&lt;span class="o">();&lt;/span> &lt;span class="n">iterator&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">hasNext&lt;/span>&lt;span class="o">();&lt;/span> &lt;span class="o">)&lt;/span> &lt;span class="o">{&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">String&lt;/span> &lt;span class="n">key&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">iterator&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">next&lt;/span>&lt;span class="o">();&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">String&lt;/span> &lt;span class="n">value&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">map&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">get&lt;/span>&lt;span class="o">(&lt;/span>&lt;span class="n">key&lt;/span>&lt;span class="o">);&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">}&lt;/span>
-&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
-&lt;/div>
-&lt;/div>&lt;h3 id="foreach">ForEach&lt;/h3>
-&lt;h4 id="entryset-1">EntrySet&lt;/h4>
 &lt;div class="highlight">&lt;div class="chroma">
 &lt;table class="lntable">&lt;tr>&lt;td class="lntd">
 &lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
@@ -1977,7 +2671,7 @@ data-flex-basis="642px"
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">}&lt;/span>
 &lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
 &lt;/div>
-&lt;/div>&lt;h4 id="keyset-1">KeySet&lt;/h4>
+&lt;/div>&lt;h4 id="keyset">KeySet&lt;/h4>
 &lt;div class="highlight">&lt;div class="chroma">
 &lt;table class="lntable">&lt;tr>&lt;td class="lntd">
 &lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
@@ -2050,6 +2744,60 @@ data-flex-basis="642px"
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">String&lt;/span> &lt;span class="n">key&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">entry&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">getKey&lt;/span>&lt;span class="o">();&lt;/span>
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">String&lt;/span> &lt;span class="n">value&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">entry&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">getValue&lt;/span>&lt;span class="o">();&lt;/span>
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">})&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;h3 id="interator">Interator&lt;/h3>
+&lt;h4 id="entryset-1">EntrySet&lt;/h4>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;span class="lnt">4
+&lt;/span>&lt;span class="lnt">5
+&lt;/span>&lt;span class="lnt">6
+&lt;/span>&lt;span class="lnt">7
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-java" data-lang="java">&lt;span class="line">&lt;span class="cl">&lt;span class="n">Iterator&lt;/span>&lt;span class="o">&amp;lt;&lt;/span>&lt;span class="n">Map&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">Entry&lt;/span>&lt;span class="o">&amp;lt;&lt;/span>&lt;span class="n">String&lt;/span>&lt;span class="o">,&lt;/span> &lt;span class="n">String&lt;/span>&lt;span class="o">&amp;gt;&amp;gt;&lt;/span> &lt;span class="n">iterator&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">map&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">entrySet&lt;/span>&lt;span class="o">().&lt;/span>&lt;span class="na">iterator&lt;/span>&lt;span class="o">();&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="k">while&lt;/span>&lt;span class="o">(&lt;/span>&lt;span class="n">iterator&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">hasNext&lt;/span>&lt;span class="o">())&lt;/span> &lt;span class="o">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">Map&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">Entry&lt;/span>&lt;span class="o">&amp;lt;&lt;/span>&lt;span class="n">String&lt;/span>&lt;span class="o">,&lt;/span> &lt;span class="n">String&lt;/span>&lt;span class="o">&amp;gt;&lt;/span> &lt;span class="n">entry&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">iterator&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">next&lt;/span>&lt;span class="o">();&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">String&lt;/span> &lt;span class="n">key&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">entry&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">getKey&lt;/span>&lt;span class="o">();&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">String&lt;/span> &lt;span class="n">value&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">entry&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">getValue&lt;/span>&lt;span class="o">();&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">}&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>根据 Effective Java - 57，更推荐以下这种写法：&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;span class="lnt">4
+&lt;/span>&lt;span class="lnt">5
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-java" data-lang="java">&lt;span class="line">&lt;span class="cl">&lt;span class="k">for&lt;/span> &lt;span class="o">(&lt;/span>&lt;span class="n">Iterator&lt;/span>&lt;span class="o">&amp;lt;&lt;/span>&lt;span class="n">Map&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">Entry&lt;/span>&lt;span class="o">&amp;lt;&lt;/span>&lt;span class="n">String&lt;/span>&lt;span class="o">,&lt;/span> &lt;span class="n">String&lt;/span>&lt;span class="o">&amp;gt;&amp;gt;&lt;/span> &lt;span class="n">iterator&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">map&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">entrySet&lt;/span>&lt;span class="o">().&lt;/span>&lt;span class="na">iterator&lt;/span>&lt;span class="o">();&lt;/span> &lt;span class="n">iterator&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">hasNext&lt;/span>&lt;span class="o">();&lt;/span> &lt;span class="o">)&lt;/span> &lt;span class="o">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">Map&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">Entry&lt;/span>&lt;span class="o">&amp;lt;&lt;/span>&lt;span class="n">String&lt;/span>&lt;span class="o">,&lt;/span> &lt;span class="n">String&lt;/span>&lt;span class="o">&amp;gt;&lt;/span> &lt;span class="n">entry&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">iterator&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">next&lt;/span>&lt;span class="o">();&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">String&lt;/span> &lt;span class="n">key&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">entry&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">getKey&lt;/span>&lt;span class="o">();&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">String&lt;/span> &lt;span class="n">value&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">entry&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">getValue&lt;/span>&lt;span class="o">();&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">}&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;h4 id="keyset-1">KeySet&lt;/h4>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;span class="lnt">4
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-java" data-lang="java">&lt;span class="line">&lt;span class="cl">&lt;span class="k">for&lt;/span> &lt;span class="o">(&lt;/span>&lt;span class="n">Iteator&lt;/span>&lt;span class="o">&amp;lt;&lt;/span>&lt;span class="n">String&lt;/span>&lt;span class="o">&amp;gt;&lt;/span> &lt;span class="n">iterator&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">map&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">keySet&lt;/span>&lt;span class="o">().&lt;/span>&lt;span class="na">iterator&lt;/span>&lt;span class="o">();&lt;/span> &lt;span class="n">iterator&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">hasNext&lt;/span>&lt;span class="o">();&lt;/span> &lt;span class="o">)&lt;/span> &lt;span class="o">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">String&lt;/span> &lt;span class="n">key&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">iterator&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">next&lt;/span>&lt;span class="o">();&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">String&lt;/span> &lt;span class="n">value&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">map&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">get&lt;/span>&lt;span class="o">(&lt;/span>&lt;span class="n">key&lt;/span>&lt;span class="o">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">}&lt;/span>
 &lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
 &lt;/div>
 &lt;/div>&lt;h2 id="-一些操作">🌟 一些操作&lt;/h2>
@@ -3217,6 +3965,701 @@ data-flex-basis="306px"
 &lt;ul>
 &lt;li>&lt;a class="link" href="https://pytorch.apachecn.org/#/docs/1.7/02" target="_blank" rel="noopener"
 >https://pytorch.apachecn.org/#/docs/1.7/02&lt;/a>&lt;/li>
+&lt;/ul></description></item><item><title>React Hooks</title><link>https://emerywan.github.io/blog/p/react-hooks/</link><pubDate>Thu, 28 Jan 2021 21:14:45 +0800</pubDate><guid>https://emerywan.github.io/blog/p/react-hooks/</guid><description>&lt;h1 id="react-hooks-简介">React Hooks 简介&lt;/h1>
+&lt;h2 id="hook-含义">Hook 含义&lt;/h2>
+&lt;h1 id="组件类和函数组件">组件类和函数组件&lt;/h1>
+&lt;h1 id="usestate">useState&lt;/h1>
+&lt;h2 id="使用">使用&lt;/h2>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;span class="lnt">11
+&lt;/span>&lt;span class="lnt">12
+&lt;/span>&lt;span class="lnt">13
+&lt;/span>&lt;span class="lnt">14
+&lt;/span>&lt;span class="lnt">15
+&lt;/span>&lt;span class="lnt">16
+&lt;/span>&lt;span class="lnt">17
+&lt;/span>&lt;span class="lnt">18
+&lt;/span>&lt;span class="lnt">19
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-jsx" data-lang="jsx">&lt;span class="line">&lt;span class="cl">&lt;span class="kr">import&lt;/span> &lt;span class="nx">React&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="p">{&lt;/span> &lt;span class="nx">useState&lt;/span> &lt;span class="p">}&lt;/span> &lt;span class="nx">from&lt;/span> &lt;span class="s1">&amp;#39;react&amp;#39;&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="kr">const&lt;/span> &lt;span class="nx">Example&lt;/span>&lt;span class="p">()&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c1">// 声明了一个 count 的 state 变量，并初始化为 0
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span> &lt;span class="c1">// setCount 设置 state 值 count 的方法
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span> &lt;span class="kr">const&lt;/span> &lt;span class="p">[&lt;/span>&lt;span class="nx">count&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="nx">setCount&lt;/span>&lt;span class="p">]&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="nx">useState&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="mi">0&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c1">// 每次点击按钮，将 count 的值 +1
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span> &lt;span class="k">return&lt;/span> &lt;span class="p">(&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">&amp;lt;&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">&amp;lt;&lt;/span>&lt;span class="nt">p&lt;/span>&lt;span class="p">&amp;gt;&lt;/span>&lt;span class="nx">You&lt;/span> &lt;span class="nx">clicked&lt;/span> &lt;span class="p">{&lt;/span>&lt;span class="nx">count&lt;/span>&lt;span class="p">}&lt;/span> &lt;span class="nx">times&lt;/span>&lt;span class="p">&amp;lt;/&lt;/span>&lt;span class="nt">p&lt;/span>&lt;span class="p">&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">&amp;lt;&lt;/span>&lt;span class="nt">button&lt;/span> &lt;span class="na">onClick&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="p">{()&lt;/span> &lt;span class="p">=&amp;gt;&lt;/span> &lt;span class="nx">setCount&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nx">count&lt;/span> &lt;span class="o">+&lt;/span> &lt;span class="mi">1&lt;/span>&lt;span class="p">)}&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nx">Click&lt;/span> &lt;span class="nx">me&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">&amp;lt;/&lt;/span>&lt;span class="nt">button&lt;/span>&lt;span class="p">&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">&amp;lt;/&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="kr">export&lt;/span> &lt;span class="k">default&lt;/span> &lt;span class="nx">Example&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;h2 id="语法">语法&lt;/h2>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-js" data-lang="js">&lt;span class="line">&lt;span class="cl">&lt;span class="c1">// 声明一个 state 变量，并同时初始化
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span>&lt;span class="kr">const&lt;/span> &lt;span class="p">[&lt;/span>&lt;span class="nx">state&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="nx">setState&lt;/span>&lt;span class="p">]&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="nx">useState&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nx">initialState&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;ul>
+&lt;li>useState 返回一个包含两个元素的数组
+&lt;ul>
+&lt;li>state 变量，指向状态当前值&lt;/li>
+&lt;li>setState 更新 state 值的方法&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>initialState 状态初始值可以是数字，字符串，数组，对象等&lt;/li>
+&lt;/ul>
+&lt;h2 id="与类中使用-setstate-异同">与类中使用 &lt;code>setState&lt;/code> 异同&lt;/h2>
+&lt;ul>
+&lt;li>相同点
+&lt;ul>
+&lt;li>在一次渲染周期中调用多次 setState，数据只改变一次&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>不同点
+&lt;ul>
+&lt;li>类组件中 setState 为合并&lt;/li>
+&lt;li>函数组件中 setState 为替换&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;h1 id="useeffect">useEffect&lt;/h1>
+&lt;p>useEffect 用来执行副作用。可以将 useEffect Hook 看做 &lt;code>componentDidMount, componentDidUpdate, componentWillMount&lt;/code> 生命周期函数的组合。&lt;/p>
+&lt;p>常用在：&lt;/p>
+&lt;ul>
+&lt;li>服务器请求&lt;/li>
+&lt;li>访问元素 dom 元素&lt;/li>
+&lt;li>本地持久化缓存&lt;/li>
+&lt;li>绑定/解绑事件&lt;/li>
+&lt;li>添加订阅&lt;/li>
+&lt;li>设置定时器&lt;/li>
+&lt;li>记录日志&lt;/li>
+&lt;li>等&lt;/li>
+&lt;/ul>
+&lt;p>useEffect 接收一个函数，该函数会在组件渲染完毕后才执行，该函数有要求：要么返回一个能清除副作用的函数，要么就不返回任何内容。&lt;/p>
+&lt;h2 id="不需要清除的-effect">不需要清除的 effect&lt;/h2>
+&lt;p>在 React 更新 DOM 之后，我们想运行一些额外的代码。比如发送网络请求，手动变更 DOM，记录日志，这些都是常见的无需清除的操作。
+因为我们在执行完这些操作之后，就可以忽略他们了。&lt;/p>
+&lt;p>以下为使用 class 和 Hook 都是怎么实现这些副作用的对比。&lt;/p>
+&lt;h3 id="使用类组件">使用类组件&lt;/h3>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;span class="lnt">11
+&lt;/span>&lt;span class="lnt">12
+&lt;/span>&lt;span class="lnt">13
+&lt;/span>&lt;span class="lnt">14
+&lt;/span>&lt;span class="lnt">15
+&lt;/span>&lt;span class="lnt">16
+&lt;/span>&lt;span class="lnt">17
+&lt;/span>&lt;span class="lnt">18
+&lt;/span>&lt;span class="lnt">19
+&lt;/span>&lt;span class="lnt">20
+&lt;/span>&lt;span class="lnt">21
+&lt;/span>&lt;span class="lnt">22
+&lt;/span>&lt;span class="lnt">23
+&lt;/span>&lt;span class="lnt">24
+&lt;/span>&lt;span class="lnt">25
+&lt;/span>&lt;span class="lnt">26
+&lt;/span>&lt;span class="lnt">27
+&lt;/span>&lt;span class="lnt">28
+&lt;/span>&lt;span class="lnt">29
+&lt;/span>&lt;span class="lnt">30
+&lt;/span>&lt;span class="lnt">31
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-jsx" data-lang="jsx">&lt;span class="line">&lt;span class="cl">&lt;span class="c1">// 在 React 更新 DOM 操作后，立即更新 document 的 title 属性
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span>&lt;span class="kr">class&lt;/span> &lt;span class="nx">Example&lt;/span> &lt;span class="kr">extends&lt;/span> &lt;span class="nx">React&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">Component&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nx">constructor&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nx">props&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kr">super&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nx">props&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">this&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">state&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nx">count&lt;/span>&lt;span class="o">:&lt;/span> &lt;span class="mi">0&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">};&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c1">// 组件加载时需要更新
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span> &lt;span class="nx">componentDidMount&lt;/span>&lt;span class="p">()&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nb">document&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">title&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="sb">`You clicked &lt;/span>&lt;span class="si">${&lt;/span>&lt;span class="k">this&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">state&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">count&lt;/span>&lt;span class="si">}&lt;/span>&lt;span class="sb"> times`&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c1">// 组件更新时需要更新
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span> &lt;span class="nx">componentDidUpdate&lt;/span>&lt;span class="p">()&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nb">document&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">title&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="sb">`You clicked &lt;/span>&lt;span class="si">${&lt;/span>&lt;span class="k">this&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">state&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">count&lt;/span>&lt;span class="si">}&lt;/span>&lt;span class="sb"> times`&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c1">// 在 render() 不能有任何副作用。应该在 react 更新 DOM 后再执行副作用。
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span> &lt;span class="nx">render&lt;/span>&lt;span class="p">()&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">return&lt;/span> &lt;span class="p">(&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">&amp;lt;&lt;/span>&lt;span class="nt">div&lt;/span>&lt;span class="p">&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">&amp;lt;&lt;/span>&lt;span class="nt">p&lt;/span>&lt;span class="p">&amp;gt;&lt;/span>&lt;span class="nx">You&lt;/span> &lt;span class="nx">clicked&lt;/span> &lt;span class="p">{&lt;/span>&lt;span class="k">this&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">state&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">count&lt;/span>&lt;span class="p">}&lt;/span> &lt;span class="nx">times&lt;/span>&lt;span class="p">.&amp;lt;/&lt;/span>&lt;span class="nt">p&lt;/span>&lt;span class="p">&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">&amp;lt;&lt;/span>&lt;span class="nt">button&lt;/span> &lt;span class="na">onClick&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="p">{()&lt;/span> &lt;span class="p">=&amp;gt;&lt;/span> &lt;span class="k">this&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">setState&lt;/span>&lt;span class="p">({&lt;/span> &lt;span class="nx">count&lt;/span>&lt;span class="o">:&lt;/span> &lt;span class="k">this&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">state&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">count&lt;/span> &lt;span class="o">+&lt;/span> &lt;span class="mi">1&lt;/span>&lt;span class="p">})}&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nx">click&lt;/span> &lt;span class="nx">me&lt;/span>&lt;span class="p">.&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">&amp;lt;/&lt;/span>&lt;span class="nt">button&lt;/span>&lt;span class="p">&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">&amp;lt;&lt;/span>&lt;span class="nt">div&lt;/span>&lt;span class="p">/&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;h3 id="使用-hook">使用 Hook&lt;/h3>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;span class="lnt">11
+&lt;/span>&lt;span class="lnt">12
+&lt;/span>&lt;span class="lnt">13
+&lt;/span>&lt;span class="lnt">14
+&lt;/span>&lt;span class="lnt">15
+&lt;/span>&lt;span class="lnt">16
+&lt;/span>&lt;span class="lnt">17
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-jsx" data-lang="jsx">&lt;span class="line">&lt;span class="cl">&lt;span class="kr">import&lt;/span> &lt;span class="nx">React&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="p">{&lt;/span>&lt;span class="nx">useState&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="nx">useEffect&lt;/span>&lt;span class="p">}&lt;/span> &lt;span class="nx">from&lt;/span> &lt;span class="s1">&amp;#39;react&amp;#39;&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="kr">export&lt;/span> &lt;span class="k">default&lt;/span> &lt;span class="kd">function&lt;/span> &lt;span class="nx">Example&lt;/span>&lt;span class="p">()&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kr">const&lt;/span> &lt;span class="p">[&lt;/span>&lt;span class="nx">count&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="nx">setCount&lt;/span>&lt;span class="p">]&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="nx">useState&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="mi">0&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nx">useEffect&lt;/span>&lt;span class="p">(()&lt;/span> &lt;span class="p">=&amp;gt;&lt;/span> &lt;span class="p">{&lt;/span> &lt;span class="c1">// 经过渲染或更新， DOM 更新完毕之后，会运行该 effect
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span> &lt;span class="nb">document&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">title&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="sb">`You click &lt;/span>&lt;span class="si">${&lt;/span>&lt;span class="nx">count&lt;/span>&lt;span class="si">}&lt;/span>&lt;span class="sb"> times`&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">});&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">return&lt;/span> &lt;span class="p">(&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">&amp;lt;&lt;/span>&lt;span class="nt">div&lt;/span>&lt;span class="p">&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">&amp;lt;&lt;/span>&lt;span class="nt">p&lt;/span>&lt;span class="p">&amp;gt;&lt;/span>&lt;span class="nx">You&lt;/span> &lt;span class="nx">clicked&lt;/span> &lt;span class="p">{&lt;/span>&lt;span class="k">this&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">state&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">count&lt;/span>&lt;span class="p">}&lt;/span> &lt;span class="nx">times&lt;/span>&lt;span class="p">.&amp;lt;/&lt;/span>&lt;span class="nt">p&lt;/span>&lt;span class="p">&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">&amp;lt;&lt;/span>&lt;span class="nt">button&lt;/span> &lt;span class="na">onClick&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="p">{()&lt;/span> &lt;span class="p">=&amp;gt;&lt;/span> &lt;span class="k">this&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">setState&lt;/span>&lt;span class="p">({&lt;/span> &lt;span class="nx">count&lt;/span>&lt;span class="o">:&lt;/span> &lt;span class="k">this&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">state&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">count&lt;/span> &lt;span class="o">+&lt;/span> &lt;span class="mi">1&lt;/span>&lt;span class="p">})}&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nx">click&lt;/span> &lt;span class="nx">me&lt;/span>&lt;span class="p">.&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">&amp;lt;/&lt;/span>&lt;span class="nt">button&lt;/span>&lt;span class="p">&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">&amp;lt;&lt;/span>&lt;span class="nt">div&lt;/span>&lt;span class="p">/&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;ul>
+&lt;li>第一次渲染之后和每次更新之后都会执行 useEffect。且 React 保证每次运行 effect 的同时，DOM 已经更新完毕。&lt;/li>
+&lt;li>useEffect 放在组件内部让我们可以在 effect 中直接访问 state / props。我们不需要特殊的 API 来读取。&lt;/li>
+&lt;li>与 componentDidMount 或 componentDidUpdate 不同，使用 useEffect 调度的 effect 不会阻塞浏览器更新屏幕，这让你的应用看起来响应更快。大多数情况下，effect 不需要同步地执行。在个别情况下（例如测量布局），有单独的 useLayoutEffect Hook 供你使用，其 API 与 useEffect 相同。&lt;/li>
+&lt;/ul>
+&lt;h2 id="需要清除的-effect">需要清除的 effect&lt;/h2>
+&lt;p>有一些副作用是需要清除的，如订阅外部数据源。这种情况下，清除工作是非常重要的，可以防止引起内存泄露！&lt;/p>
+&lt;h3 id="使用类组件-1">使用类组件&lt;/h3>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;span class="lnt">11
+&lt;/span>&lt;span class="lnt">12
+&lt;/span>&lt;span class="lnt">13
+&lt;/span>&lt;span class="lnt">14
+&lt;/span>&lt;span class="lnt">15
+&lt;/span>&lt;span class="lnt">16
+&lt;/span>&lt;span class="lnt">17
+&lt;/span>&lt;span class="lnt">18
+&lt;/span>&lt;span class="lnt">19
+&lt;/span>&lt;span class="lnt">20
+&lt;/span>&lt;span class="lnt">21
+&lt;/span>&lt;span class="lnt">22
+&lt;/span>&lt;span class="lnt">23
+&lt;/span>&lt;span class="lnt">24
+&lt;/span>&lt;span class="lnt">25
+&lt;/span>&lt;span class="lnt">26
+&lt;/span>&lt;span class="lnt">27
+&lt;/span>&lt;span class="lnt">28
+&lt;/span>&lt;span class="lnt">29
+&lt;/span>&lt;span class="lnt">30
+&lt;/span>&lt;span class="lnt">31
+&lt;/span>&lt;span class="lnt">32
+&lt;/span>&lt;span class="lnt">33
+&lt;/span>&lt;span class="lnt">34
+&lt;/span>&lt;span class="lnt">35
+&lt;/span>&lt;span class="lnt">36
+&lt;/span>&lt;span class="lnt">37
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-jsx" data-lang="jsx">&lt;span class="line">&lt;span class="cl">&lt;span class="kr">class&lt;/span> &lt;span class="nx">FriendStatus&lt;/span> &lt;span class="kr">extends&lt;/span> &lt;span class="nx">React&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">Component&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nx">constructor&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nx">props&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kr">super&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nx">props&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">this&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">state&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="p">{&lt;/span> &lt;span class="nx">isOnline&lt;/span>&lt;span class="o">:&lt;/span> &lt;span class="kc">null&lt;/span> &lt;span class="p">};&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">this&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">handleStatusChange&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="k">this&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">handleStatusChange&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">bind&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="k">this&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nx">componentDidMount&lt;/span>&lt;span class="p">()&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nx">ChatAPI&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">subscribeToFriendStatus&lt;/span>&lt;span class="p">(&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">this&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">props&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">friend&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">id&lt;/span>&lt;span class="p">,&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">this&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">handleStatusChange&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nx">componentDidUpdate&lt;/span> &lt;span class="p">()&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c1">// ...
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nx">componentWillUnmount&lt;/span>&lt;span class="p">()&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c1">// 在组件卸载时，关闭订阅的数据源
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span> &lt;span class="nx">ChatAPI&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">unsubscribeFromFriendStatus&lt;/span>&lt;span class="p">(&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">this&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">props&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">friend&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">id&lt;/span>&lt;span class="p">,&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">this&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">handleStatusChange&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nx">handleStatusChange&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nx">status&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">this&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">setState&lt;/span>&lt;span class="p">({&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nx">isOnline&lt;/span>&lt;span class="o">:&lt;/span> &lt;span class="nx">status&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">isOnline&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">});&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nx">render&lt;/span>&lt;span class="p">()&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">if&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="k">this&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">state&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">isOnline&lt;/span> &lt;span class="o">===&lt;/span> &lt;span class="kc">null&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">return&lt;/span> &lt;span class="s1">&amp;#39;Loading...&amp;#39;&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">return&lt;/span> &lt;span class="k">this&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">state&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">isOnline&lt;/span> &lt;span class="o">?&lt;/span> &lt;span class="s1">&amp;#39;Online&amp;#39;&lt;/span> &lt;span class="o">:&lt;/span> &lt;span class="s1">&amp;#39;Offline&amp;#39;&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;h3 id="使用函数组件">使用函数组件&lt;/h3>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;span class="lnt">11
+&lt;/span>&lt;span class="lnt">12
+&lt;/span>&lt;span class="lnt">13
+&lt;/span>&lt;span class="lnt">14
+&lt;/span>&lt;span class="lnt">15
+&lt;/span>&lt;span class="lnt">16
+&lt;/span>&lt;span class="lnt">17
+&lt;/span>&lt;span class="lnt">18
+&lt;/span>&lt;span class="lnt">19
+&lt;/span>&lt;span class="lnt">20
+&lt;/span>&lt;span class="lnt">21
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-jsx" data-lang="jsx">&lt;span class="line">&lt;span class="cl">&lt;span class="kr">import&lt;/span> &lt;span class="nx">React&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="p">{&lt;/span>&lt;span class="nx">useState&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="nx">useEffect&lt;/span>&lt;span class="p">}&lt;/span> &lt;span class="nx">from&lt;/span> &lt;span class="s1">&amp;#39;react&amp;#39;&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="kr">export&lt;/span> &lt;span class="k">default&lt;/span> &lt;span class="kd">function&lt;/span> &lt;span class="nx">FriendStatus&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nx">props&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kr">const&lt;/span> &lt;span class="p">[&lt;/span>&lt;span class="nx">isOnline&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="nx">setIsOnline&lt;/span>&lt;span class="p">]&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="nx">useState&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="kc">null&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nx">useEffect&lt;/span>&lt;span class="p">(()&lt;/span> &lt;span class="p">=&amp;gt;&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kd">function&lt;/span> &lt;span class="nx">handleStatusChange&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nx">status&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nx">setIsOnline&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nx">status&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">isOnline&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nx">ChatAPI&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">subscribeToFriendStatus&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nx">props&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">friend&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">id&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="nx">handleStatusChange&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c1">// effect 可选清除副作用的函数，返回函数不一定需要命名
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span> &lt;span class="k">return&lt;/span> &lt;span class="kd">function&lt;/span> &lt;span class="nx">cleanup&lt;/span>&lt;span class="p">()&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nx">ChatAPI&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">unsubscribeFromFriendStatus&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nx">props&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">friend&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">id&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="nx">handleStatusChange&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">};&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">});&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">if&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="nx">isOnline&lt;/span> &lt;span class="o">===&lt;/span> &lt;span class="kc">null&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">return&lt;/span> &lt;span class="s1">&amp;#39;Loading...&amp;#39;&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">return&lt;/span> &lt;span class="nx">isOnline&lt;/span> &lt;span class="o">?&lt;/span> &lt;span class="s1">&amp;#39;Online&amp;#39;&lt;/span> &lt;span class="o">:&lt;/span> &lt;span class="s1">&amp;#39;Offline&amp;#39;&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;ul>
+&lt;li>React 会在组件卸载的时候执行清除操作。&lt;/li>
+&lt;/ul>
+&lt;h2 id="多个-effect-实现关注点分离">多个 Effect 实现关注点分离&lt;/h2>
+&lt;p>使用 Hook 的其中一个目的是要解决： class 生命周期函数中经常包含不相关逻辑，相关逻辑又分离在几个不同的方法中。&lt;/p>
+&lt;p>如下为上文中计数器和好友状态指示器逻辑组合在一起的组件：&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;span class="lnt">11
+&lt;/span>&lt;span class="lnt">12
+&lt;/span>&lt;span class="lnt">13
+&lt;/span>&lt;span class="lnt">14
+&lt;/span>&lt;span class="lnt">15
+&lt;/span>&lt;span class="lnt">16
+&lt;/span>&lt;span class="lnt">17
+&lt;/span>&lt;span class="lnt">18
+&lt;/span>&lt;span class="lnt">19
+&lt;/span>&lt;span class="lnt">20
+&lt;/span>&lt;span class="lnt">21
+&lt;/span>&lt;span class="lnt">22
+&lt;/span>&lt;span class="lnt">23
+&lt;/span>&lt;span class="lnt">24
+&lt;/span>&lt;span class="lnt">25
+&lt;/span>&lt;span class="lnt">26
+&lt;/span>&lt;span class="lnt">27
+&lt;/span>&lt;span class="lnt">28
+&lt;/span>&lt;span class="lnt">29
+&lt;/span>&lt;span class="lnt">30
+&lt;/span>&lt;span class="lnt">31
+&lt;/span>&lt;span class="lnt">32
+&lt;/span>&lt;span class="lnt">33
+&lt;/span>&lt;span class="lnt">34
+&lt;/span>&lt;span class="lnt">35
+&lt;/span>&lt;span class="lnt">36
+&lt;/span>&lt;span class="lnt">37
+&lt;/span>&lt;span class="lnt">38
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-jsx" data-lang="jsx">&lt;span class="line">&lt;span class="cl">&lt;span class="kr">class&lt;/span> &lt;span class="nx">FriendStatusWithCounter&lt;/span> &lt;span class="kr">extends&lt;/span> &lt;span class="nx">React&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">Component&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nx">constructor&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nx">props&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kr">super&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nx">props&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">this&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">state&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nx">count&lt;/span>&lt;span class="o">:&lt;/span> &lt;span class="mi">0&lt;/span>&lt;span class="p">,&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nx">isOnline&lt;/span>&lt;span class="o">:&lt;/span> &lt;span class="kc">null&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">};&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">this&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">handleStautsChange&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="k">this&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">handleStatusChange&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">bind&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="k">this&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c1">// 相应的逻辑被分配在三个不同的生命周期函数中
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span> &lt;span class="nx">componentDidMount&lt;/span>&lt;span class="p">()&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c1">// counter
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span> &lt;span class="nb">document&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">title&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="sb">`You clicked &lt;/span>&lt;span class="si">${&lt;/span>&lt;span class="k">this&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">state&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">count&lt;/span>&lt;span class="si">}&lt;/span>&lt;span class="sb"> times`&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c1">// friend status
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span> &lt;span class="nx">ChatAPI&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">subscribeToFriendStatus&lt;/span>&lt;span class="p">(&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">this&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">props&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">fried&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">id&lt;/span>&lt;span class="p">,&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">this&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">handleStatusChange&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nx">componentDidUpdate&lt;/span>&lt;span class="p">()&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nb">document&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">title&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="sb">`You clicked &lt;/span>&lt;span class="si">${&lt;/span>&lt;span class="k">this&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">state&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">count&lt;/span>&lt;span class="si">}&lt;/span>&lt;span class="sb"> times`&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nx">componentWillUnmount&lt;/span>&lt;span class="p">()&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nx">ChatAPI&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">unsubscribeFromFriendStatus&lt;/span>&lt;span class="p">(&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">this&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">props&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">friend&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">id&lt;/span>&lt;span class="p">,&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">this&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">handleStatusChange&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nx">handleStatusChange&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nx">status&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">this&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">setState&lt;/span>&lt;span class="p">({&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nx">isOnline&lt;/span>&lt;span class="o">:&lt;/span> &lt;span class="nx">status&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">isOnline&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">});&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c1">// ...
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span>&lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>若使用 Hook，和使用多个 state 的 Hook 一样，通过使用多个 effect，将不相关的逻辑分离到不同的 effect 中。&lt;/p>
+&lt;p>Hook 允许按照代码的用途进行分离，不同于生命周期函数。将按照 effect 声明的顺序依次调用组件中的每一个 effect。&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;span class="lnt">11
+&lt;/span>&lt;span class="lnt">12
+&lt;/span>&lt;span class="lnt">13
+&lt;/span>&lt;span class="lnt">14
+&lt;/span>&lt;span class="lnt">15
+&lt;/span>&lt;span class="lnt">16
+&lt;/span>&lt;span class="lnt">17
+&lt;/span>&lt;span class="lnt">18
+&lt;/span>&lt;span class="lnt">19
+&lt;/span>&lt;span class="lnt">20
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-jsx" data-lang="jsx">&lt;span class="line">&lt;span class="cl">&lt;span class="kr">export&lt;/span> &lt;span class="k">default&lt;/span> &lt;span class="kr">const&lt;/span> &lt;span class="nx">FriendStatusWithCounter&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="p">()&lt;/span> &lt;span class="p">=&amp;gt;&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kr">const&lt;/span> &lt;span class="p">[&lt;/span>&lt;span class="nx">count&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="nx">setCount&lt;/span>&lt;span class="p">]&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="nx">useState&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="mi">0&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nx">useEffect&lt;/span>&lt;span class="p">(()&lt;/span> &lt;span class="p">=&amp;gt;&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nb">document&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">title&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="sb">`You clicked &lt;/span>&lt;span class="si">${&lt;/span>&lt;span class="k">this&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">state&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">count&lt;/span>&lt;span class="si">}&lt;/span>&lt;span class="sb"> times`&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">});&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kr">const&lt;/span> &lt;span class="p">[&lt;/span>&lt;span class="nx">isOneline&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="nx">useIsOneline&lt;/span>&lt;span class="p">]&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="nx">useState&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="kc">null&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nx">useEffect&lt;/span>&lt;span class="p">(()&lt;/span> &lt;span class="p">=&amp;gt;&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kd">function&lt;/span> &lt;span class="nx">handleStatusChange&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nx">status&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nx">setIsOneline&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nx">status&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">isOneline&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nx">ChatAPI&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">subscribeToFriendStatus&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nx">props&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">friend&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">id&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="nx">handleStatusChange&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">return&lt;/span> &lt;span class="p">()&lt;/span> &lt;span class="p">=&amp;gt;&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nx">ChatAPI&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">unsubscribeFromFriendStatus&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nx">props&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">friend&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">id&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="nx">handleStatusChange&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">};&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">});&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c1">// ...
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span>&lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;h2 id="跳过-effect-进行性能优化">跳过 Effect 进行性能优化&lt;/h2>
+&lt;p>在类组件中，我们可以通过 &lt;code>componentDidUpdate&lt;/code> 中 &lt;code>prevProps&lt;/code> 和 &lt;code>prevState&lt;/code> 的 props / state 的变化比较，判断是否需要执行某些副作用。&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;span class="lnt">4
+&lt;/span>&lt;span class="lnt">5
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-js" data-lang="js">&lt;span class="line">&lt;span class="cl">&lt;span class="nx">componentDidUpdate&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nx">prevProps&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="nx">prevState&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">if&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="nx">prevState&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">count&lt;/span> &lt;span class="o">!==&lt;/span> &lt;span class="k">this&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">state&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">count&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nb">document&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">title&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="sb">`You clicked &lt;/span>&lt;span class="si">${&lt;/span>&lt;span class="k">this&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">state&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">count&lt;/span>&lt;span class="si">}&lt;/span>&lt;span class="sb"> times`&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>在 Hook 中，可以通过对 useEffect 传递数组作为第二可选参数，通知 React 跳过对 effect 的调用。&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;span class="lnt">4
+&lt;/span>&lt;span class="lnt">5
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-js" data-lang="js">&lt;span class="line">&lt;span class="cl">&lt;span class="nx">useEffect&lt;/span>&lt;span class="p">(()&lt;/span> &lt;span class="p">=&amp;gt;&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nb">document&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">title&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="sb">`You clicked &lt;/span>&lt;span class="si">${&lt;/span>&lt;span class="nx">count&lt;/span>&lt;span class="si">}&lt;/span>&lt;span class="sb"> times`&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">},&lt;/span> &lt;span class="p">[&lt;/span>&lt;span class="nx">count&lt;/span>&lt;span class="p">]);&lt;/span> &lt;span class="c1">// 表示 count 更改时会进行更新
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">// {... , [5]} 当 count === 5 时，跳过 effect
+&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;ul>
+&lt;li>若只想运行一次 effect（仅在组件挂载和卸载时执行），可传递一个空数组 [] 作为第二参数。
+&lt;ul>
+&lt;li>传入一个空数组（[]），effect 内部的 props 和 state 会一直拥有其初始值。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>使用该优化，请确保数组中包含了所有外部作用域中会随时间变化且在 effect 中使用的变量，否则代码会用到先前渲染中的旧变量。&lt;/li>
+&lt;/ul>
+&lt;h2 id="每次更新的时候都要运行-effect-的原因">每次更新的时候都要运行 Effect 的原因&lt;/h2>
+&lt;h1 id="自定义-hook">自定义 Hook&lt;/h1>
+&lt;p>自定义 Hook 可以将组件逻辑提取到可重用的函数中。&lt;/p>
+&lt;p>目前为止，在 React 中有两种流行的方式共享组件之间的状态逻辑：&lt;/p>
+&lt;ul>
+&lt;li>render props&lt;/li>
+&lt;li>高阶组件
+使用 Hook 可以在不增加组件的情况下解决相同的问题。&lt;/li>
+&lt;/ul>
+&lt;h2 id="创建自定义-hook">创建自定义 Hook&lt;/h2>
+&lt;p>当我们想在函数间共享逻辑时，我们可以把它提取到另外一个函数中。由于组件和 Hook 都是函数，所以也同样使用于这种方式。&lt;/p>
+&lt;p>自定义 Hook 是一个函数，其名称以 &amp;ldquo;use&amp;rdquo; 开头，函数内部可以调用其他的 Hook。&lt;/p>
+&lt;p>以下是根据上文中 &lt;code>FriendStatus&lt;/code> 实例，所提取的自定义 Hook。&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;span class="lnt">11
+&lt;/span>&lt;span class="lnt">12
+&lt;/span>&lt;span class="lnt">13
+&lt;/span>&lt;span class="lnt">14
+&lt;/span>&lt;span class="lnt">15
+&lt;/span>&lt;span class="lnt">16
+&lt;/span>&lt;span class="lnt">17
+&lt;/span>&lt;span class="lnt">18
+&lt;/span>&lt;span class="lnt">19
+&lt;/span>&lt;span class="lnt">20
+&lt;/span>&lt;span class="lnt">21
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-js" data-lang="js">&lt;span class="line">&lt;span class="cl">&lt;span class="kr">import&lt;/span> &lt;span class="p">{&lt;/span> &lt;span class="nx">useState&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="nx">useEffect&lt;/span> &lt;span class="p">}&lt;/span> &lt;span class="nx">from&lt;/span> &lt;span class="s1">&amp;#39;react&amp;#39;&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">// 名称一定以 use 开头
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span>&lt;span class="kd">function&lt;/span> &lt;span class="nx">useFriendStatus&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nx">friendID&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kr">const&lt;/span> &lt;span class="p">[&lt;/span>&lt;span class="nx">isOnline&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="nx">setIsOnline&lt;/span>&lt;span class="p">]&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="nx">useState&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="kc">null&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nx">useEffect&lt;/span>&lt;span class="p">(()&lt;/span> &lt;span class="p">=&amp;gt;&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kd">function&lt;/span> &lt;span class="nx">handleStatusChange&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nx">status&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nx">setIsOnline&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nx">status&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">isOneline&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nx">ChatAPI&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">subscribeToFriendStatus&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nx">friendID&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="nx">handleStatusChange&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">return&lt;/span> &lt;span class="p">()&lt;/span> &lt;span class="p">=&amp;gt;&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nx">ChatAPI&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">unsubcribeFromFriendStatus&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nx">friendID&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="nx">handleStatusChange&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">};&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">});&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">return&lt;/span> &lt;span class="nx">isOnline&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="kr">export&lt;/span> &lt;span class="k">default&lt;/span> &lt;span class="nx">useFriendStatus&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>在这个自定义 Hook 中，没有包含任何新内容（逻辑与组件中的完全一致）&lt;/p>
+&lt;h2 id="使用自定义-hook">使用自定义 Hook&lt;/h2>
+&lt;p>与组件一致，请确保只在自定义 Hook 的顶层无条件地调用其他 Hook。&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;span class="lnt">4
+&lt;/span>&lt;span class="lnt">5
+&lt;/span>&lt;span class="lnt">6
+&lt;/span>&lt;span class="lnt">7
+&lt;/span>&lt;span class="lnt">8
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-js" data-lang="js">&lt;span class="line">&lt;span class="cl">&lt;span class="kd">function&lt;/span> &lt;span class="nx">FriendStatus&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nx">props&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kr">const&lt;/span> &lt;span class="nx">isOnline&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="nx">useFriendStatus&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nx">props&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">friend&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">id&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">if&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="nx">isOnline&lt;/span> &lt;span class="o">===&lt;/span> &lt;span class="kc">null&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">return&lt;/span> &lt;span class="s2">&amp;#34;Loading...&amp;#34;&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">return&lt;/span> &lt;span class="nx">isOnline&lt;/span> &lt;span class="o">?&lt;/span> &lt;span class="s1">&amp;#39;Online&amp;#39;&lt;/span> &lt;span class="o">:&lt;/span> &lt;span class="s1">&amp;#39;Offline&amp;#39;&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>这段代码与之前的工作方式完全一样，我们只是将函数中需要共享的逻辑提取到单独的函数中。&lt;/p>
+&lt;ul>
+&lt;li>自定义 Hook 是一种自然遵循 Hook 设计的约定，不是 React 的特性。&lt;/li>
+&lt;li>自定义 Hook 必须以 &amp;ldquo;use&amp;rdquo; 开头&lt;/li>
+&lt;li>不同组件中使用相同的 Hook 不会共享 state。
+&lt;ul>
+&lt;li>自定义 Hook 是重用状态逻辑的机制（例如设置为订阅并存储当前值），每次使用自定义 Hook 时，其中的所有 state 和副作用完全隔离。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;h2 id="在多个-hook-之间传递信息">在多个 Hook 之间传递信息&lt;/h2>
+&lt;p>由于 Hook 本身就是函数，因此我们可以在它们之间传递信息。&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;span class="lnt">11
+&lt;/span>&lt;span class="lnt">12
+&lt;/span>&lt;span class="lnt">13
+&lt;/span>&lt;span class="lnt">14
+&lt;/span>&lt;span class="lnt">15
+&lt;/span>&lt;span class="lnt">16
+&lt;/span>&lt;span class="lnt">17
+&lt;/span>&lt;span class="lnt">18
+&lt;/span>&lt;span class="lnt">19
+&lt;/span>&lt;span class="lnt">20
+&lt;/span>&lt;span class="lnt">21
+&lt;/span>&lt;span class="lnt">22
+&lt;/span>&lt;span class="lnt">23
+&lt;/span>&lt;span class="lnt">24
+&lt;/span>&lt;span class="lnt">25
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-js" data-lang="js">&lt;span class="line">&lt;span class="cl">&lt;span class="c1">// 这是一个聊天消息接收者的选择器，它会显示当前选定的好友是否在线
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span>&lt;span class="kd">function&lt;/span> &lt;span class="nx">ChatRecipientPicker&lt;/span>&lt;span class="p">()&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c1">// 当前选择的好友 ID 保存在 recipientID 状态变量中
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span> &lt;span class="kr">const&lt;/span> &lt;span class="p">[&lt;/span>&lt;span class="nx">recipientID&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="nx">setRecipientID&lt;/span>&lt;span class="p">]&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="nx">useState&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="mi">1&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c1">// 当更新 recipientID 状态变量时，useFriendStatus Hook 会取消订阅之前选中的好友，并订阅新选中的好友状态
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span> &lt;span class="kr">const&lt;/span> &lt;span class="nx">isRecipientOnline&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="nx">useFriendStatus&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nx">recipientID&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">return&lt;/span> &lt;span class="p">(&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="o">&amp;lt;&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="o">&amp;lt;&lt;/span>&lt;span class="nx">Circle&lt;/span> &lt;span class="nx">color&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="p">{&lt;/span>&lt;span class="nx">isRecipientOnline&lt;/span> &lt;span class="o">?&lt;/span> &lt;span class="s1">&amp;#39;green&amp;#39;&lt;/span> &lt;span class="o">:&lt;/span> &lt;span class="s1">&amp;#39;red&amp;#39;&lt;/span>&lt;span class="p">}&lt;/span> &lt;span class="o">/&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="o">&amp;lt;&lt;/span>&lt;span class="nx">select&lt;/span> &lt;span class="c1">// &amp;lt;select&amp;gt; 中选择其他好友时更新 recipientID
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span> &lt;span class="nx">value&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="p">{&lt;/span>&lt;span class="nx">recipientID&lt;/span>&lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nx">onChange&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="p">{&lt;/span>&lt;span class="nx">e&lt;/span> &lt;span class="p">=&amp;gt;&lt;/span> &lt;span class="nx">setRecipientID&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nb">Number&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nx">e&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">target&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">value&lt;/span>&lt;span class="p">))}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="o">&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nx">friendList&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">map&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nx">friend&lt;/span> &lt;span class="p">=&amp;gt;&lt;/span> &lt;span class="p">(&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="o">&amp;lt;&lt;/span>&lt;span class="nx">option&lt;/span> &lt;span class="nx">key&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="p">{&lt;/span>&lt;span class="nx">friend&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">id&lt;/span>&lt;span class="p">}&lt;/span> &lt;span class="nx">value&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="p">{&lt;/span>&lt;span class="nx">friend&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">id&lt;/span>&lt;span class="p">}&lt;/span>&lt;span class="o">&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">{&lt;/span>&lt;span class="nx">friend&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">name&lt;/span>&lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="o">&amp;lt;&lt;/span>&lt;span class="err">/option&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">))&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="o">&amp;lt;&lt;/span>&lt;span class="err">/select&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="o">&amp;lt;&lt;/span>&lt;span class="err">/&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>我们将当前选择的好友 ID 保存在 recipientID 状态变量中，并会在用户从 &amp;lt;select&amp;gt; 中选择其他好友时更新这个 state。&lt;/p>
+&lt;p>由于 useState 会提供 recipientID 状态变量的最新值，可以将它作为参数传递给自定义的 useFriendStatus Hook。当我们选择不同的好友并更新 recipientID 状态变量时，useFriendStatus Hook 会取消订阅之前选中的好友，并订阅新选中的好友状态。&lt;/p>
+&lt;h1 id="hook-规则">Hook 规则&lt;/h1>
+&lt;h1 id="额外的-hook">额外的 Hook&lt;/h1>
+&lt;h1 id="参考">参考&lt;/h1>
+&lt;ul>
+&lt;li>&lt;a class="link" href="https://juejin.im/post/6844903814349193229" target="_blank" rel="noopener"
+>https://juejin.im/post/6844903814349193229&lt;/a>&lt;/li>
+&lt;li>&lt;a class="link" href="https://juejin.im/post/6844903985338400782" target="_blank" rel="noopener"
+>https://juejin.im/post/6844903985338400782&lt;/a>&lt;/li>
+&lt;li>&lt;a class="link" href="https://www.ruanyifeng.com/blog/2019/09/react-hooks.html" target="_blank" rel="noopener"
+>https://www.ruanyifeng.com/blog/2019/09/react-hooks.html&lt;/a>&lt;/li>
+&lt;li>&lt;a class="link" href="https://zh-hans.reactjs.org/docs/hooks-intro.html" target="_blank" rel="noopener"
+>https://zh-hans.reactjs.org/docs/hooks-intro.html&lt;/a>&lt;/li>
 &lt;/ul></description></item><item><title>机器学习基础</title><link>https://emerywan.github.io/blog/p/mechine-learning-basics/</link><pubDate>Mon, 28 Sep 2020 14:02:02 +0800</pubDate><guid>https://emerywan.github.io/blog/p/mechine-learning-basics/</guid><description>&lt;h1 id="机器学习">机器学习&lt;/h1>
 &lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/mechine-learning-basics/machinelearning.png"
 width="887"

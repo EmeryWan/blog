@@ -9,9 +9,9 @@
 &lt;/li>
 &lt;/ul>
 &lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/distributed-lock/zookeeper/node.png"
-width="630"
-height="718"
-srcset="https://emerywan.github.io/blog/blog/p/distributed-lock/zookeeper/node_hu2de7e6219e45c40f11ee31fb5368f0b5_92897_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/distributed-lock/zookeeper/node_hu2de7e6219e45c40f11ee31fb5368f0b5_92897_1024x0_resize_box_3.png 1024w"
+width="542"
+height="618"
+srcset="https://emerywan.github.io/blog/blog/p/distributed-lock/zookeeper/node_hubb94f897927986ed284f5e5898a8688d_78967_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/distributed-lock/zookeeper/node_hubb94f897927986ed284f5e5898a8688d_78967_1024x0_resize_box_3.png 1024w"
 loading="lazy"
 alt="node"
 class="gallery-image"
