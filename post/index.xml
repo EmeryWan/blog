@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Posts on 一层</title><link>https://emerywan.github.io/blog/post/</link><description>Recent content in Posts on 一层</description><generator>Hugo -- gohugo.io</generator><lastBuildDate>Thu, 02 Jun 2022 02:02:02 +0800</lastBuildDate><atom:link href="https://emerywan.github.io/blog/post/index.xml" rel="self" type="application/rss+xml"/><item><title>Ubuntu 安装软件推荐方式</title><link>https://emerywan.github.io/blog/p/ubuntu-software-install/</link><pubDate>Thu, 02 Jun 2022 02:02:02 +0800</pubDate><guid>https://emerywan.github.io/blog/p/ubuntu-software-install/</guid><description>&lt;h2 id="说明">说明&lt;/h2>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Posts on 一层</title><link>https://emerywan.github.io/blog/post/</link><description>Recent content in Posts on 一层</description><generator>Hugo -- gohugo.io</generator><lastBuildDate>Thu, 02 Jun 2022 02:02:02 +0800</lastBuildDate><atom:link href="https://emerywan.github.io/blog/post/index.xml" rel="self" type="application/rss+xml"/><item><title>Ubuntu 安装软件推荐方式</title><link>https://emerywan.github.io/blog/p/ubuntu-software-install/</link><pubDate>Thu, 02 Jun 2022 02:02:02 +0800</pubDate><guid>https://emerywan.github.io/blog/p/ubuntu-software-install/</guid><description>&lt;img src="https://emerywan.github.io/imgs/4.jpeg" alt="Featured image of post Ubuntu 安装软件推荐方式" />&lt;h2 id="说明">说明&lt;/h2>
 &lt;p>Ubuntu 有些第三方软件只提供二进制执行文件（压缩包或 AppImage），而不是安装包或者 apt 源，这时候需要我们去自己解压文件，放在自定义目录，并进行配置。&lt;/p>
 &lt;p>平常使用桌面环境的话，这样安装后，更新还是有点麻烦的，一更新就要修改很多地方。&lt;/p>
 &lt;p>这里介绍我平常的配置方式，每次更新后，只需要修改软链接即可，感觉还是挺方便的。&lt;/p>
@@ -92,7 +92,7 @@
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">StartupNotify=true
 &lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
 &lt;/div>
-&lt;/div></description></item><item><title>使用 ZooKeeper 实现分布式锁</title><link>https://emerywan.github.io/blog/p/distributed-lock/zookeeper/</link><pubDate>Wed, 11 May 2022 21:14:45 +0800</pubDate><guid>https://emerywan.github.io/blog/p/distributed-lock/zookeeper/</guid><description>&lt;h2 id="使用-zookeeper-实现">使用 ZooKeeper 实现&lt;/h2>
+&lt;/div></description></item><item><title>使用 ZooKeeper 实现分布式锁</title><link>https://emerywan.github.io/blog/p/distributed-lock/zookeeper/</link><pubDate>Wed, 11 May 2022 21:14:45 +0800</pubDate><guid>https://emerywan.github.io/blog/p/distributed-lock/zookeeper/</guid><description>&lt;img src="https://emerywan.github.io/imgs/2.jpeg" alt="Featured image of post 使用 ZooKeeper 实现分布式锁" />&lt;h2 id="使用-zookeeper-实现">使用 ZooKeeper 实现&lt;/h2>
 &lt;h3 id="原理">原理&lt;/h3>
 &lt;ul>
 &lt;li>
@@ -470,7 +470,7 @@ data-flex-basis="1481px"
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">}&lt;/span>
 &lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
 &lt;/div>
-&lt;/div></description></item><item><title>使用 Redis 实现分布式锁</title><link>https://emerywan.github.io/blog/p/distributed-lock/redis/</link><pubDate>Wed, 11 May 2022 12:14:45 +0800</pubDate><guid>https://emerywan.github.io/blog/p/distributed-lock/redis/</guid><description>&lt;h2 id="redis-nx-实现">Redis NX 实现&lt;/h2>
+&lt;/div></description></item><item><title>使用 Redis 实现分布式锁</title><link>https://emerywan.github.io/blog/p/distributed-lock/redis/</link><pubDate>Wed, 11 May 2022 12:14:45 +0800</pubDate><guid>https://emerywan.github.io/blog/p/distributed-lock/redis/</guid><description>&lt;img src="https://emerywan.github.io/imgs/1.jpeg" alt="Featured image of post 使用 Redis 实现分布式锁" />&lt;h2 id="redis-nx-实现">Redis NX 实现&lt;/h2>
 &lt;p>利用 NX 的&lt;strong>原子性&lt;/strong>，多个线程并发时，只有一个线程可以设置成功，设置成功即获取了锁。&lt;/p>
 &lt;p>&lt;strong>如果没有获取锁，不会阻塞当前方法，直接跳过任务。&lt;/strong>&lt;/p>
 &lt;h3 id="获取锁">获取锁&lt;/h3>
@@ -812,7 +812,7 @@ data-flex-basis="1481px"
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">}&lt;/span>
 &lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
 &lt;/div>
-&lt;/div></description></item><item><title>使用 Github Actions 在腾讯云 CloudBase 部署 Hugo</title><link>https://emerywan.github.io/blog/p/hugo-in-cloudbase/</link><pubDate>Sun, 01 May 2022 21:14:45 +0800</pubDate><guid>https://emerywan.github.io/blog/p/hugo-in-cloudbase/</guid><description>&lt;h2 id="-介绍">🌱 介绍&lt;/h2>
+&lt;/div></description></item><item><title>使用 Github Actions 在腾讯云 CloudBase 部署 Hugo</title><link>https://emerywan.github.io/blog/p/hugo-in-cloudbase/</link><pubDate>Sun, 01 May 2022 21:14:45 +0800</pubDate><guid>https://emerywan.github.io/blog/p/hugo-in-cloudbase/</guid><description>&lt;img src="https://emerywan.github.io/imgs/3.jpeg" alt="Featured image of post 使用 Github Actions 在腾讯云 CloudBase 部署 Hugo" />&lt;h2 id="-介绍">🌱 介绍&lt;/h2>
 &lt;p>许多平台都提供了免费的静态页面托管的服务，如 &lt;code>Github Pages&lt;/code>，&lt;code>Vercel&lt;/code>，&lt;code>Netlify&lt;/code>等。但在国内由于一些“原因”，这些国外的服务在国内的访问并不稳定。&lt;/p>
 &lt;p>国内的免费托管平台如 &lt;code>Gitee&lt;/code> 限制很多，不可以自定义域名而且之前出现了防盗链问题，访问也不是很快，不太推荐作为托管平台。&lt;/p>
 &lt;p>腾讯云推出的云开发 &lt;code>CloudBase&lt;/code> 也有静态页面托管服务。其实它相比这些静态托管平台，有更多强大的功能，甚至能够搭一整套系统。虽然是付费服务，但是在按量付费的情况下资费不是很高，在博客访问量不是很高的情况下十分合适。&lt;/p>
@@ -1176,7 +1176,7 @@ data-flex-basis="642px"
 >https://github.com/TencentCloudBase/cloudbase-action&lt;/a>&lt;/li>
 &lt;li>🔗 &lt;a class="link" href="https://github.com/TencentCloudBase/cloudbase-action/blob/3354b442713265aa9d7c5bf03b0b8cb0173f546f/README.md" target="_blank" rel="noopener"
 >https://github.com/TencentCloudBase/cloudbase-action/blob/3354b442713265aa9d7c5bf03b0b8cb0173f546f/README.md&lt;/a>&lt;/li>
-&lt;/ul></description></item><item><title>Java 并发 - AQS</title><link>https://emerywan.github.io/blog/p/thread/aqs/</link><pubDate>Sun, 03 Apr 2022 14:02:02 +0800</pubDate><guid>https://emerywan.github.io/blog/p/thread/aqs/</guid><description>&lt;h2 id="aqs">AQS&lt;/h2>
+&lt;/ul></description></item><item><title>Java 并发 - AQS</title><link>https://emerywan.github.io/blog/p/thread/aqs/</link><pubDate>Sun, 03 Apr 2022 14:02:02 +0800</pubDate><guid>https://emerywan.github.io/blog/p/thread/aqs/</guid><description>&lt;img src="https://emerywan.github.io/imgs/6.jpeg" alt="Featured image of post Java 并发 - AQS" />&lt;h2 id="aqs">AQS&lt;/h2>
 &lt;p>AQS &lt;code>AbstractQueuedSynchronized&lt;/code> 是一个用来构建锁和同步器的框架，是对 CAS 的一种封装和丰富，AQS 引入了独占锁，共享锁等性质。&lt;/p>
 &lt;p>使用 AQS 能够基于 Java API，简单高效地构建出应用广泛的大量同步器，用于 Java 多线程之间的同步。&lt;/p>
 &lt;h2 id="核心思想">核心思想&lt;/h2>
@@ -1335,7 +1335,7 @@ data-flex-basis="642px"
 &lt;p>&lt;code>CyclicBarrier&lt;/code> 用于多个线程相互等待对方执行到某个状态后，这些线程再继续执行。&lt;/p>
 &lt;h3 id="semaphore">Semaphore&lt;/h3>
 &lt;h3 id="reentrantlock">ReentrantLock&lt;/h3>
-&lt;h3 id="reentrantreadwritelock">ReentrantReadWriteLock&lt;/h3></description></item><item><title>线程安全的单例模式</title><link>https://emerywan.github.io/blog/p/thread/singleton/</link><pubDate>Fri, 01 Apr 2022 14:02:02 +0800</pubDate><guid>https://emerywan.github.io/blog/p/thread/singleton/</guid><description>&lt;h2 id="单例模式">单例模式&lt;/h2>
+&lt;h3 id="reentrantreadwritelock">ReentrantReadWriteLock&lt;/h3></description></item><item><title>线程安全的单例模式</title><link>https://emerywan.github.io/blog/p/thread/singleton/</link><pubDate>Fri, 01 Apr 2022 14:02:02 +0800</pubDate><guid>https://emerywan.github.io/blog/p/thread/singleton/</guid><description>&lt;img src="https://emerywan.github.io/imgs/8.jpeg" alt="Featured image of post 线程安全的单例模式" />&lt;h2 id="单例模式">单例模式&lt;/h2>
 &lt;p>单例模式所要实现的目标：保持一个类有且只有一个实例。&lt;/p>
 &lt;p>出于性能的考虑，不少单例模式都会采用延迟加载的方式。&lt;/p>
 &lt;p>根据是否延迟加载，可以分为：&lt;/p>
@@ -1551,7 +1551,7 @@ data-flex-basis="642px"
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">}&lt;/span>
 &lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
 &lt;/div>
-&lt;/div>&lt;p>字段 &lt;code>INSTANCE&lt;/code> 是枚举类的唯一实例。在 &lt;code>Singleton.INSTANCE&lt;/code> 初次被引用时才会被初始化。&lt;/p></description></item><item><title>Java 并发 - 锁机制</title><link>https://emerywan.github.io/blog/p/thread/lock/</link><pubDate>Wed, 30 Mar 2022 14:02:02 +0800</pubDate><guid>https://emerywan.github.io/blog/p/thread/lock/</guid><description>&lt;p>在并发情况下，多个线程会对同一个资源进行争抢，可能会导致数据不一致的问题。&lt;/p>
+&lt;/div>&lt;p>字段 &lt;code>INSTANCE&lt;/code> 是枚举类的唯一实例。在 &lt;code>Singleton.INSTANCE&lt;/code> 初次被引用时才会被初始化。&lt;/p></description></item><item><title>Java 并发 - 锁机制</title><link>https://emerywan.github.io/blog/p/thread/lock/</link><pubDate>Wed, 30 Mar 2022 14:02:02 +0800</pubDate><guid>https://emerywan.github.io/blog/p/thread/lock/</guid><description>&lt;img src="https://emerywan.github.io/imgs/7.jpeg" alt="Featured image of post Java 并发 - 锁机制" />&lt;p>在并发情况下，多个线程会对同一个资源进行争抢，可能会导致数据不一致的问题。&lt;/p>
 &lt;p>为了解决这个问题，通过引入&lt;strong>锁机制&lt;/strong>，使用一种抽象的锁，对资源进行锁定，达到同步访问。&lt;/p>
 &lt;h2 id="实现">实现&lt;/h2>
 &lt;p>Java 采用了两种实现方式：&lt;/p>
@@ -1806,7 +1806,7 @@ data-flex-basis="642px"
 &lt;p>如果内存值原来是 A，后来变成了 B，然后又变成了 A，那么 CAS 进行检查时会发现值没有发生变化，但是实际上是有变化的。&lt;/p>
 &lt;p>&lt;code>A -&amp;gt; B -&amp;gt; A&lt;/code>&lt;/p>
 &lt;p>可以为共享变量引入一个修订号（时间戳），每次更新都会更新相应的修订号，判断变量的值是否被其他线程给修改过。&lt;code>AtomicStampedReference&lt;/code>&lt;/p>
-&lt;p>&lt;code>[A, 0] -&amp;gt; [B, 1] -&amp;gt; [A, 2]&lt;/code>&lt;/p></description></item><item><title>Java 多线程</title><link>https://emerywan.github.io/blog/p/thread/</link><pubDate>Wed, 30 Mar 2022 14:02:02 +0800</pubDate><guid>https://emerywan.github.io/blog/p/thread/</guid><description>&lt;h2 id="进程与线程">进程与线程&lt;/h2>
+&lt;p>&lt;code>[A, 0] -&amp;gt; [B, 1] -&amp;gt; [A, 2]&lt;/code>&lt;/p></description></item><item><title>Java 多线程</title><link>https://emerywan.github.io/blog/p/thread/</link><pubDate>Wed, 30 Mar 2022 14:02:02 +0800</pubDate><guid>https://emerywan.github.io/blog/p/thread/</guid><description>&lt;img src="https://emerywan.github.io/imgs/9.jpeg" alt="Featured image of post Java 多线程" />&lt;h2 id="进程与线程">进程与线程&lt;/h2>
 &lt;p>&lt;strong>进程&lt;/strong>是程序向操作系统申请资源的基本单位。&lt;/p>
 &lt;p>&lt;strong>线程&lt;/strong>是进程中可独立执行的最小单位。&lt;/p>
 &lt;p>一个进程可以包括多个线程，同一进程中所有线程共享该进程中的资源。&lt;/p>
@@ -3193,7 +3193,7 @@ alt="7"
 &lt;h2 id="-总结">🎐 总结&lt;/h2>
 &lt;p>最后总结一下这一节的内容。&lt;/p>
 &lt;p>部分机器学习的数据会具备类别特征 &lt;code>Categorical Features&lt;/code>，机器学习模型无法理解，我们需要将其转换成数值特征。类别特征的类别会被映射成一个从 &lt;code>1&lt;/code> 开始计算的整数，&lt;code>0&lt;/code> 被用来表示缺失或者未知的类别，并且使用 &lt;code>one-hot&lt;/code> 向量，能很好的表示类别特征的意义。&lt;/p>
-&lt;p>文本处理主要有三个步骤，第一步 &lt;code>tokenization&lt;/code> 把文本分割成单词的列表；第二步建立了一个字典&lt;code>vocabulary&lt;/code>，把单词映射成一个正整数；第三步进行 &lt;code>one-hot encoding&lt;/code>，将分割后的单词列表映射成正整数的列表或变成 &lt;code>one-hot&lt;/code> 向量。&lt;/p></description></item><item><title>Java Map 操作</title><link>https://emerywan.github.io/blog/p/java-map-traversal/</link><pubDate>Thu, 28 Oct 2021 21:14:45 +0800</pubDate><guid>https://emerywan.github.io/blog/p/java-map-traversal/</guid><description>&lt;p>做自然语言处理写了挺久的 &lt;code>Python&lt;/code> ，经常要处理数据。用 &lt;code>Python&lt;/code> 中的处理数据真的挺爽的 🫣，我平常都喜欢把各种数据都往 &lt;code>dict&lt;/code>（也就是 &lt;code>Java&lt;/code> 中的 &lt;code>map&lt;/code>） 和 &lt;code>json&lt;/code> 上转，用 &lt;code>Python&lt;/code> 处理这个各种方便。 最近再写 &lt;code>Java&lt;/code> 就经常“手残”，所以总结一下 &lt;code>Java&lt;/code> 中处理 &lt;code>Map&lt;/code>。&lt;/p>
+&lt;p>文本处理主要有三个步骤，第一步 &lt;code>tokenization&lt;/code> 把文本分割成单词的列表；第二步建立了一个字典&lt;code>vocabulary&lt;/code>，把单词映射成一个正整数；第三步进行 &lt;code>one-hot encoding&lt;/code>，将分割后的单词列表映射成正整数的列表或变成 &lt;code>one-hot&lt;/code> 向量。&lt;/p></description></item><item><title>Java Map 操作</title><link>https://emerywan.github.io/blog/p/java-map-traversal/</link><pubDate>Thu, 28 Oct 2021 21:14:45 +0800</pubDate><guid>https://emerywan.github.io/blog/p/java-map-traversal/</guid><description>&lt;img src="https://emerywan.github.io/imgs/11.jpeg" alt="Featured image of post Java Map 操作" />&lt;p>做自然语言处理写了挺久的 &lt;code>Python&lt;/code> ，经常要处理数据。用 &lt;code>Python&lt;/code> 中的处理数据真的挺爽的 🫣，我平常都喜欢把各种数据都往 &lt;code>dict&lt;/code>（也就是 &lt;code>Java&lt;/code> 中的 &lt;code>map&lt;/code>） 和 &lt;code>json&lt;/code> 上转，用 &lt;code>Python&lt;/code> 处理这个各种方便。 最近再写 &lt;code>Java&lt;/code> 就经常“手残”，所以总结一下 &lt;code>Java&lt;/code> 中处理 &lt;code>Map&lt;/code>。&lt;/p>
 &lt;h2 id="-遍历方式">⭐️ 遍历方式&lt;/h2>
 &lt;p>Java 遍历 Map，要么就是遍历它的 &lt;code>Map.Entry&amp;lt;K,V&amp;gt; &amp;lt;- entrySet()&lt;/code>，要么就是遍历它的 key &lt;code>KeySet &amp;lt;- keySet()&lt;/code>。主要可以用下面四种方式遍历：&lt;/p>
 &lt;ul>
@@ -3453,7 +3453,7 @@ alt="7"
 &lt;ul>
 &lt;li>&lt;a class="link" href="https://mp.weixin.qq.com/s/zQBN3UvJDhRTKP6SzcZFKw" target="_blank" rel="noopener"
 >https://mp.weixin.qq.com/s/zQBN3UvJDhRTKP6SzcZFKw&lt;/a>&lt;/li>
-&lt;/ul></description></item><item><title>PyTorch 火速上手</title><link>https://emerywan.github.io/blog/p/pytorch-handbook/</link><pubDate>Sat, 01 May 2021 21:14:45 +0800</pubDate><guid>https://emerywan.github.io/blog/p/pytorch-handbook/</guid><description>&lt;h2 id="pytorch-是什么">PyTorch 是什么？&lt;/h2>
+&lt;/ul></description></item><item><title>PyTorch 火速上手</title><link>https://emerywan.github.io/blog/p/pytorch-handbook/</link><pubDate>Sat, 01 May 2021 21:14:45 +0800</pubDate><guid>https://emerywan.github.io/blog/p/pytorch-handbook/</guid><description>&lt;img src="https://emerywan.github.io/imgs/10.jpeg" alt="Featured image of post PyTorch 火速上手" />&lt;h2 id="pytorch-是什么">PyTorch 是什么？&lt;/h2>
 &lt;p>基于 Python 的科学计算包，服务于以下两种场景：&lt;/p>
 &lt;ul>
 &lt;li>Numpy 的替代品，可以使用 GPU 的强大计算力&lt;/li>
@@ -4522,7 +4522,7 @@ data-flex-basis="306px"
 &lt;ul>
 &lt;li>&lt;a class="link" href="https://pytorch.apachecn.org/#/docs/1.7/02" target="_blank" rel="noopener"
 >https://pytorch.apachecn.org/#/docs/1.7/02&lt;/a>&lt;/li>
-&lt;/ul></description></item><item><title>React Hooks</title><link>https://emerywan.github.io/blog/p/react-hooks/</link><pubDate>Thu, 28 Jan 2021 21:14:45 +0800</pubDate><guid>https://emerywan.github.io/blog/p/react-hooks/</guid><description>&lt;h1 id="react-hooks-简介">React Hooks 简介&lt;/h1>
+&lt;/ul></description></item><item><title>React Hooks</title><link>https://emerywan.github.io/blog/p/react-hooks/</link><pubDate>Thu, 28 Jan 2021 21:14:45 +0800</pubDate><guid>https://emerywan.github.io/blog/p/react-hooks/</guid><description>&lt;img src="https://emerywan.github.io/imgs/9.jpeg" alt="Featured image of post React Hooks" />&lt;h1 id="react-hooks-简介">React Hooks 简介&lt;/h1>
 &lt;h2 id="hook-含义">Hook 含义&lt;/h2>
 &lt;h1 id="组件类和函数组件">组件类和函数组件&lt;/h1>
 &lt;h1 id="usestate">useState&lt;/h1>
@@ -5217,7 +5217,7 @@ data-flex-basis="306px"
 >https://www.ruanyifeng.com/blog/2019/09/react-hooks.html&lt;/a>&lt;/li>
 &lt;li>&lt;a class="link" href="https://zh-hans.reactjs.org/docs/hooks-intro.html" target="_blank" rel="noopener"
 >https://zh-hans.reactjs.org/docs/hooks-intro.html&lt;/a>&lt;/li>
-&lt;/ul></description></item><item><title>Ubuntu 耳机没有声音</title><link>https://emerywan.github.io/blog/p/ubuntu-sound/</link><pubDate>Sat, 02 Jan 2021 02:02:02 +0800</pubDate><guid>https://emerywan.github.io/blog/p/ubuntu-sound/</guid><description>&lt;h2 id="ubuntu-耳机没有声音">Ubuntu 耳机没有声音&lt;/h2>
+&lt;/ul></description></item><item><title>Ubuntu 耳机没有声音</title><link>https://emerywan.github.io/blog/p/ubuntu-sound/</link><pubDate>Sat, 02 Jan 2021 02:02:02 +0800</pubDate><guid>https://emerywan.github.io/blog/p/ubuntu-sound/</guid><description>&lt;img src="https://emerywan.github.io/imgs/5.jpeg" alt="Featured image of post Ubuntu 耳机没有声音" />&lt;h2 id="ubuntu-耳机没有声音">Ubuntu 耳机没有声音&lt;/h2>
 &lt;p>笔记本使用 Ubuntu 插有线耳机后，并没有反应，该外放还是外放。&lt;/p>
 &lt;p>感觉是适配问题，windows 下没有问题。找了一圈办法，只能通过软件手动切换了，效果还不错。&lt;/p>
 &lt;div class="highlight">&lt;div class="chroma">
