@@ -1551,7 +1551,217 @@ data-flex-basis="642px"
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">}&lt;/span>
 &lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
 &lt;/div>
-&lt;/div>&lt;p>字段 &lt;code>INSTANCE&lt;/code> 是枚举类的唯一实例。在 &lt;code>Singleton.INSTANCE&lt;/code> 初次被引用时才会被初始化。&lt;/p></description></item><item><title>Java 并发 - 锁机制</title><link>https://emerywan.github.io/blog/p/thread/lock/</link><pubDate>Wed, 30 Mar 2022 14:02:02 +0800</pubDate><guid>https://emerywan.github.io/blog/p/thread/lock/</guid><description>&lt;img src="https://emerywan.github.io/blog/imgs/7.jpeg" alt="Featured image of post Java 并发 - 锁机制" />&lt;p>在并发情况下，多个线程会对同一个资源进行争抢，可能会导致数据不一致的问题。&lt;/p>
+&lt;/div>&lt;p>字段 &lt;code>INSTANCE&lt;/code> 是枚举类的唯一实例。在 &lt;code>Singleton.INSTANCE&lt;/code> 初次被引用时才会被初始化。&lt;/p></description></item><item><title>Java 线程池</title><link>https://emerywan.github.io/blog/p/thread/</link><pubDate>Wed, 30 Mar 2022 16:02:02 +0800</pubDate><guid>https://emerywan.github.io/blog/p/thread/</guid><description>&lt;img src="https://emerywan.github.io/blog/imgs/9.jpeg" alt="Featured image of post Java 线程池" />&lt;h2 id="创建">创建&lt;/h2>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;span class="lnt">4
+&lt;/span>&lt;span class="lnt">5
+&lt;/span>&lt;span class="lnt">6
+&lt;/span>&lt;span class="lnt">7
+&lt;/span>&lt;span class="lnt">8
+&lt;/span>&lt;span class="lnt">9
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-java" data-lang="java">&lt;span class="line">&lt;span class="cl">&lt;span class="kd">public&lt;/span> &lt;span class="nf">ThreadPoolExecutor&lt;/span>&lt;span class="o">(&lt;/span>&lt;span class="kt">int&lt;/span> &lt;span class="n">corePoolSize&lt;/span>&lt;span class="o">,&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kt">int&lt;/span> &lt;span class="n">maximumPoolSize&lt;/span>&lt;span class="o">,&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kt">long&lt;/span> &lt;span class="n">keepAliveTime&lt;/span>&lt;span class="o">,&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">TimeUnit&lt;/span> &lt;span class="n">unit&lt;/span>&lt;span class="o">,&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">BlockingQueue&lt;/span>&lt;span class="o">&amp;lt;&lt;/span>&lt;span class="n">Runnable&lt;/span>&lt;span class="o">&amp;gt;&lt;/span> &lt;span class="n">workQueue&lt;/span>&lt;span class="o">,&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">ThreadFactory&lt;/span> &lt;span class="n">threadFactory&lt;/span>&lt;span class="o">,&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">RejectedExecutionHandler&lt;/span> &lt;span class="n">handler&lt;/span>&lt;span class="o">)&lt;/span> &lt;span class="o">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c1">// ...
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span>&lt;span class="o">}&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;ul>
+&lt;li>
+&lt;p>&lt;code>corePoolSize&lt;/code> 核心线程数&lt;/p>
+&lt;ul>
+&lt;li>每次向线程池提交一个多线程任务，都会创建一个新的核心线程，无论是否有空闲线程，直到核心线程数的数量，才会开始复用线程资源。&lt;/li>
+&lt;li>使用 &lt;code>prestartAllCoreThreads()&lt;/code> 直接初始化全部&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;code>maximumPoolSize&lt;/code> 最大线程数&lt;/p>
+&lt;ul>
+&lt;li>当所有线程都处于运行状态，且等待队列已满，会开始创建非核心线程，但不超过最大线程数&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;code>keepAliveTime&lt;/code> 线程最大空闲时间&lt;/p>
+&lt;ul>
+&lt;li>非核心线程超过最大空闲时间，会自动销毁&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;code>unit&lt;/code> 最大空闲时间单位&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;code>workQueue&lt;/code> 线程等待队列&lt;/p>
+&lt;ul>
+&lt;li>核心线程数已满时，会将任务暂存到等待队列，直到线程资源可用&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;code>threadFactory&lt;/code> 线程创建工厂&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;code>handler&lt;/code> 拒绝策略&lt;/p>
+&lt;ul>
+&lt;li>当等待队列已满，并且达到最大线程数，新的任务会进行拒绝处理&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;h3 id="线程池的大小">线程池的大小&lt;/h3>
+&lt;ul>
+&lt;li>CPU 密集型&lt;/li>
+&lt;/ul>
+&lt;p>主要是执行计算任务，相应很快，CPU 利用率高。推荐：核心线程数 = CPU 核心数 + 1&lt;/p>
+&lt;ul>
+&lt;li>IO 密集型&lt;/li>
+&lt;/ul>
+&lt;p>主要是进行 IO 操作，如硬盘读取数据等，IO 操作时间长，CPU 利用不高，推荐：核心线程数 = 2 * CPU 核心数。&lt;/p>
+&lt;h3 id="拒绝策略">拒绝策略&lt;/h3>
+&lt;ul>
+&lt;li>
+&lt;p>AbortPolicy&lt;/p>
+&lt;ul>
+&lt;li>抛出异常拒绝任务&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>
+&lt;p>DiscardPolicy&lt;/p>
+&lt;ul>
+&lt;li>不抛出异常，拒绝任务&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>
+&lt;p>DiscardOldestPolicy&lt;/p>
+&lt;ul>
+&lt;li>丢弃最老的任务&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>
+&lt;p>CallerRunsPolicy&lt;/p>
+&lt;ul>
+&lt;li>将任务交给调用线程执行&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;h3 id="使用">使用&lt;/h3>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;span class="lnt">4
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-java" data-lang="java">&lt;span class="line">&lt;span class="cl">&lt;span class="c1">// execute
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span>&lt;span class="n">executor&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">execute&lt;/span>&lt;span class="o">(()&lt;/span> &lt;span class="o">-&amp;gt;&lt;/span> &lt;span class="o">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c1">// do ...
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span>&lt;span class="o">});&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;span class="lnt">4
+&lt;/span>&lt;span class="lnt">5
+&lt;/span>&lt;span class="lnt">6
+&lt;/span>&lt;span class="lnt">7
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-java" data-lang="java">&lt;span class="line">&lt;span class="cl">&lt;span class="c1">// submit
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span>&lt;span class="n">Future&lt;/span>&lt;span class="o">&amp;lt;&lt;/span>&lt;span class="n">String&lt;/span>&lt;span class="o">&amp;gt;&lt;/span> &lt;span class="n">future&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">executor&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">submit&lt;/span>&lt;span class="o">(()&lt;/span> &lt;span class="o">-&amp;gt;&lt;/span> &lt;span class="o">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c1">// do...
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span> &lt;span class="k">return&lt;/span> &lt;span class="s">&amp;#34;返回值&amp;#34;&lt;/span>&lt;span class="o">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">});&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="n">String&lt;/span> &lt;span class="n">res&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">future&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">get&lt;/span>&lt;span class="o">();&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;h2 id="常见的线程池">常见的线程池&lt;/h2>
+&lt;ul>
+&lt;li>&lt;code>newSingleThreadExecutor&lt;/code>
+&lt;ul>
+&lt;li>只有一个线程的线程池&lt;/li>
+&lt;li>唯一线程可以保证所提交的任务顺序执行&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;span class="lnt">4
+&lt;/span>&lt;span class="lnt">5
+&lt;/span>&lt;span class="lnt">6
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-java" data-lang="java">&lt;span class="line">&lt;span class="cl">&lt;span class="kd">public&lt;/span> &lt;span class="kd">static&lt;/span> &lt;span class="n">ExecutorService&lt;/span> &lt;span class="nf">newSingleThreadExecutor&lt;/span>&lt;span class="o">()&lt;/span> &lt;span class="o">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">return&lt;/span> &lt;span class="k">new&lt;/span> &lt;span class="n">FinalizableDelegatedExecutorService&lt;/span>&lt;span class="o">(&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">new&lt;/span> &lt;span class="n">ThreadPoolExecutor&lt;/span>&lt;span class="o">(&lt;/span>&lt;span class="n">1&lt;/span>&lt;span class="o">,&lt;/span> &lt;span class="n">1&lt;/span>&lt;span class="o">,&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">0L&lt;/span>&lt;span class="o">,&lt;/span> &lt;span class="n">TimeUnit&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">MILLISECONDS&lt;/span>&lt;span class="o">,&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">new&lt;/span> &lt;span class="n">LinkedBlockingQueue&lt;/span>&lt;span class="o">&amp;lt;&lt;/span>&lt;span class="n">Runnable&lt;/span>&lt;span class="o">&amp;gt;()));&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">}&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;ul>
+&lt;li>&lt;code>newFixedThreadPool&lt;/code>
+&lt;ul>
+&lt;li>固定线程数的线程池&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;span class="lnt">4
+&lt;/span>&lt;span class="lnt">5
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-java" data-lang="java">&lt;span class="line">&lt;span class="cl">&lt;span class="kd">public&lt;/span> &lt;span class="kd">static&lt;/span> &lt;span class="n">ExecutorService&lt;/span> &lt;span class="nf">newFixedThreadPool&lt;/span>&lt;span class="o">(&lt;/span>&lt;span class="kt">int&lt;/span> &lt;span class="n">nThreads&lt;/span>&lt;span class="o">)&lt;/span> &lt;span class="o">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">return&lt;/span> &lt;span class="k">new&lt;/span> &lt;span class="n">ThreadPoolExecutor&lt;/span>&lt;span class="o">(&lt;/span>&lt;span class="n">nThread&lt;/span>&lt;span class="o">,&lt;/span> &lt;span class="n">nThread&lt;/span>&lt;span class="o">,&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">0L&lt;/span>&lt;span class="o">,&lt;/span> &lt;span class="n">TimeUnit&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">MILLISECONDS&lt;/span>&lt;span class="o">,&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">new&lt;/span> &lt;span class="n">LinkedBlockingQueue&lt;/span>&lt;span class="o">&amp;lt;&lt;/span>&lt;span class="n">Runnable&lt;/span>&lt;span class="o">&amp;gt;());&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">}&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;ul>
+&lt;li>&lt;code>newCachedThreadPool&lt;/code>
+&lt;ul>
+&lt;li>根据需要创建新线程的线程池&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;span class="lnt">4
+&lt;/span>&lt;span class="lnt">5
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-java" data-lang="java">&lt;span class="line">&lt;span class="cl">&lt;span class="kd">public&lt;/span> &lt;span class="kd">static&lt;/span> &lt;span class="n">ExecutorService&lt;/span> &lt;span class="nf">newCachedThreadPool&lt;/span>&lt;span class="o">()&lt;/span> &lt;span class="o">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">return&lt;/span> &lt;span class="k">new&lt;/span> &lt;span class="n">ThreadPoolExecutor&lt;/span>&lt;span class="o">(&lt;/span>&lt;span class="n">0&lt;/span>&lt;span class="o">,&lt;/span> &lt;span class="n">Integer&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">MAX_VALUE&lt;/span>&lt;span class="o">,&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">60L&lt;/span>&lt;span class="o">,&lt;/span> &lt;span class="n">TimeUnit&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">SECONDS&lt;/span>&lt;span class="o">,&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">new&lt;/span> &lt;span class="n">SynchronousQueue&lt;/span>&lt;span class="o">&amp;lt;&lt;/span>&lt;span class="n">Runnable&lt;/span>&lt;span class="o">&amp;gt;());&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">}&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>当提交新任务时，如果线程池为空或没有空闲线程，则创建新线程执行任务。&lt;/p>
+&lt;p>当线程空闲时间超过 keepAliveTime=60s，会自动释放线程资源。长时间空闲的 CachedThreadPool 不会持有任务任何线程资源。&lt;/p>
+&lt;h2 id="forkjoin">ForkJoin&lt;/h2></description></item><item><title>Java 并发 - 锁机制</title><link>https://emerywan.github.io/blog/p/thread/lock/</link><pubDate>Wed, 30 Mar 2022 14:02:02 +0800</pubDate><guid>https://emerywan.github.io/blog/p/thread/lock/</guid><description>&lt;img src="https://emerywan.github.io/blog/imgs/7.jpeg" alt="Featured image of post Java 并发 - 锁机制" />&lt;p>在并发情况下，多个线程会对同一个资源进行争抢，可能会导致数据不一致的问题。&lt;/p>
 &lt;p>为了解决这个问题，通过引入&lt;strong>锁机制&lt;/strong>，使用一种抽象的锁，对资源进行锁定，达到同步访问。&lt;/p>
 &lt;h2 id="实现">实现&lt;/h2>
 &lt;p>Java 采用了两种实现方式：&lt;/p>
@@ -1691,7 +1901,7 @@ data-flex-basis="642px"
 &lt;/ul>
 &lt;/li>
 &lt;li>
-&lt;p>数组型&lt;/p>
+&lt;p>数组类型&lt;/p>
 &lt;ul>
 &lt;li>AtomicIntegerArray&lt;/li>
 &lt;li>AtomicLongArray&lt;/li>
@@ -1699,7 +1909,7 @@ data-flex-basis="642px"
 &lt;/ul>
 &lt;/li>
 &lt;li>
-&lt;p>字段更新型&lt;/p>
+&lt;p>字段更新类型&lt;/p>
 &lt;ul>
 &lt;li>AtomicIntegerFieldUpdater&lt;/li>
 &lt;li>AtomicLongFieldUpdater&lt;/li>
@@ -1707,7 +1917,7 @@ data-flex-basis="642px"
 &lt;/ul>
 &lt;/li>
 &lt;li>
-&lt;p>引用型&lt;/p>
+&lt;p>引用类型&lt;/p>
 &lt;ul>
 &lt;li>AtomicReference&lt;/li>
 &lt;li>AtomicStampedReference&lt;/li>
@@ -1732,36 +1942,55 @@ data-flex-basis="642px"
 &lt;/span>&lt;span class="lnt">13
 &lt;/span>&lt;span class="lnt">14
 &lt;/span>&lt;span class="lnt">15
+&lt;/span>&lt;span class="lnt">16
 &lt;/span>&lt;/code>&lt;/pre>&lt;/td>
 &lt;td class="lntd">
 &lt;pre tabindex="0" class="chroma">&lt;code class="language-java" data-lang="java">&lt;span class="line">&lt;span class="cl">&lt;span class="kd">public&lt;/span> &lt;span class="kd">class&lt;/span> &lt;span class="nc">Demo&lt;/span> &lt;span class="o">{&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kd">static&lt;/span> &lt;span class="n">AtomicInteger&lt;/span> &lt;span class="n">num&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="k">new&lt;/span> &lt;span class="n">AtomicInteger&lt;/span>&lt;span class="o">(&lt;/span>&lt;span class="n">0&lt;/span>&lt;span class="o">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kd">private&lt;/span> &lt;span class="kd">static&lt;/span> &lt;span class="n">AtomicInteger&lt;/span> &lt;span class="n">n&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="k">new&lt;/span> &lt;span class="n">AtomicInteger&lt;/span>&lt;span class="o">(&lt;/span>&lt;span class="n">0&lt;/span>&lt;span class="o">);&lt;/span>
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kd">public&lt;/span> &lt;span class="kd">static&lt;/span> &lt;span class="kt">void&lt;/span> &lt;span class="nf">main&lt;/span>&lt;span class="o">(&lt;/span>&lt;span class="n">String&lt;/span>&lt;span class="o">[]&lt;/span> &lt;span class="n">args&lt;/span>&lt;span class="o">)&lt;/span> &lt;span class="o">{&lt;/span>
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">for&lt;/span> &lt;span class="o">(&lt;/span>&lt;span class="kt">int&lt;/span> &lt;span class="n">i&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">0&lt;/span>&lt;span class="o">;&lt;/span> &lt;span class="n">i&lt;/span> &lt;span class="o">&amp;lt;&lt;/span> &lt;span class="n">3&lt;/span>&lt;span class="o">;&lt;/span> &lt;span class="n">i&lt;/span>&lt;span class="o">++)&lt;/span> &lt;span class="o">{&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">Thread&lt;/span> &lt;span class="n">t&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="k">new&lt;/span> &lt;span class="n">Thread&lt;/span>&lt;span class="o">(()&lt;/span> &lt;span class="o">=&amp;gt;&lt;/span> &lt;span class="o">{&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">while&lt;/span> &lt;span class="o">(&lt;/span>&lt;span class="n">num&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">get&lt;/span>&lt;span class="o">()&lt;/span> &lt;span class="o">&amp;lt;&lt;/span> &lt;span class="n">10000&lt;/span>&lt;span class="o">)&lt;/span> &lt;span class="o">{&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">System&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">out&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">println&lt;/span>&lt;span class="o">(&lt;/span>&lt;span class="n">Thread&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">currentThread&lt;/span>&lt;span class="o">().&lt;/span>&lt;span class="na">getName&lt;/span>&lt;span class="o">()&lt;/span> &lt;span class="o">+&lt;/span> &lt;span class="s">&amp;#34;:&amp;#34;&lt;/span> &lt;span class="o">+&lt;/span> &lt;span class="n">num&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">incrementAndGet&lt;/span>&lt;span class="o">());&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">new&lt;/span> &lt;span class="n">Thread&lt;/span>&lt;span class="o">(()&lt;/span> &lt;span class="o">-&amp;gt;&lt;/span> &lt;span class="o">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">while&lt;/span> &lt;span class="o">(&lt;/span>&lt;span class="n">n&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">get&lt;/span>&lt;span class="o">()&lt;/span> &lt;span class="o">&amp;lt;&lt;/span> &lt;span class="n">1000&lt;/span>&lt;span class="o">)&lt;/span> &lt;span class="o">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">System&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">out&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">println&lt;/span>&lt;span class="o">(&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">Thread&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">currentThread&lt;/span>&lt;span class="o">().&lt;/span>&lt;span class="na">getName&lt;/span>&lt;span class="o">()&lt;/span> &lt;span class="o">+&lt;/span> &lt;span class="s">&amp;#34; : &amp;#34;&lt;/span> &lt;span class="o">+&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">n&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">incrementAndGet&lt;/span>&lt;span class="o">()&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="o">);&lt;/span>
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="o">}&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="o">});&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">t&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">start&lt;/span>&lt;span class="o">();&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="o">},&lt;/span> &lt;span class="s">&amp;#34;Thread&amp;#34;&lt;/span> &lt;span class="o">+&lt;/span> &lt;span class="n">i&lt;/span>&lt;span class="o">).&lt;/span>&lt;span class="na">start&lt;/span>&lt;span class="o">();&lt;/span>
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="o">}&lt;/span>
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="o">}&lt;/span>
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">}&lt;/span>
 &lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
 &lt;/div>
-&lt;/div>&lt;p>&lt;code>AtomicInteger&lt;/code> 主要由一个 &lt;code>Unsafe&lt;/code> 类型的实例 &lt;code>unsafe&lt;/code> 和 &lt;code>Long&lt;/code> 类型的 &lt;code>offset&lt;/code> 实现，Java 通过 &lt;code>Unsafe&lt;/code> 的 CAS 操作来对值进行更新，执行一些底层，和平台相关的方法。&lt;/p>
+&lt;/div>&lt;p>&lt;code>AtomicInteger&lt;/code> 主要由一个 &lt;code>Unsafe&lt;/code> 类型的实例 &lt;code>unsafe&lt;/code> 和 &lt;code>Long&lt;/code> 类型的 &lt;code>offset&lt;/code> 实现。&lt;/p>
+&lt;p>Java 通过 &lt;code>Unsafe&lt;/code> 的 CAS 操作来对 &lt;code>volatile int&lt;/code> 值进行更新。根据 &lt;code>value&lt;/code> 在对象中的偏移量，CAS 操作内存数据，执行一些底层，和平台相关的方法。&lt;/p>
 &lt;div class="highlight">&lt;div class="chroma">
 &lt;table class="lntable">&lt;tr>&lt;td class="lntd">
-&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
-&lt;/span>&lt;span class="lnt">2
-&lt;/span>&lt;span class="lnt">3
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;span class="lnt">11
 &lt;/span>&lt;/code>&lt;/pre>&lt;/td>
 &lt;td class="lntd">
 &lt;pre tabindex="0" class="chroma">&lt;code class="language-java" data-lang="java">&lt;span class="line">&lt;span class="cl">&lt;span class="c1">// setup to use Unsafe.compareAndSwapInt for updates
 &lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span>&lt;span class="kd">private&lt;/span> &lt;span class="kd">static&lt;/span> &lt;span class="kd">final&lt;/span> &lt;span class="n">Unsafe&lt;/span> &lt;span class="n">unsafe&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">Unsafe&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">getUnsafe&lt;/span>&lt;span class="o">();&lt;/span>
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="kd">private&lt;/span> &lt;span class="kd">static&lt;/span> &lt;span class="kd">final&lt;/span> &lt;span class="kt">long&lt;/span> &lt;span class="n">valueOffset&lt;/span>&lt;span class="o">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="kd">static&lt;/span> &lt;span class="o">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">try&lt;/span> &lt;span class="o">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">valueOffset&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">unsafe&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">objectFieldOffset&lt;/span>&lt;span class="o">(&lt;/span>&lt;span class="n">AtomicInteger&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">class&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">getDeclareFiele&lt;/span>&lt;span class="o">(&lt;/span>&lt;span class="s">&amp;#34;value&amp;#34;&lt;/span>&lt;span class="o">));&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="o">}&lt;/span> &lt;span class="k">catch&lt;/span> &lt;span class="o">(&lt;/span>&lt;span class="n">Exception&lt;/span> &lt;span class="n">e&lt;/span>&lt;span class="o">)&lt;/span> &lt;span class="o">{&lt;/span> &lt;span class="k">throw&lt;/span> &lt;span class="k">new&lt;/span> &lt;span class="n">Error&lt;/span>&lt;span class="o">(&lt;/span>&lt;span class="n">ex&lt;/span>&lt;span class="o">);&lt;/span> &lt;span class="o">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="kd">private&lt;/span> &lt;span class="kd">volatile&lt;/span> &lt;span class="kt">int&lt;/span> &lt;span class="n">value&lt;/span>&lt;span class="o">;&lt;/span>
 &lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
 &lt;/div>
 &lt;/div>&lt;p>例如 &lt;code>incrementAndGet()&lt;/code>。&lt;/p>
@@ -1801,12 +2030,56 @@ data-flex-basis="642px"
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="kd">public&lt;/span> &lt;span class="kd">final&lt;/span> &lt;span class="kd">native&lt;/span> &lt;span class="kt">boolean&lt;/span> &lt;span class="nf">compareAndSwapInt&lt;/span>&lt;span class="o">(&lt;/span>&lt;span class="n">Object&lt;/span> &lt;span class="n">o&lt;/span>&lt;span class="o">,&lt;/span> &lt;span class="kt">long&lt;/span> &lt;span class="n">offset&lt;/span>&lt;span class="o">,&lt;/span> &lt;span class="kt">int&lt;/span> &lt;span class="n">expected&lt;/span>&lt;span class="o">,&lt;/span> &lt;span class="kt">int&lt;/span> &lt;span class="n">x&lt;/span>&lt;span class="o">);&lt;/span>
 &lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
 &lt;/div>
-&lt;/div>&lt;h3 id="aba-问题">ABA 问题&lt;/h3>
+&lt;/div>&lt;p>缺点：&lt;/p>
+&lt;ul>
+&lt;li>
+&lt;p>循环开销大&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>只能处理一个共享变量&lt;/p>
+&lt;ul>
+&lt;li>封装成对象 AtomicReference&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>
+&lt;p>ABA&lt;/p>
+&lt;/li>
+&lt;/ul>
+&lt;h3 id="aba-问题">ABA 问题&lt;/h3>
 &lt;p>CAS 需要在操作值的时候检查内存值是否发生变化，没有发生变化才会更新内存值。&lt;/p>
 &lt;p>如果内存值原来是 A，后来变成了 B，然后又变成了 A，那么 CAS 进行检查时会发现值没有发生变化，但是实际上是有变化的。&lt;/p>
 &lt;p>&lt;code>A -&amp;gt; B -&amp;gt; A&lt;/code>&lt;/p>
 &lt;p>可以为共享变量引入一个修订号（时间戳），每次更新都会更新相应的修订号，判断变量的值是否被其他线程给修改过。&lt;code>AtomicStampedReference&lt;/code>&lt;/p>
-&lt;p>&lt;code>[A, 0] -&amp;gt; [B, 1] -&amp;gt; [A, 2]&lt;/code>&lt;/p></description></item><item><title>Java 多线程</title><link>https://emerywan.github.io/blog/p/thread/</link><pubDate>Wed, 30 Mar 2022 14:02:02 +0800</pubDate><guid>https://emerywan.github.io/blog/p/thread/</guid><description>&lt;img src="https://emerywan.github.io/blog/imgs/9.jpeg" alt="Featured image of post Java 多线程" />&lt;h2 id="进程与线程">进程与线程&lt;/h2>
+&lt;p>&lt;code>[A, 0] -&amp;gt; [B, 1] -&amp;gt; [A, 2]&lt;/code>&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;span class="lnt">11
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-java" data-lang="java">&lt;span class="line">&lt;span class="cl">&lt;span class="kd">public&lt;/span> &lt;span class="kd">static&lt;/span> &lt;span class="kt">void&lt;/span> &lt;span class="nf">main&lt;/span>&lt;span class="o">(&lt;/span>&lt;span class="n">String&lt;/span>&lt;span class="o">[]&lt;/span> &lt;span class="n">args&lt;/span>&lt;span class="o">)&lt;/span> &lt;span class="o">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">String&lt;/span> &lt;span class="n">a&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="s">&amp;#34;Hello&amp;#34;&lt;/span>&lt;span class="o">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">String&lt;/span> &lt;span class="n">b&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="s">&amp;#34;World&amp;#34;&lt;/span>&lt;span class="o">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c1">// initialRef initialStamp
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span> &lt;span class="n">AtomicStampedReference&lt;/span>&lt;span class="o">&amp;lt;&lt;/span>&lt;span class="n">String&lt;/span>&lt;span class="o">&amp;gt;&lt;/span> &lt;span class="n">reference&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="k">new&lt;/span> &lt;span class="n">AtomicStampedReference&lt;/span>&lt;span class="o">&amp;lt;&amp;gt;(&lt;/span>&lt;span class="n">a&lt;/span>&lt;span class="o">,&lt;/span> &lt;span class="n">1&lt;/span>&lt;span class="o">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c1">// expectedReference newStamp
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span> &lt;span class="n">reference&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">attemptStamp&lt;/span>&lt;span class="o">(&lt;/span>&lt;span class="n">a&lt;/span>&lt;span class="o">,&lt;/span> &lt;span class="n">2&lt;/span>&lt;span class="o">);&lt;/span> &lt;span class="c1">// 对版本号进行修改
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span> &lt;span class="c1">// expectedReference newReference expectedStamp newStamp
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span> &lt;span class="n">reference&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">compareAndSet&lt;/span>&lt;span class="o">(&lt;/span>&lt;span class="n">a&lt;/span>&lt;span class="o">,&lt;/span> &lt;span class="n">b&lt;/span>&lt;span class="o">,&lt;/span> &lt;span class="n">2&lt;/span>&lt;span class="o">,&lt;/span> &lt;span class="n">3&lt;/span>&lt;span class="o">);&lt;/span> &lt;span class="c1">// CAS 操作需要同时提供 预期值 新值 预期版本号 新版本号
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span>&lt;span class="o">}&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div></description></item><item><title>Java 多线程</title><link>https://emerywan.github.io/blog/p/thread/</link><pubDate>Wed, 30 Mar 2022 14:02:02 +0800</pubDate><guid>https://emerywan.github.io/blog/p/thread/</guid><description>&lt;img src="https://emerywan.github.io/blog/imgs/9.jpeg" alt="Featured image of post Java 多线程" />&lt;h2 id="进程与线程">进程与线程&lt;/h2>
 &lt;p>&lt;strong>进程&lt;/strong>是程序向操作系统申请资源的基本单位。&lt;/p>
 &lt;p>&lt;strong>线程&lt;/strong>是进程中可独立执行的最小单位。&lt;/p>
 &lt;p>一个进程可以包括多个线程，同一进程中所有线程共享该进程中的资源。&lt;/p>

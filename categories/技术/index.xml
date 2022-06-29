@@ -718,371 +718,7 @@ data-flex-basis="1481px"
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">}&lt;/span>
 &lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
 &lt;/div>
-&lt;/div></description></item><item><title>使用 Github Actions 在腾讯云 CloudBase 部署 Hugo</title><link>https://emerywan.github.io/blog/p/hugo-in-cloudbase/</link><pubDate>Sun, 01 May 2022 21:14:45 +0800</pubDate><guid>https://emerywan.github.io/blog/p/hugo-in-cloudbase/</guid><description>&lt;img src="https://emerywan.github.io/blog/imgs/3.jpeg" alt="Featured image of post 使用 Github Actions 在腾讯云 CloudBase 部署 Hugo" />&lt;h2 id="-介绍">🌱 介绍&lt;/h2>
-&lt;p>许多平台都提供了免费的静态页面托管的服务，如 &lt;code>Github Pages&lt;/code>，&lt;code>Vercel&lt;/code>，&lt;code>Netlify&lt;/code>等。但在国内由于一些“原因”，这些国外的服务在国内的访问并不稳定。&lt;/p>
-&lt;p>国内的免费托管平台如 &lt;code>Gitee&lt;/code> 限制很多，不可以自定义域名而且之前出现了防盗链问题，访问也不是很快，不太推荐作为托管平台。&lt;/p>
-&lt;p>腾讯云推出的云开发 &lt;code>CloudBase&lt;/code> 也有静态页面托管服务。其实它相比这些静态托管平台，有更多强大的功能，甚至能够搭一整套系统。虽然是付费服务，但是在按量付费的情况下资费不是很高，在博客访问量不是很高的情况下十分合适。&lt;/p>
-&lt;p>目前在腾讯云中暂时还没有 &lt;code>Hugo&lt;/code> 的模板。目前有两种方式可以达到自动部署的功能：&lt;/p>
-&lt;ul>
-&lt;li>
-&lt;p>🌰 使用 &lt;code>Github Actions&lt;/code> 编译，通过 &lt;code>Tencent CloudBase Github Action&lt;/code> 自动部署到 &lt;code>CloudBase&lt;/code>。&lt;/p>
-&lt;/li>
-&lt;li>
-&lt;p>🌰 使用 &lt;code>Github Actions&lt;/code> 编译，推送到 &lt;code>Web 应用托管（webify）&lt;/code> 的简易静态页面模板。&lt;/p>
-&lt;/li>
-&lt;/ul>
-&lt;h2 id="-使用-cloudbase">🏖 使用 CloudBase&lt;/h2>
-&lt;p>&lt;strong>使用 CloudBse 时，使用按量计费环境会有一些免费用量。&lt;/strong>&lt;/p>
-&lt;h3 id="-腾讯云">☁️ 腾讯云&lt;/h3>
-&lt;h4 id="创建环境">创建环境&lt;/h4>
-&lt;p>在 &lt;code>云开发 CloudBase&lt;/code> 新建一个应用，选择 &lt;strong>空模板&lt;/strong>，根据自身需求填写信息。&lt;/p>
-&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/hugo-in-cloudbase/new.png"
-width="1896"
-height="1608"
-srcset="https://emerywan.github.io/blog/blog/p/hugo-in-cloudbase/new_hu99910b72135936b76933bc6c60d2f8a9_394958_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/hugo-in-cloudbase/new_hu99910b72135936b76933bc6c60d2f8a9_394958_1024x0_resize_box_3.png 1024w"
-loading="lazy"
-alt="new"
-class="gallery-image"
-data-flex-grow="117"
-data-flex-basis="282px"
->&lt;/p>
-&lt;p>创建成功后，获得 &lt;code>环境ID&lt;/code>。&lt;/p>
-&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/hugo-in-cloudbase/env_id.png"
-width="796"
-height="406"
-srcset="https://emerywan.github.io/blog/blog/p/hugo-in-cloudbase/env_id_hucc29efc322e6de70f5fc042978c8e74b_42486_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/hugo-in-cloudbase/env_id_hucc29efc322e6de70f5fc042978c8e74b_42486_1024x0_resize_box_3.png 1024w"
-loading="lazy"
-alt="env_id"
-class="gallery-image"
-data-flex-grow="196"
-data-flex-basis="470px"
->&lt;/p>
-&lt;h4 id="获取-api-密钥">获取 API 密钥&lt;/h4>
-&lt;p>为部署新建一个密钥对。在 &lt;code>访问管理 -&amp;gt; 用户列表 -&amp;gt; 新建用户 -&amp;gt; 自定义创建 -&amp;gt; 可访问资源并接收消息&lt;/code>。&lt;a class="link" href="https://console.cloud.tencent.com/cam" target="_blank" rel="noopener"
->🔗 传送门&lt;/a>&lt;/p>
-&lt;p>根据自己的需要，新建用户名后选择 &lt;code>编程访问&lt;/code>，点击下一步。&lt;/p>
-&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/hugo-in-cloudbase/new_user.png"
-width="2122"
-height="1158"
-srcset="https://emerywan.github.io/blog/blog/p/hugo-in-cloudbase/new_user_hu5db7ae8d8e85e220ba3039161cacacd8_188871_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/hugo-in-cloudbase/new_user_hu5db7ae8d8e85e220ba3039161cacacd8_188871_1024x0_resize_box_3.png 1024w"
-loading="lazy"
-alt="new_user"
-class="gallery-image"
-data-flex-grow="183"
-data-flex-basis="439px"
->&lt;/p>
-&lt;p>在自定义策略中勾选：&lt;/p>
-&lt;ul>
-&lt;li>&lt;code>QcloudAccessForTCBRole&lt;/code>：授予云开发（TCB）对云资源的访问权限；&lt;/li>
-&lt;li>&lt;code>QcloudAccessForTCBRoleInAccessCloudBaseRun&lt;/code>：供云开发（TCB）服务角色（TCB_QcsRole）进行关联，用于 TCB 访问其他云服务资源。包含私有网络 VPC、云服务器 CVM 相关操作权限。&lt;/li>
-&lt;/ul>
-&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/hugo-in-cloudbase/access.png"
-width="2048"
-height="626"
-srcset="https://emerywan.github.io/blog/blog/p/hugo-in-cloudbase/access_hu76f892695bd748244f5434357abaf2d0_122725_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/hugo-in-cloudbase/access_hu76f892695bd748244f5434357abaf2d0_122725_1024x0_resize_box_3.png 1024w"
-loading="lazy"
-alt="access"
-class="gallery-image"
-data-flex-grow="327"
-data-flex-basis="785px"
->&lt;/p>
-&lt;p>点一下一步后，新建用户成功。可以获得 &lt;code>SecretId&lt;/code> 和 &lt;code>SecretKey&lt;/code>。&lt;/p>
-&lt;h3 id="-github-actions">⚙️ Github Actions&lt;/h3>
-&lt;h4 id="设置-github-secrets">设置 Github Secrets&lt;/h4>
-&lt;p>在项目的 &lt;code>Settings -&amp;gt; Secrets -&amp;gt; Actions&lt;/code> 中添加上述得到的 &lt;code>ENV_ID&lt;/code>，&lt;code>SECRET_ID&lt;/code>，&lt;code>SECRET_KEY&lt;/code>（名称可以自定义）。&lt;/p>
-&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/hugo-in-cloudbase/secret.png"
-width="1616"
-height="366"
-srcset="https://emerywan.github.io/blog/blog/p/hugo-in-cloudbase/secret_hu55ad514f0e88b8a75da2092c1dc5a21a_68162_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/hugo-in-cloudbase/secret_hu55ad514f0e88b8a75da2092c1dc5a21a_68162_1024x0_resize_box_3.png 1024w"
-loading="lazy"
-alt="secret"
-class="gallery-image"
-data-flex-grow="441"
-data-flex-basis="1059px"
->&lt;/p>
-&lt;h4 id="添加-workflows">添加 workflows&lt;/h4>
-&lt;p>可以在仓库的 &lt;code>Actions&lt;/code> 中 &lt;code>new workflow&lt;/code>，或者在项目中 &lt;code>.github/workflows&lt;/code> 添加。&lt;/p>
-&lt;div class="highlight">&lt;div class="chroma">
-&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
-&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
-&lt;/span>&lt;span class="lnt"> 2
-&lt;/span>&lt;span class="lnt"> 3
-&lt;/span>&lt;span class="lnt"> 4
-&lt;/span>&lt;span class="lnt"> 5
-&lt;/span>&lt;span class="lnt"> 6
-&lt;/span>&lt;span class="lnt"> 7
-&lt;/span>&lt;span class="lnt"> 8
-&lt;/span>&lt;span class="lnt"> 9
-&lt;/span>&lt;span class="lnt">10
-&lt;/span>&lt;span class="lnt">11
-&lt;/span>&lt;span class="lnt">12
-&lt;/span>&lt;span class="lnt">13
-&lt;/span>&lt;span class="lnt">14
-&lt;/span>&lt;span class="lnt">15
-&lt;/span>&lt;span class="lnt">16
-&lt;/span>&lt;span class="lnt">17
-&lt;/span>&lt;span class="lnt">18
-&lt;/span>&lt;span class="lnt">19
-&lt;/span>&lt;span class="lnt">20
-&lt;/span>&lt;span class="lnt">21
-&lt;/span>&lt;span class="lnt">22
-&lt;/span>&lt;span class="lnt">23
-&lt;/span>&lt;span class="lnt">24
-&lt;/span>&lt;span class="lnt">25
-&lt;/span>&lt;span class="lnt">26
-&lt;/span>&lt;span class="lnt">27
-&lt;/span>&lt;span class="lnt">28
-&lt;/span>&lt;span class="lnt">29
-&lt;/span>&lt;span class="lnt">30
-&lt;/span>&lt;span class="lnt">31
-&lt;/span>&lt;span class="lnt">32
-&lt;/span>&lt;span class="lnt">33
-&lt;/span>&lt;span class="lnt">34
-&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
-&lt;td class="lntd">
-&lt;pre tabindex="0" class="chroma">&lt;code class="language-yaml" data-lang="yaml">&lt;span class="line">&lt;span class="cl">&lt;span class="nt">name&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">Tencent CloudBase&lt;/span>&lt;span class="w">
-&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">
-&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="nt">on&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
-&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">push&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
-&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">branches&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
-&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>- &lt;span class="l">main&lt;/span>&lt;span class="w">
-&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">
-&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="nt">jobs&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
-&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">hugo-publish&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
-&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">name&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">publish content to static website&lt;/span>&lt;span class="w">
-&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">runs-on&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">ubuntu-latest&lt;/span>&lt;span class="w">
-&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">steps&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
-&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>- &lt;span class="nt">name&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">Checkout&lt;/span>&lt;span class="w">
-&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">uses&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">actions/checkout@v3&lt;/span>&lt;span class="w">
-&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">with&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
-&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">submodules&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="kc">true&lt;/span>&lt;span class="w">
-&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">fetch-depth&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="m">0&lt;/span>&lt;span class="w">
-&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">
-&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>- &lt;span class="nt">name&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">Setup Hugo&lt;/span>&lt;span class="w">
-&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">uses&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">peaceiris/actions-hugo@v2&lt;/span>&lt;span class="w">
-&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">with&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
-&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">hugo-version&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">latest&lt;/span>&lt;span class="w">
-&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">extended&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="kc">true&lt;/span>&lt;span class="w">
-&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">
-&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>- &lt;span class="nt">name&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">Build&lt;/span>&lt;span class="w">
-&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">run&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">hugo --minify --gc&lt;/span>&lt;span class="w">
-&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">
-&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="c"># 使用云开发 Github Action 部署&lt;/span>&lt;span class="w">
-&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>- &lt;span class="nt">name&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">Deploy to Tencent CloudBase&lt;/span>&lt;span class="w">
-&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">uses&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">TencentCloudBase/cloudbase-action@v2&lt;/span>&lt;span class="w">
-&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">with&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
-&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">secretId&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">${{ secrets.QCLOUD_SECRET_ID }}&lt;/span>&lt;span class="w">
-&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">secretKey&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">${{ secrets.QCLOUD_SECRET_KEY }}&lt;/span>&lt;span class="w">
-&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">envId&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">${{ secrets.QCLOUD_ENV_ID }}&lt;/span>&lt;span class="w">
-&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
-&lt;/div>
-&lt;/div>&lt;blockquote>
-&lt;p>🚧 提示：&lt;/p>
-&lt;p>这里使用了 &lt;code>TencentCloudBase/cloudbase-action@v2&lt;/code>，需要在项目根目录添加 &lt;code>cloudbaserc.json&lt;/code>。&lt;/p>
-&lt;/blockquote>
-&lt;div class="highlight">&lt;div class="chroma">
-&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
-&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
-&lt;/span>&lt;span class="lnt"> 2
-&lt;/span>&lt;span class="lnt"> 3
-&lt;/span>&lt;span class="lnt"> 4
-&lt;/span>&lt;span class="lnt"> 5
-&lt;/span>&lt;span class="lnt"> 6
-&lt;/span>&lt;span class="lnt"> 7
-&lt;/span>&lt;span class="lnt"> 8
-&lt;/span>&lt;span class="lnt"> 9
-&lt;/span>&lt;span class="lnt">10
-&lt;/span>&lt;span class="lnt">11
-&lt;/span>&lt;span class="lnt">12
-&lt;/span>&lt;span class="lnt">13
-&lt;/span>&lt;span class="lnt">14
-&lt;/span>&lt;span class="lnt">15
-&lt;/span>&lt;span class="lnt">16
-&lt;/span>&lt;span class="lnt">17
-&lt;/span>&lt;span class="lnt">18
-&lt;/span>&lt;span class="lnt">19
-&lt;/span>&lt;span class="lnt">20
-&lt;/span>&lt;span class="lnt">21
-&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
-&lt;td class="lntd">
-&lt;pre tabindex="0" class="chroma">&lt;code class="language-json" data-lang="json">&lt;span class="line">&lt;span class="cl">&lt;span class="p">{&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;#34;envId&amp;#34;&lt;/span>&lt;span class="p">:&lt;/span> &lt;span class="s2">&amp;#34;{{env.ENV_ID}}&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="c1">// 这里需要更改为你的 环境ID，或者在 .env 文件中配置
-&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span> &lt;span class="nt">&amp;#34;$schema&amp;#34;&lt;/span>&lt;span class="p">:&lt;/span> &lt;span class="s2">&amp;#34;https://framework-1258016615.tcloudbaseapp.com/schema/latest.json&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;#34;version&amp;#34;&lt;/span>&lt;span class="p">:&lt;/span> &lt;span class="s2">&amp;#34;2.0&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;#34;framework&amp;#34;&lt;/span>&lt;span class="p">:&lt;/span> &lt;span class="p">{&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;#34;name&amp;#34;&lt;/span>&lt;span class="p">:&lt;/span> &lt;span class="s2">&amp;#34;hugo-blog&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;#34;plugins&amp;#34;&lt;/span>&lt;span class="p">:&lt;/span> &lt;span class="p">{&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;#34;client&amp;#34;&lt;/span>&lt;span class="p">:&lt;/span> &lt;span class="p">{&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;#34;use&amp;#34;&lt;/span>&lt;span class="p">:&lt;/span> &lt;span class="s2">&amp;#34;@cloudbase/framework-plugin-website&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;#34;inputs&amp;#34;&lt;/span>&lt;span class="p">:&lt;/span> &lt;span class="p">{&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;#34;outputPath&amp;#34;&lt;/span>&lt;span class="p">:&lt;/span> &lt;span class="s2">&amp;#34;public&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;#34;ignore&amp;#34;&lt;/span>&lt;span class="p">:&lt;/span> &lt;span class="p">[&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="s2">&amp;#34;.git&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="s2">&amp;#34;.github&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="s2">&amp;#34;cloudbaserc.js&amp;#34;&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">]&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">}&lt;/span>
-&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
-&lt;/div>
-&lt;/div>&lt;blockquote>
-&lt;p>🚧 提示：&lt;/p>
-&lt;p>这里也可以选择 &lt;code> Tencent CloudBase Github Action V1&lt;/code>。🙋‍♂️ &lt;strong>（推荐）&lt;/strong>&lt;/p>
-&lt;p>V2 比 V1 有更多功能，比如拉取代码在腾讯云端编译，但目前没有 Hugo 模板。我们已经在 Github Actions 产出了静态文件，直接推送即可。所以目前对于 hugo 来说，没什么区别，使用甚至 V1 更快更简洁。&lt;/p>
-&lt;/blockquote>
-&lt;div class="highlight">&lt;div class="chroma">
-&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
-&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
-&lt;/span>&lt;span class="lnt">2
-&lt;/span>&lt;span class="lnt">3
-&lt;/span>&lt;span class="lnt">4
-&lt;/span>&lt;span class="lnt">5
-&lt;/span>&lt;span class="lnt">6
-&lt;/span>&lt;span class="lnt">7
-&lt;/span>&lt;span class="lnt">8
-&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
-&lt;td class="lntd">
-&lt;pre tabindex="0" class="chroma">&lt;code class="language-yaml" data-lang="yaml">&lt;span class="line">&lt;span class="cl">&lt;span class="c"># 将上述 jobs 内替换为&lt;/span>&lt;span class="w">
-&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>- &lt;span class="nt">name&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">Deploy to Tencent CloudBase&lt;/span>&lt;span class="w">
-&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">uses&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">TencentCloudBase/cloudbase-action@v1.1.1&lt;/span>&lt;span class="w">
-&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">with&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
-&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">secretId&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">${{ secrets.QCLOUD_SECRET_ID }}&lt;/span>&lt;span class="w">
-&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">secretKey&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">${{ secrets.QCLOUD_SECRET_KEY }}&lt;/span>&lt;span class="w">
-&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">envId&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">${{ secrets.QCLOUD_ENV_ID }}&lt;/span>&lt;span class="w">
-&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">staticSrcPath&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">public&lt;/span>&lt;span class="w">
-&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
-&lt;/div>
-&lt;/div>&lt;h2 id="-使用-webify">🏝 使用 webify&lt;/h2>
-&lt;p>使用 Web 应用托管（webify）主要是利用 &lt;code>Github Actions&lt;/code> 生成 静态页面到另一个分支，再托管这个分支的内容。&lt;/p>
-&lt;h3 id="-创建服务">☁️ 创建服务&lt;/h3>
-&lt;p>在 &lt;code>Web 应用托管 -&amp;gt; 新建应用&lt;/code> 新建一个简易静态页面模板。根据需求填写信息。选择纯静态页面。&lt;/p>
-&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/hugo-in-cloudbase/webify.png"
-width="2530"
-height="1256"
-srcset="https://emerywan.github.io/blog/blog/p/hugo-in-cloudbase/webify_hu211af589e3a728aa0fd91d8fdf6a5a77_643488_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/hugo-in-cloudbase/webify_hu211af589e3a728aa0fd91d8fdf6a5a77_643488_1024x0_resize_box_3.png 1024w"
-loading="lazy"
-alt="webify"
-class="gallery-image"
-data-flex-grow="201"
-data-flex-basis="483px"
->&lt;/p>
-&lt;p>在 &lt;code>应用列表 -&amp;gt; 应用设置&lt;/code> 中配置仓库信息，并根据自身情况选择静态文件的部署分支。（如果当前没有生成静态页面的分支，可完成后面操作后再进行此步骤）。&lt;/p>
-&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/hugo-in-cloudbase/webify_info.png"
-width="1896"
-height="1164"
-srcset="https://emerywan.github.io/blog/blog/p/hugo-in-cloudbase/webify_info_hufa1571ab4508131ee643c8a2551cf3ff_136359_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/hugo-in-cloudbase/webify_info_hufa1571ab4508131ee643c8a2551cf3ff_136359_1024x0_resize_box_3.png 1024w"
-loading="lazy"
-alt="webify_info"
-class="gallery-image"
-data-flex-grow="162"
-data-flex-basis="390px"
->&lt;/p>
-&lt;h3 id="-github-actions-1">⚙️ Github Actions&lt;/h3>
-&lt;h4 id="设置-github-token">设置 Github Token&lt;/h4>
-&lt;p>在用户的 &lt;code>Settings -&amp;gt; Developer settings -&amp;gt; Personal access tokens -&amp;gt; Generate new token&lt;/code> 获取一个 &lt;code>Repo Token&lt;/code>。&lt;a class="link" href="https://github.com/settings/tokens" target="_blank" rel="noopener"
->🔗 传送门&lt;/a>&lt;/p>
-&lt;p>在项目的 &lt;code>Settings -&amp;gt; Secrets -&amp;gt; Actions&lt;/code> 中添加上述得到的 &lt;code>Token&lt;/code>。&lt;/p>
-&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/hugo-in-cloudbase/access_token.png"
-width="1600"
-height="598"
-srcset="https://emerywan.github.io/blog/blog/p/hugo-in-cloudbase/access_token_hu161bb7d01a4edfa7f2231ebb5df9a1e4_123158_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/hugo-in-cloudbase/access_token_hu161bb7d01a4edfa7f2231ebb5df9a1e4_123158_1024x0_resize_box_3.png 1024w"
-loading="lazy"
-alt="access_token"
-class="gallery-image"
-data-flex-grow="267"
-data-flex-basis="642px"
->&lt;/p>
-&lt;h4 id="添加-workflows-1">添加 workflows&lt;/h4>
-&lt;div class="highlight">&lt;div class="chroma">
-&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
-&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
-&lt;/span>&lt;span class="lnt"> 2
-&lt;/span>&lt;span class="lnt"> 3
-&lt;/span>&lt;span class="lnt"> 4
-&lt;/span>&lt;span class="lnt"> 5
-&lt;/span>&lt;span class="lnt"> 6
-&lt;/span>&lt;span class="lnt"> 7
-&lt;/span>&lt;span class="lnt"> 8
-&lt;/span>&lt;span class="lnt"> 9
-&lt;/span>&lt;span class="lnt">10
-&lt;/span>&lt;span class="lnt">11
-&lt;/span>&lt;span class="lnt">12
-&lt;/span>&lt;span class="lnt">13
-&lt;/span>&lt;span class="lnt">14
-&lt;/span>&lt;span class="lnt">15
-&lt;/span>&lt;span class="lnt">16
-&lt;/span>&lt;span class="lnt">17
-&lt;/span>&lt;span class="lnt">18
-&lt;/span>&lt;span class="lnt">19
-&lt;/span>&lt;span class="lnt">20
-&lt;/span>&lt;span class="lnt">21
-&lt;/span>&lt;span class="lnt">22
-&lt;/span>&lt;span class="lnt">23
-&lt;/span>&lt;span class="lnt">24
-&lt;/span>&lt;span class="lnt">25
-&lt;/span>&lt;span class="lnt">26
-&lt;/span>&lt;span class="lnt">27
-&lt;/span>&lt;span class="lnt">28
-&lt;/span>&lt;span class="lnt">29
-&lt;/span>&lt;span class="lnt">30
-&lt;/span>&lt;span class="lnt">31
-&lt;/span>&lt;span class="lnt">32
-&lt;/span>&lt;span class="lnt">33
-&lt;/span>&lt;span class="lnt">34
-&lt;/span>&lt;span class="lnt">35
-&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
-&lt;td class="lntd">
-&lt;pre tabindex="0" class="chroma">&lt;code class="language-yaml" data-lang="yaml">&lt;span class="line">&lt;span class="cl">&lt;span class="nt">name&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">Tencent CloudBase&lt;/span>&lt;span class="w">
-&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">
-&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="nt">on&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
-&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">push&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
-&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">branches&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
-&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>- &lt;span class="l">main&lt;/span>&lt;span class="w">
-&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">
-&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="nt">jobs&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
-&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">hugo-publish&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
-&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">name&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">publish content to static website&lt;/span>&lt;span class="w">
-&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">runs-on&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">ubuntu-latest&lt;/span>&lt;span class="w">
-&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">steps&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
-&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>- &lt;span class="nt">name&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">Checkout&lt;/span>&lt;span class="w">
-&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">uses&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">actions/checkout@v3&lt;/span>&lt;span class="w">
-&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">with&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
-&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">submodules&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="kc">true&lt;/span>&lt;span class="w">
-&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">fetch-depth&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="m">0&lt;/span>&lt;span class="w">
-&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">
-&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>- &lt;span class="nt">name&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">Setup Hugo&lt;/span>&lt;span class="w">
-&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">uses&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">peaceiris/actions-hugo@v2&lt;/span>&lt;span class="w">
-&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">with&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
-&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">hugo-version&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">latest&lt;/span>&lt;span class="w">
-&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">extended&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="kc">true&lt;/span>&lt;span class="w">
-&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">
-&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>- &lt;span class="nt">name&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">Build&lt;/span>&lt;span class="w">
-&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">run&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">hugo --minify --gc&lt;/span>&lt;span class="w">
-&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">
-&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>- &lt;span class="nt">name&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">Deploy to Branch&lt;/span>&lt;span class="w">
-&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">uses&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">peaceiris/actions-gh-pages@v3&lt;/span>&lt;span class="w">
-&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">with&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
-&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">github_token&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">${{ secrets.ACCESS_TOKEN }}&lt;/span>&lt;span class="w">
-&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">keep_files&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="kc">false&lt;/span>&lt;span class="w">
-&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">publish_branch&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">gh-pages &lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="c"># 更改为你想要生成的分支&lt;/span>&lt;span class="w">
-&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">publich_dir&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">./public&lt;/span>&lt;span class="w">
-&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">commit_message&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">${{ github.event.head_commit.message }}&lt;/span>&lt;span class="w">
-&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
-&lt;/div>
-&lt;/div>&lt;h2 id="-参考">⛓ 参考&lt;/h2>
-&lt;ul>
-&lt;li>🔗 &lt;a class="link" href="https://blog.wangjunfeng.com/post/hugo-cloudbase/" target="_blank" rel="noopener"
->https://blog.wangjunfeng.com/post/hugo-cloudbase/&lt;/a>&lt;/li>
-&lt;li>🔗 &lt;a class="link" href="https://cloud.tencent.com/document/product/1210/43389" target="_blank" rel="noopener"
->https://cloud.tencent.com/document/product/1210/43389&lt;/a>&lt;/li>
-&lt;li>🔗 &lt;a class="link" href="https://github.com/TencentCloudBase/cloudbase-action" target="_blank" rel="noopener"
->https://github.com/TencentCloudBase/cloudbase-action&lt;/a>&lt;/li>
-&lt;li>🔗 &lt;a class="link" href="https://github.com/TencentCloudBase/cloudbase-action/blob/3354b442713265aa9d7c5bf03b0b8cb0173f546f/README.md" target="_blank" rel="noopener"
->https://github.com/TencentCloudBase/cloudbase-action/blob/3354b442713265aa9d7c5bf03b0b8cb0173f546f/README.md&lt;/a>&lt;/li>
-&lt;/ul></description></item><item><title>Java 并发 - AQS</title><link>https://emerywan.github.io/blog/p/thread/aqs/</link><pubDate>Sun, 03 Apr 2022 14:02:02 +0800</pubDate><guid>https://emerywan.github.io/blog/p/thread/aqs/</guid><description>&lt;img src="https://emerywan.github.io/blog/imgs/6.jpeg" alt="Featured image of post Java 并发 - AQS" />&lt;h2 id="aqs">AQS&lt;/h2>
+&lt;/div></description></item><item><title>Java 并发 - AQS</title><link>https://emerywan.github.io/blog/p/thread/aqs/</link><pubDate>Sun, 03 Apr 2022 14:02:02 +0800</pubDate><guid>https://emerywan.github.io/blog/p/thread/aqs/</guid><description>&lt;img src="https://emerywan.github.io/blog/imgs/6.jpeg" alt="Featured image of post Java 并发 - AQS" />&lt;h2 id="aqs">AQS&lt;/h2>
 &lt;p>AQS &lt;code>AbstractQueuedSynchronized&lt;/code> 是一个用来构建锁和同步器的框架，是对 CAS 的一种封装和丰富，AQS 引入了独占锁，共享锁等性质。&lt;/p>
 &lt;p>使用 AQS 能够基于 Java API，简单高效地构建出应用广泛的大量同步器，用于 Java 多线程之间的同步。&lt;/p>
 &lt;h2 id="核心思想">核心思想&lt;/h2>
@@ -1457,7 +1093,217 @@ data-flex-basis="642px"
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">}&lt;/span>
 &lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
 &lt;/div>
-&lt;/div>&lt;p>字段 &lt;code>INSTANCE&lt;/code> 是枚举类的唯一实例。在 &lt;code>Singleton.INSTANCE&lt;/code> 初次被引用时才会被初始化。&lt;/p></description></item><item><title>Java 并发 - 锁机制</title><link>https://emerywan.github.io/blog/p/thread/lock/</link><pubDate>Wed, 30 Mar 2022 14:02:02 +0800</pubDate><guid>https://emerywan.github.io/blog/p/thread/lock/</guid><description>&lt;img src="https://emerywan.github.io/blog/imgs/7.jpeg" alt="Featured image of post Java 并发 - 锁机制" />&lt;p>在并发情况下，多个线程会对同一个资源进行争抢，可能会导致数据不一致的问题。&lt;/p>
+&lt;/div>&lt;p>字段 &lt;code>INSTANCE&lt;/code> 是枚举类的唯一实例。在 &lt;code>Singleton.INSTANCE&lt;/code> 初次被引用时才会被初始化。&lt;/p></description></item><item><title>Java 线程池</title><link>https://emerywan.github.io/blog/p/thread/</link><pubDate>Wed, 30 Mar 2022 16:02:02 +0800</pubDate><guid>https://emerywan.github.io/blog/p/thread/</guid><description>&lt;img src="https://emerywan.github.io/blog/imgs/9.jpeg" alt="Featured image of post Java 线程池" />&lt;h2 id="创建">创建&lt;/h2>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;span class="lnt">4
+&lt;/span>&lt;span class="lnt">5
+&lt;/span>&lt;span class="lnt">6
+&lt;/span>&lt;span class="lnt">7
+&lt;/span>&lt;span class="lnt">8
+&lt;/span>&lt;span class="lnt">9
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-java" data-lang="java">&lt;span class="line">&lt;span class="cl">&lt;span class="kd">public&lt;/span> &lt;span class="nf">ThreadPoolExecutor&lt;/span>&lt;span class="o">(&lt;/span>&lt;span class="kt">int&lt;/span> &lt;span class="n">corePoolSize&lt;/span>&lt;span class="o">,&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kt">int&lt;/span> &lt;span class="n">maximumPoolSize&lt;/span>&lt;span class="o">,&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kt">long&lt;/span> &lt;span class="n">keepAliveTime&lt;/span>&lt;span class="o">,&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">TimeUnit&lt;/span> &lt;span class="n">unit&lt;/span>&lt;span class="o">,&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">BlockingQueue&lt;/span>&lt;span class="o">&amp;lt;&lt;/span>&lt;span class="n">Runnable&lt;/span>&lt;span class="o">&amp;gt;&lt;/span> &lt;span class="n">workQueue&lt;/span>&lt;span class="o">,&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">ThreadFactory&lt;/span> &lt;span class="n">threadFactory&lt;/span>&lt;span class="o">,&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">RejectedExecutionHandler&lt;/span> &lt;span class="n">handler&lt;/span>&lt;span class="o">)&lt;/span> &lt;span class="o">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c1">// ...
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span>&lt;span class="o">}&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;ul>
+&lt;li>
+&lt;p>&lt;code>corePoolSize&lt;/code> 核心线程数&lt;/p>
+&lt;ul>
+&lt;li>每次向线程池提交一个多线程任务，都会创建一个新的核心线程，无论是否有空闲线程，直到核心线程数的数量，才会开始复用线程资源。&lt;/li>
+&lt;li>使用 &lt;code>prestartAllCoreThreads()&lt;/code> 直接初始化全部&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;code>maximumPoolSize&lt;/code> 最大线程数&lt;/p>
+&lt;ul>
+&lt;li>当所有线程都处于运行状态，且等待队列已满，会开始创建非核心线程，但不超过最大线程数&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;code>keepAliveTime&lt;/code> 线程最大空闲时间&lt;/p>
+&lt;ul>
+&lt;li>非核心线程超过最大空闲时间，会自动销毁&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;code>unit&lt;/code> 最大空闲时间单位&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;code>workQueue&lt;/code> 线程等待队列&lt;/p>
+&lt;ul>
+&lt;li>核心线程数已满时，会将任务暂存到等待队列，直到线程资源可用&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;code>threadFactory&lt;/code> 线程创建工厂&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;code>handler&lt;/code> 拒绝策略&lt;/p>
+&lt;ul>
+&lt;li>当等待队列已满，并且达到最大线程数，新的任务会进行拒绝处理&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;h3 id="线程池的大小">线程池的大小&lt;/h3>
+&lt;ul>
+&lt;li>CPU 密集型&lt;/li>
+&lt;/ul>
+&lt;p>主要是执行计算任务，相应很快，CPU 利用率高。推荐：核心线程数 = CPU 核心数 + 1&lt;/p>
+&lt;ul>
+&lt;li>IO 密集型&lt;/li>
+&lt;/ul>
+&lt;p>主要是进行 IO 操作，如硬盘读取数据等，IO 操作时间长，CPU 利用不高，推荐：核心线程数 = 2 * CPU 核心数。&lt;/p>
+&lt;h3 id="拒绝策略">拒绝策略&lt;/h3>
+&lt;ul>
+&lt;li>
+&lt;p>AbortPolicy&lt;/p>
+&lt;ul>
+&lt;li>抛出异常拒绝任务&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>
+&lt;p>DiscardPolicy&lt;/p>
+&lt;ul>
+&lt;li>不抛出异常，拒绝任务&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>
+&lt;p>DiscardOldestPolicy&lt;/p>
+&lt;ul>
+&lt;li>丢弃最老的任务&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>
+&lt;p>CallerRunsPolicy&lt;/p>
+&lt;ul>
+&lt;li>将任务交给调用线程执行&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;h3 id="使用">使用&lt;/h3>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;span class="lnt">4
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-java" data-lang="java">&lt;span class="line">&lt;span class="cl">&lt;span class="c1">// execute
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span>&lt;span class="n">executor&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">execute&lt;/span>&lt;span class="o">(()&lt;/span> &lt;span class="o">-&amp;gt;&lt;/span> &lt;span class="o">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c1">// do ...
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span>&lt;span class="o">});&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;span class="lnt">4
+&lt;/span>&lt;span class="lnt">5
+&lt;/span>&lt;span class="lnt">6
+&lt;/span>&lt;span class="lnt">7
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-java" data-lang="java">&lt;span class="line">&lt;span class="cl">&lt;span class="c1">// submit
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span>&lt;span class="n">Future&lt;/span>&lt;span class="o">&amp;lt;&lt;/span>&lt;span class="n">String&lt;/span>&lt;span class="o">&amp;gt;&lt;/span> &lt;span class="n">future&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">executor&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">submit&lt;/span>&lt;span class="o">(()&lt;/span> &lt;span class="o">-&amp;gt;&lt;/span> &lt;span class="o">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c1">// do...
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span> &lt;span class="k">return&lt;/span> &lt;span class="s">&amp;#34;返回值&amp;#34;&lt;/span>&lt;span class="o">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">});&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="n">String&lt;/span> &lt;span class="n">res&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">future&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">get&lt;/span>&lt;span class="o">();&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;h2 id="常见的线程池">常见的线程池&lt;/h2>
+&lt;ul>
+&lt;li>&lt;code>newSingleThreadExecutor&lt;/code>
+&lt;ul>
+&lt;li>只有一个线程的线程池&lt;/li>
+&lt;li>唯一线程可以保证所提交的任务顺序执行&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;span class="lnt">4
+&lt;/span>&lt;span class="lnt">5
+&lt;/span>&lt;span class="lnt">6
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-java" data-lang="java">&lt;span class="line">&lt;span class="cl">&lt;span class="kd">public&lt;/span> &lt;span class="kd">static&lt;/span> &lt;span class="n">ExecutorService&lt;/span> &lt;span class="nf">newSingleThreadExecutor&lt;/span>&lt;span class="o">()&lt;/span> &lt;span class="o">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">return&lt;/span> &lt;span class="k">new&lt;/span> &lt;span class="n">FinalizableDelegatedExecutorService&lt;/span>&lt;span class="o">(&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">new&lt;/span> &lt;span class="n">ThreadPoolExecutor&lt;/span>&lt;span class="o">(&lt;/span>&lt;span class="n">1&lt;/span>&lt;span class="o">,&lt;/span> &lt;span class="n">1&lt;/span>&lt;span class="o">,&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">0L&lt;/span>&lt;span class="o">,&lt;/span> &lt;span class="n">TimeUnit&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">MILLISECONDS&lt;/span>&lt;span class="o">,&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">new&lt;/span> &lt;span class="n">LinkedBlockingQueue&lt;/span>&lt;span class="o">&amp;lt;&lt;/span>&lt;span class="n">Runnable&lt;/span>&lt;span class="o">&amp;gt;()));&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">}&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;ul>
+&lt;li>&lt;code>newFixedThreadPool&lt;/code>
+&lt;ul>
+&lt;li>固定线程数的线程池&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;span class="lnt">4
+&lt;/span>&lt;span class="lnt">5
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-java" data-lang="java">&lt;span class="line">&lt;span class="cl">&lt;span class="kd">public&lt;/span> &lt;span class="kd">static&lt;/span> &lt;span class="n">ExecutorService&lt;/span> &lt;span class="nf">newFixedThreadPool&lt;/span>&lt;span class="o">(&lt;/span>&lt;span class="kt">int&lt;/span> &lt;span class="n">nThreads&lt;/span>&lt;span class="o">)&lt;/span> &lt;span class="o">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">return&lt;/span> &lt;span class="k">new&lt;/span> &lt;span class="n">ThreadPoolExecutor&lt;/span>&lt;span class="o">(&lt;/span>&lt;span class="n">nThread&lt;/span>&lt;span class="o">,&lt;/span> &lt;span class="n">nThread&lt;/span>&lt;span class="o">,&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">0L&lt;/span>&lt;span class="o">,&lt;/span> &lt;span class="n">TimeUnit&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">MILLISECONDS&lt;/span>&lt;span class="o">,&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">new&lt;/span> &lt;span class="n">LinkedBlockingQueue&lt;/span>&lt;span class="o">&amp;lt;&lt;/span>&lt;span class="n">Runnable&lt;/span>&lt;span class="o">&amp;gt;());&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">}&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;ul>
+&lt;li>&lt;code>newCachedThreadPool&lt;/code>
+&lt;ul>
+&lt;li>根据需要创建新线程的线程池&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;span class="lnt">4
+&lt;/span>&lt;span class="lnt">5
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-java" data-lang="java">&lt;span class="line">&lt;span class="cl">&lt;span class="kd">public&lt;/span> &lt;span class="kd">static&lt;/span> &lt;span class="n">ExecutorService&lt;/span> &lt;span class="nf">newCachedThreadPool&lt;/span>&lt;span class="o">()&lt;/span> &lt;span class="o">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">return&lt;/span> &lt;span class="k">new&lt;/span> &lt;span class="n">ThreadPoolExecutor&lt;/span>&lt;span class="o">(&lt;/span>&lt;span class="n">0&lt;/span>&lt;span class="o">,&lt;/span> &lt;span class="n">Integer&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">MAX_VALUE&lt;/span>&lt;span class="o">,&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">60L&lt;/span>&lt;span class="o">,&lt;/span> &lt;span class="n">TimeUnit&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">SECONDS&lt;/span>&lt;span class="o">,&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">new&lt;/span> &lt;span class="n">SynchronousQueue&lt;/span>&lt;span class="o">&amp;lt;&lt;/span>&lt;span class="n">Runnable&lt;/span>&lt;span class="o">&amp;gt;());&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">}&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>当提交新任务时，如果线程池为空或没有空闲线程，则创建新线程执行任务。&lt;/p>
+&lt;p>当线程空闲时间超过 keepAliveTime=60s，会自动释放线程资源。长时间空闲的 CachedThreadPool 不会持有任务任何线程资源。&lt;/p>
+&lt;h2 id="forkjoin">ForkJoin&lt;/h2></description></item><item><title>Java 并发 - 锁机制</title><link>https://emerywan.github.io/blog/p/thread/lock/</link><pubDate>Wed, 30 Mar 2022 14:02:02 +0800</pubDate><guid>https://emerywan.github.io/blog/p/thread/lock/</guid><description>&lt;img src="https://emerywan.github.io/blog/imgs/7.jpeg" alt="Featured image of post Java 并发 - 锁机制" />&lt;p>在并发情况下，多个线程会对同一个资源进行争抢，可能会导致数据不一致的问题。&lt;/p>
 &lt;p>为了解决这个问题，通过引入&lt;strong>锁机制&lt;/strong>，使用一种抽象的锁，对资源进行锁定，达到同步访问。&lt;/p>
 &lt;h2 id="实现">实现&lt;/h2>
 &lt;p>Java 采用了两种实现方式：&lt;/p>
@@ -1597,7 +1443,7 @@ data-flex-basis="642px"
 &lt;/ul>
 &lt;/li>
 &lt;li>
-&lt;p>数组型&lt;/p>
+&lt;p>数组类型&lt;/p>
 &lt;ul>
 &lt;li>AtomicIntegerArray&lt;/li>
 &lt;li>AtomicLongArray&lt;/li>
@@ -1605,7 +1451,7 @@ data-flex-basis="642px"
 &lt;/ul>
 &lt;/li>
 &lt;li>
-&lt;p>字段更新型&lt;/p>
+&lt;p>字段更新类型&lt;/p>
 &lt;ul>
 &lt;li>AtomicIntegerFieldUpdater&lt;/li>
 &lt;li>AtomicLongFieldUpdater&lt;/li>
@@ -1613,7 +1459,7 @@ data-flex-basis="642px"
 &lt;/ul>
 &lt;/li>
 &lt;li>
-&lt;p>引用型&lt;/p>
+&lt;p>引用类型&lt;/p>
 &lt;ul>
 &lt;li>AtomicReference&lt;/li>
 &lt;li>AtomicStampedReference&lt;/li>
@@ -1638,36 +1484,55 @@ data-flex-basis="642px"
 &lt;/span>&lt;span class="lnt">13
 &lt;/span>&lt;span class="lnt">14
 &lt;/span>&lt;span class="lnt">15
+&lt;/span>&lt;span class="lnt">16
 &lt;/span>&lt;/code>&lt;/pre>&lt;/td>
 &lt;td class="lntd">
 &lt;pre tabindex="0" class="chroma">&lt;code class="language-java" data-lang="java">&lt;span class="line">&lt;span class="cl">&lt;span class="kd">public&lt;/span> &lt;span class="kd">class&lt;/span> &lt;span class="nc">Demo&lt;/span> &lt;span class="o">{&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kd">static&lt;/span> &lt;span class="n">AtomicInteger&lt;/span> &lt;span class="n">num&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="k">new&lt;/span> &lt;span class="n">AtomicInteger&lt;/span>&lt;span class="o">(&lt;/span>&lt;span class="n">0&lt;/span>&lt;span class="o">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kd">private&lt;/span> &lt;span class="kd">static&lt;/span> &lt;span class="n">AtomicInteger&lt;/span> &lt;span class="n">n&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="k">new&lt;/span> &lt;span class="n">AtomicInteger&lt;/span>&lt;span class="o">(&lt;/span>&lt;span class="n">0&lt;/span>&lt;span class="o">);&lt;/span>
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kd">public&lt;/span> &lt;span class="kd">static&lt;/span> &lt;span class="kt">void&lt;/span> &lt;span class="nf">main&lt;/span>&lt;span class="o">(&lt;/span>&lt;span class="n">String&lt;/span>&lt;span class="o">[]&lt;/span> &lt;span class="n">args&lt;/span>&lt;span class="o">)&lt;/span> &lt;span class="o">{&lt;/span>
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">for&lt;/span> &lt;span class="o">(&lt;/span>&lt;span class="kt">int&lt;/span> &lt;span class="n">i&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">0&lt;/span>&lt;span class="o">;&lt;/span> &lt;span class="n">i&lt;/span> &lt;span class="o">&amp;lt;&lt;/span> &lt;span class="n">3&lt;/span>&lt;span class="o">;&lt;/span> &lt;span class="n">i&lt;/span>&lt;span class="o">++)&lt;/span> &lt;span class="o">{&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">Thread&lt;/span> &lt;span class="n">t&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="k">new&lt;/span> &lt;span class="n">Thread&lt;/span>&lt;span class="o">(()&lt;/span> &lt;span class="o">=&amp;gt;&lt;/span> &lt;span class="o">{&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">while&lt;/span> &lt;span class="o">(&lt;/span>&lt;span class="n">num&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">get&lt;/span>&lt;span class="o">()&lt;/span> &lt;span class="o">&amp;lt;&lt;/span> &lt;span class="n">10000&lt;/span>&lt;span class="o">)&lt;/span> &lt;span class="o">{&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">System&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">out&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">println&lt;/span>&lt;span class="o">(&lt;/span>&lt;span class="n">Thread&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">currentThread&lt;/span>&lt;span class="o">().&lt;/span>&lt;span class="na">getName&lt;/span>&lt;span class="o">()&lt;/span> &lt;span class="o">+&lt;/span> &lt;span class="s">&amp;#34;:&amp;#34;&lt;/span> &lt;span class="o">+&lt;/span> &lt;span class="n">num&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">incrementAndGet&lt;/span>&lt;span class="o">());&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">new&lt;/span> &lt;span class="n">Thread&lt;/span>&lt;span class="o">(()&lt;/span> &lt;span class="o">-&amp;gt;&lt;/span> &lt;span class="o">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">while&lt;/span> &lt;span class="o">(&lt;/span>&lt;span class="n">n&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">get&lt;/span>&lt;span class="o">()&lt;/span> &lt;span class="o">&amp;lt;&lt;/span> &lt;span class="n">1000&lt;/span>&lt;span class="o">)&lt;/span> &lt;span class="o">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">System&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">out&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">println&lt;/span>&lt;span class="o">(&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">Thread&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">currentThread&lt;/span>&lt;span class="o">().&lt;/span>&lt;span class="na">getName&lt;/span>&lt;span class="o">()&lt;/span> &lt;span class="o">+&lt;/span> &lt;span class="s">&amp;#34; : &amp;#34;&lt;/span> &lt;span class="o">+&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">n&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">incrementAndGet&lt;/span>&lt;span class="o">()&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="o">);&lt;/span>
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="o">}&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="o">});&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">t&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">start&lt;/span>&lt;span class="o">();&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="o">},&lt;/span> &lt;span class="s">&amp;#34;Thread&amp;#34;&lt;/span> &lt;span class="o">+&lt;/span> &lt;span class="n">i&lt;/span>&lt;span class="o">).&lt;/span>&lt;span class="na">start&lt;/span>&lt;span class="o">();&lt;/span>
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="o">}&lt;/span>
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="o">}&lt;/span>
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">}&lt;/span>
 &lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
 &lt;/div>
-&lt;/div>&lt;p>&lt;code>AtomicInteger&lt;/code> 主要由一个 &lt;code>Unsafe&lt;/code> 类型的实例 &lt;code>unsafe&lt;/code> 和 &lt;code>Long&lt;/code> 类型的 &lt;code>offset&lt;/code> 实现，Java 通过 &lt;code>Unsafe&lt;/code> 的 CAS 操作来对值进行更新，执行一些底层，和平台相关的方法。&lt;/p>
+&lt;/div>&lt;p>&lt;code>AtomicInteger&lt;/code> 主要由一个 &lt;code>Unsafe&lt;/code> 类型的实例 &lt;code>unsafe&lt;/code> 和 &lt;code>Long&lt;/code> 类型的 &lt;code>offset&lt;/code> 实现。&lt;/p>
+&lt;p>Java 通过 &lt;code>Unsafe&lt;/code> 的 CAS 操作来对 &lt;code>volatile int&lt;/code> 值进行更新。根据 &lt;code>value&lt;/code> 在对象中的偏移量，CAS 操作内存数据，执行一些底层，和平台相关的方法。&lt;/p>
 &lt;div class="highlight">&lt;div class="chroma">
 &lt;table class="lntable">&lt;tr>&lt;td class="lntd">
-&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
-&lt;/span>&lt;span class="lnt">2
-&lt;/span>&lt;span class="lnt">3
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;span class="lnt">11
 &lt;/span>&lt;/code>&lt;/pre>&lt;/td>
 &lt;td class="lntd">
 &lt;pre tabindex="0" class="chroma">&lt;code class="language-java" data-lang="java">&lt;span class="line">&lt;span class="cl">&lt;span class="c1">// setup to use Unsafe.compareAndSwapInt for updates
 &lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span>&lt;span class="kd">private&lt;/span> &lt;span class="kd">static&lt;/span> &lt;span class="kd">final&lt;/span> &lt;span class="n">Unsafe&lt;/span> &lt;span class="n">unsafe&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">Unsafe&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">getUnsafe&lt;/span>&lt;span class="o">();&lt;/span>
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="kd">private&lt;/span> &lt;span class="kd">static&lt;/span> &lt;span class="kd">final&lt;/span> &lt;span class="kt">long&lt;/span> &lt;span class="n">valueOffset&lt;/span>&lt;span class="o">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="kd">static&lt;/span> &lt;span class="o">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">try&lt;/span> &lt;span class="o">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">valueOffset&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">unsafe&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">objectFieldOffset&lt;/span>&lt;span class="o">(&lt;/span>&lt;span class="n">AtomicInteger&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">class&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">getDeclareFiele&lt;/span>&lt;span class="o">(&lt;/span>&lt;span class="s">&amp;#34;value&amp;#34;&lt;/span>&lt;span class="o">));&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="o">}&lt;/span> &lt;span class="k">catch&lt;/span> &lt;span class="o">(&lt;/span>&lt;span class="n">Exception&lt;/span> &lt;span class="n">e&lt;/span>&lt;span class="o">)&lt;/span> &lt;span class="o">{&lt;/span> &lt;span class="k">throw&lt;/span> &lt;span class="k">new&lt;/span> &lt;span class="n">Error&lt;/span>&lt;span class="o">(&lt;/span>&lt;span class="n">ex&lt;/span>&lt;span class="o">);&lt;/span> &lt;span class="o">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="kd">private&lt;/span> &lt;span class="kd">volatile&lt;/span> &lt;span class="kt">int&lt;/span> &lt;span class="n">value&lt;/span>&lt;span class="o">;&lt;/span>
 &lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
 &lt;/div>
 &lt;/div>&lt;p>例如 &lt;code>incrementAndGet()&lt;/code>。&lt;/p>
@@ -1707,12 +1572,56 @@ data-flex-basis="642px"
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="kd">public&lt;/span> &lt;span class="kd">final&lt;/span> &lt;span class="kd">native&lt;/span> &lt;span class="kt">boolean&lt;/span> &lt;span class="nf">compareAndSwapInt&lt;/span>&lt;span class="o">(&lt;/span>&lt;span class="n">Object&lt;/span> &lt;span class="n">o&lt;/span>&lt;span class="o">,&lt;/span> &lt;span class="kt">long&lt;/span> &lt;span class="n">offset&lt;/span>&lt;span class="o">,&lt;/span> &lt;span class="kt">int&lt;/span> &lt;span class="n">expected&lt;/span>&lt;span class="o">,&lt;/span> &lt;span class="kt">int&lt;/span> &lt;span class="n">x&lt;/span>&lt;span class="o">);&lt;/span>
 &lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
 &lt;/div>
-&lt;/div>&lt;h3 id="aba-问题">ABA 问题&lt;/h3>
+&lt;/div>&lt;p>缺点：&lt;/p>
+&lt;ul>
+&lt;li>
+&lt;p>循环开销大&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>只能处理一个共享变量&lt;/p>
+&lt;ul>
+&lt;li>封装成对象 AtomicReference&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>
+&lt;p>ABA&lt;/p>
+&lt;/li>
+&lt;/ul>
+&lt;h3 id="aba-问题">ABA 问题&lt;/h3>
 &lt;p>CAS 需要在操作值的时候检查内存值是否发生变化，没有发生变化才会更新内存值。&lt;/p>
 &lt;p>如果内存值原来是 A，后来变成了 B，然后又变成了 A，那么 CAS 进行检查时会发现值没有发生变化，但是实际上是有变化的。&lt;/p>
 &lt;p>&lt;code>A -&amp;gt; B -&amp;gt; A&lt;/code>&lt;/p>
 &lt;p>可以为共享变量引入一个修订号（时间戳），每次更新都会更新相应的修订号，判断变量的值是否被其他线程给修改过。&lt;code>AtomicStampedReference&lt;/code>&lt;/p>
-&lt;p>&lt;code>[A, 0] -&amp;gt; [B, 1] -&amp;gt; [A, 2]&lt;/code>&lt;/p></description></item><item><title>Java 多线程</title><link>https://emerywan.github.io/blog/p/thread/</link><pubDate>Wed, 30 Mar 2022 14:02:02 +0800</pubDate><guid>https://emerywan.github.io/blog/p/thread/</guid><description>&lt;img src="https://emerywan.github.io/blog/imgs/9.jpeg" alt="Featured image of post Java 多线程" />&lt;h2 id="进程与线程">进程与线程&lt;/h2>
+&lt;p>&lt;code>[A, 0] -&amp;gt; [B, 1] -&amp;gt; [A, 2]&lt;/code>&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;span class="lnt">11
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-java" data-lang="java">&lt;span class="line">&lt;span class="cl">&lt;span class="kd">public&lt;/span> &lt;span class="kd">static&lt;/span> &lt;span class="kt">void&lt;/span> &lt;span class="nf">main&lt;/span>&lt;span class="o">(&lt;/span>&lt;span class="n">String&lt;/span>&lt;span class="o">[]&lt;/span> &lt;span class="n">args&lt;/span>&lt;span class="o">)&lt;/span> &lt;span class="o">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">String&lt;/span> &lt;span class="n">a&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="s">&amp;#34;Hello&amp;#34;&lt;/span>&lt;span class="o">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">String&lt;/span> &lt;span class="n">b&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="s">&amp;#34;World&amp;#34;&lt;/span>&lt;span class="o">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c1">// initialRef initialStamp
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span> &lt;span class="n">AtomicStampedReference&lt;/span>&lt;span class="o">&amp;lt;&lt;/span>&lt;span class="n">String&lt;/span>&lt;span class="o">&amp;gt;&lt;/span> &lt;span class="n">reference&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="k">new&lt;/span> &lt;span class="n">AtomicStampedReference&lt;/span>&lt;span class="o">&amp;lt;&amp;gt;(&lt;/span>&lt;span class="n">a&lt;/span>&lt;span class="o">,&lt;/span> &lt;span class="n">1&lt;/span>&lt;span class="o">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c1">// expectedReference newStamp
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span> &lt;span class="n">reference&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">attemptStamp&lt;/span>&lt;span class="o">(&lt;/span>&lt;span class="n">a&lt;/span>&lt;span class="o">,&lt;/span> &lt;span class="n">2&lt;/span>&lt;span class="o">);&lt;/span> &lt;span class="c1">// 对版本号进行修改
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span> &lt;span class="c1">// expectedReference newReference expectedStamp newStamp
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span> &lt;span class="n">reference&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">compareAndSet&lt;/span>&lt;span class="o">(&lt;/span>&lt;span class="n">a&lt;/span>&lt;span class="o">,&lt;/span> &lt;span class="n">b&lt;/span>&lt;span class="o">,&lt;/span> &lt;span class="n">2&lt;/span>&lt;span class="o">,&lt;/span> &lt;span class="n">3&lt;/span>&lt;span class="o">);&lt;/span> &lt;span class="c1">// CAS 操作需要同时提供 预期值 新值 预期版本号 新版本号
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span>&lt;span class="o">}&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div></description></item><item><title>Java 多线程</title><link>https://emerywan.github.io/blog/p/thread/</link><pubDate>Wed, 30 Mar 2022 14:02:02 +0800</pubDate><guid>https://emerywan.github.io/blog/p/thread/</guid><description>&lt;img src="https://emerywan.github.io/blog/imgs/9.jpeg" alt="Featured image of post Java 多线程" />&lt;h2 id="进程与线程">进程与线程&lt;/h2>
 &lt;p>&lt;strong>进程&lt;/strong>是程序向操作系统申请资源的基本单位。&lt;/p>
 &lt;p>&lt;strong>线程&lt;/strong>是进程中可独立执行的最小单位。&lt;/p>
 &lt;p>一个进程可以包括多个线程，同一进程中所有线程共享该进程中的资源。&lt;/p>
