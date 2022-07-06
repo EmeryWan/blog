@@ -2637,7 +2637,7 @@ data-flex-basis="173px"
 &lt;/li>
 &lt;/ul>
 &lt;p>&lt;code>synchronized&lt;/code> 修饰的方法，无论方法正常执行完还是抛出异常，都会释放锁。&lt;/p>
-&lt;h4 id="jdk-16-对-synchronized-的优化">JDK 1.6 对 synchronized 的优化&lt;/h4>
+&lt;h3 id="jdk-16-对-synchronized-的优化">JDK 1.6 对 synchronized 的优化&lt;/h3>
 &lt;p>&lt;code>synchronized&lt;/code> 依赖于 JVM，使用的是操作系统底层的 &lt;code>Mutex Lock&lt;/code> 实现。&lt;/p>
 &lt;p>Java 线程的实现是对操作系统线程的映射，每当唤醒或挂起一个线程的时候，都要切换到操作系统的内核态，代价是非常昂贵的。&lt;/p>
 &lt;p>JDK 1.6 对锁的实现引入了大量的优化，如 &lt;code>锁粗化&lt;/code>，&lt;code>锁消除&lt;/code>，&lt;code>轻量级锁&lt;/code>，&lt;code>偏向锁&lt;/code>，&lt;code>适应性自旋&lt;/code>等。&lt;/p>
