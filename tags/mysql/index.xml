@@ -150,10 +150,10 @@ data-flex-basis="398px"
 &lt;p>叶子节点保存了父节点所有关键字记录的指针。&lt;/p>
 &lt;/li>
 &lt;/ul>
-&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/mysql/index/B&amp;#43;Tree.png"
+&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/mysql/index/BTree2.png"
 width="726"
 height="486"
-srcset="https://emerywan.github.io/blog/blog/p/mysql/index/B&amp;#43;Tree_hu9d51150ef65d39ad05b8ca626e16e349_124398_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/mysql/index/B&amp;#43;Tree_hu9d51150ef65d39ad05b8ca626e16e349_124398_1024x0_resize_box_3.png 1024w"
+srcset="https://emerywan.github.io/blog/blog/p/mysql/index/BTree2_hu9d51150ef65d39ad05b8ca626e16e349_124398_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/mysql/index/BTree2_hu9d51150ef65d39ad05b8ca626e16e349_124398_1024x0_resize_box_3.png 1024w"
 loading="lazy"
 alt="B&amp;#43;Tree"
 class="gallery-image"

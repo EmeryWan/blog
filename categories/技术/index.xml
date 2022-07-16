@@ -150,10 +150,10 @@ data-flex-basis="398px"
 &lt;p>叶子节点保存了父节点所有关键字记录的指针。&lt;/p>
 &lt;/li>
 &lt;/ul>
-&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/mysql/index/B&amp;#43;Tree.png"
+&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/mysql/index/BTree2.png"
 width="726"
 height="486"
-srcset="https://emerywan.github.io/blog/blog/p/mysql/index/B&amp;#43;Tree_hu9d51150ef65d39ad05b8ca626e16e349_124398_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/mysql/index/B&amp;#43;Tree_hu9d51150ef65d39ad05b8ca626e16e349_124398_1024x0_resize_box_3.png 1024w"
+srcset="https://emerywan.github.io/blog/blog/p/mysql/index/BTree2_hu9d51150ef65d39ad05b8ca626e16e349_124398_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/mysql/index/BTree2_hu9d51150ef65d39ad05b8ca626e16e349_124398_1024x0_resize_box_3.png 1024w"
 loading="lazy"
 alt="B&amp;#43;Tree"
 class="gallery-image"
@@ -2182,9 +2182,9 @@ data-flex-basis="173px"
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">for&lt;/span> &lt;span class="o">(&lt;/span>&lt;span class="kt">int&lt;/span> &lt;span class="n">i&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">0&lt;/span>&lt;span class="o">;&lt;/span> &lt;span class="n">i&lt;/span> &lt;span class="o">&amp;lt;&lt;/span> &lt;span class="n">3&lt;/span>&lt;span class="o">;&lt;/span> &lt;span class="n">i&lt;/span>&lt;span class="o">++)&lt;/span> &lt;span class="o">{&lt;/span>
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">new&lt;/span> &lt;span class="n">Thread&lt;/span>&lt;span class="o">(()&lt;/span> &lt;span class="o">-&amp;gt;&lt;/span> &lt;span class="o">{&lt;/span>
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">try&lt;/span> &lt;span class="o">{&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">semaphore&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">acquire&lt;/span>&lt;span class="o">();&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">System&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">out&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">println&lt;/span>&lt;span class="o">(&lt;/span>&lt;span class="s">&amp;#34;申请许可证成功&amp;#34;&lt;/span>&lt;span class="o">);&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">TimeUnit&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">SECONDS&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">sleep&lt;/span>&lt;span class="o">(&lt;/span>&lt;span class="n">2&lt;/span>&lt;span class="o">);&lt;/span> &lt;span class="c1">// 模拟任务耗时
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">semaphore&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">acquire&lt;/span>&lt;span class="o">();&lt;/span> &lt;span class="c1">// 无参为申请一个许可证
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span> &lt;span class="n">System&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">out&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">println&lt;/span>&lt;span class="o">(&lt;/span>&lt;span class="s">&amp;#34;申请许可证成功&amp;#34;&lt;/span>&lt;span class="o">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">TimeUnit&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">SECONDS&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">sleep&lt;/span>&lt;span class="o">(&lt;/span>&lt;span class="n">5&lt;/span>&lt;span class="o">);&lt;/span> &lt;span class="c1">// 模拟任务耗时
 &lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span> &lt;span class="n">semaphore&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">release&lt;/span>&lt;span class="o">();&lt;/span>
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="o">}&lt;/span> &lt;span class="k">catch&lt;/span> &lt;span class="o">(&lt;/span>&lt;span class="n">InterruptedException&lt;/span> &lt;span class="n">e&lt;/span>&lt;span class="o">)&lt;/span> &lt;span class="o">{&lt;/span>
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">e&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">printStackTrace&lt;/span>&lt;span class="o">();&lt;/span>
