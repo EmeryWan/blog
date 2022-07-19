@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Paper on 一层</title><link>https://emerywan.github.io/blog/tags/paper/</link><description>Recent content in Paper on 一层</description><generator>Hugo -- gohugo.io</generator><lastBuildDate>Tue, 01 Jun 2021 21:14:45 +0800</lastBuildDate><atom:link href="https://emerywan.github.io/blog/tags/paper/index.xml" rel="self" type="application/rss+xml"/><item><title>Named Entity Recognition As Dependency Parsing</title><link>https://emerywan.github.io/blog/p/namedentityrecognitionasdependencyparsing/</link><pubDate>Tue, 01 Jun 2021 21:14:45 +0800</pubDate><guid>https://emerywan.github.io/blog/p/namedentityrecognitionasdependencyparsing/</guid><description>&lt;img src="https://emerywan.github.io/blog/imgs/7.jpeg" alt="Featured image of post Named Entity Recognition As Dependency Parsing" />&lt;p>文中将每个 token 用 BERT 和 fastText 进行 embedding，拼接上用 CNN 编码的字符级别向量，送入一个双向 LSTM 编码上下文信息，获得每个词的表达。之后采用两个独立的 FFNN 来得到作为实体开始和结束的位置的表达。&lt;/p>
+&lt;p>最后用一个仿射模型得到一个 $l×l×c$ 的 tensor，其中 l 是句子长度，c 是实体类别数量加一（表示无实体）。运用该矩阵，文中对于嵌套和非嵌套采用了两种不同的策略，从而得到了实体的起止位置。&lt;/p>
+&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/namedentityrecognitionasdependencyparsing/model.png"
+width="500"
+height="501"
+srcset="https://emerywan.github.io/blog/blog/p/namedentityrecognitionasdependencyparsing/model_hue39a704d975d112c4ae2b387bb0aa5be_45180_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/namedentityrecognitionasdependencyparsing/model_hue39a704d975d112c4ae2b387bb0aa5be_45180_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+alt="model"
+class="gallery-image"
+data-flex-grow="99"
+data-flex-basis="239px"
+>&lt;/p>
+&lt;p>code: &lt;a class="link" href="https://github.com/juntaoy/biaffine-ner" target="_blank" rel="noopener"
+>https://github.com/juntaoy/biaffine-ner&lt;/a>&lt;/p>
+&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/namedentityrecognitionasdependencyparsing/ner.png"
+width="325"
+height="669"
+srcset="https://emerywan.github.io/blog/blog/p/namedentityrecognitionasdependencyparsing/ner_huff0969dccbb13cbf7d246862faeafc4d_75035_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/namedentityrecognitionasdependencyparsing/ner_huff0969dccbb13cbf7d246862faeafc4d_75035_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+alt="ner"
+class="gallery-image"
+data-flex-grow="48"
+data-flex-basis="116px"
+>&lt;/p>
+&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/namedentityrecognitionasdependencyparsing/nested.png"
+width="323"
+height="618"
+srcset="https://emerywan.github.io/blog/blog/p/namedentityrecognitionasdependencyparsing/nested_hu30723d7bae4f05520cc9500a93ac4824_73991_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/namedentityrecognitionasdependencyparsing/nested_hu30723d7bae4f05520cc9500a93ac4824_73991_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+alt="nested"
+class="gallery-image"
+data-flex-grow="52"
+data-flex-basis="125px"
+>&lt;/p></description></item></channel></rss>
