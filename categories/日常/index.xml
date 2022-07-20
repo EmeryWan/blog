@@ -1,98 +1,4 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>日常 on 一层</title><link>https://emerywan.github.io/blog/categories/%E6%97%A5%E5%B8%B8/</link><description>Recent content in 日常 on 一层</description><generator>Hugo -- gohugo.io</generator><lastBuildDate>Sat, 01 Jan 2022 01:00:00 +0800</lastBuildDate><atom:link href="https://emerywan.github.io/blog/categories/%E6%97%A5%E5%B8%B8/index.xml" rel="self" type="application/rss+xml"/><item><title>Ubuntu 安装软件推荐方式</title><link>https://emerywan.github.io/blog/p/ubuntu-software-install/</link><pubDate>Thu, 02 Jun 2022 02:02:02 +0800</pubDate><guid>https://emerywan.github.io/blog/p/ubuntu-software-install/</guid><description>&lt;img src="https://emerywan.github.io/blog/imgs/4.jpeg" alt="Featured image of post Ubuntu 安装软件推荐方式" />&lt;h2 id="说明">说明&lt;/h2>
-&lt;p>Ubuntu 有些第三方软件只提供二进制执行文件（压缩包或 AppImage），而不是安装包或者 apt 源，这时候需要我们去自己解压文件，放在自定义目录，并进行配置。&lt;/p>
-&lt;p>平常使用桌面环境的话，这样安装后，更新还是有点麻烦的，一更新就要修改很多地方。&lt;/p>
-&lt;p>这里介绍我平常的配置方式，每次更新后，只需要修改软链接即可，感觉还是挺方便的。&lt;/p>
-&lt;h2 id="方式">方式&lt;/h2>
-&lt;p>以 &lt;a class="link" href="https://github.com/Fndroid/clash_for_windows_pkg/releases" target="_blank" rel="noopener"
->cfw&lt;/a> 安装为例，Linux 提供 &lt;code>.tar.gz&lt;/code> 的执行文件。&lt;/p>
-&lt;p>我通常都把这样的软件都统一放到 &lt;code>~/Applications&lt;/code> 中。&lt;/p>
-&lt;ul>
-&lt;li>🏕️ 首先创建一个安装的软件的文件夹&lt;/li>
-&lt;/ul>
-&lt;div class="highlight">&lt;div class="chroma">
-&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
-&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
-&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
-&lt;td class="lntd">
-&lt;pre tabindex="0" class="chroma">&lt;code class="language-sh" data-lang="sh">&lt;span class="line">&lt;span class="cl">mkdir -p ~/Application/clash
-&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
-&lt;/div>
-&lt;/div>&lt;ul>
-&lt;li>🏞️ 将下载的文件解压到该文件夹中&lt;/li>
-&lt;/ul>
-&lt;div class="highlight">&lt;div class="chroma">
-&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
-&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
-&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
-&lt;td class="lntd">
-&lt;pre tabindex="0" class="chroma">&lt;code class="language-sh" data-lang="sh">&lt;span class="line">&lt;span class="cl">tar -xzvf Clash.for.Windows-0.19.12 -C ~/Application/clash
-&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
-&lt;/div>
-&lt;/div>&lt;ul>
-&lt;li>🏜️ 创建启动文件的软连接&lt;/li>
-&lt;/ul>
-&lt;div class="highlight">&lt;div class="chroma">
-&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
-&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
-&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
-&lt;td class="lntd">
-&lt;pre tabindex="0" class="chroma">&lt;code class="language-sh" data-lang="sh">&lt;span class="line">&lt;span class="cl">ln -s ./Clash&lt;span class="se">\ &lt;/span>&lt;span class="k">for&lt;/span>&lt;span class="se">\ &lt;/span>Windows-0.19.12-x64-linux/cfw ./clash
-&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
-&lt;/div>
-&lt;/div>&lt;p>通过这种方式，每次启动应用都使用这个软链接进行操作，当需要升级应用时，只需要创建新的软链接，指向新的启动文件。最后的效果如下：&lt;/p>
-&lt;div class="highlight">&lt;div class="chroma">
-&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
-&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
-&lt;/span>&lt;span class="lnt">2
-&lt;/span>&lt;span class="lnt">3
-&lt;/span>&lt;span class="lnt">4
-&lt;/span>&lt;span class="lnt">5
-&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
-&lt;td class="lntd">
-&lt;pre tabindex="0" class="chroma">&lt;code class="language-fallback" data-lang="fallback">&lt;span class="line">&lt;span class="cl">$ tree . -L 1
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">.
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">├── clash -&amp;gt; ./Clash for Windows-0.19.12-x64-linux/cfw
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">├── Clash for Windows-0.19.12-x64-linux
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">└── Clash for Windows-0.19.2-x64-linux
-&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
-&lt;/div>
-&lt;/div>&lt;ul>
-&lt;li>🏖️ 添加桌面图标&lt;/li>
-&lt;/ul>
-&lt;div class="highlight">&lt;div class="chroma">
-&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
-&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
-&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
-&lt;td class="lntd">
-&lt;pre tabindex="0" class="chroma">&lt;code class="language-sh" data-lang="sh">&lt;span class="line">&lt;span class="cl">vim ~/.local/share/applications/clw.desktop
-&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
-&lt;/div>
-&lt;/div>&lt;p>添加以下内容：&lt;/p>
-&lt;div class="highlight">&lt;div class="chroma">
-&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
-&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
-&lt;/span>&lt;span class="lnt">2
-&lt;/span>&lt;span class="lnt">3
-&lt;/span>&lt;span class="lnt">4
-&lt;/span>&lt;span class="lnt">5
-&lt;/span>&lt;span class="lnt">6
-&lt;/span>&lt;span class="lnt">7
-&lt;/span>&lt;span class="lnt">8
-&lt;/span>&lt;span class="lnt">9
-&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
-&lt;td class="lntd">
-&lt;pre tabindex="0" class="chroma">&lt;code class="language-fallback" data-lang="fallback">&lt;span class="line">&lt;span class="cl">[Desktop Entry]
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">Name=Clash for Linux
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">Icon=/home/emery/Applications/icon/clash_icon.png # 替换为自己的目录
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">Comment=Clash for Linux
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">Exec=&amp;#34;/home/emery/Applications/Clash/clash&amp;#34; %u # 替换为自己的目录
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">Type=Application
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">Categories=Network
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">Terminal=false
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">StartupNotify=true
-&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
-&lt;/div>
-&lt;/div></description></item><item><title>使用 Github Actions 在腾讯云 CloudBase 部署 Hugo</title><link>https://emerywan.github.io/blog/p/hugo-in-cloudbase/</link><pubDate>Sun, 01 May 2022 21:14:45 +0800</pubDate><guid>https://emerywan.github.io/blog/p/hugo-in-cloudbase/</guid><description>&lt;img src="https://emerywan.github.io/blog/imgs/3.jpeg" alt="Featured image of post 使用 Github Actions 在腾讯云 CloudBase 部署 Hugo" />&lt;h2 id="-介绍">🌱 介绍&lt;/h2>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>日常 on 一层</title><link>https://emerywan.github.io/blog/categories/%E6%97%A5%E5%B8%B8/</link><description>Recent content in 日常 on 一层</description><generator>Hugo -- gohugo.io</generator><lastBuildDate>Sat, 01 Jan 2022 01:00:00 +0800</lastBuildDate><atom:link href="https://emerywan.github.io/blog/categories/%E6%97%A5%E5%B8%B8/index.xml" rel="self" type="application/rss+xml"/><item><title>使用 Github Actions 在腾讯云 CloudBase 部署 Hugo</title><link>https://emerywan.github.io/blog/p/hugo-in-cloudbase/</link><pubDate>Wed, 22 Jun 2022 21:14:45 +0800</pubDate><guid>https://emerywan.github.io/blog/p/hugo-in-cloudbase/</guid><description>&lt;img src="https://emerywan.github.io/blog/imgs/3.jpeg" alt="Featured image of post 使用 Github Actions 在腾讯云 CloudBase 部署 Hugo" />&lt;h2 id="-介绍">🌱 介绍&lt;/h2>
 &lt;p>许多平台都提供了免费的静态页面托管的服务，如 &lt;code>Github Pages&lt;/code>，&lt;code>Vercel&lt;/code>，&lt;code>Netlify&lt;/code>等。但在国内由于一些“原因”，这些国外的服务在国内的访问并不稳定。&lt;/p>
 &lt;p>国内的免费托管平台如 &lt;code>Gitee&lt;/code> 限制很多，不可以自定义域名而且之前出现了防盗链问题，访问也不是很快，不太推荐作为托管平台。&lt;/p>
 &lt;p>腾讯云推出的云开发 &lt;code>CloudBase&lt;/code> 也有静态页面托管服务。其实它相比这些静态托管平台，有更多强大的功能，甚至能够搭一整套系统。虽然是付费服务，但是在按量付费的情况下资费不是很高，在博客访问量不是很高的情况下十分合适。&lt;/p>
@@ -456,7 +362,233 @@ data-flex-basis="642px"
 >https://github.com/TencentCloudBase/cloudbase-action&lt;/a>&lt;/li>
 &lt;li>🔗 &lt;a class="link" href="https://github.com/TencentCloudBase/cloudbase-action/blob/3354b442713265aa9d7c5bf03b0b8cb0173f546f/README.md" target="_blank" rel="noopener"
 >https://github.com/TencentCloudBase/cloudbase-action/blob/3354b442713265aa9d7c5bf03b0b8cb0173f546f/README.md&lt;/a>&lt;/li>
-&lt;/ul></description></item><item><title>Ubuntu 耳机没有声音</title><link>https://emerywan.github.io/blog/p/ubuntu-sound/</link><pubDate>Sat, 02 Jan 2021 02:02:02 +0800</pubDate><guid>https://emerywan.github.io/blog/p/ubuntu-sound/</guid><description>&lt;img src="https://emerywan.github.io/blog/imgs/5.jpeg" alt="Featured image of post Ubuntu 耳机没有声音" />&lt;h2 id="ubuntu-耳机没有声音">Ubuntu 耳机没有声音&lt;/h2>
+&lt;/ul></description></item><item><title>Ubuntu 安装软件推荐方式</title><link>https://emerywan.github.io/blog/p/ubuntu-software-install/</link><pubDate>Thu, 02 Jun 2022 02:02:02 +0800</pubDate><guid>https://emerywan.github.io/blog/p/ubuntu-software-install/</guid><description>&lt;img src="https://emerywan.github.io/blog/imgs/4.jpeg" alt="Featured image of post Ubuntu 安装软件推荐方式" />&lt;h2 id="说明">说明&lt;/h2>
+&lt;p>Ubuntu 有些第三方软件只提供二进制执行文件（压缩包或 AppImage），而不是安装包或者 apt 源，这时候需要我们去自己解压文件，放在自定义目录，并进行配置。&lt;/p>
+&lt;p>平常使用桌面环境的话，这样安装后，更新还是有点麻烦的，一更新就要修改很多地方。&lt;/p>
+&lt;p>这里介绍我平常的配置方式，每次更新后，只需要修改软链接即可，感觉还是挺方便的。&lt;/p>
+&lt;h2 id="方式">方式&lt;/h2>
+&lt;p>以 &lt;a class="link" href="https://github.com/Fndroid/clash_for_windows_pkg/releases" target="_blank" rel="noopener"
+>cfw&lt;/a> 安装为例，Linux 提供 &lt;code>.tar.gz&lt;/code> 的执行文件。&lt;/p>
+&lt;p>我通常都把这样的软件都统一放到 &lt;code>~/Applications&lt;/code> 中。&lt;/p>
+&lt;ul>
+&lt;li>🏕️ 首先创建一个安装的软件的文件夹&lt;/li>
+&lt;/ul>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-sh" data-lang="sh">&lt;span class="line">&lt;span class="cl">mkdir -p ~/Application/clash
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;ul>
+&lt;li>🏞️ 将下载的文件解压到该文件夹中&lt;/li>
+&lt;/ul>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-sh" data-lang="sh">&lt;span class="line">&lt;span class="cl">tar -xzvf Clash.for.Windows-0.19.12 -C ~/Application/clash
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;ul>
+&lt;li>🏜️ 创建启动文件的软连接&lt;/li>
+&lt;/ul>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-sh" data-lang="sh">&lt;span class="line">&lt;span class="cl">ln -s ./Clash&lt;span class="se">\ &lt;/span>&lt;span class="k">for&lt;/span>&lt;span class="se">\ &lt;/span>Windows-0.19.12-x64-linux/cfw ./clash
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>通过这种方式，每次启动应用都使用这个软链接进行操作，当需要升级应用时，只需要创建新的软链接，指向新的启动文件。最后的效果如下：&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;span class="lnt">4
+&lt;/span>&lt;span class="lnt">5
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-fallback" data-lang="fallback">&lt;span class="line">&lt;span class="cl">$ tree . -L 1
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">.
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">├── clash -&amp;gt; ./Clash for Windows-0.19.12-x64-linux/cfw
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">├── Clash for Windows-0.19.12-x64-linux
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">└── Clash for Windows-0.19.2-x64-linux
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;ul>
+&lt;li>🏖️ 添加桌面图标&lt;/li>
+&lt;/ul>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-sh" data-lang="sh">&lt;span class="line">&lt;span class="cl">vim ~/.local/share/applications/clw.desktop
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>添加以下内容：&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;span class="lnt">4
+&lt;/span>&lt;span class="lnt">5
+&lt;/span>&lt;span class="lnt">6
+&lt;/span>&lt;span class="lnt">7
+&lt;/span>&lt;span class="lnt">8
+&lt;/span>&lt;span class="lnt">9
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-fallback" data-lang="fallback">&lt;span class="line">&lt;span class="cl">[Desktop Entry]
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">Name=Clash for Linux
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">Icon=/home/emery/Applications/icon/clash_icon.png # 替换为自己的目录
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">Comment=Clash for Linux
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">Exec=&amp;#34;/home/emery/Applications/Clash/clash&amp;#34; %u # 替换为自己的目录
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">Type=Application
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">Categories=Network
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">Terminal=false
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">StartupNotify=true
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div></description></item><item><title>在 Ubuntu 中搭建 CUDA 环境</title><link>https://emerywan.github.io/blog/p/cuda/</link><pubDate>Mon, 02 May 2022 02:02:02 +0800</pubDate><guid>https://emerywan.github.io/blog/p/cuda/</guid><description>&lt;img src="https://emerywan.github.io/blog/imgs/11.jpeg" alt="Featured image of post 在 Ubuntu 中搭建 CUDA 环境" />&lt;h2 id="nvdia-驱动">Nvdia 驱动&lt;/h2>
+&lt;p>首先，请确保在系统中安装了英伟达显卡驱动，可以使用 &lt;code>nvidia-msi&lt;/code> 命令查看显卡对应信息。&lt;/p>
+&lt;p>如果没有安装驱动，可以参考该章节。&lt;a class="link" href="https://emerywan.github.io/blog/guide/prepare/driver.html" >传送门➡️&lt;/a>&lt;/p>
+&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/cuda/nvidia-msi.png"
+width="734"
+height="512"
+srcset="https://emerywan.github.io/blog/blog/p/cuda/nvidia-msi_hu25fedbd9e105d28334236f2eb0bd81d5_56804_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/cuda/nvidia-msi_hu25fedbd9e105d28334236f2eb0bd81d5_56804_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+alt="nvidia-msi"
+class="gallery-image"
+data-flex-grow="143"
+data-flex-basis="344px"
+>&lt;/p>
+&lt;p>推荐使用系统自带软件 &lt;code>软件和更新&lt;/code> 安装显卡驱动。打开应用后，点击 &lt;code>附加驱动&lt;/code> 选项，会对所有可选的附加驱动进行搜索。&lt;/p>
+&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/cuda/nvidia-install.png"
+width="877"
+height="500"
+srcset="https://emerywan.github.io/blog/blog/p/cuda/nvidia-install_hud8377b5c2eaf750be9838eb34291d82b_111878_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/cuda/nvidia-install_hud8377b5c2eaf750be9838eb34291d82b_111878_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+alt="nvidia-install"
+class="gallery-image"
+data-flex-grow="175"
+data-flex-basis="420px"
+>&lt;/p>
+&lt;p>其中，&lt;code>Nouveau&lt;/code> 为英伟达显卡开源驱动（默认安装），选择需要的 &lt;code>NVIDIA drive&lt;/code> 驱动选项，点击 &lt;code>应用更改&lt;/code>。&lt;/p>
+&lt;p>等待进度条结束后，重启电脑，即完成了显卡驱动的安装。&lt;/p>
+&lt;h2 id="cuda">CUDA&lt;/h2>
+&lt;p>你可以在 &lt;a class="link" href="https://docs.nvidia.com/cuda/cuda-toolkit-release-notes/index.html" target="_blank" rel="noopener"
+>这里&lt;/a> 看到显卡驱动版本与 CUDA 版本的对应关系。&lt;/p>
+&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/cuda/cuda.png"
+width="1540"
+height="358"
+srcset="https://emerywan.github.io/blog/blog/p/cuda/cuda_hu06d82653b392e263a912d34e822f7d1a_74559_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/cuda/cuda_hu06d82653b392e263a912d34e822f7d1a_74559_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+alt="cuda"
+class="gallery-image"
+data-flex-grow="430"
+data-flex-basis="1032px"
+>&lt;/p>
+&lt;p>🌰 在这里的显卡驱动版本为 &lt;code>470.103.01&lt;/code>，根据对应表可知，最高可选的 CUDA Toolkit 的版本号为 &lt;code>CUDA 11.4 Update 4&lt;/code>。&lt;/p>
+&lt;p>之后，可在官网 &lt;a class="link" href="https://developer.nvidia.com/cuda-toolkit-archive" target="_blank" rel="noopener"
+>该页面&lt;/a> 中，选择对应的 CUDA Toolkit。&lt;/p>
+&lt;p>可根据当前系统环境，选择对应的下载选项（推荐下载 &lt;code>.drunfile&lt;/code>，&lt;code>.deb&lt;/code> 会覆盖系统安装的显卡驱动）：&lt;/p>
+&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/cuda/cuda-platform.png"
+width="2506"
+height="894"
+srcset="https://emerywan.github.io/blog/blog/p/cuda/cuda-platform_hu9bf542e30b48a580f041a55f80ab65bc_245327_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/cuda/cuda-platform_hu9bf542e30b48a580f041a55f80ab65bc_245327_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+alt="cuda-platform"
+class="gallery-image"
+data-flex-grow="280"
+data-flex-basis="672px"
+>&lt;/p>
+&lt;p>下载完成后，使用以下命令进行安装：&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;span class="lnt">4
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-sh" data-lang="sh">&lt;span class="line">&lt;span class="cl">&lt;span class="nb">cd&lt;/span> &lt;span class="si">${&lt;/span>&lt;span class="nv">DOWNLOAD_DIR&lt;/span>&lt;span class="si">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">chmod +x ./cuda_&lt;span class="o">{&lt;/span>Version&lt;span class="o">}&lt;/span>_linux.run
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">sudo sh ./cuda_&lt;span class="o">{&lt;/span>Version&lt;span class="o">}&lt;/span>_linux.run
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>::: warning 警告 🚧
+注意：在安装过程中，请取消勾选安装驱动选项。
+:::&lt;/p>
+&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/cuda/cuda-install.png"
+width="734"
+height="476"
+srcset="https://emerywan.github.io/blog/blog/p/cuda/cuda-install_hu423287ac940ffb3bc75497440c5c47d7_30663_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/cuda/cuda-install_hu423287ac940ffb3bc75497440c5c47d7_30663_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+alt="cuda-install"
+class="gallery-image"
+data-flex-grow="154"
+data-flex-basis="370px"
+>&lt;/p>
+&lt;p>配置环境变量，在对应配置文件中添加如下内容：&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-sh" data-lang="sh">&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># bash -&amp;gt; .bashrc / zsh -&amp;gt; .zshrc&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nb">export&lt;/span> &lt;span class="nv">CUDA_HOME&lt;/span>&lt;span class="o">=&lt;/span>/usr/local/cuda-&lt;span class="o">{&lt;/span>Version&lt;span class="o">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nb">export&lt;/span> &lt;span class="nv">PATH&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="si">${&lt;/span>&lt;span class="nv">CUDA_HOME&lt;/span>&lt;span class="si">}&lt;/span>/bin:&lt;span class="si">${&lt;/span>&lt;span class="nv">PATH&lt;/span>&lt;span class="si">}&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;h2 id="cudnn">cuDNN&lt;/h2>
+&lt;p>你可以在官网 &lt;a class="link" href="https://developer.nvidia.com/rdp/cudnn-download" target="_blank" rel="noopener"
+>此链接&lt;/a> 下载 CUDNN，需要注册开发者账号，可能还需要一个“良好的网络环境”。&lt;/p>
+&lt;p>选择与 CUDA 相对应用的 cuDNN，推荐下载压缩包格式。&lt;/p>
+&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/cuda/cudnn.png"
+width="2228"
+height="1498"
+srcset="https://emerywan.github.io/blog/blog/p/cuda/cudnn_hu2d2e598f2ebb22e3f94073a6174ea5e2_332327_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/cuda/cudnn_hu2d2e598f2ebb22e3f94073a6174ea5e2_332327_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+alt="cudnn"
+class="gallery-image"
+data-flex-grow="148"
+data-flex-basis="356px"
+>&lt;/p>
+&lt;p>下载完成后，解压文件夹，并根据以下命令复制解压后文件夹中的 &lt;code>lib64&lt;/code> &lt;code>include&lt;/code> 文件夹：&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;span class="lnt">4
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-sh" data-lang="sh">&lt;span class="line">&lt;span class="cl">tar -xzvf cudnn-linux-&lt;span class="o">{&lt;/span>Version&lt;span class="o">}&lt;/span>.tar.gz
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">sudo cp cudnn-linux-&lt;span class="o">{&lt;/span>Version&lt;span class="o">}&lt;/span>/lib64/* /usr/local/cuda/lib64
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">sudo cp cudnn-linux-&lt;span class="o">{&lt;/span>Version&lt;span class="o">}&lt;/span>/include/* /usr/local/cuda/include
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>复制完成后，可以通过以下命令查看 cuDNN 版本信息：&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-sh" data-lang="sh">&lt;span class="line">&lt;span class="cl">cat /usr/local/cuda-10.1/include/cudnn.h &lt;span class="p">|&lt;/span> grep CUDNN_MAJOR -A &lt;span class="m">2&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div></description></item><item><title>Ubuntu 耳机没有声音</title><link>https://emerywan.github.io/blog/p/ubuntu-sound/</link><pubDate>Sat, 02 Jan 2021 02:02:02 +0800</pubDate><guid>https://emerywan.github.io/blog/p/ubuntu-sound/</guid><description>&lt;img src="https://emerywan.github.io/blog/imgs/5.jpeg" alt="Featured image of post Ubuntu 耳机没有声音" />&lt;h2 id="ubuntu-耳机没有声音">Ubuntu 耳机没有声音&lt;/h2>
 &lt;p>笔记本使用 Ubuntu 插有线耳机后，并没有反应，该外放还是外放。&lt;/p>
 &lt;p>感觉是适配问题，windows 下没有问题。找了一圈办法，只能通过软件手动切换了，效果还不错。&lt;/p>
 &lt;div class="highlight">&lt;div class="chroma">
