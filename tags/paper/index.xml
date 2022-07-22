@@ -1,4 +1,42 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Paper on 一层</title><link>https://emerywan.github.io/blog/tags/paper/</link><description>Recent content in Paper on 一层</description><generator>Hugo -- gohugo.io</generator><lastBuildDate>Mon, 07 Jun 2021 21:14:45 +0800</lastBuildDate><atom:link href="https://emerywan.github.io/blog/tags/paper/index.xml" rel="self" type="application/rss+xml"/><item><title>A Sequence-to-Set Network for Nested Named Entity Recognition</title><link>https://emerywan.github.io/blog/p/sequence-to-set/</link><pubDate>Mon, 07 Jun 2021 21:14:45 +0800</pubDate><guid>https://emerywan.github.io/blog/p/sequence-to-set/</guid><description>&lt;img src="https://emerywan.github.io/blog/imgs/14.jpeg" alt="Featured image of post A Sequence-to-Set Network for Nested Named Entity Recognition" />&lt;p>借鉴图像领域的目标检测任务，将嵌套任务转化成span的预测，解决嵌套命名实体识别任务。&lt;/p>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Paper on 一层</title><link>https://emerywan.github.io/blog/tags/paper/</link><description>Recent content in Paper on 一层</description><generator>Hugo -- gohugo.io</generator><lastBuildDate>Wed, 01 Sep 2021 21:14:45 +0800</lastBuildDate><atom:link href="https://emerywan.github.io/blog/tags/paper/index.xml" rel="self" type="application/rss+xml"/><item><title>Modularized Interaction Network for Named Entity Recognition</title><link>https://emerywan.github.io/blog/p/modularizedinteractionnetworkfornamed-entityrecognition/</link><pubDate>Wed, 01 Sep 2021 21:14:45 +0800</pubDate><guid>https://emerywan.github.io/blog/p/modularizedinteractionnetworkfornamed-entityrecognition/</guid><description>&lt;img src="https://emerywan.github.io/blog/imgs/9.jpeg" alt="Featured image of post Modularized Interaction Network for Named Entity Recognition" />&lt;p>现有NER模型缺点：&lt;/p>
+&lt;ul>
+&lt;li>
+&lt;p>基于序列标注的NER模型（The sequence labeling-based NERmodels）&lt;/p>
+&lt;ul>
+&lt;li>长实体识别不佳，只关注词级信息&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>
+&lt;p>基于分段的NER模型（The segment-based NERmodels）&lt;/p>
+&lt;ul>
+&lt;li>处理分段，而非单个词，不能捕获分段中的词级依赖关系&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;p>边界检测（boundary detection）和类型预测（type pre-diction）可以相互配合，两个子任务可共享信息，相互加强。&lt;/p>
+&lt;p>提出模块化交互网络模型MIN（Modularized Interaction Network）&lt;/p>
+&lt;p>利用段级信息和词级依赖关系，结合一种交互机制，支持边界检测和类型预测之间的信息共享。&lt;/p>
+&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/modularizedinteractionnetworkfornamed-entityrecognition/1.png"
+width="493"
+height="408"
+srcset="https://emerywan.github.io/blog/blog/p/modularizedinteractionnetworkfornamed-entityrecognition/1_huf69a1b5e1975a497801b13aa3110264f_41598_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/modularizedinteractionnetworkfornamed-entityrecognition/1_huf69a1b5e1975a497801b13aa3110264f_41598_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+alt="1"
+class="gallery-image"
+data-flex-grow="120"
+data-flex-basis="290px"
+>&lt;/p>
+&lt;p>a recurrentneural network encoder-decoder framework with apointer network is used to detect entity segmentsfor segment information.&lt;/p>
+&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/modularizedinteractionnetworkfornamed-entityrecognition/2.png"
+width="790"
+height="399"
+srcset="https://emerywan.github.io/blog/blog/p/modularizedinteractionnetworkfornamed-entityrecognition/2_hu67c580ff6778a63552a8e24eeebbd582_54929_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/modularizedinteractionnetworkfornamed-entityrecognition/2_hu67c580ff6778a63552a8e24eeebbd582_54929_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+alt="2"
+class="gallery-image"
+data-flex-grow="197"
+data-flex-basis="475px"
+>&lt;/p></description></item><item><title>A Sequence-to-Set Network for Nested Named Entity Recognition</title><link>https://emerywan.github.io/blog/p/sequence-to-set/</link><pubDate>Mon, 07 Jun 2021 21:14:45 +0800</pubDate><guid>https://emerywan.github.io/blog/p/sequence-to-set/</guid><description>&lt;img src="https://emerywan.github.io/blog/imgs/14.jpeg" alt="Featured image of post A Sequence-to-Set Network for Nested Named Entity Recognition" />&lt;p>借鉴图像领域的目标检测任务，将嵌套任务转化成span的预测，解决嵌套命名实体识别任务。&lt;/p>
 &lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/sequence-to-set/model.png"
 width="693"
 height="366"
