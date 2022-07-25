@@ -1716,7 +1716,7 @@ data-flex-basis="173px"
 &lt;ul>
 &lt;li>分配对象所需的空间&lt;/li>
 &lt;li>初始化 instance 引用的对象&lt;/li>
-&lt;li>将对象的应用写入共享变量&lt;/li>
+&lt;li>将对象的引用写入共享变量&lt;/li>
 &lt;/ul>
 &lt;p>由于 JVM 具有指令重排的特性，执行顺序有可能变成 &lt;code>1-&amp;gt;3-&amp;gt;2&lt;/code>。指令重排在单线程环境下不会出现问题，但是在多线程环境下会导致一个线程获得还没有初始化的实例。&lt;/p>
 &lt;p>例如：线程 T1 执行了 1 和 3 后，此时 T2 调用 &lt;code>getInstance()&lt;/code> 后发现 &lt;code>instance&lt;/code> 不为空，因此直接返回，但此时 &lt;code>instance&lt;/code> 还未被初始化。&lt;/p>
@@ -1784,7 +1784,7 @@ data-flex-basis="173px"
 &lt;/span>&lt;span class="lnt">10
 &lt;/span>&lt;/code>&lt;/pre>&lt;/td>
 &lt;td class="lntd">
-&lt;pre tabindex="0" class="chroma">&lt;code class="language-java" data-lang="java">&lt;span class="line">&lt;span class="cl">&lt;span class="kd">public&lt;/span> &lt;span class="kd">static&lt;/span> &lt;span class="kd">enum&lt;/span> &lt;span class="n">Singleton&lt;/span> &lt;span class="o">{&lt;/span>
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-java" data-lang="java">&lt;span class="line">&lt;span class="cl">&lt;span class="kd">public&lt;/span> &lt;span class="kd">enum&lt;/span> &lt;span class="n">Singleton&lt;/span> &lt;span class="o">{&lt;/span>
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">INSTANCE&lt;/span>&lt;span class="o">;&lt;/span>
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">Singleton&lt;/span>&lt;span class="o">()&lt;/span> &lt;span class="o">{&lt;/span> &lt;span class="c1">// 私有构造器

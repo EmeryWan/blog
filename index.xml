@@ -1,4 +1,232 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>home on 一层</title><link>https://emerywan.github.io/blog/</link><description>Recent content in home on 一层</description><generator>Hugo -- gohugo.io</generator><lastBuildDate>Thu, 30 Jun 2022 14:02:02 +0800</lastBuildDate><atom:link href="https://emerywan.github.io/blog/index.xml" rel="self" type="application/rss+xml"/><item><title>MySQL 索引</title><link>https://emerywan.github.io/blog/p/mysql/index/</link><pubDate>Thu, 30 Jun 2022 14:02:02 +0800</pubDate><guid>https://emerywan.github.io/blog/p/mysql/index/</guid><description>&lt;img src="https://emerywan.github.io/blog/imgs/15.jpeg" alt="Featured image of post MySQL 索引" />&lt;h2 id="索引">索引&lt;/h2>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>home on 一层</title><link>https://emerywan.github.io/blog/</link><description>Recent content in home on 一层</description><generator>Hugo -- gohugo.io</generator><lastBuildDate>Thu, 30 Jun 2022 18:02:02 +0800</lastBuildDate><atom:link href="https://emerywan.github.io/blog/index.xml" rel="self" type="application/rss+xml"/><item><title>MySQL 日志</title><link>https://emerywan.github.io/blog/p/mysql/index/</link><pubDate>Thu, 30 Jun 2022 18:02:02 +0800</pubDate><guid>https://emerywan.github.io/blog/p/mysql/index/</guid><description>&lt;img src="https://emerywan.github.io/blog/imgs/19.jpeg" alt="Featured image of post MySQL 日志" />&lt;h2 id="日志">日志&lt;/h2>
+&lt;h3 id="错误日志">错误日志&lt;/h3>
+&lt;p>错误日志是 MySQL 中最重要的日志之一，它记录了当 mysqld 启动和停止时，以及服务器在运行过程中发生任何严重错误时的相关信息。&lt;/p>
+&lt;p>当数据库出现任何故障导致无法正常使用时，建议首先查看此日志。&lt;/p>
+&lt;p>查看日志位置：&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-sql" data-lang="sql">&lt;span class="line">&lt;span class="cl">&lt;span class="k">show&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">variables&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">like&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="s1">&amp;#39;%log_error%&amp;#39;&lt;/span>&lt;span class="p">;&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/mysql/index/errorlog.png"
+width="669"
+height="214"
+srcset="https://emerywan.github.io/blog/blog/p/mysql/index/errorlog_huaf2aa946fc0c9a4be25a1e7ae77fcd38_27013_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/mysql/index/errorlog_huaf2aa946fc0c9a4be25a1e7ae77fcd38_27013_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+alt="errorlog"
+class="gallery-image"
+data-flex-grow="312"
+data-flex-basis="750px"
+>&lt;/p>
+&lt;h3 id="二进制日志">二进制日志&lt;/h3>
+&lt;p>二进制日志（BINLOG）记录了所有的 DDL（数据定义语言）语句和 DML（数据操纵语言）语句。&lt;/p>
+&lt;p>作用：&lt;/p>
+&lt;ul>
+&lt;li>灾难时数据恢复&lt;/li>
+&lt;li>MySQL 主从复制&lt;/li>
+&lt;/ul>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-sql" data-lang="sql">&lt;span class="line">&lt;span class="cl">&lt;span class="k">show&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">variables&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">like&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="s1">&amp;#39;%log_bin%&amp;#39;&lt;/span>&lt;span class="p">;&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/mysql/index/binlog.png"
+width="602"
+height="240"
+srcset="https://emerywan.github.io/blog/blog/p/mysql/index/binlog_hue4b3570af35eb515872cd8390aac573d_28397_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/mysql/index/binlog_hue4b3570af35eb515872cd8390aac573d_28397_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+alt="binlog"
+class="gallery-image"
+data-flex-grow="250"
+data-flex-basis="602px"
+>&lt;/p>
+&lt;ul>
+&lt;li>
+&lt;p>log_bin_basename&lt;/p>
+&lt;ul>
+&lt;li>当前数据库服务器的binlog日志的基础名称(前缀)，具体的binlog文件名需要再该basename的基础上加上编号(编号从000001开始)。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>
+&lt;p>log_bin_index&lt;/p>
+&lt;ul>
+&lt;li>binlog的索引文件，里面记录了当前服务器关联的binlog文件有哪些。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;h4 id="binlog-格式">binlog 格式&lt;/h4>
+&lt;p>MySQL 服务器中提供了多种格式来记录二进制日志：&lt;/p>
+&lt;p>配置二进制日志的格式，只需要在 /etc/my.cnf 中配置 binlog_format 参数即可。&lt;/p>
+&lt;ul>
+&lt;li>
+&lt;p>&lt;code>statement&lt;/code>&lt;/p>
+&lt;ul>
+&lt;li>基于 SQL 语句的日志记录，记录的是 SQL 语句，对数据进行修改的 SQL 都会记录在日志文件中。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;code>row&lt;/code> （默认）&lt;/p>
+&lt;ul>
+&lt;li>基于行的日志记录，记录的是每一行的数据变更。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;code>mixed&lt;/code>&lt;/p>
+&lt;ul>
+&lt;li>混合了 statememt 和 row 两种格式，默认采用statement，在某些特殊情况下会自动切换为 row 进行记录。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-sql" data-lang="sql">&lt;span class="line">&lt;span class="cl">&lt;span class="k">show&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">variables&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">like&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="s1">&amp;#39;%binlog_format%&amp;#39;&lt;/span>&lt;span class="p">;&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/mysql/index/binlogformat.png"
+width="432"
+height="156"
+srcset="https://emerywan.github.io/blog/blog/p/mysql/index/binlogformat_hu025aaab383e907dcebf622698b084bf9_13882_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/mysql/index/binlogformat_hu025aaab383e907dcebf622698b084bf9_13882_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+alt="binlogformat"
+class="gallery-image"
+data-flex-grow="276"
+data-flex-basis="664px"
+>&lt;/p>
+&lt;h4 id="查看-binlog">查看 binlog&lt;/h4>
+&lt;p>日志是以二进制方式存储的，不能直接读取，需要通过二进制日志查询工具 &lt;code>mysqlbinlog&lt;/code> 来查看。&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;span class="lnt">4
+&lt;/span>&lt;span class="lnt">5
+&lt;/span>&lt;span class="lnt">6
+&lt;/span>&lt;span class="lnt">7
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-fallback" data-lang="fallback">&lt;span class="line">&lt;span class="cl">mysqlbinlog [参数] logfilename
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">参数选项：
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> -d 指定数据库名称，只列出指定的数据库相关操作
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> -o 忽略掉日志中的前 n 行命令
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> -v 将行事件(数据变更)重构为SQL语句
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> -vv 将行事件(数据变更)重构为SQL语句，并输出注释信息
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;h4 id="清理-binlog">清理 binlog&lt;/h4>
+&lt;ul>
+&lt;li>
+&lt;p>&lt;code>reset master&lt;/code>&lt;/p>
+&lt;ul>
+&lt;li>删除全部 binlog 日志，删除之后，日志编号，将从 binlog.000001重新开始&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;code>purge master logs to 'binlog.000005'&lt;/code>&lt;/p>
+&lt;ul>
+&lt;li>删除 000005 之前的所有日志&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;code>purge master logs before 'yyyy-mm-dd hh24:mi:ss'&lt;/code>&lt;/p>
+&lt;ul>
+&lt;li>删除日志为 &amp;ldquo;yyyy-mm-dd hh24:mi:ss&amp;rdquo; 之前产生的所有日志&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;p>可以在 mysql 的配置文件中配置二进制日志的过期时间，设置了之后，二进制日志过期会自动删除。&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-sql" data-lang="sql">&lt;span class="line">&lt;span class="cl">&lt;span class="k">show&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">variables&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">like&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="s1">&amp;#39;%binlog_expire_logs_seconds%&amp;#39;&lt;/span>&lt;span class="p">;&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/mysql/index/binlogexpire.png"
+width="541"
+height="153"
+srcset="https://emerywan.github.io/blog/blog/p/mysql/index/binlogexpire_hua71c1465b703f02a37880ff6dd450f1c_15632_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/mysql/index/binlogexpire_hua71c1465b703f02a37880ff6dd450f1c_15632_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+alt="binlogexpire"
+class="gallery-image"
+data-flex-grow="353"
+data-flex-basis="848px"
+>&lt;/p>
+&lt;h3 id="查询日志">查询日志&lt;/h3>
+&lt;p>查询日志中记录了客户端的所有操作语句。（binlog 不包含查询数据的 SQL 语句）&lt;/p>
+&lt;p>默认情况下，查询日志是未开启的。&lt;/p>
+&lt;p>如果需要开启查询日志，可以修改MySQL的配置文件 /etc/my.cnf 文件，添加如下内容：&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;span class="lnt">4
+&lt;/span>&lt;span class="lnt">5
+&lt;/span>&lt;span class="lnt">6
+&lt;/span>&lt;span class="lnt">7
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-fallback" data-lang="fallback">&lt;span class="line">&lt;span class="cl"># 该选项用来开启查询日志
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"># 可选值 0 关闭 1 开启
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">general_log=1
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"># 设置日志的文件名
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"># 如果没有指定，默认的文件名为 host_name.log
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">general_log_file=mysql_query.log
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>开启了查询日志之后，/var/lib/mysql/ 目录下就会出现 mysql_query.log 文件。&lt;/p>
+&lt;p>所有的客户端的增删改查操作都会记录在该日志文件之中，长时间运行后，该日志文件将会非常大。&lt;/p>
+&lt;h3 id="慢查询日志">慢查询日志&lt;/h3>
+&lt;p>慢查询日志记录了：&lt;/p>
+&lt;ul>
+&lt;li>执行时间超过 &lt;code>long_query_time&lt;/code>&lt;/li>
+&lt;li>扫描记录数大于 &lt;code>min_examined_row_limit&lt;/code>
+的所有的SQL语句的日志，默认未开启。&lt;/li>
+&lt;/ul>
+&lt;p>如果需要开启慢查询日志，需要在 MySQL 的配置文件 /etc/my.cnf 中配置如下参数：&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;span class="lnt">4
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-fallback" data-lang="fallback">&lt;span class="line">&lt;span class="cl"># 慢查询日志
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">slow_query_log=1
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"># 执行时间参数
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">long_query_time=2
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>默认情况下，不会记录管理语句，也不会记录不使用索引进行查找的查询。&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;span class="lnt">4
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-fallback" data-lang="fallback">&lt;span class="line">&lt;span class="cl"># 记录执行较慢的管理语句
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">log_slow_admin_statements=1
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"># 记录执行较慢的未使用索引的语句
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">log_queries_not_using_indexes= 1
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div></description></item><item><title>MySQL 索引</title><link>https://emerywan.github.io/blog/p/mysql/index/</link><pubDate>Thu, 30 Jun 2022 14:02:02 +0800</pubDate><guid>https://emerywan.github.io/blog/p/mysql/index/</guid><description>&lt;img src="https://emerywan.github.io/blog/imgs/15.jpeg" alt="Featured image of post MySQL 索引" />&lt;h2 id="索引">索引&lt;/h2>
 &lt;p>索引（Index）是帮助 MySQL 高效获取数据的数据结构，提高查询效率。&lt;/p>
 &lt;ul>
 &lt;li>
@@ -3206,7 +3434,7 @@ data-flex-basis="173px"
 &lt;ul>
 &lt;li>分配对象所需的空间&lt;/li>
 &lt;li>初始化 instance 引用的对象&lt;/li>
-&lt;li>将对象的应用写入共享变量&lt;/li>
+&lt;li>将对象的引用写入共享变量&lt;/li>
 &lt;/ul>
 &lt;p>由于 JVM 具有指令重排的特性，执行顺序有可能变成 &lt;code>1-&amp;gt;3-&amp;gt;2&lt;/code>。指令重排在单线程环境下不会出现问题，但是在多线程环境下会导致一个线程获得还没有初始化的实例。&lt;/p>
 &lt;p>例如：线程 T1 执行了 1 和 3 后，此时 T2 调用 &lt;code>getInstance()&lt;/code> 后发现 &lt;code>instance&lt;/code> 不为空，因此直接返回，但此时 &lt;code>instance&lt;/code> 还未被初始化。&lt;/p>
@@ -3274,7 +3502,7 @@ data-flex-basis="173px"
 &lt;/span>&lt;span class="lnt">10
 &lt;/span>&lt;/code>&lt;/pre>&lt;/td>
 &lt;td class="lntd">
-&lt;pre tabindex="0" class="chroma">&lt;code class="language-java" data-lang="java">&lt;span class="line">&lt;span class="cl">&lt;span class="kd">public&lt;/span> &lt;span class="kd">static&lt;/span> &lt;span class="kd">enum&lt;/span> &lt;span class="n">Singleton&lt;/span> &lt;span class="o">{&lt;/span>
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-java" data-lang="java">&lt;span class="line">&lt;span class="cl">&lt;span class="kd">public&lt;/span> &lt;span class="kd">enum&lt;/span> &lt;span class="n">Singleton&lt;/span> &lt;span class="o">{&lt;/span>
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">INSTANCE&lt;/span>&lt;span class="o">;&lt;/span>
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">Singleton&lt;/span>&lt;span class="o">()&lt;/span> &lt;span class="o">{&lt;/span> &lt;span class="c1">// 私有构造器
