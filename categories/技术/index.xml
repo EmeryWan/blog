@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>技术 on 一层</title><link>https://emerywan.github.io/blog/categories/%E6%8A%80%E6%9C%AF/</link><description>Recent content in 技术 on 一层</description><generator>Hugo -- gohugo.io</generator><lastBuildDate>Sat, 01 Jan 2022 01:00:00 +0800</lastBuildDate><atom:link href="https://emerywan.github.io/blog/categories/%E6%8A%80%E6%9C%AF/index.xml" rel="self" type="application/rss+xml"/><item><title>MySQL 日志</title><link>https://emerywan.github.io/blog/p/mysql/index/</link><pubDate>Thu, 30 Jun 2022 18:02:02 +0800</pubDate><guid>https://emerywan.github.io/blog/p/mysql/index/</guid><description>&lt;img src="https://emerywan.github.io/blog/imgs/19.jpeg" alt="Featured image of post MySQL 日志" />&lt;h2 id="日志">日志&lt;/h2>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>技术 on 一层</title><link>https://emerywan.github.io/blog/categories/%E6%8A%80%E6%9C%AF/</link><description>Recent content in 技术 on 一层</description><generator>Hugo -- gohugo.io</generator><lastBuildDate>Sat, 01 Jan 2022 01:00:00 +0800</lastBuildDate><atom:link href="https://emerywan.github.io/blog/categories/%E6%8A%80%E6%9C%AF/index.xml" rel="self" type="application/rss+xml"/><item><title>MySQL 日志</title><link>https://emerywan.github.io/blog/p/mysql/log/</link><pubDate>Thu, 30 Jun 2022 18:02:02 +0800</pubDate><guid>https://emerywan.github.io/blog/p/mysql/log/</guid><description>&lt;img src="https://emerywan.github.io/blog/imgs/19.jpeg" alt="Featured image of post MySQL 日志" />&lt;h2 id="日志">日志&lt;/h2>
 &lt;h3 id="错误日志">错误日志&lt;/h3>
 &lt;p>错误日志是 MySQL 中最重要的日志之一，它记录了当 mysqld 启动和停止时，以及服务器在运行过程中发生任何严重错误时的相关信息。&lt;/p>
 &lt;p>当数据库出现任何故障导致无法正常使用时，建议首先查看此日志。&lt;/p>
@@ -11,10 +11,10 @@
 &lt;pre tabindex="0" class="chroma">&lt;code class="language-sql" data-lang="sql">&lt;span class="line">&lt;span class="cl">&lt;span class="k">show&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">variables&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">like&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="s1">&amp;#39;%log_error%&amp;#39;&lt;/span>&lt;span class="p">;&lt;/span>&lt;span class="w">
 &lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
 &lt;/div>
-&lt;/div>&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/mysql/index/errorlog.png"
+&lt;/div>&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/mysql/log/errorlog.png"
 width="669"
 height="214"
-srcset="https://emerywan.github.io/blog/blog/p/mysql/index/errorlog_huaf2aa946fc0c9a4be25a1e7ae77fcd38_27013_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/mysql/index/errorlog_huaf2aa946fc0c9a4be25a1e7ae77fcd38_27013_1024x0_resize_box_3.png 1024w"
+srcset="https://emerywan.github.io/blog/blog/p/mysql/log/errorlog_huaf2aa946fc0c9a4be25a1e7ae77fcd38_27013_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/mysql/log/errorlog_huaf2aa946fc0c9a4be25a1e7ae77fcd38_27013_1024x0_resize_box_3.png 1024w"
 loading="lazy"
 alt="errorlog"
 class="gallery-image"
@@ -36,10 +36,10 @@ data-flex-basis="750px"
 &lt;pre tabindex="0" class="chroma">&lt;code class="language-sql" data-lang="sql">&lt;span class="line">&lt;span class="cl">&lt;span class="k">show&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">variables&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">like&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="s1">&amp;#39;%log_bin%&amp;#39;&lt;/span>&lt;span class="p">;&lt;/span>&lt;span class="w">
 &lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
 &lt;/div>
-&lt;/div>&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/mysql/index/binlog.png"
+&lt;/div>&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/mysql/log/binlog.png"
 width="602"
 height="240"
-srcset="https://emerywan.github.io/blog/blog/p/mysql/index/binlog_hue4b3570af35eb515872cd8390aac573d_28397_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/mysql/index/binlog_hue4b3570af35eb515872cd8390aac573d_28397_1024x0_resize_box_3.png 1024w"
+srcset="https://emerywan.github.io/blog/blog/p/mysql/log/binlog_hue4b3570af35eb515872cd8390aac573d_28397_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/mysql/log/binlog_hue4b3570af35eb515872cd8390aac573d_28397_1024x0_resize_box_3.png 1024w"
 loading="lazy"
 alt="binlog"
 class="gallery-image"
@@ -91,10 +91,10 @@ data-flex-basis="602px"
 &lt;pre tabindex="0" class="chroma">&lt;code class="language-sql" data-lang="sql">&lt;span class="line">&lt;span class="cl">&lt;span class="k">show&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">variables&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">like&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="s1">&amp;#39;%binlog_format%&amp;#39;&lt;/span>&lt;span class="p">;&lt;/span>&lt;span class="w">
 &lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
 &lt;/div>
-&lt;/div>&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/mysql/index/binlogformat.png"
+&lt;/div>&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/mysql/log/binlogformat.png"
 width="432"
 height="156"
-srcset="https://emerywan.github.io/blog/blog/p/mysql/index/binlogformat_hu025aaab383e907dcebf622698b084bf9_13882_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/mysql/index/binlogformat_hu025aaab383e907dcebf622698b084bf9_13882_1024x0_resize_box_3.png 1024w"
+srcset="https://emerywan.github.io/blog/blog/p/mysql/log/binlogformat_hu025aaab383e907dcebf622698b084bf9_13882_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/mysql/log/binlogformat_hu025aaab383e907dcebf622698b084bf9_13882_1024x0_resize_box_3.png 1024w"
 loading="lazy"
 alt="binlogformat"
 class="gallery-image"
@@ -153,10 +153,10 @@ data-flex-basis="664px"
 &lt;pre tabindex="0" class="chroma">&lt;code class="language-sql" data-lang="sql">&lt;span class="line">&lt;span class="cl">&lt;span class="k">show&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">variables&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">like&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="s1">&amp;#39;%binlog_expire_logs_seconds%&amp;#39;&lt;/span>&lt;span class="p">;&lt;/span>&lt;span class="w">
 &lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
 &lt;/div>
-&lt;/div>&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/mysql/index/binlogexpire.png"
+&lt;/div>&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/mysql/log/binlogexpire.png"
 width="541"
 height="153"
-srcset="https://emerywan.github.io/blog/blog/p/mysql/index/binlogexpire_hua71c1465b703f02a37880ff6dd450f1c_15632_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/mysql/index/binlogexpire_hua71c1465b703f02a37880ff6dd450f1c_15632_1024x0_resize_box_3.png 1024w"
+srcset="https://emerywan.github.io/blog/blog/p/mysql/log/binlogexpire_hua71c1465b703f02a37880ff6dd450f1c_15632_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/mysql/log/binlogexpire_hua71c1465b703f02a37880ff6dd450f1c_15632_1024x0_resize_box_3.png 1024w"
 loading="lazy"
 alt="binlogexpire"
 class="gallery-image"
@@ -203,10 +203,12 @@ data-flex-basis="848px"
 &lt;/span>&lt;span class="lnt">2
 &lt;/span>&lt;span class="lnt">3
 &lt;/span>&lt;span class="lnt">4
+&lt;/span>&lt;span class="lnt">5
 &lt;/span>&lt;/code>&lt;/pre>&lt;/td>
 &lt;td class="lntd">
 &lt;pre tabindex="0" class="chroma">&lt;code class="language-fallback" data-lang="fallback">&lt;span class="line">&lt;span class="cl"># 慢查询日志
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">slow_query_log=1
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"># 执行时间参数
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">long_query_time=2
 &lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
@@ -218,10 +220,12 @@ data-flex-basis="848px"
 &lt;/span>&lt;span class="lnt">2
 &lt;/span>&lt;span class="lnt">3
 &lt;/span>&lt;span class="lnt">4
+&lt;/span>&lt;span class="lnt">5
 &lt;/span>&lt;/code>&lt;/pre>&lt;/td>
 &lt;td class="lntd">
 &lt;pre tabindex="0" class="chroma">&lt;code class="language-fallback" data-lang="fallback">&lt;span class="line">&lt;span class="cl"># 记录执行较慢的管理语句
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">log_slow_admin_statements=1
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"># 记录执行较慢的未使用索引的语句
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">log_queries_not_using_indexes= 1
 &lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
