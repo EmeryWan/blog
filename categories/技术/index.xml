@@ -1,4 +1,282 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>技术 on 一层</title><link>https://emerywan.github.io/blog/categories/%E6%8A%80%E6%9C%AF/</link><description>Recent content in 技术 on 一层</description><generator>Hugo -- gohugo.io</generator><lastBuildDate>Sat, 01 Jan 2022 01:00:00 +0800</lastBuildDate><atom:link href="https://emerywan.github.io/blog/categories/%E6%8A%80%E6%9C%AF/index.xml" rel="self" type="application/rss+xml"/><item><title>MySQL 日志</title><link>https://emerywan.github.io/blog/p/mysql/log/</link><pubDate>Thu, 30 Jun 2022 18:02:02 +0800</pubDate><guid>https://emerywan.github.io/blog/p/mysql/log/</guid><description>&lt;img src="https://emerywan.github.io/blog/imgs/19.jpeg" alt="Featured image of post MySQL 日志" />&lt;h2 id="日志">日志&lt;/h2>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>技术 on 一层</title><link>https://emerywan.github.io/blog/categories/%E6%8A%80%E6%9C%AF/</link><description>Recent content in 技术 on 一层</description><generator>Hugo -- gohugo.io</generator><lastBuildDate>Sat, 01 Jan 2022 01:00:00 +0800</lastBuildDate><atom:link href="https://emerywan.github.io/blog/categories/%E6%8A%80%E6%9C%AF/index.xml" rel="self" type="application/rss+xml"/><item><title>MySQL 存储引擎</title><link>https://emerywan.github.io/blog/p/mysql/engine/</link><pubDate>Fri, 29 Jul 2022 19:02:02 +0800</pubDate><guid>https://emerywan.github.io/blog/p/mysql/engine/</guid><description>&lt;img src="https://emerywan.github.io/blog/imgs/22.jpeg" alt="Featured image of post MySQL 存储引擎" />&lt;h2 id="mysql-体系结构">MySQL 体系结构&lt;/h2>
+&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/mysql/engine/1.png"
+width="1176"
+height="639"
+srcset="https://emerywan.github.io/blog/blog/p/mysql/engine/1_hu5b4a85ab8f594ef5edc02d326d256cb0_206182_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/mysql/engine/1_hu5b4a85ab8f594ef5edc02d326d256cb0_206182_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+alt="1"
+class="gallery-image"
+data-flex-grow="184"
+data-flex-basis="441px"
+>&lt;/p>
+&lt;h3 id="连接层">连接层&lt;/h3>
+&lt;p>主要完成一些类似于连接处理、授权认证、及相关的安全方案。&lt;/p>
+&lt;p>为通过认证安全接入的客户端提供线程，服务器也会为安全接入的每个客户端验证它所具有的操作权限。&lt;/p>
+&lt;h3 id="服务层">服务层&lt;/h3>
+&lt;p>主要完成大多数的核心服务功能，如SQL接口，并完成缓存的查询，SQL的分析和优化，部分内置函数的执行。&lt;/p>
+&lt;p>所有跨存储引擎的功能也在这一层实现，如 过程、函数等。在该层，服务器会解析查询并创建相应的内部解析树，并对其完成相应的优化如确定表的查询的顺序，是否利用索引等，最后生成相应的执行操作。&lt;/p>
+&lt;p>如果是select语句，服务器还会查询内部的缓存，如果缓存空间足够大，这样在解决大量读操作的环境中能够很好的提升系统的性能。&lt;/p>
+&lt;h3 id="引擎层">引擎层&lt;/h3>
+&lt;p>真正的负责了MySQL中数据的存储和提取，服务器通过API和存储引擎进行通信。不同的存储引擎具有不同的功能，这样我们可以根据自己的需要，来选取合适的存储引擎。数据库中的索引是在存储引擎层实现的。&lt;/p>
+&lt;h3 id="存储层">存储层&lt;/h3>
+&lt;p>数据存储层， 主要是将数据（如: redolog、undolog、数据、索引、二进制日志、错误日志、查询日志、慢查询日志等）存储在文件系统之上，并完成与存储引擎的交互。&lt;/p>
+&lt;h2 id="存储引擎">存储引擎&lt;/h2>
+&lt;p>存储引擎就是存储数据，建立索引，更新、查询数据等技术的具体实现方式。&lt;/p>
+&lt;p>存储引擎是基于表的，而不是基于库的，所以存储引擎可以被称为表类型，可在创建表的时候，指定选择的存储引擎。&lt;/p>
+&lt;ul>
+&lt;li>当前数据库支持的存储引擎&lt;/li>
+&lt;/ul>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-sql" data-lang="sql">&lt;span class="line">&lt;span class="cl">&lt;span class="k">show&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">engines&lt;/span>&lt;span class="p">;&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;h2 id="innodb">InnoDB&lt;/h2>
+&lt;p>InnoDB 是 MySQL 5.5 之后默认的 MySQL 存储引擎。&lt;/p>
+&lt;p>特点：&lt;/p>
+&lt;ul>
+&lt;li>DML 操作遵循 ACID 模型，支持事务&lt;/li>
+&lt;li>支持行级锁，提高并发访问性能&lt;/li>
+&lt;li>支持外键约束，保证数据的完整性和正确性&lt;/li>
+&lt;/ul>
+&lt;p>InnoDB 的逻辑存储结构：&lt;/p>
+&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/mysql/engine/innodb.png"
+width="1207"
+height="503"
+srcset="https://emerywan.github.io/blog/blog/p/mysql/engine/innodb_hu255dad38c999e36f2d3fd079c10a9f22_82479_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/mysql/engine/innodb_hu255dad38c999e36f2d3fd079c10a9f22_82479_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+alt="innodb"
+class="gallery-image"
+data-flex-grow="239"
+data-flex-basis="575px"
+>&lt;/p>
+&lt;ul>
+&lt;li>表空间&lt;/li>
+&lt;/ul>
+&lt;p>InnoDB 存储引擎逻辑结构的最高层，idb 文件就是表空间文件。在表空间中可以包含多个 Segment 段。&lt;/p>
+&lt;ul>
+&lt;li>段&lt;/li>
+&lt;/ul>
+&lt;p>表空间是由各个段组成的，常见的段有数据段、索引段、回滚段等。InnoDB 对于段的管理，都是引擎自身完成，不需要人为控制，一个段中包含多个区。&lt;/p>
+&lt;ul>
+&lt;li>区（1M）&lt;/li>
+&lt;/ul>
+&lt;p>区是表空间的单元结构，每个区的大小为 1M。默认情况下，InnoDB 存储引擎页的大小为 16K，即一个区中一共有 64 个连续的页。&lt;/p>
+&lt;ul>
+&lt;li>页（16K）&lt;/li>
+&lt;/ul>
+&lt;p>页是组成区的最小单元，也是 InnoDB 存储引擎磁盘管理的最小单元，每个页默认为 16K。为了保证页的连续性，InnoDB 存储引擎每次从磁盘申请 4-5 个区。&lt;/p>
+&lt;ul>
+&lt;li>行&lt;/li>
+&lt;/ul>
+&lt;p>InnoDB 存储引擎是面向行的，也就是说数据是按行进行存放的，在每一行中，除了定义表时指定的字段外，还包括隐藏字段。&lt;/p>
+&lt;h2 id="myisam">MyISAM&lt;/h2>
+&lt;p>MyISAM 是 MySQL 早期的默认存储引擎。&lt;/p>
+&lt;p>特点：&lt;/p>
+&lt;ul>
+&lt;li>不支持事务，不支持外键&lt;/li>
+&lt;li>支持表锁，不支持行锁&lt;/li>
+&lt;li>适合 select&lt;/li>
+&lt;/ul>
+&lt;p>存储文件：&lt;/p>
+&lt;ul>
+&lt;li>.sdi
+存储表结构信息&lt;/li>
+&lt;li>.MYD
+存储数据&lt;/li>
+&lt;li>.MYI
+存储索引&lt;/li>
+&lt;/ul>
+&lt;h2 id="memory">Memory&lt;/h2>
+&lt;p>Memory 引擎的表数据是存放在内存中的，由于受到硬件、断电等问题的影响，只能将这些表作为临时表或缓存使用。&lt;/p>
+&lt;p>特点：&lt;/p>
+&lt;ul>
+&lt;li>内存存放&lt;/li>
+&lt;li>hash 索引（默认）&lt;/li>
+&lt;/ul>
+&lt;p>文件：&lt;/p>
+&lt;ul>
+&lt;li>.sdi 存储表结构信息&lt;/li>
+&lt;/ul></description></item><item><title>MySQL 优化</title><link>https://emerywan.github.io/blog/p/mysql/sql-optimize/</link><pubDate>Fri, 01 Jul 2022 18:02:02 +0800</pubDate><guid>https://emerywan.github.io/blog/p/mysql/sql-optimize/</guid><description>&lt;img src="https://emerywan.github.io/blog/imgs/20.jpeg" alt="Featured image of post MySQL 优化" />&lt;h2 id="insert-优化">insert 优化&lt;/h2>
+&lt;p>一次性往数据库中插入多条数据，可从以下三方面优化：&lt;/p>
+&lt;ul>
+&lt;li>批量插入数据&lt;/li>
+&lt;/ul>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-sql" data-lang="sql">&lt;span class="line">&lt;span class="cl">&lt;span class="k">insert&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">into&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">tb_test&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">values&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="mi">1&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="s1">&amp;#39;Tom&amp;#39;&lt;/span>&lt;span class="p">),&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="mi">2&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="s1">&amp;#39;Cat&amp;#39;&lt;/span>&lt;span class="p">),&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="mi">3&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="s1">&amp;#39;Jerry&amp;#39;&lt;/span>&lt;span class="p">);&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;ul>
+&lt;li>手动控制事务&lt;/li>
+&lt;/ul>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;span class="lnt">4
+&lt;/span>&lt;span class="lnt">5
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-sql" data-lang="sql">&lt;span class="line">&lt;span class="cl">&lt;span class="k">start&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">transaction&lt;/span>&lt;span class="p">;&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="k">insert&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">into&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">tb_test&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">values&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="mi">1&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="s1">&amp;#39;Tom&amp;#39;&lt;/span>&lt;span class="p">),&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="mi">2&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="s1">&amp;#39;Cat&amp;#39;&lt;/span>&lt;span class="p">),&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="mi">3&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="s1">&amp;#39;Jerry&amp;#39;&lt;/span>&lt;span class="p">);&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="k">insert&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">into&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">tb_test&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">values&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="mi">4&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="s1">&amp;#39;Tom&amp;#39;&lt;/span>&lt;span class="p">),&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="mi">5&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="s1">&amp;#39;Cat&amp;#39;&lt;/span>&lt;span class="p">),&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="mi">6&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="s1">&amp;#39;Jerry&amp;#39;&lt;/span>&lt;span class="p">);&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="k">insert&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">into&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">tb_test&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">values&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="mi">7&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="s1">&amp;#39;Tom&amp;#39;&lt;/span>&lt;span class="p">),&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="mi">8&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="s1">&amp;#39;Cat&amp;#39;&lt;/span>&lt;span class="p">),&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="mi">9&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="s1">&amp;#39;Jerry&amp;#39;&lt;/span>&lt;span class="p">);&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="k">commit&lt;/span>&lt;span class="p">;&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;ul>
+&lt;li>主键顺序插入&lt;/li>
+&lt;/ul>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-fallback" data-lang="fallback">&lt;span class="line">&lt;span class="cl">主键乱序插入 : 8 1 9 21 88 2 4 15 89 5 7 3
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">主键顺序插入 : 1 2 3 4 5 7 8 9 15 21 88 89
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;h3 id="主键优化">主键优化&lt;/h3>
+&lt;ul>
+&lt;li>满足业务需求的情况下，尽量降低主键的长度，减少磁盘 IO&lt;/li>
+&lt;li>插入数据尽量选择顺序插入，选择使用 auto_increment 自增主键&lt;/li>
+&lt;li>尽量不要使用 UUID 或其他自然主键（如身份证号） 作为主键&lt;/li>
+&lt;li>业务操作避免对主键的修改&lt;/li>
+&lt;/ul>
+&lt;p>在 InnoDB 存储引擎中，表数据是根据主键顺序组织存放的。这种存储方式为索引组织表（index organized table IOT）。&lt;/p>
+&lt;p>在 InnoDB 引擎中，数据行是记录在逻辑结构 page 页中的，而每一个页的大小是固定的，默认 16K。
+那也就意味着，一个页中所存储的行也是有限的，如果插入的数据行在该页存储不下，将会存储到下一个页中，页与页之间会通过指针连接。&lt;/p>
+&lt;h4 id="页分裂">页分裂&lt;/h4>
+&lt;p>页可以为空，也可以填充一半，也可以填充100%。每个页包含了 2-N 行数据(如果一行数据过大，会行
+溢出)，根据主键排列。&lt;/p>
+&lt;p>乱序插入：&lt;/p>
+&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/mysql/sql-optimize/primary_index_1.png"
+width="898"
+height="636"
+srcset="https://emerywan.github.io/blog/blog/p/mysql/sql-optimize/primary_index_1_hu563b35cba82cad8802163900e924e8ca_143837_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/mysql/sql-optimize/primary_index_1_hu563b35cba82cad8802163900e924e8ca_143837_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+alt="primary_index_1"
+class="gallery-image"
+data-flex-grow="141"
+data-flex-basis="338px"
+>&lt;/p>
+&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/mysql/sql-optimize/primary_index_2.png"
+width="915"
+height="659"
+srcset="https://emerywan.github.io/blog/blog/p/mysql/sql-optimize/primary_index_2_hua83dc9b4ef4e3c90fc06cafc64e9881b_251787_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/mysql/sql-optimize/primary_index_2_hua83dc9b4ef4e3c90fc06cafc64e9881b_251787_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+alt="primary_index_2"
+class="gallery-image"
+data-flex-grow="138"
+data-flex-basis="333px"
+>&lt;/p>
+&lt;h4 id="页合并">页合并&lt;/h4>
+&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/mysql/sql-optimize/primary_index_3.png"
+width="906"
+height="382"
+srcset="https://emerywan.github.io/blog/blog/p/mysql/sql-optimize/primary_index_3_hu3b7e2aa6c3e2312a91f1497a31cd1dee_78730_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/mysql/sql-optimize/primary_index_3_hu3b7e2aa6c3e2312a91f1497a31cd1dee_78730_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+alt="primary_index_3"
+class="gallery-image"
+data-flex-grow="237"
+data-flex-basis="569px"
+>&lt;/p>
+&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/mysql/sql-optimize/primary_index_4.png"
+width="887"
+height="573"
+srcset="https://emerywan.github.io/blog/blog/p/mysql/sql-optimize/primary_index_4_hu41da46b964a6401e487c72fb3de2f351_108741_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/mysql/sql-optimize/primary_index_4_hu41da46b964a6401e487c72fb3de2f351_108741_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+alt="primary_index_4"
+class="gallery-image"
+data-flex-grow="154"
+data-flex-basis="371px"
+>&lt;/p>
+&lt;h2 id="order-by-优化">order by 优化&lt;/h2>
+&lt;p>MySQL的排序，有两种方式：&lt;/p>
+&lt;ul>
+&lt;li>
+&lt;p>Using filesort : 通过表的索引或全表扫描，读取满足条件的数据行，然后在排序缓冲区 sort
+buffer 中完成排序操作，所有不是通过索引直接返回排序结果的排序都叫 FileSort 排序&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>Using index : 通过有序索引顺序扫描直接返回有序数据，这种情况即为 using index，不需要
+额外排序，操作效率高&lt;/p>
+&lt;/li>
+&lt;/ul>
+&lt;p>优化原则：&lt;/p>
+&lt;ul>
+&lt;li>
+&lt;p>根据排序字段建立合适的索引，多字段排序时，也遵循最左前缀法则&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>尽量使用覆盖索引，否则不生效(filesort)&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>多字段排序, 一个升序一个降序，此时需要注意联合索引在创建时的规则（ASC/DESC）&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>如果不可避免的出现 filesort，大数据量排序时，可以适当增大排序缓冲区大小 sort_buffer_size(默认 256k)&lt;/p>
+&lt;/li>
+&lt;/ul>
+&lt;h2 id="limit-优化">limit 优化&lt;/h2>
+&lt;p>在数据量比较大时，如果进行 limit 分页查询，在查询时，越往后，分页查询效率越低。&lt;/p>
+&lt;p>当在进行分页查询时，如果执行 &lt;code>limit 2000000,10&lt;/code> ，此时需要MySQL排序前2000010 记
+录，仅仅返回 2000000 - 2000010 的记录，其他记录丢弃，查询排序的代价非常大 。&lt;/p>
+&lt;p>优化思路: 一般分页查询时，通过创建覆盖索引能够比较好地提高性能，可以通过覆盖索引加子查
+询形式进行优化。&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-sql" data-lang="sql">&lt;span class="line">&lt;span class="cl">&lt;span class="k">select&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">*&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="k">from&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">tb_sku&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">t&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="k">select&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">id&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">from&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">tb_sku&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">order&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">by&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">id&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">limit&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="mi">2000000&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="mi">10&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">a&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="k">where&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">t&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">id&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="n">a&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">id&lt;/span>&lt;span class="p">;&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;h2 id="count-优化">count 优化&lt;/h2>
+&lt;ul>
+&lt;li>
+&lt;p>count(主键)&lt;/p>
+&lt;ul>
+&lt;li>InnoDB 引擎会遍历整张表，把每一行的 主键id 值都取出来，返回给服务层。服务层拿到主键后，直接按行进行累加(主键不可能为null)&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>
+&lt;p>count(字段)&lt;/p>
+&lt;ul>
+&lt;li>没有 not null 约束: InnoDB 引擎会遍历整张表把每一行的字段值都取出来，返回给服务层，服务层判断是否为null，不为null，计数累加。&lt;/li>
+&lt;li>有 not null 约束：InnoDB 引擎会遍历整张表把每一行的字段值都取出来，返回给服务层，直接按行进行累加。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>
+&lt;p>count(数字)&lt;/p>
+&lt;ul>
+&lt;li>InnoDB 引擎遍历整张表，但不取值。服务层对于返回的每一行，放一个数字“1”进去，直接按行进行累加。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>
+&lt;p>count(*)&lt;/p>
+&lt;ul>
+&lt;li>InnoDB引擎并不会把全部字段取出来，而是专门做了优化，不取值，服务层直接按行进行累加。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;h2 id="update-优化">update 优化&lt;/h2>
+&lt;p>InnoDB的行锁是针对索引加的锁，不是针对记录加的锁，并且该索引不能失效，否则会从行锁
+升级为表锁。&lt;/p>
+&lt;p>开启多个事务，在执行 SQL 时，防止行锁升级为了表锁。&lt;/p></description></item><item><title>MySQL 日志</title><link>https://emerywan.github.io/blog/p/mysql/log/</link><pubDate>Thu, 30 Jun 2022 18:02:02 +0800</pubDate><guid>https://emerywan.github.io/blog/p/mysql/log/</guid><description>&lt;img src="https://emerywan.github.io/blog/imgs/19.jpeg" alt="Featured image of post MySQL 日志" />&lt;h2 id="日志">日志&lt;/h2>
 &lt;h3 id="错误日志">错误日志&lt;/h3>
 &lt;p>错误日志是 MySQL 中最重要的日志之一，它记录了当 mysqld 启动和停止时，以及服务器在运行过程中发生任何严重错误时的相关信息。&lt;/p>
 &lt;p>当数据库出现任何故障导致无法正常使用时，建议首先查看此日志。&lt;/p>
@@ -231,12 +509,13 @@ data-flex-basis="848px"
 &lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
 &lt;/div>
 &lt;/div></description></item><item><title>MySQL 索引</title><link>https://emerywan.github.io/blog/p/mysql/index/</link><pubDate>Thu, 30 Jun 2022 14:02:02 +0800</pubDate><guid>https://emerywan.github.io/blog/p/mysql/index/</guid><description>&lt;img src="https://emerywan.github.io/blog/imgs/15.jpeg" alt="Featured image of post MySQL 索引" />&lt;h2 id="索引">索引&lt;/h2>
-&lt;p>索引（Index）是帮助 MySQL 高效获取数据的数据结构，提高查询效率。&lt;/p>
+&lt;p>索引（index）是帮助 MySQL 高效获取数据的数据结构，提高查询效率。&lt;/p>
 &lt;ul>
 &lt;li>
 &lt;p>优点&lt;/p>
 &lt;ul>
-&lt;li>提高数据的查询速度。&lt;/li>
+&lt;li>提高数据的查询速度&lt;/li>
+&lt;li>降低数据库的 IO 成本&lt;/li>
 &lt;/ul>
 &lt;/li>
 &lt;li>
@@ -248,7 +527,17 @@ data-flex-basis="848px"
 &lt;/li>
 &lt;/ul>
 &lt;h2 id="索引的分类">索引的分类&lt;/h2>
-&lt;h3 id="主键索引">主键索引&lt;/h3>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-sql" data-lang="sql">&lt;span class="line">&lt;span class="cl">&lt;span class="c1">-- 查看表中的索引
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span>&lt;span class="k">show&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">index&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">from&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">table_name&lt;/span>&lt;span class="p">;&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;h3 id="主键索引">主键索引&lt;/h3>
 &lt;p>当一张表，把某个列设为主键的时候，则该列就是主键索引。&lt;/p>
 &lt;div class="highlight">&lt;div class="chroma">
 &lt;table class="lntable">&lt;tr>&lt;td class="lntd">
@@ -334,6 +623,7 @@ data-flex-basis="848px"
 &lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
 &lt;/div>
 &lt;/div>&lt;h3 id="组合索引">组合索引&lt;/h3>
+&lt;p>组合索引 / 联合索引&lt;/p>
 &lt;div class="highlight">&lt;div class="chroma">
 &lt;table class="lntable">&lt;tr>&lt;td class="lntd">
 &lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
@@ -342,7 +632,57 @@ data-flex-basis="848px"
 &lt;pre tabindex="0" class="chroma">&lt;code class="language-sql" data-lang="sql">&lt;span class="line">&lt;span class="cl">&lt;span class="k">create&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">index&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">demo_name_age_index&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">on&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">demo&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">name&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">age&lt;/span>&lt;span class="p">);&lt;/span>&lt;span class="w">
 &lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
 &lt;/div>
-&lt;/div>&lt;h2 id="索引的底层原理">索引的底层原理&lt;/h2>
+&lt;/div>&lt;h3 id="聚簇索引">聚簇索引&lt;/h3>
+&lt;ul>
+&lt;li>
+&lt;p>索引和数据放在一起，索引结构的叶子节点保存了行数据，找到了索引就找到了数据。&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>访问数据更快，聚簇索引将索引和数据保存在一个B+树上。&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>插入速度严重依赖于插入顺序。&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>更新聚簇索引列的代价很高。&lt;/p>
+&lt;/li>
+&lt;/ul>
+&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/mysql/index/index8.png"
+width="722"
+height="369"
+srcset="https://emerywan.github.io/blog/blog/p/mysql/index/index8_hu9d45f79d8b338c019791de22ea52eb90_62479_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/mysql/index/index8_hu9d45f79d8b338c019791de22ea52eb90_62479_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+alt="index8"
+class="gallery-image"
+data-flex-grow="195"
+data-flex-basis="469px"
+>&lt;/p>
+&lt;h3 id="非聚簇索引二级索引">非聚簇索引（二级索引）&lt;/h3>
+&lt;p>将数据与索引分开存储，索引结构的叶子节点关联的是对应的主键。&lt;/p>
+&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/mysql/index/clustering-index.png"
+width="840"
+height="571"
+srcset="https://emerywan.github.io/blog/blog/p/mysql/index/clustering-index_hub32172b742ab96d724c643b42699b935_232051_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/mysql/index/clustering-index_hub32172b742ab96d724c643b42699b935_232051_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+alt="clustering-index"
+class="gallery-image"
+data-flex-grow="147"
+data-flex-basis="353px"
+>&lt;/p>
+&lt;ul>
+&lt;li>二级索引访问需要两次索引查找，要回表。&lt;/li>
+&lt;/ul>
+&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/mysql/index/index9.png"
+width="727"
+height="389"
+srcset="https://emerywan.github.io/blog/blog/p/mysql/index/index9_hua49cf0193b83cd4f61e5b4747229532b_46178_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/mysql/index/index9_hua49cf0193b83cd4f61e5b4747229532b_46178_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+alt="index9"
+class="gallery-image"
+data-flex-grow="186"
+data-flex-basis="448px"
+>&lt;/p>
+&lt;h2 id="索引的结构">索引的结构&lt;/h2>
 &lt;h3 id="b-tree">B Tree&lt;/h3>
 &lt;p>B 树是一种多叉平衡查找树，其主要特点：&lt;/p>
 &lt;ul>
@@ -350,7 +690,7 @@ data-flex-basis="848px"
 &lt;p>树的节点中存储着多个元素，每个内节点有多个分叉。&lt;/p>
 &lt;/li>
 &lt;li>
-&lt;p>节点中的元素包含键值和数据，节点中的键值从小到大排列。也就是说，在所有的节点都储存数据。&lt;/p>
+&lt;p>在所有的节点都储存数据。每个节点中包含键值和数据，节点中的键值从小到大排列。&lt;/p>
 &lt;/li>
 &lt;li>
 &lt;p>父节点当中的元素不会出现在子节点中。&lt;/p>
@@ -373,7 +713,7 @@ data-flex-basis="398px"
 &lt;p>B+ 树是 B 树的升级版。B+ 树在结构上和B树的区别在于：&lt;/p>
 &lt;ul>
 &lt;li>
-&lt;p>只有叶子节点才会存储数据，非叶子节点只存储键值。&lt;/p>
+&lt;p>只有叶子节点才会存储数据，非叶子节点只存储键值，用于查找。&lt;/p>
 &lt;/li>
 &lt;li>
 &lt;p>叶子节点之间使用双向指针连接，最底层的叶子节点形成了一个双向有序链表。&lt;/p>
@@ -408,6 +748,15 @@ data-flex-basis="358px"
 &lt;/li>
 &lt;/ul>
 &lt;p>数据库中，B+ 树的高度一般都在 2~4 层。由于 MySQL 的 INNODB 引擎在设计时是将 B+ 树的根节点常驻内存的，因此在查找某一键值的行记录时，最多只需要 1~3 次磁盘IO。&lt;/p>
+&lt;h3 id="hash">Hash&lt;/h3>
+&lt;p>支持 hash 索引的是 Memory 存储引擎。采用一定的 hash 算法，将键值换算成新的 hash 值，映射到对应的槽位上，然后存储在 hash 表中。&lt;/p>
+&lt;p>&lt;a class="link" href="hash.png" >hash&lt;/a>&lt;/p>
+&lt;p>特点：&lt;/p>
+&lt;ul>
+&lt;li>只能用于对等比较（=, in），不支持范围查询（between, &amp;gt;, &amp;lt;）&lt;/li>
+&lt;li>无法利用索引完成排序操作&lt;/li>
+&lt;li>查询效率高，通常只需要一次检索（无 hash 冲突的情况）&lt;/li>
+&lt;/ul>
 &lt;h2 id="创建索引的原则">创建索引的原则&lt;/h2>
 &lt;h3 id="-建议创建索引">🙆 建议创建索引&lt;/h3>
 &lt;ul>
@@ -745,7 +1094,7 @@ data-flex-basis="1533px"
 &lt;p>单列索引无法存储 null 值，复合索引无法存储全为 null 的值&lt;/p>
 &lt;/li>
 &lt;li>
-&lt;p>查询时，采用 &lt;code>is null&lt;/code> 条件，不能使用索引，只能全表扫描&lt;/p>
+&lt;p>查询时，采用 &lt;code>is null&lt;/code> &lt;code>is not null&lt;/code> 条件，根据表中的数据分布，MySQL 判断是否走索引，并不固定&lt;/p>
 &lt;/li>
 &lt;li>
 &lt;p>MySQL 官方建议尽量把字段定义为 &lt;code>NOT NULL&lt;/code>&lt;/p>
@@ -794,39 +1143,19 @@ data-flex-basis="396px"
 &lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">-- dept_emp de departments.dept_no 类型不一致时会导致隐式转换
 &lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
 &lt;/div>
-&lt;/div>&lt;h2 id="聚簇索引">聚簇索引&lt;/h2>
-&lt;ul>
-&lt;li>
-&lt;p>索引和数据放在一起，找到了索引就找到了数据。&lt;/p>
-&lt;/li>
-&lt;li>
-&lt;p>访问数据更快，聚簇索引将索引和数据保存在一个B+树上。&lt;/p>
-&lt;/li>
-&lt;li>
-&lt;p>插入速度严重依赖于插入顺序。&lt;/p>
-&lt;/li>
-&lt;li>
-&lt;p>二级索引访问需要两次索引查找，要回表。&lt;/p>
-&lt;/li>
-&lt;li>
-&lt;p>更新聚簇索引列的代价很高。&lt;/p>
-&lt;/li>
-&lt;/ul>
-&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/mysql/index/clustering-index.png"
-width="840"
-height="571"
-srcset="https://emerywan.github.io/blog/blog/p/mysql/index/clustering-index_hub32172b742ab96d724c643b42699b935_232051_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/mysql/index/clustering-index_hub32172b742ab96d724c643b42699b935_232051_1024x0_resize_box_3.png 1024w"
-loading="lazy"
-alt="clustering-index"
-class="gallery-image"
-data-flex-grow="147"
-data-flex-basis="353px"
->&lt;/p>
-&lt;h2 id="非聚簇索引">非聚簇索引&lt;/h2>
-&lt;p>非聚簇索引的数据表和索引表是分开存储的。&lt;/p>
-&lt;p>非聚簇索引的两棵B+树看上去没什么不同，对于表数据来说，这两个键没有任何差别。由于索引树是独立的，通过辅助键检索无需访问主键的索引树。&lt;/p>
+&lt;/div>&lt;h3 id="-mysql-评估">⚠️ MySQL 评估&lt;/h3>
+&lt;p>MySQL 在查询时，会评估使用索引的效率与走全表扫描的效率，如果走全表扫描更快，则放弃
+索引，走全表扫描。&lt;/p>
+&lt;p>因为索引是用来索引少量数据的，如果通过索引查询返回大批量的数据，则还不
+如走全表扫描来的快，此时索引就会失效。&lt;/p>
+&lt;h2 id="最左前缀法则">最左前缀法则&lt;/h2>
+&lt;p>最左前缀法则指的是查询从索引的最左列开始，并且不跳过索引中的列。&lt;/p>
+&lt;p>如果跳跃某一列，索引将会部分失效(后面的字段索引失效)。&lt;/p>
+&lt;p>中间不能跳过某一列，否则该列后面的字段索引将失效。&lt;/p>
+&lt;h2 id="范围查询">范围查询&lt;/h2>
+&lt;p>联合索引中，出现范围查询(&amp;gt;, &amp;lt;)，范围查询右侧的列索引失效。&lt;/p>
 &lt;h2 id="覆盖索引">覆盖索引&lt;/h2>
-&lt;p>对于索引 X，&lt;code>SELECT&lt;/code> 的字段只需要从索引中就能获得，而无需到表中获取。&lt;/p>
+&lt;p>对于索引 X，&lt;code>SELECT&lt;/code> 的字段只需要从索引中就能获得，而无需回表获取。&lt;/p>
 &lt;div class="highlight">&lt;div class="chroma">
 &lt;table class="lntable">&lt;tr>&lt;td class="lntd">
 &lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
@@ -841,7 +1170,89 @@ data-flex-basis="353px"
 &lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="k">where&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">name&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s2">&amp;#34;July&amp;#34;&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">and&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">age&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="mi">14&lt;/span>&lt;span class="p">;&lt;/span>&lt;span class="w">
 &lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
 &lt;/div>
-&lt;/div>&lt;h2 id="参考">参考&lt;/h2>
+&lt;/div>&lt;h2 id="前缀索引">前缀索引&lt;/h2>
+&lt;p>当字段类型为字符串（varchar，text，longtext等）时，有时候需要索引很长的字符串，这会让
+索引变得很大，查询时，浪费大量的磁盘 IO， 影响查询效率。&lt;/p>
+&lt;p>可以只将字符串的一部分前缀，建立索引，这样可以大大节约索引空间，从而提高索引效率。&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-sql" data-lang="sql">&lt;span class="line">&lt;span class="cl">&lt;span class="c1">-- 为 email 字段，建立索引长度为 5 的前缀索引
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span>&lt;span class="k">create&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">index&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">index_email_5&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">on&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">tb_user&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">email&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="mi">5&lt;/span>&lt;span class="p">));&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;h2 id="explain">explain&lt;/h2>
+&lt;p>查看 SQL 语句的执行计划。字段含义：&lt;/p>
+&lt;ul>
+&lt;li>
+&lt;p>id&lt;/p>
+&lt;ul>
+&lt;li>查询中执行 select 子句或者是操作表的顺序&lt;/li>
+&lt;li>id 相同，执行顺序从上到下；id 不同，值越大，越先执行&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>
+&lt;p>select_type&lt;/p>
+&lt;ul>
+&lt;li>表示 select 的类型&lt;/li>
+&lt;li>SIMPLE (简单 select,不使用 union 或子查询等)&lt;/li>
+&lt;li>PRIMARY (查询中若包含任何复杂的子部分,最外层的 select 被标记为 PRIMARY)&lt;/li>
+&lt;li>UNION (union 中的第二个或后面的 select 语句)&lt;/li>
+&lt;li>SUBQUERY (子查询中的第一个 select)&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>
+&lt;p>table&lt;/p>
+&lt;ul>
+&lt;li>这一行的数据是关于哪张表&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>
+&lt;p>type&lt;/p>
+&lt;ul>
+&lt;li>MySQL在表中找到所需行的方式&lt;/li>
+&lt;li>性能由好到差的连接类型为：NULL、system、const、eq_ref、ref、range、index、all&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>
+&lt;p>possible_keys&lt;/p>
+&lt;ul>
+&lt;li>可能应用在这张表上的索引，一个或多个&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>
+&lt;p>key
+-实际使用的索引，如果为 NULL，则没有使用索引&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>key_len&lt;/p>
+&lt;ul>
+&lt;li>表示索引中使用的字节数，该值为索引字段最大可能长度，并非实际使用长度，在不损失精确性的前提下，长度越短越好&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>
+&lt;p>ref&lt;/p>
+&lt;ul>
+&lt;li>上述表的连接匹配条件，即哪些列或常量被用于查找索引列上的值&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>
+&lt;p>rows&lt;/p>
+&lt;ul>
+&lt;li>MySQL 认为必须要执行查询的行数，在 innodb 引擎的表中，是一个估计值，可能并不总是准确的&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>
+&lt;p>Extra&lt;/p>
+&lt;ul>
+&lt;li>MySQL解决查询的详细信息&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;h2 id="参考">参考&lt;/h2>
 &lt;ul>
 &lt;li>&lt;a class="link" href="https://juejin.cn/post/6936032090546765837" target="_blank" rel="noopener"
 >https://juejin.cn/post/6936032090546765837&lt;/a>&lt;/li>
