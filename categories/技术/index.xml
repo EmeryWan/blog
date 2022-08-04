@@ -1,4 +1,76 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>技术 on 一层</title><link>https://emerywan.github.io/blog/categories/%E6%8A%80%E6%9C%AF/</link><description>Recent content in 技术 on 一层</description><generator>Hugo -- gohugo.io</generator><lastBuildDate>Sat, 01 Jan 2022 01:00:00 +0800</lastBuildDate><atom:link href="https://emerywan.github.io/blog/categories/%E6%8A%80%E6%9C%AF/index.xml" rel="self" type="application/rss+xml"/><item><title>MySQL 存储引擎</title><link>https://emerywan.github.io/blog/p/mysql/engine/</link><pubDate>Fri, 29 Jul 2022 19:02:02 +0800</pubDate><guid>https://emerywan.github.io/blog/p/mysql/engine/</guid><description>&lt;img src="https://emerywan.github.io/blog/imgs/22.jpeg" alt="Featured image of post MySQL 存储引擎" />&lt;h2 id="mysql-体系结构">MySQL 体系结构&lt;/h2>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>技术 on 一层</title><link>https://emerywan.github.io/blog/categories/%E6%8A%80%E6%9C%AF/</link><description>Recent content in 技术 on 一层</description><generator>Hugo -- gohugo.io</generator><lastBuildDate>Sat, 01 Jan 2022 01:00:00 +0800</lastBuildDate><atom:link href="https://emerywan.github.io/blog/categories/%E6%8A%80%E6%9C%AF/index.xml" rel="self" type="application/rss+xml"/><item><title>MySQL 存储引擎</title><link>https://emerywan.github.io/blog/p/mysql/innodb/</link><pubDate>Sun, 31 Jul 2022 13:02:02 +0800</pubDate><guid>https://emerywan.github.io/blog/p/mysql/innodb/</guid><description>&lt;img src="https://emerywan.github.io/blog/imgs/23.jpeg" alt="Featured image of post MySQL 存储引擎" />&lt;h2 id="事务">事务&lt;/h2>
+&lt;p>事务是一组逻辑上的数据库操作，这些操作要么全部成功，要么全部失败。&lt;/p>
+&lt;h3 id="特性">特性&lt;/h3>
+&lt;ul>
+&lt;li>
+&lt;p>原子性：事务是不可分割的最小操作单元，要么全部成功，要么全部失败。&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>一致性：事务完成时，必须使所有的数据都保持一致状态。&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>隔离性：数据库系统提供的隔离机制，保证事务在不受外部并发操作影响的独立环境下运行。&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>持久性：事务一旦提交或回滚，它对数据库中的数据的改变就是永久的。&lt;/p>
+&lt;/li>
+&lt;/ul>
+&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/mysql/innodb/1.png"
+width="869"
+height="333"
+srcset="https://emerywan.github.io/blog/blog/p/mysql/innodb/1_hu3fd49fc1a58d123f3498503f7ff7204f_68265_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/mysql/innodb/1_hu3fd49fc1a58d123f3498503f7ff7204f_68265_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+alt="1"
+class="gallery-image"
+data-flex-grow="260"
+data-flex-basis="626px"
+>&lt;/p>
+&lt;h2 id="redo-log">redo log&lt;/h2>
+&lt;p>重做日志，记录的是“某个数据页上做了什么修改”。属于物理日志。&lt;/p>
+&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/mysql/innodb/redolog.png"
+width="889"
+height="359"
+srcset="https://emerywan.github.io/blog/blog/p/mysql/innodb/redolog_huec6805565d40a88bf7c70b51e3ee84c7_38212_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/mysql/innodb/redolog_huec6805565d40a88bf7c70b51e3ee84c7_38212_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+alt="redolog"
+class="gallery-image"
+data-flex-grow="247"
+data-flex-basis="594px"
+>&lt;/p>
+&lt;p>redo log 用来保障数据库的持久性。&lt;/p>
+&lt;p>在一个事务中，执行多个增删改的操作时，InnoDB 引擎会先操作缓冲池中的数据，如果缓冲区没有对应的数据，会通过后台线程将磁盘中的数据加载出来，存放在缓冲区中，再将缓冲池中的数据修改，修改后的数据页我们称为脏页。&lt;/p>
+&lt;p>脏页则会在一定的时机，通过后台线程刷新到磁盘中，从而保证缓冲区与磁盘的数据一致。&lt;/p>
+&lt;p>缓冲区的脏页数据并不是实时刷新的，而是一段时间之后将缓冲区的数据刷新到磁盘中（随机磁盘 IO）。&lt;/p>
+&lt;p>当对缓冲区的数据进行增删改之后，会首先将操作的数据页的变化，记录在 redo log buffer 中。在事务提交时，会将 redo log buffer 中的数据刷新到 redo log 磁盘文件中（顺序磁盘 IO）。&lt;/p>
+&lt;p>如果刷新缓冲区的脏页到磁盘时，发生错误，此时就可以借助于 redo log 进行数据恢复，这样就保证了事务的持久性。&lt;/p>
+&lt;h2 id="undo-log">undo log&lt;/h2>
+&lt;p>回滚日志。记录操作数据库的逆操作，用于进行回滚。&lt;/p>
+&lt;p>作用：&lt;/p>
+&lt;ul>
+&lt;li>提供回滚（保障事务的原子性）&lt;/li>
+&lt;li>MVCC&lt;/li>
+&lt;/ul>
+&lt;p>undo log 是逻辑日志，可以认为当 delete 一条记录时，undo log 中会记录一条对应的 insert 记录；当 update 一条记录时，它记录一条对应相反的 update 记录。&lt;/p>
+&lt;h2 id="mvcc">MVCC&lt;/h2>
+&lt;p>多版本并发控制，同一条记录在数据库中，可以存在多个版本。&lt;/p>
+&lt;ul>
+&lt;li>隐式字段
+&lt;ul>
+&lt;li>DB_TRX_ID 事务 id&lt;/li>
+&lt;li>DB_ROLL_PTR 回滚指针（记录这条记录的上一个版本）&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>undo log&lt;/li>
+&lt;li>readview&lt;/li>
+&lt;/ul>
+&lt;h3 id="当前读">当前读&lt;/h3>
+&lt;p>读取的是记录的最新版本。&lt;/p>
+&lt;p>&lt;code>update&lt;/code> &lt;code>insert&lt;/code> &lt;code>delete&lt;/code> &lt;code>select ... for update&lt;/code> &lt;code>select ... lock in share mode&lt;/code> 都是进行当前读。&lt;/p>
+&lt;h3 id="快照读">快照读&lt;/h3>
+&lt;p>简单的不加锁 &lt;code>select&lt;/code> 就是快照读。读取的是快照版本，通过 MVCC 进行并发控制。&lt;/p>
+&lt;h2 id="一致性">一致性&lt;/h2>
+&lt;p>数据库通过原子性、隔离性、持久性来保证一致性。&lt;/p>
+&lt;p>C(一致性)是目的，A(原子性)、I(隔离性)、D(持久性)是是为了保证一致性，数据库提供的手段。&lt;/p></description></item><item><title>MySQL 存储引擎</title><link>https://emerywan.github.io/blog/p/mysql/engine/</link><pubDate>Fri, 29 Jul 2022 19:02:02 +0800</pubDate><guid>https://emerywan.github.io/blog/p/mysql/engine/</guid><description>&lt;img src="https://emerywan.github.io/blog/imgs/22.jpeg" alt="Featured image of post MySQL 存储引擎" />&lt;h2 id="mysql-体系结构">MySQL 体系结构&lt;/h2>
 &lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/mysql/engine/1.png"
 width="1176"
 height="639"
@@ -94,7 +166,7 @@ data-flex-basis="575px"
 &lt;p>Memory 引擎的表数据是存放在内存中的，由于受到硬件、断电等问题的影响，只能将这些表作为临时表或缓存使用。&lt;/p>
 &lt;p>特点：&lt;/p>
 &lt;ul>
-&lt;li>内存存放&lt;/li>
+&lt;li>内存存放数据，宕机后数据会丢失&lt;/li>
 &lt;li>hash 索引（默认）&lt;/li>
 &lt;/ul>
 &lt;p>文件：&lt;/p>
@@ -578,7 +650,7 @@ data-flex-basis="848px"
 &lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
 &lt;/div>
 &lt;/div>&lt;h3 id="唯一索引">唯一索引&lt;/h3>
-&lt;p>索引列的值必须唯一，允许有空值null（和主键不同，主键不允许为空），但只能有一个。&lt;/p>
+&lt;p>索引列的值必须唯一，允许有多个空值 null（和主键不同，主键不允许为空）。&lt;/p>
 &lt;div class="highlight">&lt;div class="chroma">
 &lt;table class="lntable">&lt;tr>&lt;td class="lntd">
 &lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
@@ -4934,57 +5006,7 @@ alt="2"
 class="gallery-image"
 data-flex-grow="197"
 data-flex-basis="475px"
->&lt;/p></description></item><item><title>消息队列</title><link>https://emerywan.github.io/blog/p/mq/</link><pubDate>Tue, 20 Jul 2021 21:14:45 +0800</pubDate><guid>https://emerywan.github.io/blog/p/mq/</guid><description>&lt;img src="https://emerywan.github.io/blog/imgs/10.jpeg" alt="Featured image of post 消息队列" />&lt;h2 id="kafka">Kafka&lt;/h2>
-&lt;p>使用 Zookeeper 作为注册中心，负责 Kafka 集群元数据的管理，以及集群协调工作。每个 Kafka 服务器启动时连接到 Zookeeper，将自己注册到 Zookeeper 当中。&lt;/p>
-&lt;h3 id="基本概念">基本概念&lt;/h3>
-&lt;ul>
-&lt;li>Record&lt;/li>
-&lt;/ul>
-&lt;p>代表记录&lt;/p>
-&lt;ul>
-&lt;li>Producer&lt;/li>
-&lt;/ul>
-&lt;p>生产者，负责发送消息&lt;/p>
-&lt;ul>
-&lt;li>Consumer&lt;/li>
-&lt;/ul>
-&lt;p>消费者，负责消费消息&lt;/p>
-&lt;ul>
-&lt;li>Topic&lt;/li>
-&lt;/ul>
-&lt;p>主题，消息都会由一个主题方式来组织，可以理解为对于消息的一个分类。
-Producer 将消息发送到特定的主题，Consumer 通过订阅特定的主题来消费消息。&lt;/p>
-&lt;ul>
-&lt;li>Broker&lt;/li>
-&lt;/ul>
-&lt;p>Kafka 服务器。可以看做是一个独立的 Kafka 实例，多个 Kafka Broker 组成一个 Kafka Cluster。&lt;/p>
-&lt;ul>
-&lt;li>Partition&lt;/li>
-&lt;/ul>
-&lt;p>分区，属于 Topic 的一部分，一个 Topic 可以有多个 Partition，同一个 Topic 下的 Partition 可以分布在不同的 Broker 上。
-通常每个分区的消息都是按照顺序读取的，不同的分区无法保证顺序性。
-分区也就是我们常说的数据分片 sharding 机制，主要是为了提高系统的伸缩能力，通过分区，消息的读写可以负载均衡到多个不同节点上。&lt;/p>
-&lt;ul>
-&lt;li>Leader/Follower&lt;/li>
-&lt;/ul>
-&lt;p>分区的副本。为了保证高可用，分区都会有一些副本，每个分区都会有一个Leader主副本负责读写数据，Follower从副本只负责和Leader副本保持数据同步，不对外提供任何服务&lt;/p>
-&lt;ul>
-&lt;li>offset&lt;/li>
-&lt;/ul>
-&lt;p>偏移量，分区中的每一条消息都会根据时间先后顺序有一个递增的序号，这个序号就是 offset 偏移量&lt;/p>
-&lt;p>Kafka就是用offset来表示消费者的消费进度到哪了，每个消费者会都有自己的offset。&lt;/p>
-&lt;h2 id="rocketmq">RocketMQ&lt;/h2>
-&lt;h2 id="rabbitmq">RabbitMQ&lt;/h2>
-&lt;p>Broker： 简单来说就是消息队列服务器实体
-Exchange： 消息交换机，它指定消息按什么规则，路由到哪个队列
-Queue： 消息队列载体，每个消息都会被投入到一个或多个队列
-Binding： 绑定，它的作用就是把exchange和queue按照路由规则绑定起来
-Routing Key： 路由关键字，exchange根据这个关键字进行消息投递
-VHost： vhost 可以理解为虚拟 broker ，即 mini-RabbitMQ server。其内部均含有独立的 queue、exchange 和 binding 等，但最最重要的是，其拥有独立的权限系统，可以做到 vhost 范围的用户控制。当然，从 RabbitMQ 的全局角度，vhost 可以作为不同权限隔离的手段（一个典型的例子就是不同的应用可以跑在不同的 vhost 中）。
-Producer： 消息生产者，就是投递消息的程序
-Consumer： 消息消费者，就是接受消息的程序
-Channel： 消息通道，在客户端的每个连接里，可建立多个channel，每个channel代表一个会话任务&lt;/p>
-&lt;p>由Exchange、Queue、RoutingKey三个才能决定一个从Exchange到Queue的唯一的线路。&lt;/p></description></item><item><title>A Sequence-to-Set Network for Nested Named Entity Recognition</title><link>https://emerywan.github.io/blog/p/sequence-to-set/</link><pubDate>Mon, 07 Jun 2021 21:14:45 +0800</pubDate><guid>https://emerywan.github.io/blog/p/sequence-to-set/</guid><description>&lt;img src="https://emerywan.github.io/blog/imgs/14.jpeg" alt="Featured image of post A Sequence-to-Set Network for Nested Named Entity Recognition" />&lt;p>借鉴图像领域的目标检测任务，将嵌套任务转化成span的预测，解决嵌套命名实体识别任务。&lt;/p>
+>&lt;/p></description></item><item><title>A Sequence-to-Set Network for Nested Named Entity Recognition</title><link>https://emerywan.github.io/blog/p/sequence-to-set/</link><pubDate>Mon, 07 Jun 2021 21:14:45 +0800</pubDate><guid>https://emerywan.github.io/blog/p/sequence-to-set/</guid><description>&lt;img src="https://emerywan.github.io/blog/imgs/14.jpeg" alt="Featured image of post A Sequence-to-Set Network for Nested Named Entity Recognition" />&lt;p>借鉴图像领域的目标检测任务，将嵌套任务转化成span的预测，解决嵌套命名实体识别任务。&lt;/p>
 &lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/sequence-to-set/model.png"
 width="693"
 height="366"
