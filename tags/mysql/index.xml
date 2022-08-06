@@ -63,6 +63,16 @@ data-flex-basis="594px"
 &lt;li>undo log&lt;/li>
 &lt;li>readview&lt;/li>
 &lt;/ul>
+&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/mysql/innodb/2.png"
+width="447"
+height="293"
+srcset="https://emerywan.github.io/blog/blog/p/mysql/innodb/2_hu6914e1ba0252a0a630b3ee48cb8867a4_30147_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/mysql/innodb/2_hu6914e1ba0252a0a630b3ee48cb8867a4_30147_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+alt="2"
+class="gallery-image"
+data-flex-grow="152"
+data-flex-basis="366px"
+>&lt;/p>
 &lt;h3 id="当前读">当前读&lt;/h3>
 &lt;p>读取的是记录的最新版本。&lt;/p>
 &lt;p>&lt;code>update&lt;/code> &lt;code>insert&lt;/code> &lt;code>delete&lt;/code> &lt;code>select ... for update&lt;/code> &lt;code>select ... lock in share mode&lt;/code> 都是进行当前读。&lt;/p>

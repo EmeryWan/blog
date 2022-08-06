@@ -1,4 +1,275 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Posts on 一层</title><link>https://emerywan.github.io/blog/post/</link><description>Recent content in Posts on 一层</description><generator>Hugo -- gohugo.io</generator><lastBuildDate>Sun, 31 Jul 2022 13:02:02 +0800</lastBuildDate><atom:link href="https://emerywan.github.io/blog/post/index.xml" rel="self" type="application/rss+xml"/><item><title>MySQL 存储引擎</title><link>https://emerywan.github.io/blog/p/mysql/innodb/</link><pubDate>Sun, 31 Jul 2022 13:02:02 +0800</pubDate><guid>https://emerywan.github.io/blog/p/mysql/innodb/</guid><description>&lt;img src="https://emerywan.github.io/blog/imgs/23.jpeg" alt="Featured image of post MySQL 存储引擎" />&lt;h2 id="事务">事务&lt;/h2>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Posts on 一层</title><link>https://emerywan.github.io/blog/post/</link><description>Recent content in Posts on 一层</description><generator>Hugo -- gohugo.io</generator><lastBuildDate>Sat, 06 Aug 2022 16:02:02 +0800</lastBuildDate><atom:link href="https://emerywan.github.io/blog/post/index.xml" rel="self" type="application/rss+xml"/><item><title>类加载器</title><link>https://emerywan.github.io/blog/p/java/jvm/classloader/</link><pubDate>Sat, 06 Aug 2022 16:02:02 +0800</pubDate><guid>https://emerywan.github.io/blog/p/java/jvm/classloader/</guid><description>&lt;img src="https://emerywan.github.io/blog/imgs/25.jpeg" alt="Featured image of post 类加载器" />&lt;h2 id="类加载器">类加载器&lt;/h2>
+&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/java/jvm/classloader/menu.png"
+width="1707"
+height="638"
+srcset="https://emerywan.github.io/blog/blog/p/java/jvm/classloader/menu_hu8b8ca38d973bcbde05d207eb8795320e_321907_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/java/jvm/classloader/menu_hu8b8ca38d973bcbde05d207eb8795320e_321907_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+alt="menu"
+class="gallery-image"
+data-flex-grow="267"
+data-flex-basis="642px"
+>&lt;/p>
+&lt;h3 id="bootstrapclassloader">BootstrapClassLoader&lt;/h3>
+&lt;p>启动类加载器&lt;/p>
+&lt;p>最顶层的加载类，由 C++ 实现，负责加载 &lt;code>%JAVA_HOME%/lib&lt;/code> 目录下的 jar 包和类或者被 &lt;code>-Xbootclasspath&lt;/code> 参数指定的路径中的所有类。&lt;/p>
+&lt;h3 id="extensionclassloader">ExtensionClassLoader&lt;/h3>
+&lt;p>扩展类加载器。Java 系统类库的扩展机制。&lt;/p>
+&lt;p>负责加载 &lt;code>%JRE_HOME%/lib/ext&lt;/code> 目录下的 jar 包和类，或被 &lt;code>java.ext.dirs&lt;/code> 系统变量所指定的路径下的 jar 包。&lt;/p>
+&lt;h3 id="applicationclassloader">ApplicationClassLoader&lt;/h3>
+&lt;p>面向用户的加载器，负责加载当前应用 &lt;code>classpath&lt;/code> 下的所有 jar 包和类。&lt;/p>
+&lt;h2 id="双亲委派模型">双亲委派模型&lt;/h2>
+&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/java/jvm/classloader/classloader.png"
+width="1279"
+height="699"
+srcset="https://emerywan.github.io/blog/blog/p/java/jvm/classloader/classloader_hu2885d6b96687a867396da9eda76d4bf0_289144_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/java/jvm/classloader/classloader_hu2885d6b96687a867396da9eda76d4bf0_289144_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+alt="classloader"
+class="gallery-image"
+data-flex-grow="182"
+data-flex-basis="439px"
+>&lt;/p>
+&lt;p>每个类加载器都有自己的命名空间，用不同的类加载器加载了同一个限定名的类，JVM 也会认为是两个不同的类。&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;span class="lnt">11
+&lt;/span>&lt;span class="lnt">12
+&lt;/span>&lt;span class="lnt">13
+&lt;/span>&lt;span class="lnt">14
+&lt;/span>&lt;span class="lnt">15
+&lt;/span>&lt;span class="lnt">16
+&lt;/span>&lt;span class="lnt">17
+&lt;/span>&lt;span class="lnt">18
+&lt;/span>&lt;span class="lnt">19
+&lt;/span>&lt;span class="lnt">20
+&lt;/span>&lt;span class="lnt">21
+&lt;/span>&lt;span class="lnt">22
+&lt;/span>&lt;span class="lnt">23
+&lt;/span>&lt;span class="lnt">24
+&lt;/span>&lt;span class="lnt">25
+&lt;/span>&lt;span class="lnt">26
+&lt;/span>&lt;span class="lnt">27
+&lt;/span>&lt;span class="lnt">28
+&lt;/span>&lt;span class="lnt">29
+&lt;/span>&lt;span class="lnt">30
+&lt;/span>&lt;span class="lnt">31
+&lt;/span>&lt;span class="lnt">32
+&lt;/span>&lt;span class="lnt">33
+&lt;/span>&lt;span class="lnt">34
+&lt;/span>&lt;span class="lnt">35
+&lt;/span>&lt;span class="lnt">36
+&lt;/span>&lt;span class="lnt">37
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-java" data-lang="java">&lt;span class="line">&lt;span class="cl">&lt;span class="kd">protected&lt;/span> &lt;span class="n">Class&lt;/span>&lt;span class="o">&amp;lt;?&amp;gt;&lt;/span> &lt;span class="n">loadClass&lt;/span>&lt;span class="o">(&lt;/span>&lt;span class="n">String&lt;/span> &lt;span class="n">name&lt;/span>&lt;span class="o">,&lt;/span> &lt;span class="kt">boolean&lt;/span> &lt;span class="n">resolve&lt;/span>&lt;span class="o">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kd">throws&lt;/span> &lt;span class="n">ClassNotFoundException&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="o">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kd">synchronized&lt;/span> &lt;span class="o">(&lt;/span>&lt;span class="n">getClassLoadingLock&lt;/span>&lt;span class="o">(&lt;/span>&lt;span class="n">name&lt;/span>&lt;span class="o">))&lt;/span> &lt;span class="o">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c1">// (1) 判断是否加载过该类
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span> &lt;span class="n">Class&lt;/span>&lt;span class="o">&amp;lt;?&amp;gt;&lt;/span> &lt;span class="n">c&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">findLoadedClass&lt;/span>&lt;span class="o">(&lt;/span>&lt;span class="n">name&lt;/span>&lt;span class="o">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">if&lt;/span> &lt;span class="o">(&lt;/span>&lt;span class="n">c&lt;/span> &lt;span class="o">==&lt;/span> &lt;span class="kc">null&lt;/span>&lt;span class="o">)&lt;/span> &lt;span class="o">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kt">long&lt;/span> &lt;span class="n">t0&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">System&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">nanoTime&lt;/span>&lt;span class="o">();&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">try&lt;/span> &lt;span class="o">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">if&lt;/span> &lt;span class="o">(&lt;/span>&lt;span class="n">parent&lt;/span> &lt;span class="o">!=&lt;/span> &lt;span class="kc">null&lt;/span>&lt;span class="o">)&lt;/span> &lt;span class="o">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">c&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">parent&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">loadClass&lt;/span>&lt;span class="o">(&lt;/span>&lt;span class="n">name&lt;/span>&lt;span class="o">,&lt;/span> &lt;span class="kc">false&lt;/span>&lt;span class="o">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="o">}&lt;/span> &lt;span class="k">else&lt;/span> &lt;span class="o">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c1">// (2) parent == null 约定为：parnet 为 Bootstracp ClassLoader
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span> &lt;span class="n">c&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">findBootstrapClassOrNull&lt;/span>&lt;span class="o">(&lt;/span>&lt;span class="n">name&lt;/span>&lt;span class="o">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="o">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="o">}&lt;/span> &lt;span class="k">catch&lt;/span> &lt;span class="o">(&lt;/span>&lt;span class="n">ClassNotFoundException&lt;/span> &lt;span class="n">e&lt;/span>&lt;span class="o">)&lt;/span> &lt;span class="o">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c1">// ClassNotFoundException thrown if class not found
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span> &lt;span class="c1">// from the non-null parent class loader
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span> &lt;span class="o">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">if&lt;/span> &lt;span class="o">(&lt;/span>&lt;span class="n">c&lt;/span> &lt;span class="o">==&lt;/span> &lt;span class="kc">null&lt;/span>&lt;span class="o">)&lt;/span> &lt;span class="o">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c1">// (3) 说明 parent 加载不了，当前 loader 尝试加载 class
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span> &lt;span class="kt">long&lt;/span> &lt;span class="n">t1&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">System&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">nanoTime&lt;/span>&lt;span class="o">();&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">c&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">findClass&lt;/span>&lt;span class="o">(&lt;/span>&lt;span class="n">name&lt;/span>&lt;span class="o">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c1">// this is the defining class loader; record the stats
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span> &lt;span class="n">sun&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">misc&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">PerfCounter&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">getParentDelegationTime&lt;/span>&lt;span class="o">().&lt;/span>&lt;span class="na">addTime&lt;/span>&lt;span class="o">(&lt;/span>&lt;span class="n">t1&lt;/span> &lt;span class="o">-&lt;/span> &lt;span class="n">t0&lt;/span>&lt;span class="o">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">sun&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">misc&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">PerfCounter&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">getFindClassTime&lt;/span>&lt;span class="o">().&lt;/span>&lt;span class="na">addElapsedTimeFrom&lt;/span>&lt;span class="o">(&lt;/span>&lt;span class="n">t1&lt;/span>&lt;span class="o">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">sun&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">misc&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">PerfCounter&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">getFindClasses&lt;/span>&lt;span class="o">().&lt;/span>&lt;span class="na">increment&lt;/span>&lt;span class="o">();&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="o">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="o">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">if&lt;/span> &lt;span class="o">(&lt;/span>&lt;span class="n">resolve&lt;/span>&lt;span class="o">)&lt;/span> &lt;span class="o">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">resolveClass&lt;/span>&lt;span class="o">(&lt;/span>&lt;span class="n">c&lt;/span>&lt;span class="o">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="o">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">return&lt;/span> &lt;span class="n">c&lt;/span>&lt;span class="o">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="o">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="o">}&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>默认情况下，一个限定名的类只会被一个类加载器加载并解析使用，在程序中是唯一的，不会产生歧义。&lt;/p>
+&lt;p>在加载时，首先会判断当前类是否被加载过，如果已经加载，会直接返回，否则才会尝试加载。&lt;/p>
+&lt;p>尝试加载时，不会自己进行加载，而是将请求委派给父类加载器，当父类加载器无法加载时，才会由自己处理。&lt;/p></description></item><item><title>类加载机制</title><link>https://emerywan.github.io/blog/p/java/jvm/class-loading/</link><pubDate>Sat, 06 Aug 2022 13:02:02 +0800</pubDate><guid>https://emerywan.github.io/blog/p/java/jvm/class-loading/</guid><description>&lt;img src="https://emerywan.github.io/blog/imgs/24.jpeg" alt="Featured image of post 类加载机制" />&lt;h2 id="java-类生命周期">Java 类生命周期&lt;/h2>
+&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/java/jvm/class-loading/life.png"
+width="973"
+height="331"
+srcset="https://emerywan.github.io/blog/blog/p/java/jvm/class-loading/life_hue0715323a61c74c3a1d0de4b0a99146c_113100_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/java/jvm/class-loading/life_hue0715323a61c74c3a1d0de4b0a99146c_113100_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+alt="java-class-life"
+class="gallery-image"
+data-flex-grow="293"
+data-flex-basis="705px"
+>&lt;/p>
+&lt;h2 id="类加载过程">类加载过程&lt;/h2>
+&lt;p>类加载主要有三步：&lt;code>加载 - 链接 - 初始化&lt;/code>。&lt;/p>
+&lt;h3 id="-加载">🥎 加载&lt;/h3>
+&lt;p>加载是一个读取 Class 文件，将其转化为某种静态数据结构存储在方法区内，并在堆中生成一个便于调用的 java.lang.Class 类型的对象的过程。&lt;/p>
+&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/java/jvm/class-loading/loading.png"
+width="707"
+height="335"
+srcset="https://emerywan.github.io/blog/blog/p/java/jvm/class-loading/loading_hu8b469e8111e2814cd40ca0f04de26462_22328_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/java/jvm/class-loading/loading_hu8b469e8111e2814cd40ca0f04de26462_22328_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+alt="loading"
+class="gallery-image"
+data-flex-grow="211"
+data-flex-basis="506px"
+>&lt;/p>
+&lt;p>分为三步进行：&lt;/p>
+&lt;ul>
+&lt;li>
+&lt;p>获取定义类的二进制字节流（不限制从哪里获取，文件、网络、即时生成）&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>将字节流代表的静态存储结构，转换成方法区中运行时数据结构&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>在堆中生成一个代表该类的 java.lang.Class 对象，作为方法区这个类的各种数据访问入口&lt;/p>
+&lt;/li>
+&lt;/ul>
+&lt;h3 id="-链接">🥎 链接&lt;/h3>
+&lt;h4 id="-验证">⚾️ 验证&lt;/h4>
+&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/java/jvm/class-loading/verify.png"
+width="915"
+height="390"
+srcset="https://emerywan.github.io/blog/blog/p/java/jvm/class-loading/verify_hu8c1a3959f1e343b5f02da51e1aaf01f3_138925_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/java/jvm/class-loading/verify_hu8c1a3959f1e343b5f02da51e1aaf01f3_138925_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+alt="verify"
+class="gallery-image"
+data-flex-grow="234"
+data-flex-basis="563px"
+>&lt;/p>
+&lt;ul>
+&lt;li>文件格式验证&lt;/li>
+&lt;/ul>
+&lt;p>验证字节流是否符合 Class 文件格式的规范，能被当前版本的虚拟机处理。&lt;/p>
+&lt;ul>
+&lt;li>元数据、字节码验证&lt;/li>
+&lt;/ul>
+&lt;p>对字节码进行语法、语义的分析，保证其符合 Java 虚拟机的规范，不会有危害虚拟机的行为。&lt;/p>
+&lt;ul>
+&lt;li>符号引用验证&lt;/li>
+&lt;/ul>
+&lt;p>确保解析行为能够正常执行。&lt;strong>发生在解析阶段。&lt;/strong>&lt;/p>
+&lt;h4 id="-准备">⚾️ 准备&lt;/h4>
+&lt;p>为类中定义的变量（静态变量 &lt;code>static&lt;/code>）分配内存并设置类变量初始值的阶段。&lt;/p>
+&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/java/jvm/class-loading/prepare.png"
+width="482"
+height="260"
+srcset="https://emerywan.github.io/blog/blog/p/java/jvm/class-loading/prepare_hu58a397643ad84aca2032de9a3ac6155c_29464_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/java/jvm/class-loading/prepare_hu58a397643ad84aca2032de9a3ac6155c_29464_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+alt="prepare"
+class="gallery-image"
+data-flex-grow="185"
+data-flex-basis="444px"
+>&lt;/p>
+&lt;ul>
+&lt;li>&lt;code>static&lt;/code> -&amp;gt; 赋零值&lt;/li>
+&lt;li>&lt;code>static final&lt;/code> -&amp;gt; 赋定义的常量值&lt;/li>
+&lt;/ul>
+&lt;h4 id="-解析">⚾️ 解析&lt;/h4>
+&lt;p>解析是将常量池中的符号引用替换为直接引用。&lt;/p>
+&lt;ul>
+&lt;li>
+&lt;p>符号引用：描述引用对象的符号&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>直接引用：指向目标实际地址的指针&lt;/p>
+&lt;/li>
+&lt;/ul>
+&lt;p>🎾 解析部分是灵活的，可以在初始化环节后再进行，实现所谓的“后期绑定”。（方法调用直到运行时才会解析，因为无法在编译时确定方法调用所需的所有信息，所以方法定义和方法调用直到运行时才绑定。）&lt;/p>
+&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/java/jvm/class-loading/resolve_1.png"
+width="163"
+height="370"
+srcset="https://emerywan.github.io/blog/blog/p/java/jvm/class-loading/resolve_1_hua9ef48196efa3564a4ef1eaa93606c3a_10102_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/java/jvm/class-loading/resolve_1_hua9ef48196efa3564a4ef1eaa93606c3a_10102_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+alt="resolve"
+class="gallery-image"
+data-flex-grow="44"
+data-flex-basis="105px"
+>&lt;/p>
+&lt;p>当一个类被编译成 Class 之后，假设这个类称为 &lt;code>A&lt;/code>，并且在 &lt;code>A&lt;/code> 中引用了类 &lt;code>B&lt;/code>。&lt;/p>
+&lt;ul>
+&lt;li>
+&lt;p>在编译阶段，&lt;code>A&lt;/code> 无法确定 &lt;code>B&lt;/code> 是否被编译（现在 &lt;code>B&lt;/code> 一定未加载），此时 &lt;code>A&lt;/code> 无法知道 &lt;code>B&lt;/code> 的实际地址，所有在 &lt;code>A.Class&lt;/code> 中，会使用一个&lt;code>字符串&lt;/code>代表 &lt;code>B&lt;/code>。这个字符串被称为&lt;strong>符号引用&lt;/strong>。&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>在运行阶段，&lt;code>A&lt;/code> 发生了加载，在解析时，发现其中的 &lt;code>B&lt;/code> 还未被加载，就会触发类 &lt;code>B&lt;/code> 的加载，将 &lt;code>B&lt;/code> 加载到虚拟机中。此时，&lt;code>A&lt;/code> 中的符号引用会被替换为 &lt;code>B&lt;/code> 中的实际地址（直接引用）。&lt;/p>
+&lt;/li>
+&lt;/ul>
+&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/java/jvm/class-loading/resolve.png"
+width="922"
+height="538"
+srcset="https://emerywan.github.io/blog/blog/p/java/jvm/class-loading/resolve_hu45e5622ef4d0eaddcde37871cfee2a7a_117190_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/java/jvm/class-loading/resolve_hu45e5622ef4d0eaddcde37871cfee2a7a_117190_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+alt="resolve"
+class="gallery-image"
+data-flex-grow="171"
+data-flex-basis="411px"
+>&lt;/p>
+&lt;ul>
+&lt;li>静态解析&lt;/li>
+&lt;/ul>
+&lt;p>类 &lt;code>B&lt;/code> 是具体的实现类，解析的对象十分明确，即会进行静态解析。&lt;/p>
+&lt;ul>
+&lt;li>动态解析&lt;/li>
+&lt;/ul>
+&lt;p>Java 通过后期绑定的方式实现多态，通过动态解析实现。&lt;/p>
+&lt;p>如果类 &lt;code>B&lt;/code> 是抽象类或者接口，有具体的实现类 &lt;code>C&lt;/code>、&lt;code>D&lt;/code>，当前具体的实现方式并不明确，无法确定使用哪个具体实现。&lt;/p>
+&lt;p>直到运行过程中发生了调用，虚拟机调用栈中会得到具体类的信息，再进行解析，就有明确的直接引用代替符号引用。&lt;/p>
+&lt;h3 id="-初始化">🥎 初始化&lt;/h3>
+&lt;p>虚拟机真正开始执行类中编写的代码，完成一些主动的资源初始化动作。&lt;/p>
+&lt;p>&lt;strong>执行的是类层面的初始化。&lt;/strong> 只有显式调用 new 才会执行构造函数的初始化。&lt;/p>
+&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/java/jvm/class-loading/init.png"
+width="533"
+height="388"
+srcset="https://emerywan.github.io/blog/blog/p/java/jvm/class-loading/init_hud5162327100fcc16da85dffebeccc0e0_46268_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/java/jvm/class-loading/init_hud5162327100fcc16da85dffebeccc0e0_46268_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+alt="init"
+class="gallery-image"
+data-flex-grow="137"
+data-flex-basis="329px"
+>&lt;/p>
+&lt;ul>
+&lt;li>成员变量的赋值&lt;/li>
+&lt;li>静态变量的赋值&lt;/li>
+&lt;li>静态代码块&lt;/li>
+&lt;/ul>
+&lt;h2 id="参考">参考&lt;/h2>
+&lt;ul>
+&lt;li>
+&lt;p>&lt;a class="link" href="https://javaguide.cn/java/jvm/class-loading-process.html" target="_blank" rel="noopener"
+>https://javaguide.cn/java/jvm/class-loading-process.html&lt;/a>&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>深入理解 Java 虚拟机&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;a class="link" href="https://www.bilibili.com/video/BV14U4y1L75q/?spm_id_from=333.788" target="_blank" rel="noopener"
+>https://www.bilibili.com/video/BV14U4y1L75q/?spm_id_from=333.788&lt;/a>&lt;/p>
+&lt;/li>
+&lt;/ul></description></item><item><title>MySQL 存储引擎</title><link>https://emerywan.github.io/blog/p/mysql/innodb/</link><pubDate>Sun, 31 Jul 2022 13:02:02 +0800</pubDate><guid>https://emerywan.github.io/blog/p/mysql/innodb/</guid><description>&lt;img src="https://emerywan.github.io/blog/imgs/23.jpeg" alt="Featured image of post MySQL 存储引擎" />&lt;h2 id="事务">事务&lt;/h2>
 &lt;p>事务是一组逻辑上的数据库操作，这些操作要么全部成功，要么全部失败。&lt;/p>
 &lt;h3 id="特性">特性&lt;/h3>
 &lt;ul>
@@ -63,6 +334,16 @@ data-flex-basis="594px"
 &lt;li>undo log&lt;/li>
 &lt;li>readview&lt;/li>
 &lt;/ul>
+&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/mysql/innodb/2.png"
+width="447"
+height="293"
+srcset="https://emerywan.github.io/blog/blog/p/mysql/innodb/2_hu6914e1ba0252a0a630b3ee48cb8867a4_30147_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/mysql/innodb/2_hu6914e1ba0252a0a630b3ee48cb8867a4_30147_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+alt="2"
+class="gallery-image"
+data-flex-grow="152"
+data-flex-basis="366px"
+>&lt;/p>
 &lt;h3 id="当前读">当前读&lt;/h3>
 &lt;p>读取的是记录的最新版本。&lt;/p>
 &lt;p>&lt;code>update&lt;/code> &lt;code>insert&lt;/code> &lt;code>delete&lt;/code> &lt;code>select ... for update&lt;/code> &lt;code>select ... lock in share mode&lt;/code> 都是进行当前读。&lt;/p>
