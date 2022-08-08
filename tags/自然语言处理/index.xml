@@ -332,9 +332,150 @@ alt="12"
 &lt;p>所以，最终矩阵 $A$ 的大小等于：&lt;/p>
 &lt;p>$parameter(A) = shape(h) * [shape(h) + shape(x)]$&lt;/p>
 &lt;p>这个乘积 $parameter(A)$ 就是 &lt;code>simple RNN&lt;/code> 的最终的参数数量。&lt;/p>
-&lt;h2 id="-todo-simple-rnn-的电影评论分析">📖 (TODO) Simple RNN 的电影评论分析&lt;/h2>
-&lt;p>&lt;strong>Doing&lt;/strong>&lt;/p>
-&lt;h2 id="-simple-rnn-的缺陷">🧰 simple RNN 的缺陷&lt;/h2>
+&lt;p>我们来搭一个简单的网络。最底层是一个词嵌入层 &lt;code>Word Embedding Layer&lt;/code>，它可以把词映射为词向量。&lt;/p>
+&lt;p>&lt;img src="https://nlp.letout.cn/img/nlp/03/13.png"
+loading="lazy"
+alt="13"
+>&lt;/p>
+&lt;p>词向量的维度由自己设置（这是一个超参数，我们应该使用交叉验证 &lt;code>cross validation&lt;/code> 选择最佳的维度），这里设置 $x$ 的维度是 $32$。&lt;/p>
+&lt;p>然后下一层是 &lt;code>Simple RNN Layer&lt;/code>，输入的是词向量 $x_i$，输出的是状态 $h_i$。&lt;/p>
+&lt;p>&lt;img src="https://nlp.letout.cn/img/nlp/03/14.png"
+loading="lazy"
+alt="14"
+>&lt;/p>
+&lt;p>$h$ 的维度也是由自己设置，我们设置 $h$ 维度为 $32$。这里 $x$ 和 $h$ 的维度都是 $32$，这只是一个巧合而已，$h$ 和 $x$ 的维度通常不一样。&lt;/p>
+&lt;p>前面说过，状态向量 $h$ 会积累输入的信息，比如：$h_0$ 包含第一个单词 &lt;code>I&lt;/code> 的信息，$h_1$ 包含前两个词 &lt;code>I love&lt;/code> 的信息，最后一个状态 $h_t$ 包含整句话 &lt;code>I love the movice so much&lt;/code> 的信息。&lt;/p>
+&lt;p>我们可以从 &lt;code>PyTorch&lt;/code> 中获取所有的状态 $h={h_1, h_2, &amp;hellip;, h_t}$，也可以只获得最后一个状态向量 $h_t$ 的信息。&lt;/p>
+&lt;p>$h_t$ 积累了整句话的信息，所有通常使用 $h_t$ 这一个向量就够了，这里我们只使用 $h_t$，把前面的所有状态 ${h_1, h_2, &amp;hellip;, h_{t-1}}$ 全部都丢掉。&lt;/p>
+&lt;p>&lt;img src="https://nlp.letout.cn/img/nlp/03/15.png"
+loading="lazy"
+alt="15"
+>&lt;/p>
+&lt;p>$h_t$ 相当于从文本中提取的特征向量，把 $h_t$ 输入这个分类器 $sigmoid(v^T h_t)$，分类器就会输出一个 &lt;code>0&lt;/code> 或 &lt;code>1&lt;/code> 之间的数值，&lt;code>0&lt;/code> 代表了负面电影评价，&lt;code>1&lt;/code> 代表正面电影评价。&lt;/p>
+&lt;p>然后我们设置超参数：&lt;/p>
+&lt;ul>
+&lt;li>设置 &lt;code>vocabulary = 1000&lt;/code>，意思是词典里有 &lt;code>10000&lt;/code> 个词汇；&lt;/li>
+&lt;li>&lt;code>embedding_dim = 32&lt;/code>，意思是词向量 $x$ 的维度是 $32$；&lt;/li>
+&lt;li>&lt;code>word_num = 500&lt;/code>，意思是每条电影评价有 &lt;code>500&lt;/code> 个单词，如果超过 &lt;code>500&lt;/code> 个单词，就会被截掉，只保留 &lt;code>500&lt;/code> 个，如果不够 &lt;code>500&lt;/code>，就用 &lt;code>zero_padding&lt;/code> 将句子补成长度为 &lt;code>500&lt;/code>；&lt;/li>
+&lt;li>&lt;code>state_dim = 32&lt;/code>，意思是状态 $h$ 的维度等于 $32$。&lt;/li>
+&lt;/ul>
+&lt;h3 id="-pytorch-实现">👩‍🚒 PyTorch 实现&lt;/h3>
+&lt;p>接下来开始搭网络，首先我们定义一个类 &lt;code>Model&lt;/code>，我们让它继承 &lt;code>nn.Model&lt;/code> 父类。&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;span class="lnt">11
+&lt;/span>&lt;span class="lnt">12
+&lt;/span>&lt;span class="lnt">13
+&lt;/span>&lt;span class="lnt">14
+&lt;/span>&lt;span class="lnt">15
+&lt;/span>&lt;span class="lnt">16
+&lt;/span>&lt;span class="lnt">17
+&lt;/span>&lt;span class="lnt">18
+&lt;/span>&lt;span class="lnt">19
+&lt;/span>&lt;span class="lnt">20
+&lt;/span>&lt;span class="lnt">21
+&lt;/span>&lt;span class="lnt">22
+&lt;/span>&lt;span class="lnt">23
+&lt;/span>&lt;span class="lnt">24
+&lt;/span>&lt;span class="lnt">25
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-python" data-lang="python">&lt;span class="line">&lt;span class="cl">&lt;span class="kn">import&lt;/span> &lt;span class="nn">torch&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="kn">import&lt;/span> &lt;span class="nn">torch.nn&lt;/span> &lt;span class="k">as&lt;/span> &lt;span class="nn">nn&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="k">class&lt;/span> &lt;span class="nc">Model&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">nn&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">Module&lt;/span>&lt;span class="p">):&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">def&lt;/span> &lt;span class="fm">__init__&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="bp">self&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">vocabulary_size&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">embedding_dim&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">state_dim&lt;/span>&lt;span class="p">):&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nb">super&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">Model&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="bp">self&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="fm">__init__&lt;/span>&lt;span class="p">()&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="bp">self&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">vocabulary_size&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">vocabulary_size&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="bp">self&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">embedding_dim&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">embedding_dim&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="bp">self&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">state_dim&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">state_dim&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="bp">self&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">Embedding&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">nn&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">Embedding&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="bp">self&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">vocabulary_size&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="bp">self&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">embedding_dim&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="bp">self&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">RNN&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">nn&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">RNN&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="bp">self&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">embedding_dim&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="bp">self&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">state_dim&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="bp">self&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">fc&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">nn&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">Linear&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="bp">self&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">state_dim&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="mi">1&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="bp">self&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">sigmoid&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">nn&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">Sigmoid&lt;/span>&lt;span class="p">()&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">def&lt;/span> &lt;span class="nf">forward&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="bp">self&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">x&lt;/span>&lt;span class="p">):&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">x&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">x&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">transpose&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="mi">0&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="mi">1&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">embedded&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="bp">self&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">Embedding&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">x&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">output&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">h_n&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="bp">self&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">RNN&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">embedded&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">h_n&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">torch&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">squeeze&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">h_n&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">dim&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="mi">0&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">result&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="bp">self&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">fc&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">h_n&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">return&lt;/span> &lt;span class="bp">self&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">sigmoid&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">result&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>接下来，我们在构造函数 &lt;code>__init__&lt;/code> 中定义我们的模型结构，并重载 &lt;code>forword&lt;/code> 方法。&lt;/p>
+&lt;p>首先是词嵌入层 &lt;code>nn.Embedding()&lt;/code>，它是把词映射成向量。&lt;/p>
+&lt;p>然后是 simple RNN 层 &lt;code>nn.RNN()&lt;/code>，需要指定词向量的维度 &lt;code>embedding_dim&lt;/code> 和状态向量 $h$ 的维度 &lt;code>state_dim&lt;/code>；&lt;/p>
+&lt;p>最后是一个全连接层 &lt;code>nn.Linear()&lt;/code>，并且会使用 &lt;code>nn.Sigmoid()&lt;/code> 作用于它的结果，输入最后一个状态向量 $h$，输出一个 &lt;code>0、1&lt;/code> 之间的数。&lt;/p>
+&lt;p>&lt;code>PyTorch&lt;/code> 中的 &lt;code>RNN&lt;/code> 会有两个返回值：&lt;code>output&lt;/code>，&lt;code>h_n&lt;/code>。&lt;/p>
+&lt;ul>
+&lt;li>&lt;code>output&lt;/code> 是 &lt;code>RNN&lt;/code> 所有时刻的状态向量集合（矩阵）；&lt;/li>
+&lt;li>&lt;code>h_n&lt;/code> 是 &lt;code>RNN&lt;/code> 中最后一个状态向量。&lt;/li>
+&lt;/ul>
+&lt;p>这是模型的一个概要， 词嵌入层 &lt;code>Embedding&lt;/code> 的输出是一个 $500*32$ 的矩阵，&lt;code>500&lt;/code> 的意思是每个句子有 $500$ 个词，&lt;code>32&lt;/code> 的意思是每个词用 $32$ 维的词向量表示。&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;span class="lnt">11
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-fallback" data-lang="fallback">&lt;span class="line">&lt;span class="cl">==========================================================================================
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">Layer (type:depth-idx) Output Shape Param #
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">==========================================================================================
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">Model -- --
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">├─Embedding: 1-1 [500, 1, 32] 320,000
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">├─RNN: 1-2 [500, 1, 32] 2,112
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">├─Linear: 1-3 [1, 1] 33
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">├─Sigmoid: 1-4 [1, 1] --
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">==========================================================================================
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">Total params: 322,145
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">Trainable params: 322,145
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>&lt;code>Simple RNN&lt;/code> 每个状态的输出 $h_t$ 都是一个 &lt;code>32&lt;/code> 维的向量。我们看一下 RNN 的参数，他有 &lt;code>2080&lt;/code> 个参数，它是这样算出来的：&lt;/p>
+&lt;p>$shape(h) * (shape(h)+shape(x)) = 32*(32+32)+32 = 2080$&lt;/p>
+&lt;p>这是矩阵 $A$ 的大小，后面的 $32$ 的维度来自 &lt;code>intercept&lt;/code>，也叫 &lt;code>bias&lt;/code>，偏移量。RNN 会默认使用 &lt;code>intercept&lt;/code>，但这个不重要，这里暂时不管它。&lt;/p>
+&lt;p>剩下的 &lt;code>32&lt;/code> 个参数来自于最后一个状态，因为 &lt;code>PyTorch&lt;/code> 中的 &lt;code>RNN&lt;/code> 会同时输出所有时刻的状态向量集合和最后一个状态向量。&lt;/p>
+&lt;h3 id="-运行模型">🧑‍🔧 运行模型&lt;/h3>
+&lt;p>搭好模型之后，初始化模型，然后用训练数据拟合模型。&lt;/p>
+&lt;p>我们指定算法是 &lt;code>optim.Adam&lt;/code>，损失函数是 &lt;code>nn.BCELoss()&lt;/code>，评价标准是准确率 &lt;code>accuracy&lt;/code>。&lt;/p>
+&lt;p>然后用训练数据拟合模型，我让算法训练 &lt;code>3&lt;/code> 个 &lt;code>epochs&lt;/code>，只让算法运行 &lt;code>3&lt;/code> 个 epochs，是出现了过拟合，&lt;code>3&lt;/code> 个 &lt;code>epochs&lt;/code> 之后，&lt;code>validate accuracy&lt;/code> 会变差。提前让算法停止运行称为 &lt;code>early stoping&lt;/code> 提前终止训练，使 &lt;code>validate accuracy&lt;/code> 变差之前就停止。&lt;/p>
+&lt;p>最后，用测试数据评价模型的表现，把测试数据作为输入，调用 &lt;code>model.evaluate()&lt;/code>，返回 loss 和 accuracy，测试的 accuracy，测试的 accuracy 是 84.36%，比上一节中的 逻辑回归好很多（75%）。&lt;/p>
+&lt;p>刚才搭模型的时候，只使用了RNN最后一个状态 $h_t$，把之前的状态都丢掉了，想用 $h_0$ 到 $h_t$ 所有状态也可以，但并没有太大区别。&lt;/p>
+&lt;p>我们让 &lt;code>RNN&lt;/code> 的第一个输出 &lt;code>output&lt;/code>，它是一个矩阵，矩阵每一行就是一个状态向量 $h$。&lt;/p>
+&lt;p>如果用所有状态，就要加一个 &lt;code>flatten&lt;/code> 层，将状态矩阵变成一个向量，然后把这个向量作为分类器的输入，来判断电影是正面的，还是负面的。只要把网络稍作改动就可以了。&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-python" data-lang="python">&lt;span class="line">&lt;span class="cl">&lt;span class="n">torch&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">flatten&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">output&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">start_dim&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="mi">1&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">end_dim&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="mi">2&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;h2 id="-simple-rnn-的缺陷">🧰 simple RNN 的缺陷&lt;/h2>
 &lt;p>下面看一下 &lt;code>simple RNN&lt;/code> 这种简单的模型有什么缺陷。&lt;/p>
 &lt;p>举个栗子 🌰 ，现在有这样一个问题，给定半句话，要求预测下一个单词。&lt;/p>
 &lt;p>&lt;img src="https://nlp.letout.cn/img/nlp/03/16.png"

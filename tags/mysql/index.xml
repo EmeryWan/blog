@@ -381,7 +381,7 @@ class="gallery-image"
 data-flex-grow="312"
 data-flex-basis="750px"
 >&lt;/p>
-&lt;h3 id="二进制日志">二进制日志&lt;/h3>
+&lt;h3 id="二进制日志归档日志">二进制日志（归档日志）&lt;/h3>
 &lt;p>二进制日志（BINLOG）记录了所有的 DDL（数据定义语言）语句和 DML（数据操纵语言）语句。&lt;/p>
 &lt;p>作用：&lt;/p>
 &lt;ul>

@@ -1,4 +1,490 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Java on 一层</title><link>https://emerywan.github.io/blog/tags/java/</link><description>Recent content in Java on 一层</description><generator>Hugo -- gohugo.io</generator><lastBuildDate>Sat, 06 Aug 2022 16:02:02 +0800</lastBuildDate><atom:link href="https://emerywan.github.io/blog/tags/java/index.xml" rel="self" type="application/rss+xml"/><item><title>类加载器</title><link>https://emerywan.github.io/blog/p/java/jvm/classloader/</link><pubDate>Sat, 06 Aug 2022 16:02:02 +0800</pubDate><guid>https://emerywan.github.io/blog/p/java/jvm/classloader/</guid><description>&lt;img src="https://emerywan.github.io/blog/imgs/25.jpeg" alt="Featured image of post 类加载器" />&lt;h2 id="类加载器">类加载器&lt;/h2>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Java on 一层</title><link>https://emerywan.github.io/blog/tags/java/</link><description>Recent content in Java on 一层</description><generator>Hugo -- gohugo.io</generator><lastBuildDate>Mon, 08 Aug 2022 15:02:02 +0800</lastBuildDate><atom:link href="https://emerywan.github.io/blog/tags/java/index.xml" rel="self" type="application/rss+xml"/><item><title>JVM 内存区域</title><link>https://emerywan.github.io/blog/p/java/jvm/memory-area/</link><pubDate>Mon, 08 Aug 2022 15:02:02 +0800</pubDate><guid>https://emerywan.github.io/blog/p/java/jvm/memory-area/</guid><description>&lt;img src="https://emerywan.github.io/blog/imgs/27.jpeg" alt="Featured image of post JVM 内存区域" />&lt;ul>
+&lt;li>
+&lt;p>线程隔离&lt;/p>
+&lt;ul>
+&lt;li>程序计数器&lt;/li>
+&lt;li>虚拟机栈&lt;/li>
+&lt;li>本地方法栈&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>
+&lt;p>线程共享&lt;/p>
+&lt;ul>
+&lt;li>方法区&lt;/li>
+&lt;li>堆&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/java/jvm/memory-area/area.png"
+width="875"
+height="550"
+srcset="https://emerywan.github.io/blog/blog/p/java/jvm/memory-area/area_hu77c5f146be5bf31c819ffe7a07cc3500_205102_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/java/jvm/memory-area/area_hu77c5f146be5bf31c819ffe7a07cc3500_205102_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+alt="area"
+class="gallery-image"
+data-flex-grow="159"
+data-flex-basis="381px"
+>&lt;/p>
+&lt;h2 id="-程序计数器">🎋 程序计数器&lt;/h2>
+&lt;p>当前线程执行字节码的行号指示器。&lt;/p>
+&lt;p>唯一一个不会出现 &lt;code>OutOfMemoryError&lt;/code> 的内存区域，随线程的创建而创建，随线程的结束而死亡。&lt;/p>
+&lt;h2 id="-虚拟机栈">🎋 虚拟机栈&lt;/h2>
+&lt;p>每一次方法的调用都会有一个对应的栈帧被压入栈中，每一个方法调用结束后，都会有一个栈帧被弹出。&lt;/p>
+&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/java/jvm/memory-area/stack.png"
+width="302"
+height="551"
+srcset="https://emerywan.github.io/blog/blog/p/java/jvm/memory-area/stack_hu387fe9e9614436cd46058aff5c85565a_61440_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/java/jvm/memory-area/stack_hu387fe9e9614436cd46058aff5c85565a_61440_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+alt="stack"
+class="gallery-image"
+data-flex-grow="54"
+data-flex-basis="131px"
+>&lt;/p>
+&lt;p>当线程请求栈的深度超过当前 Java 虚拟机最大深度时，会抛出 &lt;code>StackOverFlowError&lt;/code>。&lt;/p>
+&lt;ul>
+&lt;li>局部变量表&lt;/li>
+&lt;/ul>
+&lt;p>存放编译期可知的各种数据类型，对象引用地址。&lt;/p>
+&lt;ul>
+&lt;li>操作数栈&lt;/li>
+&lt;/ul>
+&lt;p>方法执行过程中的计算结果，计算过程中产生的临时变量。&lt;/p>
+&lt;ul>
+&lt;li>动态链接&lt;/li>
+&lt;/ul>
+&lt;p>服务于一个方法需要调用其他方法的场景。&lt;/p>
+&lt;ul>
+&lt;li>方法返回地址
+&lt;ul>
+&lt;li>正常返回&lt;/li>
+&lt;li>异常返回&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;h2 id="-本地方法栈">🎋 本地方法栈&lt;/h2>
+&lt;p>本地方法栈是虚拟为执行 Native 方法服务。&lt;/p>
+&lt;h2 id="-方法区">🎍 方法区&lt;/h2>
+&lt;p>方法区是 Java 虚拟机的抽象概念。实现方式在不同虚拟机中可能不同。&lt;/p>
+&lt;ul>
+&lt;li>
+&lt;p>JDK 8 之前，HotSpot 虚拟机使用永久带实现方法区&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>JDK 8 及之后，使用元空间（直接内存）实现&lt;/p>
+&lt;/li>
+&lt;/ul>
+&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/java/jvm/memory-area/function-before.png"
+width="382"
+height="436"
+srcset="https://emerywan.github.io/blog/blog/p/java/jvm/memory-area/function-before_hu5ba856b5fa83b596c5da12a50d62fcb1_75748_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/java/jvm/memory-area/function-before_hu5ba856b5fa83b596c5da12a50d62fcb1_75748_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+alt="before"
+class="gallery-image"
+data-flex-grow="87"
+data-flex-basis="210px"
+>&lt;/p>
+&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/java/jvm/memory-area/function-after.png"
+width="484"
+height="433"
+srcset="https://emerywan.github.io/blog/blog/p/java/jvm/memory-area/function-after_hue0bd0747c11f9c8962eb0e412965ba30_84329_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/java/jvm/memory-area/function-after_hue0bd0747c11f9c8962eb0e412965ba30_84329_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+alt="after"
+class="gallery-image"
+data-flex-grow="111"
+data-flex-basis="268px"
+>&lt;/p>
+&lt;ul>
+&lt;li>类的元信息&lt;/li>
+&lt;/ul>
+&lt;p>类名，访问修饰符，字段描述，方法描述等&lt;/p>
+&lt;ul>
+&lt;li>运行时常量池&lt;/li>
+&lt;/ul>
+&lt;p>存放编译后的各种字面量，符号引用，常量（final）池表等&lt;/p>
+&lt;ul>
+&lt;li>字符串常量池&lt;/li>
+&lt;/ul>
+&lt;p>JVM 为了减少字符串对内存的消耗，并提升性能，专门开辟的区域&lt;/p>
+&lt;ul>
+&lt;li>静态变量&lt;/li>
+&lt;/ul>
+&lt;p>类变量（static）&lt;/p>
+&lt;h2 id="-堆">🎍 堆&lt;/h2>
+&lt;p>用来存放和管理对象实例，几乎所有的对象实例都在这里分配（逃逸分析，栈上分配）。&lt;/p>
+&lt;p>Java 堆是垃圾回收的主要区域，因此也被称为 GC 堆。&lt;/p>
+&lt;ul>
+&lt;li>
+&lt;p>JDK 8 之前，堆被分为&lt;/p>
+&lt;ul>
+&lt;li>新生代（Eden、Survivor1、Survivor2）&lt;/li>
+&lt;li>老年代&lt;/li>
+&lt;li>永久代&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>
+&lt;p>JDK 8 之后，永久代被取消&lt;/p>
+&lt;/li>
+&lt;/ul>
+&lt;p>大部分情况下，对象首先会在 Eden 区进行分配；在一次垃圾回收后，如果对象还存活，会进入 S0 或 S1；当对象年龄增长到一定程度（默认 15），或累积的年龄超过了 Survivor 的一半，会晋升到老年代。&lt;/p></description></item><item><title>JVM 垃圾回收</title><link>https://emerywan.github.io/blog/p/java/jvm/garbage-collection/</link><pubDate>Sun, 07 Aug 2022 12:02:02 +0800</pubDate><guid>https://emerywan.github.io/blog/p/java/jvm/garbage-collection/</guid><description>&lt;img src="https://emerywan.github.io/blog/imgs/26.jpeg" alt="Featured image of post JVM 垃圾回收" />&lt;h2 id="-对象存活判定">🌴 对象存活判定&lt;/h2>
+&lt;h3 id="-引用计数法">🪨 引用计数法&lt;/h3>
+&lt;p>给每个对象添加一个引用计数器：&lt;/p>
+&lt;ul>
+&lt;li>当有地方引用该对象，计数器 &lt;code>+1&lt;/code>&lt;/li>
+&lt;li>当引用失效，计数器 &lt;code>-1&lt;/code>&lt;/li>
+&lt;li>当计数器为 &lt;code>0&lt;/code> 时，表示对象不可用&lt;/li>
+&lt;/ul>
+&lt;p>该方法简单高效，但主流的虚拟机都没有选择该方法管理内存，难以解决对象之间循环引用的问题。&lt;/p>
+&lt;h3 id="-可达性分析法">🪨 可达性分析法&lt;/h3>
+&lt;p>通过一系列称为 &lt;code>GC Root&lt;/code> 的对象作为起点，从这些起点向下搜索，节点走过的路径称为引用链，当一个对象与 &lt;code>GC Root&lt;/code> 之间没有任何引用链相连的话，说明对象不可用，需要被回收。&lt;/p>
+&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/java/jvm/garbage-collection/gcroot.png"
+width="935"
+height="581"
+srcset="https://emerywan.github.io/blog/blog/p/java/jvm/garbage-collection/gcroot_hud8e4c62b0ef63778b91f8329965428a2_102739_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/java/jvm/garbage-collection/gcroot_hud8e4c62b0ef63778b91f8329965428a2_102739_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+alt="gcroot"
+class="gallery-image"
+data-flex-grow="160"
+data-flex-basis="386px"
+>&lt;/p>
+&lt;p>可以作为 &lt;code>GC Root&lt;/code> 的对象：&lt;/p>
+&lt;ul>
+&lt;li>虚拟机栈（栈帧中局部变量表）引用的对象&lt;/li>
+&lt;li>本地方法栈中引用的对象&lt;/li>
+&lt;li>类静态属性引用的对象&lt;/li>
+&lt;li>方法区中常量引用的对象&lt;/li>
+&lt;li>所有被同步锁（synchronized）持有的对象&lt;/li>
+&lt;/ul>
+&lt;!-- raw HTML omitted -->
+&lt;!-- raw HTML omitted -->
+&lt;h2 id="-垃圾回收算法">🌴 垃圾回收算法&lt;/h2>
+&lt;h3 id="-标记-清除">🪵 标记-清除&lt;/h3>
+&lt;ul>
+&lt;li>标记出所有需要回收的对象&lt;/li>
+&lt;li>标记结束后，统一回收掉所有被标记的对象&lt;/li>
+&lt;/ul>
+&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/java/jvm/garbage-collection/clear.png"
+width="962"
+height="488"
+srcset="https://emerywan.github.io/blog/blog/p/java/jvm/garbage-collection/clear_hu3ebff86a38831b55ce513a2b74335841_65435_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/java/jvm/garbage-collection/clear_hu3ebff86a38831b55ce513a2b74335841_65435_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+alt="clear"
+class="gallery-image"
+data-flex-grow="197"
+data-flex-basis="473px"
+>&lt;/p>
+&lt;ul>
+&lt;li>执行效率不稳定，大部分对象需要回收时，需要大量标记和清除操作&lt;/li>
+&lt;li>内存空间碎片化问题&lt;/li>
+&lt;/ul>
+&lt;h3 id="-标记-复制">🪵 标记-复制&lt;/h3>
+&lt;ul>
+&lt;li>将内存分为两块，每次只使用其中的一块&lt;/li>
+&lt;li>当一块内存使用完后，将存活的对象复制到另外一块去&lt;/li>
+&lt;li>将以使用的空间一次性清除掉&lt;/li>
+&lt;/ul>
+&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/java/jvm/garbage-collection/copy.png"
+width="955"
+height="495"
+srcset="https://emerywan.github.io/blog/blog/p/java/jvm/garbage-collection/copy_hu6b5a3b19d23e61d87d481fdc4629a5cf_68281_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/java/jvm/garbage-collection/copy_hu6b5a3b19d23e61d87d481fdc4629a5cf_68281_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+alt="copy"
+class="gallery-image"
+data-flex-grow="192"
+data-flex-basis="463px"
+>&lt;/p>
+&lt;ul>
+&lt;li>可用内存变少，有空间浪费问题&lt;/li>
+&lt;/ul>
+&lt;h3 id="-标记-整理">🪵 标记-整理&lt;/h3>
+&lt;ul>
+&lt;li>标记出所有需要回收的对象&lt;/li>
+&lt;li>让这些存活对象向内存的一端移动&lt;/li>
+&lt;li>直接清除掉边界以外的内存&lt;/li>
+&lt;/ul>
+&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/java/jvm/garbage-collection/move.png"
+width="944"
+height="480"
+srcset="https://emerywan.github.io/blog/blog/p/java/jvm/garbage-collection/move_hu0eec74bf9ebb0cbf4f6fd4cbe2be3a39_63153_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/java/jvm/garbage-collection/move_hu0eec74bf9ebb0cbf4f6fd4cbe2be3a39_63153_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+alt="move"
+class="gallery-image"
+data-flex-grow="196"
+data-flex-basis="472px"
+>&lt;/p>
+&lt;h3 id="-分代收集">🪵 分代收集&lt;/h3>
+&lt;p>根据对象存活周期的不同，将 Java 堆分为新生代和老年代，依据各个区域的特点，选择回收算法。&lt;/p>
+&lt;ul>
+&lt;li>在新生代中，每次收集都会有大量的对象死去，选择 &lt;code>标记-复制&lt;/code> 算法&lt;/li>
+&lt;li>在老年代中，存活对象的几率较高，没有额外的空间进行分配担保，选择 &lt;code>标记-清除&lt;/code> 或 &lt;code>标记-整理&lt;/code> 算法&lt;/li>
+&lt;/ul>
+&lt;h2 id="-垃圾收集方式">🌴 垃圾收集方式&lt;/h2>
+&lt;h3 id="-部分收集">🪨 部分收集&lt;/h3>
+&lt;p>收集堆部分区域。&lt;/p>
+&lt;ul>
+&lt;li>新生代收集 &lt;code>Minor GC / Young GC&lt;/code>&lt;/li>
+&lt;/ul>
+&lt;p>目标只是新生代的垃圾收集。&lt;/p>
+&lt;ul>
+&lt;li>老年代收集 &lt;code>Major GC / Old GC&lt;/code>&lt;/li>
+&lt;/ul>
+&lt;p>目标只是老年代的垃圾收集，目前只有 CMS 收集器会有单独收集老年代的行为。&lt;/p>
+&lt;ul>
+&lt;li>混合收集&lt;/li>
+&lt;/ul>
+&lt;p>目标是整个新生代和部分老年代的垃圾收集，目前只有 G1 收集器会有这种行为。&lt;/p>
+&lt;h3 id="-整堆收集">🪨 整堆收集&lt;/h3>
+&lt;p>收集整个堆和方法区。Full GC&lt;/p>
+&lt;ul>
+&lt;li>晋升到老年代的对象大于老年代的剩余空间&lt;/li>
+&lt;li>Minor GC 后，新生代存活对象超过了老年代的空间（分配担保）&lt;/li>
+&lt;li>手动 System.gc()&lt;/li>
+&lt;li>(Java8之前) 永久代空间不足&lt;/li>
+&lt;/ul>
+&lt;h2 id="-垃圾收集器">🌴 垃圾收集器&lt;/h2>
+&lt;h3 id="-serial--serial-old">🪵 Serial / Serial Old&lt;/h3>
+&lt;p>“单线程”的垃圾收集器，在进行垃圾收集时，必须暂停其他所有工作线程&lt;code>stop the world&lt;/code>，直到收集介绍。&lt;/p>
+&lt;ul>
+&lt;li>新生代采用标记-复制算法，老年代采用标记-整理算法&lt;/li>
+&lt;/ul>
+&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/java/jvm/garbage-collection/serial.png"
+width="953"
+height="209"
+srcset="https://emerywan.github.io/blog/blog/p/java/jvm/garbage-collection/serial_hu902bd566aebd83355bfe0e2769bbc345_79667_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/java/jvm/garbage-collection/serial_hu902bd566aebd83355bfe0e2769bbc345_79667_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+alt="serial"
+class="gallery-image"
+data-flex-grow="455"
+data-flex-basis="1094px"
+>&lt;/p>
+&lt;ul>
+&lt;li>简单高效&lt;/li>
+&lt;li>依旧是现在 HotSpot 虚拟机运行在客户端模式下的默认新生代垃圾回收方式&lt;/li>
+&lt;/ul>
+&lt;h3 id="-parnew">🪵 ParNew&lt;/h3>
+&lt;p>Serial 的多线程版本，可以使用多条线程进行垃圾回收（新生代）。&lt;/p>
+&lt;ul>
+&lt;li>采用标记复制算法&lt;/li>
+&lt;/ul>
+&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/java/jvm/garbage-collection/parnew.png"
+width="960"
+height="202"
+srcset="https://emerywan.github.io/blog/blog/p/java/jvm/garbage-collection/parnew_hub4e3375e7b496e8b6ebc251ec3bf2f26_87679_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/java/jvm/garbage-collection/parnew_hub4e3375e7b496e8b6ebc251ec3bf2f26_87679_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+alt="parnew"
+class="gallery-image"
+data-flex-grow="475"
+data-flex-basis="1140px"
+>&lt;/p>
+&lt;h3 id="-parallel-scavenge--parallel-old">🪵 Parallel Scavenge / Parallel Old&lt;/h3>
+&lt;ul>
+&lt;li>基于 标记-复制 算法实现的新生代垃圾收集器，能够并行收集的多线程收集器，目标是达到一个可控制的“吞吐量”&lt;/li>
+&lt;li>基于 标记-整理 算法实现的老年代多线程收集器。&lt;/li>
+&lt;/ul>
+&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/java/jvm/garbage-collection/parallel.png"
+width="934"
+height="199"
+srcset="https://emerywan.github.io/blog/blog/p/java/jvm/garbage-collection/parallel_hu519cfc57a4a5c97f5f81fc0feaeb8730_92362_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/java/jvm/garbage-collection/parallel_hu519cfc57a4a5c97f5f81fc0feaeb8730_92362_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+alt="parallel"
+class="gallery-image"
+data-flex-grow="469"
+data-flex-basis="1126px"
+>&lt;/p>
+&lt;ul>
+&lt;li>Java 8 默认的收集器为 Parallel Sacvenge + Parallel Old&lt;/li>
+&lt;/ul>
+&lt;h3 id="-cms">🪵 CMS&lt;/h3>
+&lt;p>&lt;code>Concurrent Mark Swap&lt;/code> 获取最短停顿时间的收集器。&lt;/p>
+&lt;p>是 HotSpot 虚拟机第一款真正意义上的垃圾收集器，实现了用户线程和垃圾回收线程同时工作。基于 标记-清除 算法。（老年代）&lt;/p>
+&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/java/jvm/garbage-collection/CMS.png"
+width="1121"
+height="230"
+srcset="https://emerywan.github.io/blog/blog/p/java/jvm/garbage-collection/CMS_hu7a65fd9981325c5387fcf294cec67078_167761_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/java/jvm/garbage-collection/CMS_hu7a65fd9981325c5387fcf294cec67078_167761_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+alt="CMS"
+class="gallery-image"
+data-flex-grow="487"
+data-flex-basis="1169px"
+>&lt;/p>
+&lt;p>CMS 收集器整个过程分为四个步骤：&lt;/p>
+&lt;ul>
+&lt;li>🐾 初始标记&lt;/li>
+&lt;/ul>
+&lt;p>标记与 GC Root 直接关联的对象。（stop the world）暂停用户线程，但速度较快。&lt;/p>
+&lt;ul>
+&lt;li>🐾 并发标记&lt;/li>
+&lt;/ul>
+&lt;p>用户线程和垃圾回收线程同时工作，从 GC Root 直接关联的对象开始遍历，根据可达性分析，找出存活对象。&lt;/p>
+&lt;ul>
+&lt;li>🐾 重新标记&lt;/li>
+&lt;/ul>
+&lt;p>修正并发标记过程中，由于程序继续运行，导致的标记错误。暂停用户线程。&lt;/p>
+&lt;ul>
+&lt;li>🐾 并发清除&lt;/li>
+&lt;/ul>
+&lt;p>并发地清理未被标记的区域。&lt;/p>
+&lt;p>缺点：&lt;/p>
+&lt;ul>
+&lt;li>对 CPU 资源敏感&lt;/li>
+&lt;li>无法处理浮动垃圾：运行过程中，有一些垃圾在当次无法处理，需要等待下次垃圾回收&lt;/li>
+&lt;li>会产生内存碎片，连续空间减少，导致 Full GC&lt;/li>
+&lt;/ul>
+&lt;h3 id="-g1">🪵 G1&lt;/h3>
+&lt;p>G1 开创了收集器面向局部收集的设计思路和基于 Region 的内存布局形式。&lt;/p>
+&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/java/jvm/garbage-collection/g1heap.png"
+width="902"
+height="676"
+srcset="https://emerywan.github.io/blog/blog/p/java/jvm/garbage-collection/g1heap_huc8187154c5204389b583a76e76e7dffa_88685_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/java/jvm/garbage-collection/g1heap_huc8187154c5204389b583a76e76e7dffa_88685_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+alt="g1heap"
+class="gallery-image"
+data-flex-grow="133"
+data-flex-basis="320px"
+>&lt;/p>
+&lt;p>将 Java 堆分为 2048 个大小相同的独立 Region，每个 Region 的大小依据堆空间的大小而定，在 JVM 生命周期中不会改变。&lt;/p>
+&lt;p>每个 Region 都可以更新需要，作为新生代的 Eden 区，Survivor 区，或者是老年代；新生代和老年代在内存中不是连续的空间，收集器会根据区域的不同采取不同的策略。&lt;/p>
+&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/java/jvm/garbage-collection/g1.png"
+width="941"
+height="209"
+srcset="https://emerywan.github.io/blog/blog/p/java/jvm/garbage-collection/g1_hu2c13cc7a5d500b4a818a8d3a4dfa26ed_139186_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/java/jvm/garbage-collection/g1_hu2c13cc7a5d500b4a818a8d3a4dfa26ed_139186_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+alt="g1"
+class="gallery-image"
+data-flex-grow="450"
+data-flex-basis="1080px"
+>&lt;/p>
+&lt;p>Region 中还会有一类特殊的巨大区域 Humongous，专门用来存储大对象。当对象的大小超过了一个 Region 的一半，就被判定为大对象。&lt;/p>
+&lt;p>G1 收集器回收的步骤：&lt;/p>
+&lt;ul>
+&lt;li>🐾 初始标记&lt;/li>
+&lt;/ul>
+&lt;p>标记 GC Root 能够直接关联到的对象，耗时较短。&lt;/p>
+&lt;ul>
+&lt;li>🐾 并发标记&lt;/li>
+&lt;/ul>
+&lt;p>从 GC Root 开始对堆中的对象进行可达性分析，找出需要回收的对象，与用户线程同时执行。&lt;/p>
+&lt;ul>
+&lt;li>🐾 最终标记&lt;/li>
+&lt;/ul>
+&lt;p>处理并发标记结束后，遗留的&lt;/p>
+&lt;ul>
+&lt;li>🐾 筛选回收&lt;/li>
+&lt;/ul>
+&lt;p>对各个 Region 的回收价值和成本进行排序，选择会后价值最大的区域进行回收。&lt;/p>
+&lt;p>将回收部分的 Region 中的存活对象，复制到空的 Region 中，再清理掉整个旧的 Region 区域。&lt;/p>
+&lt;p>涉及对象的移动，必须暂停用户线程，有多条垃圾收集器并发执行。&lt;/p>
+&lt;!-- raw HTML omitted -->
+&lt;h2 id="-对象分配和回收原则">🌴 对象分配和回收原则&lt;/h2>
+&lt;ul>
+&lt;li>🪨 对象优先在 Eden 区分配&lt;/li>
+&lt;/ul>
+&lt;p>大多数情况下，对象在新生代 Eden 区分配，当 Eden 区没有足够空间时，虚拟机会发起一次 Minor GC。&lt;/p>
+&lt;ul>
+&lt;li>🪨 大对象直接进入老年代&lt;/li>
+&lt;/ul>
+&lt;p>需要大量连续内存空间的 Java 对象（数组，很长的字符串），直接在老年代分配，避免在 Eden 区和两个 Survivor 区之间来回复制，产生大量的内存复制操作。&lt;/p>
+&lt;ul>
+&lt;li>🪨 长期存活的对象进入老年代&lt;/li>
+&lt;/ul>
+&lt;p>虚拟机给每个对象一个对象年龄计数器，每经过一次 MinorGC，年龄就会 +1，&lt;/p>
+&lt;p>当年龄增加到一定程度（默认 15），或某个年龄超过了 Survivor 区的一半时，会晋升到老年代。&lt;/p>
+&lt;ul>
+&lt;li>🪨 空间分配担保&lt;/li>
+&lt;/ul>
+&lt;p>确保在 Minor GC 之前，老年代还有容纳新生代所有对象的剩余空间。&lt;/p>
+&lt;p>进行一次 Minor GC 之后，Eden 区中任然存在大量对象，Survivor 中无法容纳，直接送到老年代，让老年代进行空间分配担保。&lt;/p></description></item><item><title>JVM 内存模型</title><link>https://emerywan.github.io/blog/p/java/jvm/memory-model/</link><pubDate>Sun, 07 Aug 2022 06:02:02 +0800</pubDate><guid>https://emerywan.github.io/blog/p/java/jvm/memory-model/</guid><description>&lt;img src="https://emerywan.github.io/blog/imgs/28.jpeg" alt="Featured image of post JVM 内存模型" />&lt;h2 id="jmm">JMM&lt;/h2>
+&lt;p>Java 内存模型屏蔽了不同操作系统和各种硬件的内存访问差异，实现了 Java 程序在各种平台下，都能达到一致性的访问效果。&lt;/p>
+&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/java/jvm/memory-model/JMM.png"
+width="613"
+height="530"
+srcset="https://emerywan.github.io/blog/blog/p/java/jvm/memory-model/JMM_hu7e11e9092393e4f5c6cb98b7857d5889_99528_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/java/jvm/memory-model/JMM_hu7e11e9092393e4f5c6cb98b7857d5889_99528_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+alt="JMM"
+class="gallery-image"
+data-flex-grow="115"
+data-flex-basis="277px"
+>&lt;/p>
+&lt;p>JMM 规定了：&lt;/p>
+&lt;ul>
+&lt;li>所有的变量都存储在主存中&lt;/li>
+&lt;li>每条线程有自己的工作内存&lt;/li>
+&lt;li>线程对变量的所有操作（读取、赋值等），都必须在工作内存中进行，不能直接读写主存中的数据&lt;/li>
+&lt;/ul>
+&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/java/jvm/memory-model/memory.png"
+width="942"
+height="383"
+srcset="https://emerywan.github.io/blog/blog/p/java/jvm/memory-model/memory_hue7fb17d3eb7c4a77bd28c7215dc28c3d_104935_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/java/jvm/memory-model/memory_hue7fb17d3eb7c4a77bd28c7215dc28c3d_104935_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+alt="memory"
+class="gallery-image"
+data-flex-grow="245"
+data-flex-basis="590px"
+>&lt;/p>
+&lt;h2 id="原子性可见性有序性">原子性、可见性、有序性&lt;/h2>
+&lt;p>Java 内存模型是围绕着在并发过程中如何处理原子性、可见性和有序性三个特征来建立的。&lt;/p>
+&lt;h3 id="原子性">原子性&lt;/h3>
+&lt;p>一次或多次操作，要么全部执行且不受到任何干扰，要么全不执行。&lt;/p>
+&lt;ul>
+&lt;li>利用锁，任一时刻只有一个线程访问代码块。&lt;code>synchronized&lt;/code> &lt;code>Lock&lt;/code>&lt;/li>
+&lt;li>利用 &lt;code>CAS&lt;/code> 原子类 保证原子操作&lt;/li>
+&lt;/ul>
+&lt;h3 id="可见性">可见性&lt;/h3>
+&lt;p>一个线程修改了共享变量的值，其他线程能够立即得知这个修改。&lt;/p>
+&lt;ul>
+&lt;li>&lt;code>volatile&lt;/code>&lt;/li>
+&lt;/ul>
+&lt;p>规定每次写操作，都立即同步到主存；每次读操作，都从主存中读取。&lt;/p>
+&lt;ul>
+&lt;li>&lt;code>synchronized&lt;/code> &lt;code>lock&lt;/code>&lt;/li>
+&lt;/ul>
+&lt;p>对一个变量执行执行 unlock 之前，必须把变量同步回主存中。&lt;/p>
+&lt;ul>
+&lt;li>&lt;code>final&lt;/code>&lt;/li>
+&lt;/ul>
+&lt;h3 id="有序性">有序性&lt;/h3>
+&lt;p>指令重排问题，代码的执行顺序不一定。&lt;/p>
+&lt;ul>
+&lt;li>&lt;code>volatile&lt;/code>&lt;/li>
+&lt;/ul>
+&lt;p>包含禁止指令重排序的语义。&lt;/p>
+&lt;ul>
+&lt;li>&lt;code>synchronized&lt;/code>&lt;/li>
+&lt;/ul>
+&lt;p>只有一条线程能够进入临界区。&lt;/p>
+&lt;h2 id="volatile">volatile&lt;/h2>
+&lt;p>Java 虚拟机提供的轻量级内存同步机制。&lt;/p>
+&lt;p>作用：&lt;/p>
+&lt;ul>
+&lt;li>保障了此变量对所有线程的可见性&lt;/li>
+&lt;/ul>
+&lt;p>volatile 的写操作，都会刷新到主内存中，并使其他线程中的 volatile 变量失效；volatile 的读操作，都会从主存中读取。&lt;/p>
+&lt;ul>
+&lt;li>
+&lt;p>禁止指令重排优化（有序性）&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>❗️无法保障原子性&lt;/p>
+&lt;/li>
+&lt;/ul>
+&lt;p>一条字节码在执行时，需要运行多条指令才能实现。&lt;/p>
+&lt;p>实现方式：内存屏障&lt;/p>
+&lt;p>保证：之前的执行一定全部执行，之后的指令一定都没有执行，并且前面语句的结果对后面的语句可见。&lt;/p>
+&lt;h2 id="happens-before">happens-before&lt;/h2>
+&lt;p>对于两个操作 A 和 B，这两个操作可以在不同的线程中执行。如果 A happens-before B（A 优先于 B 执行），那么可以保证，当 A 操作完后，A 的操作对于 B 操作是可见的。&lt;/p>
+&lt;p>指令重排提高了并发性能，但是 Java 虚拟机会对指令重排做一些规则限制，并不能让所有的指令都随意改变执行位置。&lt;/p>
+&lt;p>Java 内存模型天然的先行发生关系：&lt;/p>
+&lt;ul>
+&lt;li>程序顺序规则&lt;/li>
+&lt;/ul>
+&lt;p>在一个线程内，前面的代码操作优于后面的代码操作&lt;/p>
+&lt;ul>
+&lt;li>锁定规则&lt;/li>
+&lt;/ul>
+&lt;p>一个 unlock 操作优于后面对于同一个锁的 lock 操作&lt;/p>
+&lt;ul>
+&lt;li>volatile 规则&lt;/li>
+&lt;/ul>
+&lt;p>一个 volatile 变量的写操作，优于后面这个变量的读操作&lt;/p></description></item><item><title>类加载器</title><link>https://emerywan.github.io/blog/p/java/jvm/classloader/</link><pubDate>Sat, 06 Aug 2022 16:02:02 +0800</pubDate><guid>https://emerywan.github.io/blog/p/java/jvm/classloader/</guid><description>&lt;img src="https://emerywan.github.io/blog/imgs/25.jpeg" alt="Featured image of post 类加载器" />&lt;h2 id="类加载器">类加载器&lt;/h2>
 &lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/java/jvm/classloader/menu.png"
 width="1707"
 height="638"
