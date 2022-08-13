@@ -3,34 +3,56 @@
 </span><span class=lnt>2
 </span><span class=lnt>3
 </span><span class=lnt>4
-</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-java data-lang=java><span class=line><span class=cl><span class=k>for</span> <span class=o>(</span><span class=n>Map</span><span class=o>.</span><span class=na>Entry</span><span class=o>&lt;</span><span class=n>String</span><span class=o>,</span> <span class=n>String</span><span class=o>&gt;</span> <span class=n>entry</span> <span class=o>:</span> <span class=n>map</span><span class=o>.</span><span class=na>entrySet</span><span class=o>())</span> <span class=o>{</span>
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span><span class=lnt>7
+</span><span class=lnt>8
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-java data-lang=java><span class=line><span class=cl><span class=n>Set</span><span class=o>&lt;</span><span class=n>Map</span><span class=o>.</span><span class=na>Entry</span><span class=o>&lt;</span><span class=n>K</span><span class=o>,</span> <span class=n>V</span><span class=o>&gt;&gt;</span> <span class=nf>entrySet</span><span class=o>();</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1>// ---
+</span></span></span><span class=line><span class=cl><span class=c1></span>
+</span></span><span class=line><span class=cl><span class=k>for</span> <span class=o>(</span><span class=n>Map</span><span class=o>.</span><span class=na>Entry</span><span class=o>&lt;</span><span class=n>String</span><span class=o>,</span> <span class=n>String</span><span class=o>&gt;</span> <span class=n>entry</span> <span class=o>:</span> <span class=n>map</span><span class=o>.</span><span class=na>entrySet</span><span class=o>())</span> <span class=o>{</span>
 </span></span><span class=line><span class=cl>    <span class=n>String</span> <span class=n>key</span> <span class=o>=</span> <span class=n>entry</span><span class=o>.</span><span class=na>getKey</span><span class=o>();</span>
 </span></span><span class=line><span class=cl>    <span class=n>String</span> <span class=n>value</span> <span class=o>=</span> <span class=n>entry</span><span class=o>.</span><span class=na>getValue</span><span class=o>();</span>
 </span></span><span class=line><span class=cl><span class=o>}</span>
 </span></span></code></pre></td></tr></table></div></div><h4 id=keyset>KeySet</h4><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
 </span><span class=lnt>2
 </span><span class=lnt>3
-</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-java data-lang=java><span class=line><span class=cl><span class=k>for</span> <span class=o>(</span><span class=n>String</span> <span class=n>key</span> <span class=o>:</span> <span class=n>map</span><span class=o>.</span><span class=na>keySet</span><span class=o>())</span> <span class=o>{</span>
-</span></span><span class=line><span class=cl>    <span class=n>String</span> <span class=n>value</span> <span class=o>=</span> <span class=n>map</span><span class=o>.</span><span class=na>get</span><span class=o>(</span><span class=n>key</span><span class=o>);</span>
-</span></span><span class=line><span class=cl><span class=o>}</span>
-</span></span></code></pre></td></tr></table></div></div><h3 id=lambda>Lambda</h3><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
-</span><span class=lnt>2
-</span><span class=lnt>3
-</span><span class=lnt>4
-</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-java data-lang=java><span class=line><span class=cl><span class=n>map</span><span class=o>.</span><span class=na>forEach</span><span class=o>((</span><span class=n>key</span><span class=o>,</span> <span class=n>value</span><span class=o>)</span> <span class=o>-&gt;</span> <span class=o>{</span>
-</span></span><span class=line><span class=cl>    <span class=c1>// key
-</span></span></span><span class=line><span class=cl><span class=c1></span>    <span class=c1>// value
-</span></span></span><span class=line><span class=cl><span class=c1></span><span class=o>})</span>
-</span></span></code></pre></td></tr></table></div></div><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
-</span><span class=lnt>2
-</span><span class=lnt>3
 </span><span class=lnt>4
 </span><span class=lnt>5
+</span><span class=lnt>6
+</span><span class=lnt>7
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-java data-lang=java><span class=line><span class=cl><span class=n>Set</span><span class=o>&lt;</span><span class=n>K</span><span class=o>&gt;</span> <span class=nf>keySet</span><span class=o>();</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1>// ---
+</span></span></span><span class=line><span class=cl><span class=c1></span>
+</span></span><span class=line><span class=cl><span class=k>for</span> <span class=o>(</span><span class=n>String</span> <span class=n>key</span> <span class=o>:</span> <span class=n>map</span><span class=o>.</span><span class=na>keySet</span><span class=o>())</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>    <span class=n>String</span> <span class=n>value</span> <span class=o>=</span> <span class=n>map</span><span class=o>.</span><span class=na>get</span><span class=o>(</span><span class=n>key</span><span class=o>);</span>
+</span></span><span class=line><span class=cl><span class=o>}</span>
+</span></span></code></pre></td></tr></table></div></div><h3 id=lambda>Lambda</h3><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
 </span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-java data-lang=java><span class=line><span class=cl><span class=kd>public</span> <span class=kd>class</span> <span class=nc>HashMap</span><span class=o>&lt;</span><span class=n>K</span><span class=o>,</span><span class=n>V</span><span class=o>&gt;</span> <span class=kd>extends</span> <span class=n>AbstractMap</span><span class=o>&lt;</span><span class=n>K</span><span class=o>,</span><span class=n>V</span><span class=o>&gt;</span> <span class=kd>implements</span> <span class=n>Map</span><span class=o>&lt;</span><span class=n>K</span><span class=o>,</span><span class=n>V</span><span class=o>&gt;,</span> <span class=n>Cloneable</span><span class=o>,</span> <span class=n>Serializable</span> <span class=o>{</span>
 </span></span><span class=line><span class=cl>    <span class=nd>@Override</span>
 </span></span><span class=line><span class=cl>    <span class=kd>public</span> <span class=kt>void</span> <span class=nf>forEach</span><span class=o>(</span><span class=n>Biconsumer</span><span class=o>&lt;?</span> <span class=kd>super</span> <span class=n>K</span><span class=o>,</span> <span class=o>?</span> <span class=kd>super</span> <span class=n>V</span><span class=o>&gt;</span> <span class=n>action</span><span class=o>)</span> <span class=o>{</span>
 </span></span><span class=line><span class=cl>    <span class=o>}</span>
 </span></span><span class=line><span class=cl><span class=o>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1>// ---
+</span></span></span><span class=line><span class=cl><span class=c1></span>
+</span></span><span class=line><span class=cl><span class=n>map</span><span class=o>.</span><span class=na>forEach</span><span class=o>((</span><span class=n>key</span><span class=o>,</span> <span class=n>value</span><span class=o>)</span> <span class=o>-&gt;</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>    <span class=c1>// key
+</span></span></span><span class=line><span class=cl><span class=c1></span>    <span class=c1>// value
+</span></span></span><span class=line><span class=cl><span class=c1></span><span class=o>})</span>
 </span></span></code></pre></td></tr></table></div></div><h3 id=stream>Stream</h3><h4 id=steram>Steram</h4><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
 </span><span class=lnt>2
 </span><span class=lnt>3

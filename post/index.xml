@@ -468,7 +468,7 @@ data-flex-basis="590px"
 &lt;/ul>
 &lt;p>一条字节码在执行时，需要运行多条指令才能实现。&lt;/p>
 &lt;p>实现方式：内存屏障&lt;/p>
-&lt;p>保证：之前的执行一定全部执行，之后的指令一定都没有执行，并且前面语句的结果对后面的语句可见。&lt;/p>
+&lt;p>保证：之前的指令一定全部执行，之后的指令一定都没有执行，并且前面语句的结果对后面的语句可见。&lt;/p>
 &lt;h2 id="happens-before">happens-before&lt;/h2>
 &lt;p>对于两个操作 A 和 B，这两个操作可以在不同的线程中执行。如果 A happens-before B（A 优先于 B 执行），那么可以保证，当 A 操作完后，A 的操作对于 B 操作是可见的。&lt;/p>
 &lt;p>指令重排提高了并发性能，但是 Java 虚拟机会对指令重排做一些规则限制，并不能让所有的指令都随意改变执行位置。&lt;/p>
@@ -4217,7 +4217,7 @@ data-flex-basis="356px"
 &lt;p>AQS &lt;code>AbstractQueuedSynchronized&lt;/code> 是一个用来构建锁和同步器的框架，是对 CAS 的一种封装和丰富，AQS 引入了独占锁，共享锁等性质。&lt;/p>
 &lt;p>使用 AQS 能够基于 Java API，简单高效地构建出应用广泛的大量同步器，用于 Java 多线程之间的同步。&lt;/p>
 &lt;h2 id="核心思想">核心思想&lt;/h2>
-&lt;p>AQS 使用一个 &lt;code>int&lt;/code> 成员变量表示同步状态。&lt;/p>
+&lt;p>AQS 使用一个 &lt;code>volatile int&lt;/code> 成员变量表示同步状态。&lt;/p>
 &lt;p>使用 CAS 对该同步状态进行原子操作，实现对其值的修改。&lt;/p>
 &lt;div class="highlight">&lt;div class="chroma">
 &lt;table class="lntable">&lt;tr>&lt;td class="lntd">
@@ -4229,7 +4229,7 @@ data-flex-basis="356px"
 &lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span>&lt;span class="kd">private&lt;/span> &lt;span class="kd">volatile&lt;/span> &lt;span class="kt">int&lt;/span> &lt;span class="n">state&lt;/span>&lt;span class="o">;&lt;/span>
 &lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
 &lt;/div>
-&lt;/div>&lt;p>AQS 通过内置的 &lt;code>FIFO&lt;/code> 双向队列来完成获取资源线程的排队工作。&lt;/p>
+&lt;/div>&lt;p>AQS 通过内置的 &lt;code>FIFO&lt;/code> 双向队列来完成同步状态的管理，获取资源线程的排队工作。&lt;/p>
 &lt;div class="highlight">&lt;div class="chroma">
 &lt;table class="lntable">&lt;tr>&lt;td class="lntd">
 &lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
@@ -4241,7 +4241,7 @@ data-flex-basis="356px"
 &lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
 &lt;/div>
 &lt;/div>&lt;p>当请求的共享资源空闲时，将当前请求资源的线程设置为有效的工作线程，并将共享资源设置为锁定状态。&lt;/p>
-&lt;p>如果被请求的共享资源被占用，将暂时获取不到锁的线程加入到队列中。&lt;/p>
+&lt;p>如果被请求的共享资源被占用，将暂时获取不到锁的线程构造成一个 Node 加入到队列中。&lt;/p>
 &lt;h2 id="资源的共享方式">资源的共享方式&lt;/h2>
 &lt;h3 id="独占">独占&lt;/h3>
 &lt;p>当一个线程以独占模式获取锁时，其他任何线程都必须等待。&lt;/p>
@@ -4775,12 +4775,28 @@ data-flex-basis="173px"
 &lt;ul>
 &lt;li>
 &lt;p>基于 &lt;code>Object&lt;/code> 的悲观锁&lt;/p>
+&lt;ul>
+&lt;li>📝 适合于写多读少的场景。先加锁，保证写操作时的数据正确。&lt;/li>
+&lt;/ul>
 &lt;/li>
 &lt;li>
 &lt;p>基于 &lt;code>CAS&lt;/code> 的乐观锁&lt;/p>
+&lt;ul>
+&lt;li>📖 适合于读多写少的场景。不加锁，可以大幅提高读的性能。&lt;/li>
+&lt;/ul>
 &lt;/li>
 &lt;/ul>
-&lt;h2 id="悲观锁">悲观锁&lt;/h2>
+&lt;h2 id="-悲观锁">😢 悲观锁&lt;/h2>
+&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/thread/lock/pessimistic_lock.png"
+width="1203"
+height="435"
+srcset="https://emerywan.github.io/blog/blog/p/thread/lock/pessimistic_lock_hu0c6cbd403a1714d2f5c0f487acc85888_127050_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/thread/lock/pessimistic_lock_hu0c6cbd403a1714d2f5c0f487acc85888_127050_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+alt="pessimistic"
+class="gallery-image"
+data-flex-grow="276"
+data-flex-basis="663px"
+>&lt;/p>
 &lt;p>在 Java 中，每个对象（Object），都拥有一把锁，存放在对象头中，记录了当前对象被哪个线程所占用。&lt;/p>
 &lt;h3 id="内部锁-synchronized">内部锁 synchronized&lt;/h3>
 &lt;p>&lt;code>synchronized&lt;/code> 关键字可以用来同步线程，其被编译后，会生成 &lt;code>monitorenter&lt;/code> 和 &lt;code>moniterexit&lt;/code> 两个字节码指令，用来进行线程的同步。&lt;/p>
@@ -4862,7 +4878,17 @@ data-flex-basis="173px"
 &lt;/li>
 &lt;/ul>
 &lt;p>对象锁状态被标记为重量级锁，需要通过 Monitor 来对线程进行控制。&lt;/p>
-&lt;h2 id="乐观锁-cas">乐观锁 CAS&lt;/h2>
+&lt;h2 id="-乐观锁-cas">😁 乐观锁 CAS&lt;/h2>
+&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/thread/lock/optimistic_lock.png"
+width="1037"
+height="468"
+srcset="https://emerywan.github.io/blog/blog/p/thread/lock/optimistic_lock_hu036037785ffcb4d154b9171a46e6bd40_99684_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/thread/lock/optimistic_lock_hu036037785ffcb4d154b9171a46e6bd40_99684_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+alt="optimistic"
+class="gallery-image"
+data-flex-grow="221"
+data-flex-basis="531px"
+>&lt;/p>
 &lt;p>在一些情况下，同步代码块执行的时间远远小于线程切换的耗时。所以希望能够在用户态中对线程的切换进行管理，这样效率更高。&lt;/p>
 &lt;p>我们让线程“乐观地”反复尝试获取共享资源，当发现空闲时便进行使用，否则继续“乐观地”进行重试。&lt;/p>
 &lt;p>基于以上想法，诞生了 &lt;code>CAS (Compare And Swap)&lt;/code> 算法：比较并交换。&lt;/p>
@@ -5086,7 +5112,11 @@ data-flex-basis="173px"
 &lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span>&lt;span class="o">}&lt;/span>
 &lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
 &lt;/div>
-&lt;/div></description></item><item><title>Java并发 - 线程池</title><link>https://emerywan.github.io/blog/p/thread/threadpool/</link><pubDate>Wed, 30 Mar 2022 16:02:02 +0800</pubDate><guid>https://emerywan.github.io/blog/p/thread/threadpool/</guid><description>&lt;img src="https://emerywan.github.io/blog/imgs/9.jpeg" alt="Featured image of post Java并发 - 线程池" />&lt;h2 id="创建">创建&lt;/h2>
+&lt;/div>&lt;h2 id="参考">参考&lt;/h2>
+&lt;ul>
+&lt;li>&lt;a class="link" href="https://tech.meituan.com/2018/11/15/java-lock.html" target="_blank" rel="noopener"
+>https://tech.meituan.com/2018/11/15/java-lock.html&lt;/a>&lt;/li>
+&lt;/ul></description></item><item><title>Java并发 - 线程池</title><link>https://emerywan.github.io/blog/p/thread/threadpool/</link><pubDate>Wed, 30 Mar 2022 16:02:02 +0800</pubDate><guid>https://emerywan.github.io/blog/p/thread/threadpool/</guid><description>&lt;img src="https://emerywan.github.io/blog/imgs/9.jpeg" alt="Featured image of post Java并发 - 线程池" />&lt;h2 id="创建">创建&lt;/h2>
 &lt;div class="highlight">&lt;div class="chroma">
 &lt;table class="lntable">&lt;tr>&lt;td class="lntd">
 &lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
@@ -6981,9 +7011,17 @@ alt="7"
 &lt;/span>&lt;span class="lnt">2
 &lt;/span>&lt;span class="lnt">3
 &lt;/span>&lt;span class="lnt">4
+&lt;/span>&lt;span class="lnt">5
+&lt;/span>&lt;span class="lnt">6
+&lt;/span>&lt;span class="lnt">7
+&lt;/span>&lt;span class="lnt">8
 &lt;/span>&lt;/code>&lt;/pre>&lt;/td>
 &lt;td class="lntd">
-&lt;pre tabindex="0" class="chroma">&lt;code class="language-java" data-lang="java">&lt;span class="line">&lt;span class="cl">&lt;span class="k">for&lt;/span> &lt;span class="o">(&lt;/span>&lt;span class="n">Map&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">Entry&lt;/span>&lt;span class="o">&amp;lt;&lt;/span>&lt;span class="n">String&lt;/span>&lt;span class="o">,&lt;/span> &lt;span class="n">String&lt;/span>&lt;span class="o">&amp;gt;&lt;/span> &lt;span class="n">entry&lt;/span> &lt;span class="o">:&lt;/span> &lt;span class="n">map&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">entrySet&lt;/span>&lt;span class="o">())&lt;/span> &lt;span class="o">{&lt;/span>
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-java" data-lang="java">&lt;span class="line">&lt;span class="cl">&lt;span class="n">Set&lt;/span>&lt;span class="o">&amp;lt;&lt;/span>&lt;span class="n">Map&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">Entry&lt;/span>&lt;span class="o">&amp;lt;&lt;/span>&lt;span class="n">K&lt;/span>&lt;span class="o">,&lt;/span> &lt;span class="n">V&lt;/span>&lt;span class="o">&amp;gt;&amp;gt;&lt;/span> &lt;span class="nf">entrySet&lt;/span>&lt;span class="o">();&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">// ---
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="k">for&lt;/span> &lt;span class="o">(&lt;/span>&lt;span class="n">Map&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">Entry&lt;/span>&lt;span class="o">&amp;lt;&lt;/span>&lt;span class="n">String&lt;/span>&lt;span class="o">,&lt;/span> &lt;span class="n">String&lt;/span>&lt;span class="o">&amp;gt;&lt;/span> &lt;span class="n">entry&lt;/span> &lt;span class="o">:&lt;/span> &lt;span class="n">map&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">entrySet&lt;/span>&lt;span class="o">())&lt;/span> &lt;span class="o">{&lt;/span>
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">String&lt;/span> &lt;span class="n">key&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">entry&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">getKey&lt;/span>&lt;span class="o">();&lt;/span>
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">String&lt;/span> &lt;span class="n">value&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">entry&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">getValue&lt;/span>&lt;span class="o">();&lt;/span>
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">}&lt;/span>
@@ -6995,9 +7033,17 @@ alt="7"
 &lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
 &lt;/span>&lt;span class="lnt">2
 &lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;span class="lnt">4
+&lt;/span>&lt;span class="lnt">5
+&lt;/span>&lt;span class="lnt">6
+&lt;/span>&lt;span class="lnt">7
 &lt;/span>&lt;/code>&lt;/pre>&lt;/td>
 &lt;td class="lntd">
-&lt;pre tabindex="0" class="chroma">&lt;code class="language-java" data-lang="java">&lt;span class="line">&lt;span class="cl">&lt;span class="k">for&lt;/span> &lt;span class="o">(&lt;/span>&lt;span class="n">String&lt;/span> &lt;span class="n">key&lt;/span> &lt;span class="o">:&lt;/span> &lt;span class="n">map&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">keySet&lt;/span>&lt;span class="o">())&lt;/span> &lt;span class="o">{&lt;/span>
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-java" data-lang="java">&lt;span class="line">&lt;span class="cl">&lt;span class="n">Set&lt;/span>&lt;span class="o">&amp;lt;&lt;/span>&lt;span class="n">K&lt;/span>&lt;span class="o">&amp;gt;&lt;/span> &lt;span class="nf">keySet&lt;/span>&lt;span class="o">();&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">// ---
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="k">for&lt;/span> &lt;span class="o">(&lt;/span>&lt;span class="n">String&lt;/span> &lt;span class="n">key&lt;/span> &lt;span class="o">:&lt;/span> &lt;span class="n">map&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">keySet&lt;/span>&lt;span class="o">())&lt;/span> &lt;span class="o">{&lt;/span>
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">String&lt;/span> &lt;span class="n">value&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">map&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">get&lt;/span>&lt;span class="o">(&lt;/span>&lt;span class="n">key&lt;/span>&lt;span class="o">);&lt;/span>
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">}&lt;/span>
 &lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
@@ -7005,25 +7051,18 @@ alt="7"
 &lt;/div>&lt;h3 id="lambda">Lambda&lt;/h3>
 &lt;div class="highlight">&lt;div class="chroma">
 &lt;table class="lntable">&lt;tr>&lt;td class="lntd">
-&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
-&lt;/span>&lt;span class="lnt">2
-&lt;/span>&lt;span class="lnt">3
-&lt;/span>&lt;span class="lnt">4
-&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
-&lt;td class="lntd">
-&lt;pre tabindex="0" class="chroma">&lt;code class="language-java" data-lang="java">&lt;span class="line">&lt;span class="cl">&lt;span class="n">map&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">forEach&lt;/span>&lt;span class="o">((&lt;/span>&lt;span class="n">key&lt;/span>&lt;span class="o">,&lt;/span> &lt;span class="n">value&lt;/span>&lt;span class="o">)&lt;/span> &lt;span class="o">-&amp;gt;&lt;/span> &lt;span class="o">{&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c1">// key
-&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span> &lt;span class="c1">// value
-&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span>&lt;span class="o">})&lt;/span>
-&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
-&lt;/div>
-&lt;/div>&lt;div class="highlight">&lt;div class="chroma">
-&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
-&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
-&lt;/span>&lt;span class="lnt">2
-&lt;/span>&lt;span class="lnt">3
-&lt;/span>&lt;span class="lnt">4
-&lt;/span>&lt;span class="lnt">5
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;span class="lnt">11
+&lt;/span>&lt;span class="lnt">12
 &lt;/span>&lt;/code>&lt;/pre>&lt;/td>
 &lt;td class="lntd">
 &lt;pre tabindex="0" class="chroma">&lt;code class="language-java" data-lang="java">&lt;span class="line">&lt;span class="cl">&lt;span class="kd">public&lt;/span> &lt;span class="kd">class&lt;/span> &lt;span class="nc">HashMap&lt;/span>&lt;span class="o">&amp;lt;&lt;/span>&lt;span class="n">K&lt;/span>&lt;span class="o">,&lt;/span>&lt;span class="n">V&lt;/span>&lt;span class="o">&amp;gt;&lt;/span> &lt;span class="kd">extends&lt;/span> &lt;span class="n">AbstractMap&lt;/span>&lt;span class="o">&amp;lt;&lt;/span>&lt;span class="n">K&lt;/span>&lt;span class="o">,&lt;/span>&lt;span class="n">V&lt;/span>&lt;span class="o">&amp;gt;&lt;/span> &lt;span class="kd">implements&lt;/span> &lt;span class="n">Map&lt;/span>&lt;span class="o">&amp;lt;&lt;/span>&lt;span class="n">K&lt;/span>&lt;span class="o">,&lt;/span>&lt;span class="n">V&lt;/span>&lt;span class="o">&amp;gt;,&lt;/span> &lt;span class="n">Cloneable&lt;/span>&lt;span class="o">,&lt;/span> &lt;span class="n">Serializable&lt;/span> &lt;span class="o">{&lt;/span>
@@ -7031,6 +7070,13 @@ alt="7"
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kd">public&lt;/span> &lt;span class="kt">void&lt;/span> &lt;span class="nf">forEach&lt;/span>&lt;span class="o">(&lt;/span>&lt;span class="n">Biconsumer&lt;/span>&lt;span class="o">&amp;lt;?&lt;/span> &lt;span class="kd">super&lt;/span> &lt;span class="n">K&lt;/span>&lt;span class="o">,&lt;/span> &lt;span class="o">?&lt;/span> &lt;span class="kd">super&lt;/span> &lt;span class="n">V&lt;/span>&lt;span class="o">&amp;gt;&lt;/span> &lt;span class="n">action&lt;/span>&lt;span class="o">)&lt;/span> &lt;span class="o">{&lt;/span>
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="o">}&lt;/span>
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">// ---
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="n">map&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">forEach&lt;/span>&lt;span class="o">((&lt;/span>&lt;span class="n">key&lt;/span>&lt;span class="o">,&lt;/span> &lt;span class="n">value&lt;/span>&lt;span class="o">)&lt;/span> &lt;span class="o">-&amp;gt;&lt;/span> &lt;span class="o">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c1">// key
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span> &lt;span class="c1">// value
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span>&lt;span class="o">})&lt;/span>
 &lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
 &lt;/div>
 &lt;/div>&lt;h3 id="stream">Stream&lt;/h3>
