@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Spring Cloud on 一层</title><link>https://emerywan.github.io/blog/tags/spring-cloud/</link><description>Recent content in Spring Cloud on 一层</description><generator>Hugo -- gohugo.io</generator><lastBuildDate>Wed, 29 Jul 2020 21:14:45 +0800</lastBuildDate><atom:link href="https://emerywan.github.io/blog/tags/spring-cloud/index.xml" rel="self" type="application/rss+xml"/><item><title>Spring Cloud Hystrix 服务容错</title><link>https://emerywan.github.io/blog/p/spring-cloud-hystrix/</link><pubDate>Wed, 29 Jul 2020 21:14:45 +0800</pubDate><guid>https://emerywan.github.io/blog/p/spring-cloud-hystrix/</guid><description>&lt;h1 id="spring-cloud-hystrix">Spring Cloud Hystrix&lt;/h1>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Spring Cloud on 一层</title><link>https://blog.letout.cn/tags/spring-cloud/</link><description>Recent content in Spring Cloud on 一层</description><generator>Hugo -- gohugo.io</generator><language>zh-cn</language><lastBuildDate>Wed, 29 Jul 2020 21:14:45 +0800</lastBuildDate><atom:link href="https://blog.letout.cn/tags/spring-cloud/index.xml" rel="self" type="application/rss+xml"/><item><title>Spring Cloud Hystrix 服务容错</title><link>https://blog.letout.cn/p/spring-cloud-hystrix/</link><pubDate>Wed, 29 Jul 2020 21:14:45 +0800</pubDate><guid>https://blog.letout.cn/p/spring-cloud-hystrix/</guid><description>&lt;h1 id="spring-cloud-hystrix">Spring Cloud Hystrix&lt;/h1>
 &lt;p>在微服务架构中，我们将系统拆分成了一个个的服务单元，各单元应用间通过服务注册与订阅的方式互相依赖。由于每个单元都在不同的进程中运行，如果某个服务不可用，可能导致级联故障，造成整个系统不可用的情况（雪崩效应）。为了解决这样的问题，产生了断路器等一系列的服务保护机制。&lt;/p>
 &lt;h1 id="简介">简介&lt;/h1>
 &lt;p>Spring Cloud Hystrix，它是一个基于 Netflix 的开源框架，具有如下功能：&lt;/p>
@@ -196,7 +196,7 @@
 docker通过”舱壁模式”实现进程隔离，使得容器之间互不影响。
 而Hystrix使用该模式实现：“线程池隔离”，会为每一个HystrixCommand创建一个独立线程池，这样就算某个在Hystrix包装下的依赖服务出现延迟过高情况，也只是对该依赖服务的调用产生影响，并不会拖慢其他服务。&lt;/p>
 &lt;p>使用 @HystrixCommand 来将某个函数包装成了 Hystrix 命令时，Hystrix框架自动地为这个函数实现了依赖隔离。所以依赖隔离，服务降级在使用时候都是一体化实现的，这样就可以实现服务容错保护。在编程模型上就会非常方便。&lt;/p>
-&lt;h2 id="服务熔断">服务熔断&lt;/h2></description></item><item><title>Spring Cloud Zuul 服务网关</title><link>https://emerywan.github.io/blog/p/spring-cloud-zuul/</link><pubDate>Tue, 28 Jul 2020 15:14:45 +0800</pubDate><guid>https://emerywan.github.io/blog/p/spring-cloud-zuul/</guid><description>&lt;h1 id="spring-cloud-zuul">Spring Cloud Zuul&lt;/h1>
+&lt;h2 id="服务熔断">服务熔断&lt;/h2></description></item><item><title>Spring Cloud Zuul 服务网关</title><link>https://blog.letout.cn/p/spring-cloud-zuul/</link><pubDate>Tue, 28 Jul 2020 15:14:45 +0800</pubDate><guid>https://blog.letout.cn/p/spring-cloud-zuul/</guid><description>&lt;h1 id="spring-cloud-zuul">Spring Cloud Zuul&lt;/h1>
 &lt;p>在微服务架构中，后端服务往往不直接开放给调用端，而是通过一个API网关根据请求的url，路由到相应的服务。
 当添加API网关后，在第三方调用端和服务提供方之间就创建了一面墙，这面墙直接与调用方通信进行权限控制，后将请求均衡分发给后台服务端。
 Spring Cloud Zuul 是一个基于JVM路由和服务端的负载均衡器，提供动态路由，监控，弹性，安全等的边缘服务。&lt;/p>
@@ -398,10 +398,10 @@ Spring Cloud Zuul 是一个基于JVM路由和服务端的负载均衡器，提�
 &lt;/ul>
 &lt;/li>
 &lt;/ul>
-&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/spring-cloud-zuul/zuul-core.png"
+&lt;p>&lt;img src="https://blog.letout.cn/p/spring-cloud-zuul/zuul-core.png"
 width="921"
 height="566"
-srcset="https://emerywan.github.io/blog/blog/p/spring-cloud-zuul/zuul-core_hu334c91cd99c88cb1ff369a39dfc29056_46538_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/spring-cloud-zuul/zuul-core_hu334c91cd99c88cb1ff369a39dfc29056_46538_1024x0_resize_box_3.png 1024w"
+srcset="https://blog.letout.cn/p/spring-cloud-zuul/zuul-core_hu334c91cd99c88cb1ff369a39dfc29056_46538_480x0_resize_box_3.png 480w, https://blog.letout.cn/p/spring-cloud-zuul/zuul-core_hu334c91cd99c88cb1ff369a39dfc29056_46538_1024x0_resize_box_3.png 1024w"
 loading="lazy"
 alt="zuul-core"
 class="gallery-image"
@@ -472,10 +472,10 @@ data-flex-basis="390px"
 &lt;p>限流在前置过滤器（pre）前使用，在请求被转发前调用，且优先级最高。&lt;/p>
 &lt;p>令牌桶限流示例。令牌桶算法能够在限制数据的平均传输速率的同时还允许某种程度的突发传输。&lt;/p>
 &lt;p>令牌桶算法会以一个恒定的速度往桶里放入令牌，而如果请求需要被处理，则需要先从桶里获取一个令牌，当桶里没有令牌可取时，则拒绝服务。&lt;/p>
-&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/spring-cloud-zuul/token-bucket.png"
+&lt;p>&lt;img src="https://blog.letout.cn/p/spring-cloud-zuul/token-bucket.png"
 width="595"
 height="428"
-srcset="https://emerywan.github.io/blog/blog/p/spring-cloud-zuul/token-bucket_hu1695d7ffe20c41b60543bc6e8b7c644d_101106_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/spring-cloud-zuul/token-bucket_hu1695d7ffe20c41b60543bc6e8b7c644d_101106_1024x0_resize_box_3.png 1024w"
+srcset="https://blog.letout.cn/p/spring-cloud-zuul/token-bucket_hu1695d7ffe20c41b60543bc6e8b7c644d_101106_480x0_resize_box_3.png 480w, https://blog.letout.cn/p/spring-cloud-zuul/token-bucket_hu1695d7ffe20c41b60543bc6e8b7c644d_101106_1024x0_resize_box_3.png 1024w"
 loading="lazy"
 alt="token-bucket"
 class="gallery-image"
@@ -678,7 +678,7 @@ data-flex-basis="333px"
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">}&lt;/span>
 &lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
 &lt;/div>
-&lt;/div></description></item><item><title>Spring Cloud Config 统一配置中心</title><link>https://emerywan.github.io/blog/p/spring-cloud-config/</link><pubDate>Mon, 27 Jul 2020 12:14:45 +0800</pubDate><guid>https://emerywan.github.io/blog/p/spring-cloud-config/</guid><description>&lt;h1 id="spring-cloud-config">Spring Cloud Config&lt;/h1>
+&lt;/div></description></item><item><title>Spring Cloud Config 统一配置中心</title><link>https://blog.letout.cn/p/spring-cloud-config/</link><pubDate>Mon, 27 Jul 2020 12:14:45 +0800</pubDate><guid>https://blog.letout.cn/p/spring-cloud-config/</guid><description>&lt;h1 id="spring-cloud-config">Spring Cloud Config&lt;/h1>
 &lt;p>Spring Cloud Config 是一个解决分布式系统的配置管理方案。&lt;/p>
 &lt;ul>
 &lt;li>Server
@@ -974,7 +974,7 @@ data-flex-basis="333px"
 &lt;/ul>
 &lt;h2 id="webhook">WebHook&lt;/h2>
 &lt;p>WebHook 是当某个事件发生时，通过发送 http post 请求的方式来通知信息接收方。&lt;/p>
-&lt;p>通过创建 WebHook 即可自动触发 POST 请求，让客户端动态刷新配置。&lt;/p></description></item><item><title>Spring Cloud 服务通信</title><link>https://emerywan.github.io/blog/p/spring-cloud-openfeign/</link><pubDate>Sun, 26 Jul 2020 21:14:45 +0800</pubDate><guid>https://emerywan.github.io/blog/p/spring-cloud-openfeign/</guid><description>&lt;h1 id="spring-cloud-服务通信">Spring Cloud 服务通信&lt;/h1>
+&lt;p>通过创建 WebHook 即可自动触发 POST 请求，让客户端动态刷新配置。&lt;/p></description></item><item><title>Spring Cloud 服务通信</title><link>https://blog.letout.cn/p/spring-cloud-openfeign/</link><pubDate>Sun, 26 Jul 2020 21:14:45 +0800</pubDate><guid>https://blog.letout.cn/p/spring-cloud-openfeign/</guid><description>&lt;h1 id="spring-cloud-服务通信">Spring Cloud 服务通信&lt;/h1>
 &lt;ul>
 &lt;li>
 &lt;p>同步通信：&lt;/p>
@@ -1205,7 +1205,7 @@ data-flex-basis="333px"
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">}&lt;/span>
 &lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
 &lt;/div>
-&lt;/div></description></item><item><title>Spring Cloud Eureka 服务注册与发现</title><link>https://emerywan.github.io/blog/p/spring-cloud-eureka/</link><pubDate>Sat, 25 Jul 2020 13:14:45 +0800</pubDate><guid>https://emerywan.github.io/blog/p/spring-cloud-eureka/</guid><description>&lt;h1 id="eureka-找到啦">Eureka 找到啦！&lt;/h1>
+&lt;/div></description></item><item><title>Spring Cloud Eureka 服务注册与发现</title><link>https://blog.letout.cn/p/spring-cloud-eureka/</link><pubDate>Sat, 25 Jul 2020 13:14:45 +0800</pubDate><guid>https://blog.letout.cn/p/spring-cloud-eureka/</guid><description>&lt;h1 id="eureka-找到啦">Eureka 找到啦！&lt;/h1>
 &lt;p>服务注册与发现&lt;/p>
 &lt;h1 id="简介">简介&lt;/h1>
 &lt;ul>
@@ -1218,10 +1218,10 @@ data-flex-basis="333px"
 &lt;/li>
 &lt;/ul>
 &lt;p>Eureka 采用了&lt;strong>客户端发现&lt;/strong>的方式，在服务运行时，通过(轮训、hash等负载均衡机制等方式)注册中心找到需要服务（即 A 通过 注册中心 找 B，需要谁找谁）。&lt;/p>
-&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/spring-cloud-eureka/eureka-server-discovery.png"
+&lt;p>&lt;img src="https://blog.letout.cn/p/spring-cloud-eureka/eureka-server-discovery.png"
 width="1202"
 height="571"
-srcset="https://emerywan.github.io/blog/blog/p/spring-cloud-eureka/eureka-server-discovery_huebe0236b66186033cdf1592e4bf67abe_104496_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/spring-cloud-eureka/eureka-server-discovery_huebe0236b66186033cdf1592e4bf67abe_104496_1024x0_resize_box_3.png 1024w"
+srcset="https://blog.letout.cn/p/spring-cloud-eureka/eureka-server-discovery_huebe0236b66186033cdf1592e4bf67abe_104496_480x0_resize_box_3.png 480w, https://blog.letout.cn/p/spring-cloud-eureka/eureka-server-discovery_huebe0236b66186033cdf1592e4bf67abe_104496_1024x0_resize_box_3.png 1024w"
 loading="lazy"
 alt="eureka-server-discovery"
 class="gallery-image"
@@ -1376,20 +1376,20 @@ data-flex-basis="505px"
 &lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
 &lt;/div>
 &lt;/div>&lt;p>启动程序后，通过 http://localhost:8761/ 和 http://localhost:8762/ 都可访问 Eureka 界面。并且可以看到另一个节点信息节点的信息。&lt;/p>
-&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/spring-cloud-eureka/eureka-server-cluster-1.png"
+&lt;p>&lt;img src="https://blog.letout.cn/p/spring-cloud-eureka/eureka-server-cluster-1.png"
 width="1849"
 height="596"
-srcset="https://emerywan.github.io/blog/blog/p/spring-cloud-eureka/eureka-server-cluster-1_huba86fcdb4b5d0d0d30bd35cfb721e86e_55103_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/spring-cloud-eureka/eureka-server-cluster-1_huba86fcdb4b5d0d0d30bd35cfb721e86e_55103_1024x0_resize_box_3.png 1024w"
+srcset="https://blog.letout.cn/p/spring-cloud-eureka/eureka-server-cluster-1_huba86fcdb4b5d0d0d30bd35cfb721e86e_55103_480x0_resize_box_3.png 480w, https://blog.letout.cn/p/spring-cloud-eureka/eureka-server-cluster-1_huba86fcdb4b5d0d0d30bd35cfb721e86e_55103_1024x0_resize_box_3.png 1024w"
 loading="lazy"
 alt="eureka-server-cluster-1"
 class="gallery-image"
 data-flex-grow="310"
 data-flex-basis="744px"
 >&lt;/p>
-&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/spring-cloud-eureka/eureka-server-cluster-2.png"
+&lt;p>&lt;img src="https://blog.letout.cn/p/spring-cloud-eureka/eureka-server-cluster-2.png"
 width="1745"
 height="582"
-srcset="https://emerywan.github.io/blog/blog/p/spring-cloud-eureka/eureka-server-cluster-2_hu2962bd37558dde85fe30af951e20dc3b_54772_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/spring-cloud-eureka/eureka-server-cluster-2_hu2962bd37558dde85fe30af951e20dc3b_54772_1024x0_resize_box_3.png 1024w"
+srcset="https://blog.letout.cn/p/spring-cloud-eureka/eureka-server-cluster-2_hu2962bd37558dde85fe30af951e20dc3b_54772_480x0_resize_box_3.png 480w, https://blog.letout.cn/p/spring-cloud-eureka/eureka-server-cluster-2_hu2962bd37558dde85fe30af951e20dc3b_54772_1024x0_resize_box_3.png 1024w"
 loading="lazy"
 alt="eureka-server-cluster-2"
 class="gallery-image"
@@ -1565,10 +1565,10 @@ data-flex-basis="719px"
 &lt;/div>
 &lt;/div>&lt;h3 id="4-启动程序-1">4. 启动程序&lt;/h3>
 &lt;p>启动程序后，进入 Eureka 页面 http://localhost:8761/eureka/，即可看到注册的服务 eureka-client。&lt;/p>
-&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/spring-cloud-eureka/eureka-client.png"
+&lt;p>&lt;img src="https://blog.letout.cn/p/spring-cloud-eureka/eureka-client.png"
 width="1888"
 height="356"
-srcset="https://emerywan.github.io/blog/blog/p/spring-cloud-eureka/eureka-client_hu7c72d91007eb8a4a1109447929086548_37277_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/spring-cloud-eureka/eureka-client_hu7c72d91007eb8a4a1109447929086548_37277_1024x0_resize_box_3.png 1024w"
+srcset="https://blog.letout.cn/p/spring-cloud-eureka/eureka-client_hu7c72d91007eb8a4a1109447929086548_37277_480x0_resize_box_3.png 480w, https://blog.letout.cn/p/spring-cloud-eureka/eureka-client_hu7c72d91007eb8a4a1109447929086548_37277_1024x0_resize_box_3.png 1024w"
 loading="lazy"
 alt="eureka-client"
 class="gallery-image"

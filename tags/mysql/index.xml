@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>MySQL on 一层</title><link>https://emerywan.github.io/blog/tags/mysql/</link><description>Recent content in MySQL on 一层</description><generator>Hugo -- gohugo.io</generator><lastBuildDate>Sun, 31 Jul 2022 13:02:02 +0800</lastBuildDate><atom:link href="https://emerywan.github.io/blog/tags/mysql/index.xml" rel="self" type="application/rss+xml"/><item><title>InnoDB 存储引擎</title><link>https://emerywan.github.io/blog/p/mysql/innodb/</link><pubDate>Sun, 31 Jul 2022 13:02:02 +0800</pubDate><guid>https://emerywan.github.io/blog/p/mysql/innodb/</guid><description>&lt;img src="https://emerywan.github.io/blog/imgs/23.jpeg" alt="Featured image of post InnoDB 存储引擎" />&lt;h2 id="事务">事务&lt;/h2>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>MySQL on 一层</title><link>https://blog.letout.cn/tags/mysql/</link><description>Recent content in MySQL on 一层</description><generator>Hugo -- gohugo.io</generator><language>zh-cn</language><lastBuildDate>Sun, 31 Jul 2022 13:02:02 +0800</lastBuildDate><atom:link href="https://blog.letout.cn/tags/mysql/index.xml" rel="self" type="application/rss+xml"/><item><title>InnoDB 存储引擎</title><link>https://blog.letout.cn/p/mysql/innodb/</link><pubDate>Sun, 31 Jul 2022 13:02:02 +0800</pubDate><guid>https://blog.letout.cn/p/mysql/innodb/</guid><description>&lt;img src="https://blog.letout.cn/imgs/23.jpeg" alt="Featured image of post InnoDB 存储引擎" />&lt;h2 id="事务">事务&lt;/h2>
 &lt;p>事务是一组逻辑上的数据库操作，这些操作要么全部成功，要么全部失败。&lt;/p>
 &lt;h3 id="特性">特性&lt;/h3>
 &lt;ul>
@@ -15,10 +15,10 @@
 &lt;p>持久性：事务一旦提交或回滚，它对数据库中的数据的改变就是永久的。&lt;/p>
 &lt;/li>
 &lt;/ul>
-&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/mysql/innodb/1.png"
+&lt;p>&lt;img src="https://blog.letout.cn/p/mysql/innodb/1.png"
 width="869"
 height="333"
-srcset="https://emerywan.github.io/blog/blog/p/mysql/innodb/1_hu3fd49fc1a58d123f3498503f7ff7204f_68265_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/mysql/innodb/1_hu3fd49fc1a58d123f3498503f7ff7204f_68265_1024x0_resize_box_3.png 1024w"
+srcset="https://blog.letout.cn/p/mysql/innodb/1_hu3fd49fc1a58d123f3498503f7ff7204f_68265_480x0_resize_box_3.png 480w, https://blog.letout.cn/p/mysql/innodb/1_hu3fd49fc1a58d123f3498503f7ff7204f_68265_1024x0_resize_box_3.png 1024w"
 loading="lazy"
 alt="1"
 class="gallery-image"
@@ -27,10 +27,10 @@ data-flex-basis="626px"
 >&lt;/p>
 &lt;h2 id="redo-log">redo log&lt;/h2>
 &lt;p>重做日志，记录的是“某个数据页上做了什么修改”。属于物理日志。&lt;/p>
-&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/mysql/innodb/redolog.png"
+&lt;p>&lt;img src="https://blog.letout.cn/p/mysql/innodb/redolog.png"
 width="889"
 height="359"
-srcset="https://emerywan.github.io/blog/blog/p/mysql/innodb/redolog_huec6805565d40a88bf7c70b51e3ee84c7_38212_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/mysql/innodb/redolog_huec6805565d40a88bf7c70b51e3ee84c7_38212_1024x0_resize_box_3.png 1024w"
+srcset="https://blog.letout.cn/p/mysql/innodb/redolog_huec6805565d40a88bf7c70b51e3ee84c7_38212_480x0_resize_box_3.png 480w, https://blog.letout.cn/p/mysql/innodb/redolog_huec6805565d40a88bf7c70b51e3ee84c7_38212_1024x0_resize_box_3.png 1024w"
 loading="lazy"
 alt="redolog"
 class="gallery-image"
@@ -63,10 +63,10 @@ data-flex-basis="594px"
 &lt;li>undo log&lt;/li>
 &lt;li>readview&lt;/li>
 &lt;/ul>
-&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/mysql/innodb/2.png"
+&lt;p>&lt;img src="https://blog.letout.cn/p/mysql/innodb/2.png"
 width="447"
 height="293"
-srcset="https://emerywan.github.io/blog/blog/p/mysql/innodb/2_hu6914e1ba0252a0a630b3ee48cb8867a4_30147_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/mysql/innodb/2_hu6914e1ba0252a0a630b3ee48cb8867a4_30147_1024x0_resize_box_3.png 1024w"
+srcset="https://blog.letout.cn/p/mysql/innodb/2_hu6914e1ba0252a0a630b3ee48cb8867a4_30147_480x0_resize_box_3.png 480w, https://blog.letout.cn/p/mysql/innodb/2_hu6914e1ba0252a0a630b3ee48cb8867a4_30147_1024x0_resize_box_3.png 1024w"
 loading="lazy"
 alt="2"
 class="gallery-image"
@@ -80,11 +80,11 @@ data-flex-basis="366px"
 &lt;p>简单的不加锁 &lt;code>select&lt;/code> 就是快照读。读取的是快照版本，通过 MVCC 进行并发控制。&lt;/p>
 &lt;h2 id="一致性">一致性&lt;/h2>
 &lt;p>数据库通过原子性、隔离性、持久性来保证一致性。&lt;/p>
-&lt;p>C(一致性)是目的，A(原子性)、I(隔离性)、D(持久性)是是为了保证一致性，数据库提供的手段。&lt;/p></description></item><item><title>MySQL 存储引擎</title><link>https://emerywan.github.io/blog/p/mysql/engine/</link><pubDate>Fri, 29 Jul 2022 19:02:02 +0800</pubDate><guid>https://emerywan.github.io/blog/p/mysql/engine/</guid><description>&lt;img src="https://emerywan.github.io/blog/imgs/22.jpeg" alt="Featured image of post MySQL 存储引擎" />&lt;h2 id="mysql-体系结构">MySQL 体系结构&lt;/h2>
-&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/mysql/engine/1.png"
+&lt;p>C(一致性)是目的，A(原子性)、I(隔离性)、D(持久性)是是为了保证一致性，数据库提供的手段。&lt;/p></description></item><item><title>MySQL 存储引擎</title><link>https://blog.letout.cn/p/mysql/engine/</link><pubDate>Fri, 29 Jul 2022 19:02:02 +0800</pubDate><guid>https://blog.letout.cn/p/mysql/engine/</guid><description>&lt;img src="https://blog.letout.cn/imgs/22.jpeg" alt="Featured image of post MySQL 存储引擎" />&lt;h2 id="mysql-体系结构">MySQL 体系结构&lt;/h2>
+&lt;p>&lt;img src="https://blog.letout.cn/p/mysql/engine/1.png"
 width="1176"
 height="639"
-srcset="https://emerywan.github.io/blog/blog/p/mysql/engine/1_hu5b4a85ab8f594ef5edc02d326d256cb0_206182_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/mysql/engine/1_hu5b4a85ab8f594ef5edc02d326d256cb0_206182_1024x0_resize_box_3.png 1024w"
+srcset="https://blog.letout.cn/p/mysql/engine/1_hu5b4a85ab8f594ef5edc02d326d256cb0_206182_480x0_resize_box_3.png 480w, https://blog.letout.cn/p/mysql/engine/1_hu5b4a85ab8f594ef5edc02d326d256cb0_206182_1024x0_resize_box_3.png 1024w"
 loading="lazy"
 alt="1"
 class="gallery-image"
@@ -125,10 +125,10 @@ data-flex-basis="441px"
 &lt;li>支持外键约束，保证数据的完整性和正确性&lt;/li>
 &lt;/ul>
 &lt;p>InnoDB 的逻辑存储结构：&lt;/p>
-&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/mysql/engine/innodb.png"
+&lt;p>&lt;img src="https://blog.letout.cn/p/mysql/engine/innodb.png"
 width="1207"
 height="503"
-srcset="https://emerywan.github.io/blog/blog/p/mysql/engine/innodb_hu255dad38c999e36f2d3fd079c10a9f22_82479_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/mysql/engine/innodb_hu255dad38c999e36f2d3fd079c10a9f22_82479_1024x0_resize_box_3.png 1024w"
+srcset="https://blog.letout.cn/p/mysql/engine/innodb_hu255dad38c999e36f2d3fd079c10a9f22_82479_480x0_resize_box_3.png 480w, https://blog.letout.cn/p/mysql/engine/innodb_hu255dad38c999e36f2d3fd079c10a9f22_82479_1024x0_resize_box_3.png 1024w"
 loading="lazy"
 alt="innodb"
 class="gallery-image"
@@ -182,7 +182,7 @@ data-flex-basis="575px"
 &lt;p>文件：&lt;/p>
 &lt;ul>
 &lt;li>.sdi 存储表结构信息&lt;/li>
-&lt;/ul></description></item><item><title>MySQL 优化</title><link>https://emerywan.github.io/blog/p/mysql/sql-optimize/</link><pubDate>Fri, 01 Jul 2022 18:02:02 +0800</pubDate><guid>https://emerywan.github.io/blog/p/mysql/sql-optimize/</guid><description>&lt;img src="https://emerywan.github.io/blog/imgs/20.jpeg" alt="Featured image of post MySQL 优化" />&lt;h2 id="insert-优化">insert 优化&lt;/h2>
+&lt;/ul></description></item><item><title>MySQL 优化</title><link>https://blog.letout.cn/p/mysql/sql-optimize/</link><pubDate>Fri, 01 Jul 2022 18:02:02 +0800</pubDate><guid>https://blog.letout.cn/p/mysql/sql-optimize/</guid><description>&lt;img src="https://blog.letout.cn/imgs/20.jpeg" alt="Featured image of post MySQL 优化" />&lt;h2 id="insert-优化">insert 优化&lt;/h2>
 &lt;p>一次性往数据库中插入多条数据，可从以下三方面优化：&lt;/p>
 &lt;ul>
 &lt;li>批量插入数据&lt;/li>
@@ -241,20 +241,20 @@ data-flex-basis="575px"
 &lt;p>页可以为空，也可以填充一半，也可以填充100%。每个页包含了 2-N 行数据(如果一行数据过大，会行
 溢出)，根据主键排列。&lt;/p>
 &lt;p>乱序插入：&lt;/p>
-&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/mysql/sql-optimize/primary_index_1.png"
+&lt;p>&lt;img src="https://blog.letout.cn/p/mysql/sql-optimize/primary_index_1.png"
 width="898"
 height="636"
-srcset="https://emerywan.github.io/blog/blog/p/mysql/sql-optimize/primary_index_1_hu563b35cba82cad8802163900e924e8ca_143837_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/mysql/sql-optimize/primary_index_1_hu563b35cba82cad8802163900e924e8ca_143837_1024x0_resize_box_3.png 1024w"
+srcset="https://blog.letout.cn/p/mysql/sql-optimize/primary_index_1_hu563b35cba82cad8802163900e924e8ca_143837_480x0_resize_box_3.png 480w, https://blog.letout.cn/p/mysql/sql-optimize/primary_index_1_hu563b35cba82cad8802163900e924e8ca_143837_1024x0_resize_box_3.png 1024w"
 loading="lazy"
 alt="primary_index_1"
 class="gallery-image"
 data-flex-grow="141"
 data-flex-basis="338px"
 >&lt;/p>
-&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/mysql/sql-optimize/primary_index_2.png"
+&lt;p>&lt;img src="https://blog.letout.cn/p/mysql/sql-optimize/primary_index_2.png"
 width="915"
 height="659"
-srcset="https://emerywan.github.io/blog/blog/p/mysql/sql-optimize/primary_index_2_hua83dc9b4ef4e3c90fc06cafc64e9881b_251787_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/mysql/sql-optimize/primary_index_2_hua83dc9b4ef4e3c90fc06cafc64e9881b_251787_1024x0_resize_box_3.png 1024w"
+srcset="https://blog.letout.cn/p/mysql/sql-optimize/primary_index_2_hua83dc9b4ef4e3c90fc06cafc64e9881b_251787_480x0_resize_box_3.png 480w, https://blog.letout.cn/p/mysql/sql-optimize/primary_index_2_hua83dc9b4ef4e3c90fc06cafc64e9881b_251787_1024x0_resize_box_3.png 1024w"
 loading="lazy"
 alt="primary_index_2"
 class="gallery-image"
@@ -262,20 +262,20 @@ data-flex-grow="138"
 data-flex-basis="333px"
 >&lt;/p>
 &lt;h4 id="页合并">页合并&lt;/h4>
-&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/mysql/sql-optimize/primary_index_3.png"
+&lt;p>&lt;img src="https://blog.letout.cn/p/mysql/sql-optimize/primary_index_3.png"
 width="906"
 height="382"
-srcset="https://emerywan.github.io/blog/blog/p/mysql/sql-optimize/primary_index_3_hu3b7e2aa6c3e2312a91f1497a31cd1dee_78730_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/mysql/sql-optimize/primary_index_3_hu3b7e2aa6c3e2312a91f1497a31cd1dee_78730_1024x0_resize_box_3.png 1024w"
+srcset="https://blog.letout.cn/p/mysql/sql-optimize/primary_index_3_hu3b7e2aa6c3e2312a91f1497a31cd1dee_78730_480x0_resize_box_3.png 480w, https://blog.letout.cn/p/mysql/sql-optimize/primary_index_3_hu3b7e2aa6c3e2312a91f1497a31cd1dee_78730_1024x0_resize_box_3.png 1024w"
 loading="lazy"
 alt="primary_index_3"
 class="gallery-image"
 data-flex-grow="237"
 data-flex-basis="569px"
 >&lt;/p>
-&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/mysql/sql-optimize/primary_index_4.png"
+&lt;p>&lt;img src="https://blog.letout.cn/p/mysql/sql-optimize/primary_index_4.png"
 width="887"
 height="573"
-srcset="https://emerywan.github.io/blog/blog/p/mysql/sql-optimize/primary_index_4_hu41da46b964a6401e487c72fb3de2f351_108741_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/mysql/sql-optimize/primary_index_4_hu41da46b964a6401e487c72fb3de2f351_108741_1024x0_resize_box_3.png 1024w"
+srcset="https://blog.letout.cn/p/mysql/sql-optimize/primary_index_4_hu41da46b964a6401e487c72fb3de2f351_108741_480x0_resize_box_3.png 480w, https://blog.letout.cn/p/mysql/sql-optimize/primary_index_4_hu41da46b964a6401e487c72fb3de2f351_108741_1024x0_resize_box_3.png 1024w"
 loading="lazy"
 alt="primary_index_4"
 class="gallery-image"
@@ -358,7 +358,7 @@ buffer 中完成排序操作，所有不是通过索引直接返回排序结果�
 &lt;h2 id="update-优化">update 优化&lt;/h2>
 &lt;p>InnoDB的行锁是针对索引加的锁，不是针对记录加的锁，并且该索引不能失效，否则会从行锁
 升级为表锁。&lt;/p>
-&lt;p>开启多个事务，在执行 SQL 时，防止行锁升级为了表锁。&lt;/p></description></item><item><title>MySQL 日志</title><link>https://emerywan.github.io/blog/p/mysql/log/</link><pubDate>Thu, 30 Jun 2022 18:02:02 +0800</pubDate><guid>https://emerywan.github.io/blog/p/mysql/log/</guid><description>&lt;img src="https://emerywan.github.io/blog/imgs/19.jpeg" alt="Featured image of post MySQL 日志" />&lt;h2 id="日志">日志&lt;/h2>
+&lt;p>开启多个事务，在执行 SQL 时，防止行锁升级为了表锁。&lt;/p></description></item><item><title>MySQL 日志</title><link>https://blog.letout.cn/p/mysql/log/</link><pubDate>Thu, 30 Jun 2022 18:02:02 +0800</pubDate><guid>https://blog.letout.cn/p/mysql/log/</guid><description>&lt;img src="https://blog.letout.cn/imgs/19.jpeg" alt="Featured image of post MySQL 日志" />&lt;h2 id="日志">日志&lt;/h2>
 &lt;h3 id="错误日志">错误日志&lt;/h3>
 &lt;p>错误日志是 MySQL 中最重要的日志之一，它记录了当 mysqld 启动和停止时，以及服务器在运行过程中发生任何严重错误时的相关信息。&lt;/p>
 &lt;p>当数据库出现任何故障导致无法正常使用时，建议首先查看此日志。&lt;/p>
@@ -371,10 +371,10 @@ buffer 中完成排序操作，所有不是通过索引直接返回排序结果�
 &lt;pre tabindex="0" class="chroma">&lt;code class="language-sql" data-lang="sql">&lt;span class="line">&lt;span class="cl">&lt;span class="k">show&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">variables&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">like&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="s1">&amp;#39;%log_error%&amp;#39;&lt;/span>&lt;span class="p">;&lt;/span>&lt;span class="w">
 &lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
 &lt;/div>
-&lt;/div>&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/mysql/log/errorlog.png"
+&lt;/div>&lt;p>&lt;img src="https://blog.letout.cn/p/mysql/log/errorlog.png"
 width="669"
 height="214"
-srcset="https://emerywan.github.io/blog/blog/p/mysql/log/errorlog_huaf2aa946fc0c9a4be25a1e7ae77fcd38_27013_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/mysql/log/errorlog_huaf2aa946fc0c9a4be25a1e7ae77fcd38_27013_1024x0_resize_box_3.png 1024w"
+srcset="https://blog.letout.cn/p/mysql/log/errorlog_huaf2aa946fc0c9a4be25a1e7ae77fcd38_27013_480x0_resize_box_3.png 480w, https://blog.letout.cn/p/mysql/log/errorlog_huaf2aa946fc0c9a4be25a1e7ae77fcd38_27013_1024x0_resize_box_3.png 1024w"
 loading="lazy"
 alt="errorlog"
 class="gallery-image"
@@ -396,10 +396,10 @@ data-flex-basis="750px"
 &lt;pre tabindex="0" class="chroma">&lt;code class="language-sql" data-lang="sql">&lt;span class="line">&lt;span class="cl">&lt;span class="k">show&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">variables&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">like&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="s1">&amp;#39;%log_bin%&amp;#39;&lt;/span>&lt;span class="p">;&lt;/span>&lt;span class="w">
 &lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
 &lt;/div>
-&lt;/div>&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/mysql/log/binlog.png"
+&lt;/div>&lt;p>&lt;img src="https://blog.letout.cn/p/mysql/log/binlog.png"
 width="602"
 height="240"
-srcset="https://emerywan.github.io/blog/blog/p/mysql/log/binlog_hue4b3570af35eb515872cd8390aac573d_28397_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/mysql/log/binlog_hue4b3570af35eb515872cd8390aac573d_28397_1024x0_resize_box_3.png 1024w"
+srcset="https://blog.letout.cn/p/mysql/log/binlog_hue4b3570af35eb515872cd8390aac573d_28397_480x0_resize_box_3.png 480w, https://blog.letout.cn/p/mysql/log/binlog_hue4b3570af35eb515872cd8390aac573d_28397_1024x0_resize_box_3.png 1024w"
 loading="lazy"
 alt="binlog"
 class="gallery-image"
@@ -451,10 +451,10 @@ data-flex-basis="602px"
 &lt;pre tabindex="0" class="chroma">&lt;code class="language-sql" data-lang="sql">&lt;span class="line">&lt;span class="cl">&lt;span class="k">show&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">variables&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">like&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="s1">&amp;#39;%binlog_format%&amp;#39;&lt;/span>&lt;span class="p">;&lt;/span>&lt;span class="w">
 &lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
 &lt;/div>
-&lt;/div>&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/mysql/log/binlogformat.png"
+&lt;/div>&lt;p>&lt;img src="https://blog.letout.cn/p/mysql/log/binlogformat.png"
 width="432"
 height="156"
-srcset="https://emerywan.github.io/blog/blog/p/mysql/log/binlogformat_hu025aaab383e907dcebf622698b084bf9_13882_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/mysql/log/binlogformat_hu025aaab383e907dcebf622698b084bf9_13882_1024x0_resize_box_3.png 1024w"
+srcset="https://blog.letout.cn/p/mysql/log/binlogformat_hu025aaab383e907dcebf622698b084bf9_13882_480x0_resize_box_3.png 480w, https://blog.letout.cn/p/mysql/log/binlogformat_hu025aaab383e907dcebf622698b084bf9_13882_1024x0_resize_box_3.png 1024w"
 loading="lazy"
 alt="binlogformat"
 class="gallery-image"
@@ -513,10 +513,10 @@ data-flex-basis="664px"
 &lt;pre tabindex="0" class="chroma">&lt;code class="language-sql" data-lang="sql">&lt;span class="line">&lt;span class="cl">&lt;span class="k">show&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">variables&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">like&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="s1">&amp;#39;%binlog_expire_logs_seconds%&amp;#39;&lt;/span>&lt;span class="p">;&lt;/span>&lt;span class="w">
 &lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
 &lt;/div>
-&lt;/div>&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/mysql/log/binlogexpire.png"
+&lt;/div>&lt;p>&lt;img src="https://blog.letout.cn/p/mysql/log/binlogexpire.png"
 width="541"
 height="153"
-srcset="https://emerywan.github.io/blog/blog/p/mysql/log/binlogexpire_hua71c1465b703f02a37880ff6dd450f1c_15632_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/mysql/log/binlogexpire_hua71c1465b703f02a37880ff6dd450f1c_15632_1024x0_resize_box_3.png 1024w"
+srcset="https://blog.letout.cn/p/mysql/log/binlogexpire_hua71c1465b703f02a37880ff6dd450f1c_15632_480x0_resize_box_3.png 480w, https://blog.letout.cn/p/mysql/log/binlogexpire_hua71c1465b703f02a37880ff6dd450f1c_15632_1024x0_resize_box_3.png 1024w"
 loading="lazy"
 alt="binlogexpire"
 class="gallery-image"
@@ -590,7 +590,7 @@ data-flex-basis="848px"
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">log_queries_not_using_indexes= 1
 &lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
 &lt;/div>
-&lt;/div></description></item><item><title>MySQL 索引</title><link>https://emerywan.github.io/blog/p/mysql/index/</link><pubDate>Thu, 30 Jun 2022 14:02:02 +0800</pubDate><guid>https://emerywan.github.io/blog/p/mysql/index/</guid><description>&lt;img src="https://emerywan.github.io/blog/imgs/15.jpeg" alt="Featured image of post MySQL 索引" />&lt;h2 id="索引">索引&lt;/h2>
+&lt;/div></description></item><item><title>MySQL 索引</title><link>https://blog.letout.cn/p/mysql/index/</link><pubDate>Thu, 30 Jun 2022 14:02:02 +0800</pubDate><guid>https://blog.letout.cn/p/mysql/index/</guid><description>&lt;img src="https://blog.letout.cn/imgs/15.jpeg" alt="Featured image of post MySQL 索引" />&lt;h2 id="索引">索引&lt;/h2>
 &lt;p>索引（index）是帮助 MySQL 高效获取数据的数据结构，提高查询效率。&lt;/p>
 &lt;ul>
 &lt;li>
@@ -729,10 +729,10 @@ data-flex-basis="848px"
 &lt;p>更新聚簇索引列的代价很高。&lt;/p>
 &lt;/li>
 &lt;/ul>
-&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/mysql/index/index8.png"
+&lt;p>&lt;img src="https://blog.letout.cn/p/mysql/index/index8.png"
 width="722"
 height="369"
-srcset="https://emerywan.github.io/blog/blog/p/mysql/index/index8_hu9d45f79d8b338c019791de22ea52eb90_62479_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/mysql/index/index8_hu9d45f79d8b338c019791de22ea52eb90_62479_1024x0_resize_box_3.png 1024w"
+srcset="https://blog.letout.cn/p/mysql/index/index8_hu9d45f79d8b338c019791de22ea52eb90_62479_480x0_resize_box_3.png 480w, https://blog.letout.cn/p/mysql/index/index8_hu9d45f79d8b338c019791de22ea52eb90_62479_1024x0_resize_box_3.png 1024w"
 loading="lazy"
 alt="index8"
 class="gallery-image"
@@ -741,10 +741,10 @@ data-flex-basis="469px"
 >&lt;/p>
 &lt;h3 id="非聚簇索引二级索引">非聚簇索引（二级索引）&lt;/h3>
 &lt;p>将数据与索引分开存储，索引结构的叶子节点关联的是对应的主键。&lt;/p>
-&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/mysql/index/clustering-index.png"
+&lt;p>&lt;img src="https://blog.letout.cn/p/mysql/index/clustering-index.png"
 width="840"
 height="571"
-srcset="https://emerywan.github.io/blog/blog/p/mysql/index/clustering-index_hub32172b742ab96d724c643b42699b935_232051_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/mysql/index/clustering-index_hub32172b742ab96d724c643b42699b935_232051_1024x0_resize_box_3.png 1024w"
+srcset="https://blog.letout.cn/p/mysql/index/clustering-index_hub32172b742ab96d724c643b42699b935_232051_480x0_resize_box_3.png 480w, https://blog.letout.cn/p/mysql/index/clustering-index_hub32172b742ab96d724c643b42699b935_232051_1024x0_resize_box_3.png 1024w"
 loading="lazy"
 alt="clustering-index"
 class="gallery-image"
@@ -754,10 +754,10 @@ data-flex-basis="353px"
 &lt;ul>
 &lt;li>二级索引访问需要两次索引查找，要回表。&lt;/li>
 &lt;/ul>
-&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/mysql/index/index9.png"
+&lt;p>&lt;img src="https://blog.letout.cn/p/mysql/index/index9.png"
 width="727"
 height="389"
-srcset="https://emerywan.github.io/blog/blog/p/mysql/index/index9_hua49cf0193b83cd4f61e5b4747229532b_46178_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/mysql/index/index9_hua49cf0193b83cd4f61e5b4747229532b_46178_1024x0_resize_box_3.png 1024w"
+srcset="https://blog.letout.cn/p/mysql/index/index9_hua49cf0193b83cd4f61e5b4747229532b_46178_480x0_resize_box_3.png 480w, https://blog.letout.cn/p/mysql/index/index9_hua49cf0193b83cd4f61e5b4747229532b_46178_1024x0_resize_box_3.png 1024w"
 loading="lazy"
 alt="index9"
 class="gallery-image"
@@ -781,10 +781,10 @@ data-flex-basis="448px"
 &lt;p>所有的叶子结点都位于同一层，叶节点具有相同的深度，叶节点之间没有指针连接。&lt;/p>
 &lt;/li>
 &lt;/ul>
-&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/mysql/index/BTree.png"
+&lt;p>&lt;img src="https://blog.letout.cn/p/mysql/index/BTree.png"
 width="824"
 height="496"
-srcset="https://emerywan.github.io/blog/blog/p/mysql/index/BTree_hu5a2ea9e01a7974b484f27a03994c1eb9_162577_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/mysql/index/BTree_hu5a2ea9e01a7974b484f27a03994c1eb9_162577_1024x0_resize_box_3.png 1024w"
+srcset="https://blog.letout.cn/p/mysql/index/BTree_hu5a2ea9e01a7974b484f27a03994c1eb9_162577_480x0_resize_box_3.png 480w, https://blog.letout.cn/p/mysql/index/BTree_hu5a2ea9e01a7974b484f27a03994c1eb9_162577_1024x0_resize_box_3.png 1024w"
 loading="lazy"
 alt="BTree"
 class="gallery-image"
@@ -804,10 +804,10 @@ data-flex-basis="398px"
 &lt;p>叶子节点保存了父节点所有关键字记录的指针。&lt;/p>
 &lt;/li>
 &lt;/ul>
-&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/mysql/index/BTree2.png"
+&lt;p>&lt;img src="https://blog.letout.cn/p/mysql/index/BTree2.png"
 width="726"
 height="486"
-srcset="https://emerywan.github.io/blog/blog/p/mysql/index/BTree2_hu9d51150ef65d39ad05b8ca626e16e349_124398_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/mysql/index/BTree2_hu9d51150ef65d39ad05b8ca626e16e349_124398_1024x0_resize_box_3.png 1024w"
+srcset="https://blog.letout.cn/p/mysql/index/BTree2_hu9d51150ef65d39ad05b8ca626e16e349_124398_480x0_resize_box_3.png 480w, https://blog.letout.cn/p/mysql/index/BTree2_hu9d51150ef65d39ad05b8ca626e16e349_124398_1024x0_resize_box_3.png 1024w"
 loading="lazy"
 alt="B&amp;#43;Tree"
 class="gallery-image"
@@ -973,10 +973,10 @@ data-flex-basis="358px"
 &lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="k">where&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">emp_no&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">+&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="mi">1&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="mi">100003&lt;/span>&lt;span class="w">
 &lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
 &lt;/div>
-&lt;/div>&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/mysql/index/index1.png"
+&lt;/div>&lt;p>&lt;img src="https://blog.letout.cn/p/mysql/index/index1.png"
 width="1185"
 height="157"
-srcset="https://emerywan.github.io/blog/blog/p/mysql/index/index1_huaa761d032e691cca90bef5eef1dadb87_81724_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/mysql/index/index1_huaa761d032e691cca90bef5eef1dadb87_81724_1024x0_resize_box_3.png 1024w"
+srcset="https://blog.letout.cn/p/mysql/index/index1_huaa761d032e691cca90bef5eef1dadb87_81724_480x0_resize_box_3.png 480w, https://blog.letout.cn/p/mysql/index/index1_huaa761d032e691cca90bef5eef1dadb87_81724_1024x0_resize_box_3.png 1024w"
 loading="lazy"
 alt="1"
 class="gallery-image"
@@ -1021,10 +1021,10 @@ data-flex-basis="1811px"
 &lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">-- 注意 like 索引失效的情况
 &lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
 &lt;/div>
-&lt;/div>&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/mysql/index/index2.png"
+&lt;/div>&lt;p>&lt;img src="https://blog.letout.cn/p/mysql/index/index2.png"
 width="1169"
 height="154"
-srcset="https://emerywan.github.io/blog/blog/p/mysql/index/index2_hu58e272ce7b5bb61c6085e6a94f631f41_86327_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/mysql/index/index2_hu58e272ce7b5bb61c6085e6a94f631f41_86327_1024x0_resize_box_3.png 1024w"
+srcset="https://blog.letout.cn/p/mysql/index/index2_hu58e272ce7b5bb61c6085e6a94f631f41_86327_480x0_resize_box_3.png 480w, https://blog.letout.cn/p/mysql/index/index2_hu58e272ce7b5bb61c6085e6a94f631f41_86327_1024x0_resize_box_3.png 1024w"
 loading="lazy"
 alt="2"
 class="gallery-image"
@@ -1070,10 +1070,10 @@ data-flex-basis="1821px"
 &lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">-- index(fitst_name)
 &lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
 &lt;/div>
-&lt;/div>&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/mysql/index/index3.png"
+&lt;/div>&lt;p>&lt;img src="https://blog.letout.cn/p/mysql/index/index3.png"
 width="1148"
 height="176"
-srcset="https://emerywan.github.io/blog/blog/p/mysql/index/index3_hua5c1e2b296fd025c6e1f6de1e5790543_84429_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/mysql/index/index3_hua5c1e2b296fd025c6e1f6de1e5790543_84429_1024x0_resize_box_3.png 1024w"
+srcset="https://blog.letout.cn/p/mysql/index/index3_hua5c1e2b296fd025c6e1f6de1e5790543_84429_480x0_resize_box_3.png 480w, https://blog.letout.cn/p/mysql/index/index3_hua5c1e2b296fd025c6e1f6de1e5790543_84429_1024x0_resize_box_3.png 1024w"
 loading="lazy"
 alt="3"
 class="gallery-image"
@@ -1082,10 +1082,10 @@ data-flex-basis="1565px"
 >&lt;/p>
 &lt;p>解决：根据实际业务，添加相应的索引。&lt;/p>
 &lt;p>添加索引后，索引合并，避免了全表扫描。&lt;/p>
-&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/mysql/index/index4.png"
+&lt;p>&lt;img src="https://blog.letout.cn/p/mysql/index/index4.png"
 width="1129"
 height="139"
-srcset="https://emerywan.github.io/blog/blog/p/mysql/index/index4_hu903a3bbf3d6eb2ece40fc0c15484c985_86767_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/mysql/index/index4_hu903a3bbf3d6eb2ece40fc0c15484c985_86767_1024x0_resize_box_3.png 1024w"
+srcset="https://blog.letout.cn/p/mysql/index/index4_hu903a3bbf3d6eb2ece40fc0c15484c985_86767_480x0_resize_box_3.png 480w, https://blog.letout.cn/p/mysql/index/index4_hu903a3bbf3d6eb2ece40fc0c15484c985_86767_1024x0_resize_box_3.png 1024w"
 loading="lazy"
 alt="4"
 class="gallery-image"
@@ -1120,10 +1120,10 @@ data-flex-basis="1949px"
 &lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="c1">-- index(last_name, first_name)
 &lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
 &lt;/div>
-&lt;/div>&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/mysql/index/index5.png"
+&lt;/div>&lt;p>&lt;img src="https://blog.letout.cn/p/mysql/index/index5.png"
 width="1156"
 height="155"
-srcset="https://emerywan.github.io/blog/blog/p/mysql/index/index5_huc69773c1cc30429ec167298f8192f5a8_78720_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/mysql/index/index5_huc69773c1cc30429ec167298f8192f5a8_78720_1024x0_resize_box_3.png 1024w"
+srcset="https://blog.letout.cn/p/mysql/index/index5_huc69773c1cc30429ec167298f8192f5a8_78720_480x0_resize_box_3.png 480w, https://blog.letout.cn/p/mysql/index/index5_huc69773c1cc30429ec167298f8192f5a8_78720_1024x0_resize_box_3.png 1024w"
 loading="lazy"
 alt="5"
 class="gallery-image"
@@ -1146,10 +1146,10 @@ data-flex-basis="1789px"
 &lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">-- index(first_name, last_name)
 &lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
 &lt;/div>
-&lt;/div>&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/mysql/index/index6.png"
+&lt;/div>&lt;p>&lt;img src="https://blog.letout.cn/p/mysql/index/index6.png"
 width="1144"
 height="179"
-srcset="https://emerywan.github.io/blog/blog/p/mysql/index/index6_huc94bdeb83f55eebd5e2d4f615313b023_79724_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/mysql/index/index6_huc94bdeb83f55eebd5e2d4f615313b023_79724_1024x0_resize_box_3.png 1024w"
+srcset="https://blog.letout.cn/p/mysql/index/index6_huc94bdeb83f55eebd5e2d4f615313b023_79724_480x0_resize_box_3.png 480w, https://blog.letout.cn/p/mysql/index/index6_huc94bdeb83f55eebd5e2d4f615313b023_79724_1024x0_resize_box_3.png 1024w"
 loading="lazy"
 alt="6"
 class="gallery-image"
@@ -1182,10 +1182,10 @@ data-flex-basis="1533px"
 &lt;p>MySQL 官方建议尽量把字段定义为 &lt;code>NOT NULL&lt;/code>&lt;/p>
 &lt;/li>
 &lt;/ul>
-&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/mysql/index/index7.png"
+&lt;p>&lt;img src="https://blog.letout.cn/p/mysql/index/index7.png"
 width="821"
 height="497"
-srcset="https://emerywan.github.io/blog/blog/p/mysql/index/index7_hu4d7b4705c5cf93f7dc141b75d9f23067_225180_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/mysql/index/index7_hu4d7b4705c5cf93f7dc141b75d9f23067_225180_1024x0_resize_box_3.png 1024w"
+srcset="https://blog.letout.cn/p/mysql/index/index7_hu4d7b4705c5cf93f7dc141b75d9f23067_225180_480x0_resize_box_3.png 480w, https://blog.letout.cn/p/mysql/index/index7_hu4d7b4705c5cf93f7dc141b75d9f23067_225180_1024x0_resize_box_3.png 1024w"
 loading="lazy"
 alt="7"
 class="gallery-image"

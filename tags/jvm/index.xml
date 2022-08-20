@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>JVM on 一层</title><link>https://emerywan.github.io/blog/tags/jvm/</link><description>Recent content in JVM on 一层</description><generator>Hugo -- gohugo.io</generator><lastBuildDate>Mon, 08 Aug 2022 15:02:02 +0800</lastBuildDate><atom:link href="https://emerywan.github.io/blog/tags/jvm/index.xml" rel="self" type="application/rss+xml"/><item><title>JVM 内存区域</title><link>https://emerywan.github.io/blog/p/java/jvm/memory-area/</link><pubDate>Mon, 08 Aug 2022 15:02:02 +0800</pubDate><guid>https://emerywan.github.io/blog/p/java/jvm/memory-area/</guid><description>&lt;img src="https://emerywan.github.io/blog/imgs/27.jpeg" alt="Featured image of post JVM 内存区域" />&lt;ul>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>JVM on 一层</title><link>https://blog.letout.cn/tags/jvm/</link><description>Recent content in JVM on 一层</description><generator>Hugo -- gohugo.io</generator><language>zh-cn</language><lastBuildDate>Mon, 08 Aug 2022 15:02:02 +0800</lastBuildDate><atom:link href="https://blog.letout.cn/tags/jvm/index.xml" rel="self" type="application/rss+xml"/><item><title>JVM 内存区域</title><link>https://blog.letout.cn/p/java/jvm/memory-area/</link><pubDate>Mon, 08 Aug 2022 15:02:02 +0800</pubDate><guid>https://blog.letout.cn/p/java/jvm/memory-area/</guid><description>&lt;img src="https://blog.letout.cn/imgs/27.jpeg" alt="Featured image of post JVM 内存区域" />&lt;ul>
 &lt;li>
 &lt;p>线程隔离&lt;/p>
 &lt;ul>
@@ -15,10 +15,10 @@
 &lt;/ul>
 &lt;/li>
 &lt;/ul>
-&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/java/jvm/memory-area/area.png"
+&lt;p>&lt;img src="https://blog.letout.cn/p/java/jvm/memory-area/area.png"
 width="875"
 height="550"
-srcset="https://emerywan.github.io/blog/blog/p/java/jvm/memory-area/area_hu77c5f146be5bf31c819ffe7a07cc3500_205102_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/java/jvm/memory-area/area_hu77c5f146be5bf31c819ffe7a07cc3500_205102_1024x0_resize_box_3.png 1024w"
+srcset="https://blog.letout.cn/p/java/jvm/memory-area/area_hu77c5f146be5bf31c819ffe7a07cc3500_205102_480x0_resize_box_3.png 480w, https://blog.letout.cn/p/java/jvm/memory-area/area_hu77c5f146be5bf31c819ffe7a07cc3500_205102_1024x0_resize_box_3.png 1024w"
 loading="lazy"
 alt="area"
 class="gallery-image"
@@ -30,10 +30,10 @@ data-flex-basis="381px"
 &lt;p>唯一一个不会出现 &lt;code>OutOfMemoryError&lt;/code> 的内存区域，随线程的创建而创建，随线程的结束而死亡。&lt;/p>
 &lt;h2 id="-虚拟机栈">🎋 虚拟机栈&lt;/h2>
 &lt;p>每一次方法的调用都会有一个对应的栈帧被压入栈中，每一个方法调用结束后，都会有一个栈帧被弹出。&lt;/p>
-&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/java/jvm/memory-area/stack.png"
+&lt;p>&lt;img src="https://blog.letout.cn/p/java/jvm/memory-area/stack.png"
 width="302"
 height="551"
-srcset="https://emerywan.github.io/blog/blog/p/java/jvm/memory-area/stack_hu387fe9e9614436cd46058aff5c85565a_61440_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/java/jvm/memory-area/stack_hu387fe9e9614436cd46058aff5c85565a_61440_1024x0_resize_box_3.png 1024w"
+srcset="https://blog.letout.cn/p/java/jvm/memory-area/stack_hu387fe9e9614436cd46058aff5c85565a_61440_480x0_resize_box_3.png 480w, https://blog.letout.cn/p/java/jvm/memory-area/stack_hu387fe9e9614436cd46058aff5c85565a_61440_1024x0_resize_box_3.png 1024w"
 loading="lazy"
 alt="stack"
 class="gallery-image"
@@ -73,20 +73,20 @@ data-flex-basis="131px"
 &lt;p>JDK 8 及之后，使用元空间（直接内存）实现&lt;/p>
 &lt;/li>
 &lt;/ul>
-&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/java/jvm/memory-area/function-before.png"
+&lt;p>&lt;img src="https://blog.letout.cn/p/java/jvm/memory-area/function-before.png"
 width="382"
 height="436"
-srcset="https://emerywan.github.io/blog/blog/p/java/jvm/memory-area/function-before_hu5ba856b5fa83b596c5da12a50d62fcb1_75748_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/java/jvm/memory-area/function-before_hu5ba856b5fa83b596c5da12a50d62fcb1_75748_1024x0_resize_box_3.png 1024w"
+srcset="https://blog.letout.cn/p/java/jvm/memory-area/function-before_hu5ba856b5fa83b596c5da12a50d62fcb1_75748_480x0_resize_box_3.png 480w, https://blog.letout.cn/p/java/jvm/memory-area/function-before_hu5ba856b5fa83b596c5da12a50d62fcb1_75748_1024x0_resize_box_3.png 1024w"
 loading="lazy"
 alt="before"
 class="gallery-image"
 data-flex-grow="87"
 data-flex-basis="210px"
 >&lt;/p>
-&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/java/jvm/memory-area/function-after.png"
+&lt;p>&lt;img src="https://blog.letout.cn/p/java/jvm/memory-area/function-after.png"
 width="484"
 height="433"
-srcset="https://emerywan.github.io/blog/blog/p/java/jvm/memory-area/function-after_hue0bd0747c11f9c8962eb0e412965ba30_84329_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/java/jvm/memory-area/function-after_hue0bd0747c11f9c8962eb0e412965ba30_84329_1024x0_resize_box_3.png 1024w"
+srcset="https://blog.letout.cn/p/java/jvm/memory-area/function-after_hue0bd0747c11f9c8962eb0e412965ba30_84329_480x0_resize_box_3.png 480w, https://blog.letout.cn/p/java/jvm/memory-area/function-after_hue0bd0747c11f9c8962eb0e412965ba30_84329_1024x0_resize_box_3.png 1024w"
 loading="lazy"
 alt="after"
 class="gallery-image"
@@ -125,7 +125,7 @@ data-flex-basis="268px"
 &lt;p>JDK 8 之后，永久代被取消&lt;/p>
 &lt;/li>
 &lt;/ul>
-&lt;p>大部分情况下，对象首先会在 Eden 区进行分配；在一次垃圾回收后，如果对象还存活，会进入 S0 或 S1；当对象年龄增长到一定程度（默认 15），或累积的年龄超过了 Survivor 的一半，会晋升到老年代。&lt;/p></description></item><item><title>JVM 垃圾回收</title><link>https://emerywan.github.io/blog/p/java/jvm/garbage-collection/</link><pubDate>Sun, 07 Aug 2022 12:02:02 +0800</pubDate><guid>https://emerywan.github.io/blog/p/java/jvm/garbage-collection/</guid><description>&lt;img src="https://emerywan.github.io/blog/imgs/26.jpeg" alt="Featured image of post JVM 垃圾回收" />&lt;h2 id="-对象存活判定">🌴 对象存活判定&lt;/h2>
+&lt;p>大部分情况下，对象首先会在 Eden 区进行分配；在一次垃圾回收后，如果对象还存活，会进入 S0 或 S1；当对象年龄增长到一定程度（默认 15），或累积的年龄超过了 Survivor 的一半，会晋升到老年代。&lt;/p></description></item><item><title>JVM 垃圾回收</title><link>https://blog.letout.cn/p/java/jvm/garbage-collection/</link><pubDate>Sun, 07 Aug 2022 12:02:02 +0800</pubDate><guid>https://blog.letout.cn/p/java/jvm/garbage-collection/</guid><description>&lt;img src="https://blog.letout.cn/imgs/26.jpeg" alt="Featured image of post JVM 垃圾回收" />&lt;h2 id="-对象存活判定">🌴 对象存活判定&lt;/h2>
 &lt;h3 id="-引用计数法">🪨 引用计数法&lt;/h3>
 &lt;p>给每个对象添加一个引用计数器：&lt;/p>
 &lt;ul>
@@ -136,10 +136,10 @@ data-flex-basis="268px"
 &lt;p>该方法简单高效，但主流的虚拟机都没有选择该方法管理内存，难以解决对象之间循环引用的问题。&lt;/p>
 &lt;h3 id="-可达性分析法">🪨 可达性分析法&lt;/h3>
 &lt;p>通过一系列称为 &lt;code>GC Root&lt;/code> 的对象作为起点，从这些起点向下搜索，节点走过的路径称为引用链，当一个对象与 &lt;code>GC Root&lt;/code> 之间没有任何引用链相连的话，说明对象不可用，需要被回收。&lt;/p>
-&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/java/jvm/garbage-collection/gcroot.png"
+&lt;p>&lt;img src="https://blog.letout.cn/p/java/jvm/garbage-collection/gcroot.png"
 width="935"
 height="581"
-srcset="https://emerywan.github.io/blog/blog/p/java/jvm/garbage-collection/gcroot_hud8e4c62b0ef63778b91f8329965428a2_102739_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/java/jvm/garbage-collection/gcroot_hud8e4c62b0ef63778b91f8329965428a2_102739_1024x0_resize_box_3.png 1024w"
+srcset="https://blog.letout.cn/p/java/jvm/garbage-collection/gcroot_hud8e4c62b0ef63778b91f8329965428a2_102739_480x0_resize_box_3.png 480w, https://blog.letout.cn/p/java/jvm/garbage-collection/gcroot_hud8e4c62b0ef63778b91f8329965428a2_102739_1024x0_resize_box_3.png 1024w"
 loading="lazy"
 alt="gcroot"
 class="gallery-image"
@@ -162,10 +162,10 @@ data-flex-basis="386px"
 &lt;li>标记出所有需要回收的对象&lt;/li>
 &lt;li>标记结束后，统一回收掉所有被标记的对象&lt;/li>
 &lt;/ul>
-&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/java/jvm/garbage-collection/clear.png"
+&lt;p>&lt;img src="https://blog.letout.cn/p/java/jvm/garbage-collection/clear.png"
 width="962"
 height="488"
-srcset="https://emerywan.github.io/blog/blog/p/java/jvm/garbage-collection/clear_hu3ebff86a38831b55ce513a2b74335841_65435_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/java/jvm/garbage-collection/clear_hu3ebff86a38831b55ce513a2b74335841_65435_1024x0_resize_box_3.png 1024w"
+srcset="https://blog.letout.cn/p/java/jvm/garbage-collection/clear_hu3ebff86a38831b55ce513a2b74335841_65435_480x0_resize_box_3.png 480w, https://blog.letout.cn/p/java/jvm/garbage-collection/clear_hu3ebff86a38831b55ce513a2b74335841_65435_1024x0_resize_box_3.png 1024w"
 loading="lazy"
 alt="clear"
 class="gallery-image"
@@ -182,10 +182,10 @@ data-flex-basis="473px"
 &lt;li>当一块内存使用完后，将存活的对象复制到另外一块去&lt;/li>
 &lt;li>将以使用的空间一次性清除掉&lt;/li>
 &lt;/ul>
-&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/java/jvm/garbage-collection/copy.png"
+&lt;p>&lt;img src="https://blog.letout.cn/p/java/jvm/garbage-collection/copy.png"
 width="955"
 height="495"
-srcset="https://emerywan.github.io/blog/blog/p/java/jvm/garbage-collection/copy_hu6b5a3b19d23e61d87d481fdc4629a5cf_68281_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/java/jvm/garbage-collection/copy_hu6b5a3b19d23e61d87d481fdc4629a5cf_68281_1024x0_resize_box_3.png 1024w"
+srcset="https://blog.letout.cn/p/java/jvm/garbage-collection/copy_hu6b5a3b19d23e61d87d481fdc4629a5cf_68281_480x0_resize_box_3.png 480w, https://blog.letout.cn/p/java/jvm/garbage-collection/copy_hu6b5a3b19d23e61d87d481fdc4629a5cf_68281_1024x0_resize_box_3.png 1024w"
 loading="lazy"
 alt="copy"
 class="gallery-image"
@@ -201,10 +201,10 @@ data-flex-basis="463px"
 &lt;li>让这些存活对象向内存的一端移动&lt;/li>
 &lt;li>直接清除掉边界以外的内存&lt;/li>
 &lt;/ul>
-&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/java/jvm/garbage-collection/move.png"
+&lt;p>&lt;img src="https://blog.letout.cn/p/java/jvm/garbage-collection/move.png"
 width="944"
 height="480"
-srcset="https://emerywan.github.io/blog/blog/p/java/jvm/garbage-collection/move_hu0eec74bf9ebb0cbf4f6fd4cbe2be3a39_63153_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/java/jvm/garbage-collection/move_hu0eec74bf9ebb0cbf4f6fd4cbe2be3a39_63153_1024x0_resize_box_3.png 1024w"
+srcset="https://blog.letout.cn/p/java/jvm/garbage-collection/move_hu0eec74bf9ebb0cbf4f6fd4cbe2be3a39_63153_480x0_resize_box_3.png 480w, https://blog.letout.cn/p/java/jvm/garbage-collection/move_hu0eec74bf9ebb0cbf4f6fd4cbe2be3a39_63153_1024x0_resize_box_3.png 1024w"
 loading="lazy"
 alt="move"
 class="gallery-image"
@@ -246,10 +246,10 @@ data-flex-basis="472px"
 &lt;ul>
 &lt;li>新生代采用标记-复制算法，老年代采用标记-整理算法&lt;/li>
 &lt;/ul>
-&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/java/jvm/garbage-collection/serial.png"
+&lt;p>&lt;img src="https://blog.letout.cn/p/java/jvm/garbage-collection/serial.png"
 width="953"
 height="209"
-srcset="https://emerywan.github.io/blog/blog/p/java/jvm/garbage-collection/serial_hu902bd566aebd83355bfe0e2769bbc345_79667_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/java/jvm/garbage-collection/serial_hu902bd566aebd83355bfe0e2769bbc345_79667_1024x0_resize_box_3.png 1024w"
+srcset="https://blog.letout.cn/p/java/jvm/garbage-collection/serial_hu902bd566aebd83355bfe0e2769bbc345_79667_480x0_resize_box_3.png 480w, https://blog.letout.cn/p/java/jvm/garbage-collection/serial_hu902bd566aebd83355bfe0e2769bbc345_79667_1024x0_resize_box_3.png 1024w"
 loading="lazy"
 alt="serial"
 class="gallery-image"
@@ -265,10 +265,10 @@ data-flex-basis="1094px"
 &lt;ul>
 &lt;li>采用标记复制算法&lt;/li>
 &lt;/ul>
-&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/java/jvm/garbage-collection/parnew.png"
+&lt;p>&lt;img src="https://blog.letout.cn/p/java/jvm/garbage-collection/parnew.png"
 width="960"
 height="202"
-srcset="https://emerywan.github.io/blog/blog/p/java/jvm/garbage-collection/parnew_hub4e3375e7b496e8b6ebc251ec3bf2f26_87679_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/java/jvm/garbage-collection/parnew_hub4e3375e7b496e8b6ebc251ec3bf2f26_87679_1024x0_resize_box_3.png 1024w"
+srcset="https://blog.letout.cn/p/java/jvm/garbage-collection/parnew_hub4e3375e7b496e8b6ebc251ec3bf2f26_87679_480x0_resize_box_3.png 480w, https://blog.letout.cn/p/java/jvm/garbage-collection/parnew_hub4e3375e7b496e8b6ebc251ec3bf2f26_87679_1024x0_resize_box_3.png 1024w"
 loading="lazy"
 alt="parnew"
 class="gallery-image"
@@ -280,10 +280,10 @@ data-flex-basis="1140px"
 &lt;li>基于 标记-复制 算法实现的新生代垃圾收集器，能够并行收集的多线程收集器，目标是达到一个可控制的“吞吐量”&lt;/li>
 &lt;li>基于 标记-整理 算法实现的老年代多线程收集器。&lt;/li>
 &lt;/ul>
-&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/java/jvm/garbage-collection/parallel.png"
+&lt;p>&lt;img src="https://blog.letout.cn/p/java/jvm/garbage-collection/parallel.png"
 width="934"
 height="199"
-srcset="https://emerywan.github.io/blog/blog/p/java/jvm/garbage-collection/parallel_hu519cfc57a4a5c97f5f81fc0feaeb8730_92362_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/java/jvm/garbage-collection/parallel_hu519cfc57a4a5c97f5f81fc0feaeb8730_92362_1024x0_resize_box_3.png 1024w"
+srcset="https://blog.letout.cn/p/java/jvm/garbage-collection/parallel_hu519cfc57a4a5c97f5f81fc0feaeb8730_92362_480x0_resize_box_3.png 480w, https://blog.letout.cn/p/java/jvm/garbage-collection/parallel_hu519cfc57a4a5c97f5f81fc0feaeb8730_92362_1024x0_resize_box_3.png 1024w"
 loading="lazy"
 alt="parallel"
 class="gallery-image"
@@ -301,10 +301,10 @@ data-flex-basis="1126px"
 &lt;h3 id="-cms">🪵 CMS&lt;/h3>
 &lt;p>&lt;code>Concurrent Mark Swap&lt;/code> 获取最短停顿时间的收集器。&lt;/p>
 &lt;p>是 HotSpot 虚拟机第一款真正意义上的垃圾收集器，实现了用户线程和垃圾回收线程同时工作。基于 标记-清除 算法的 &lt;strong>老年代&lt;/strong> 收集器。&lt;/p>
-&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/java/jvm/garbage-collection/CMS.png"
+&lt;p>&lt;img src="https://blog.letout.cn/p/java/jvm/garbage-collection/CMS.png"
 width="1121"
 height="230"
-srcset="https://emerywan.github.io/blog/blog/p/java/jvm/garbage-collection/CMS_hu7a65fd9981325c5387fcf294cec67078_167761_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/java/jvm/garbage-collection/CMS_hu7a65fd9981325c5387fcf294cec67078_167761_1024x0_resize_box_3.png 1024w"
+srcset="https://blog.letout.cn/p/java/jvm/garbage-collection/CMS_hu7a65fd9981325c5387fcf294cec67078_167761_480x0_resize_box_3.png 480w, https://blog.letout.cn/p/java/jvm/garbage-collection/CMS_hu7a65fd9981325c5387fcf294cec67078_167761_1024x0_resize_box_3.png 1024w"
 loading="lazy"
 alt="CMS"
 class="gallery-image"
@@ -336,10 +336,10 @@ data-flex-basis="1169px"
 &lt;/ul>
 &lt;h3 id="-g1">🪵 G1&lt;/h3>
 &lt;p>G1 开创了收集器面向局部收集的设计思路和基于 Region 的内存布局形式。&lt;/p>
-&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/java/jvm/garbage-collection/g1heap.png"
+&lt;p>&lt;img src="https://blog.letout.cn/p/java/jvm/garbage-collection/g1heap.png"
 width="902"
 height="676"
-srcset="https://emerywan.github.io/blog/blog/p/java/jvm/garbage-collection/g1heap_huc8187154c5204389b583a76e76e7dffa_88685_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/java/jvm/garbage-collection/g1heap_huc8187154c5204389b583a76e76e7dffa_88685_1024x0_resize_box_3.png 1024w"
+srcset="https://blog.letout.cn/p/java/jvm/garbage-collection/g1heap_huc8187154c5204389b583a76e76e7dffa_88685_480x0_resize_box_3.png 480w, https://blog.letout.cn/p/java/jvm/garbage-collection/g1heap_huc8187154c5204389b583a76e76e7dffa_88685_1024x0_resize_box_3.png 1024w"
 loading="lazy"
 alt="g1heap"
 class="gallery-image"
@@ -348,10 +348,10 @@ data-flex-basis="320px"
 >&lt;/p>
 &lt;p>将 Java 堆分为 2048 个大小相同的独立 Region，每个 Region 的大小依据堆空间的大小而定，在 JVM 生命周期中不会改变。&lt;/p>
 &lt;p>每个 Region 都可以更新需要，作为新生代的 Eden 区，Survivor 区，或者是老年代；新生代和老年代在内存中不是连续的空间，收集器会根据区域的不同采取不同的策略。&lt;/p>
-&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/java/jvm/garbage-collection/g1.png"
+&lt;p>&lt;img src="https://blog.letout.cn/p/java/jvm/garbage-collection/g1.png"
 width="941"
 height="209"
-srcset="https://emerywan.github.io/blog/blog/p/java/jvm/garbage-collection/g1_hu2c13cc7a5d500b4a818a8d3a4dfa26ed_139186_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/java/jvm/garbage-collection/g1_hu2c13cc7a5d500b4a818a8d3a4dfa26ed_139186_1024x0_resize_box_3.png 1024w"
+srcset="https://blog.letout.cn/p/java/jvm/garbage-collection/g1_hu2c13cc7a5d500b4a818a8d3a4dfa26ed_139186_480x0_resize_box_3.png 480w, https://blog.letout.cn/p/java/jvm/garbage-collection/g1_hu2c13cc7a5d500b4a818a8d3a4dfa26ed_139186_1024x0_resize_box_3.png 1024w"
 loading="lazy"
 alt="g1"
 class="gallery-image"
@@ -397,12 +397,12 @@ data-flex-basis="1080px"
 &lt;li>🪨 空间分配担保&lt;/li>
 &lt;/ul>
 &lt;p>确保在 Minor GC 之前，老年代还有容纳新生代所有对象的剩余空间。&lt;/p>
-&lt;p>进行一次 Minor GC 之后，Eden 区中任然存在大量对象，Survivor 中无法容纳，直接送到老年代，让老年代进行空间分配担保。&lt;/p></description></item><item><title>JVM 内存模型</title><link>https://emerywan.github.io/blog/p/java/jvm/memory-model/</link><pubDate>Sun, 07 Aug 2022 06:02:02 +0800</pubDate><guid>https://emerywan.github.io/blog/p/java/jvm/memory-model/</guid><description>&lt;img src="https://emerywan.github.io/blog/imgs/28.jpeg" alt="Featured image of post JVM 内存模型" />&lt;h2 id="jmm">JMM&lt;/h2>
+&lt;p>进行一次 Minor GC 之后，Eden 区中任然存在大量对象，Survivor 中无法容纳，直接送到老年代，让老年代进行空间分配担保。&lt;/p></description></item><item><title>JVM 内存模型</title><link>https://blog.letout.cn/p/java/jvm/memory-model/</link><pubDate>Sun, 07 Aug 2022 06:02:02 +0800</pubDate><guid>https://blog.letout.cn/p/java/jvm/memory-model/</guid><description>&lt;img src="https://blog.letout.cn/imgs/28.jpeg" alt="Featured image of post JVM 内存模型" />&lt;h2 id="jmm">JMM&lt;/h2>
 &lt;p>Java 内存模型屏蔽了不同操作系统和各种硬件的内存访问差异，实现了 Java 程序在各种平台下，都能达到一致性的访问效果。&lt;/p>
-&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/java/jvm/memory-model/JMM.png"
+&lt;p>&lt;img src="https://blog.letout.cn/p/java/jvm/memory-model/JMM.png"
 width="613"
 height="530"
-srcset="https://emerywan.github.io/blog/blog/p/java/jvm/memory-model/JMM_hu7e11e9092393e4f5c6cb98b7857d5889_99528_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/java/jvm/memory-model/JMM_hu7e11e9092393e4f5c6cb98b7857d5889_99528_1024x0_resize_box_3.png 1024w"
+srcset="https://blog.letout.cn/p/java/jvm/memory-model/JMM_hu7e11e9092393e4f5c6cb98b7857d5889_99528_480x0_resize_box_3.png 480w, https://blog.letout.cn/p/java/jvm/memory-model/JMM_hu7e11e9092393e4f5c6cb98b7857d5889_99528_1024x0_resize_box_3.png 1024w"
 loading="lazy"
 alt="JMM"
 class="gallery-image"
@@ -415,10 +415,10 @@ data-flex-basis="277px"
 &lt;li>每条线程有自己的工作内存&lt;/li>
 &lt;li>线程对变量的所有操作（读取、赋值等），不能直接读写主存中的数据，都必须在工作内存中进行&lt;/li>
 &lt;/ul>
-&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/java/jvm/memory-model/memory.png"
+&lt;p>&lt;img src="https://blog.letout.cn/p/java/jvm/memory-model/memory.png"
 width="942"
 height="383"
-srcset="https://emerywan.github.io/blog/blog/p/java/jvm/memory-model/memory_hue7fb17d3eb7c4a77bd28c7215dc28c3d_104935_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/java/jvm/memory-model/memory_hue7fb17d3eb7c4a77bd28c7215dc28c3d_104935_1024x0_resize_box_3.png 1024w"
+srcset="https://blog.letout.cn/p/java/jvm/memory-model/memory_hue7fb17d3eb7c4a77bd28c7215dc28c3d_104935_480x0_resize_box_3.png 480w, https://blog.letout.cn/p/java/jvm/memory-model/memory_hue7fb17d3eb7c4a77bd28c7215dc28c3d_104935_1024x0_resize_box_3.png 1024w"
 loading="lazy"
 alt="memory"
 class="gallery-image"
@@ -489,11 +489,11 @@ data-flex-basis="590px"
 &lt;ul>
 &lt;li>volatile 规则&lt;/li>
 &lt;/ul>
-&lt;p>一个 volatile 变量的写操作，优于后面这个变量的读操作&lt;/p></description></item><item><title>类加载器</title><link>https://emerywan.github.io/blog/p/java/jvm/classloader/</link><pubDate>Sat, 06 Aug 2022 16:02:02 +0800</pubDate><guid>https://emerywan.github.io/blog/p/java/jvm/classloader/</guid><description>&lt;img src="https://emerywan.github.io/blog/imgs/25.jpeg" alt="Featured image of post 类加载器" />&lt;h2 id="类加载器">类加载器&lt;/h2>
-&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/java/jvm/classloader/menu.png"
+&lt;p>一个 volatile 变量的写操作，优于后面这个变量的读操作&lt;/p></description></item><item><title>类加载器</title><link>https://blog.letout.cn/p/java/jvm/classloader/</link><pubDate>Sat, 06 Aug 2022 16:02:02 +0800</pubDate><guid>https://blog.letout.cn/p/java/jvm/classloader/</guid><description>&lt;img src="https://blog.letout.cn/imgs/25.jpeg" alt="Featured image of post 类加载器" />&lt;h2 id="类加载器">类加载器&lt;/h2>
+&lt;p>&lt;img src="https://blog.letout.cn/p/java/jvm/classloader/menu.png"
 width="1707"
 height="638"
-srcset="https://emerywan.github.io/blog/blog/p/java/jvm/classloader/menu_hu8b8ca38d973bcbde05d207eb8795320e_321907_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/java/jvm/classloader/menu_hu8b8ca38d973bcbde05d207eb8795320e_321907_1024x0_resize_box_3.png 1024w"
+srcset="https://blog.letout.cn/p/java/jvm/classloader/menu_hu8b8ca38d973bcbde05d207eb8795320e_321907_480x0_resize_box_3.png 480w, https://blog.letout.cn/p/java/jvm/classloader/menu_hu8b8ca38d973bcbde05d207eb8795320e_321907_1024x0_resize_box_3.png 1024w"
 loading="lazy"
 alt="menu"
 class="gallery-image"
@@ -509,10 +509,10 @@ data-flex-basis="642px"
 &lt;h3 id="applicationclassloader">ApplicationClassLoader&lt;/h3>
 &lt;p>面向用户的加载器，负责加载当前应用 &lt;code>classpath&lt;/code> 下的所有 jar 包和类。&lt;/p>
 &lt;h2 id="双亲委派模型">双亲委派模型&lt;/h2>
-&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/java/jvm/classloader/classloader.png"
+&lt;p>&lt;img src="https://blog.letout.cn/p/java/jvm/classloader/classloader.png"
 width="1279"
 height="699"
-srcset="https://emerywan.github.io/blog/blog/p/java/jvm/classloader/classloader_hu2885d6b96687a867396da9eda76d4bf0_289144_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/java/jvm/classloader/classloader_hu2885d6b96687a867396da9eda76d4bf0_289144_1024x0_resize_box_3.png 1024w"
+srcset="https://blog.letout.cn/p/java/jvm/classloader/classloader_hu2885d6b96687a867396da9eda76d4bf0_289144_480x0_resize_box_3.png 480w, https://blog.letout.cn/p/java/jvm/classloader/classloader_hu2885d6b96687a867396da9eda76d4bf0_289144_1024x0_resize_box_3.png 1024w"
 loading="lazy"
 alt="classloader"
 class="gallery-image"
@@ -602,11 +602,11 @@ data-flex-basis="439px"
 &lt;/div>
 &lt;/div>&lt;p>默认情况下，一个限定名的类只会被一个类加载器加载并解析使用，在程序中是唯一的，不会产生歧义。&lt;/p>
 &lt;p>在加载时，首先会判断当前类是否被加载过，如果已经加载，会直接返回，否则才会尝试加载。&lt;/p>
-&lt;p>尝试加载时，不会自己进行加载，而是将请求委派给父类加载器，当父类加载器无法加载时，才会由自己处理。&lt;/p></description></item><item><title>类加载机制</title><link>https://emerywan.github.io/blog/p/java/jvm/class-loading/</link><pubDate>Sat, 06 Aug 2022 13:02:02 +0800</pubDate><guid>https://emerywan.github.io/blog/p/java/jvm/class-loading/</guid><description>&lt;img src="https://emerywan.github.io/blog/imgs/24.jpeg" alt="Featured image of post 类加载机制" />&lt;h2 id="java-类生命周期">Java 类生命周期&lt;/h2>
-&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/java/jvm/class-loading/life.png"
+&lt;p>尝试加载时，不会自己进行加载，而是将请求委派给父类加载器，当父类加载器无法加载时，才会由自己处理。&lt;/p></description></item><item><title>类加载机制</title><link>https://blog.letout.cn/p/java/jvm/class-loading/</link><pubDate>Sat, 06 Aug 2022 13:02:02 +0800</pubDate><guid>https://blog.letout.cn/p/java/jvm/class-loading/</guid><description>&lt;img src="https://blog.letout.cn/imgs/24.jpeg" alt="Featured image of post 类加载机制" />&lt;h2 id="java-类生命周期">Java 类生命周期&lt;/h2>
+&lt;p>&lt;img src="https://blog.letout.cn/p/java/jvm/class-loading/life.png"
 width="973"
 height="331"
-srcset="https://emerywan.github.io/blog/blog/p/java/jvm/class-loading/life_hue0715323a61c74c3a1d0de4b0a99146c_113100_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/java/jvm/class-loading/life_hue0715323a61c74c3a1d0de4b0a99146c_113100_1024x0_resize_box_3.png 1024w"
+srcset="https://blog.letout.cn/p/java/jvm/class-loading/life_hue0715323a61c74c3a1d0de4b0a99146c_113100_480x0_resize_box_3.png 480w, https://blog.letout.cn/p/java/jvm/class-loading/life_hue0715323a61c74c3a1d0de4b0a99146c_113100_1024x0_resize_box_3.png 1024w"
 loading="lazy"
 alt="java-class-life"
 class="gallery-image"
@@ -617,10 +617,10 @@ data-flex-basis="705px"
 &lt;p>类加载主要有三步：&lt;code>加载 - 链接 - 初始化&lt;/code>。&lt;/p>
 &lt;h3 id="-加载">🥎 加载&lt;/h3>
 &lt;p>加载是一个读取 Class 文件，将其转化为某种静态数据结构存储在方法区内，并在堆中生成一个便于调用的 java.lang.Class 类型的对象的过程。&lt;/p>
-&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/java/jvm/class-loading/loading.png"
+&lt;p>&lt;img src="https://blog.letout.cn/p/java/jvm/class-loading/loading.png"
 width="707"
 height="335"
-srcset="https://emerywan.github.io/blog/blog/p/java/jvm/class-loading/loading_hu8b469e8111e2814cd40ca0f04de26462_22328_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/java/jvm/class-loading/loading_hu8b469e8111e2814cd40ca0f04de26462_22328_1024x0_resize_box_3.png 1024w"
+srcset="https://blog.letout.cn/p/java/jvm/class-loading/loading_hu8b469e8111e2814cd40ca0f04de26462_22328_480x0_resize_box_3.png 480w, https://blog.letout.cn/p/java/jvm/class-loading/loading_hu8b469e8111e2814cd40ca0f04de26462_22328_1024x0_resize_box_3.png 1024w"
 loading="lazy"
 alt="loading"
 class="gallery-image"
@@ -641,10 +641,10 @@ data-flex-basis="506px"
 &lt;/ul>
 &lt;h3 id="-链接">🥎 链接&lt;/h3>
 &lt;h4 id="-验证">⚾️ 验证&lt;/h4>
-&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/java/jvm/class-loading/verify.png"
+&lt;p>&lt;img src="https://blog.letout.cn/p/java/jvm/class-loading/verify.png"
 width="915"
 height="390"
-srcset="https://emerywan.github.io/blog/blog/p/java/jvm/class-loading/verify_hu8c1a3959f1e343b5f02da51e1aaf01f3_138925_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/java/jvm/class-loading/verify_hu8c1a3959f1e343b5f02da51e1aaf01f3_138925_1024x0_resize_box_3.png 1024w"
+srcset="https://blog.letout.cn/p/java/jvm/class-loading/verify_hu8c1a3959f1e343b5f02da51e1aaf01f3_138925_480x0_resize_box_3.png 480w, https://blog.letout.cn/p/java/jvm/class-loading/verify_hu8c1a3959f1e343b5f02da51e1aaf01f3_138925_1024x0_resize_box_3.png 1024w"
 loading="lazy"
 alt="verify"
 class="gallery-image"
@@ -667,10 +667,10 @@ data-flex-basis="563px"
 &lt;/ul>
 &lt;h4 id="-准备">⚾️ 准备&lt;/h4>
 &lt;p>为类中定义的变量（静态变量 &lt;code>static&lt;/code>）分配内存并设置类变量零值的阶段。&lt;/p>
-&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/java/jvm/class-loading/prepare.png"
+&lt;p>&lt;img src="https://blog.letout.cn/p/java/jvm/class-loading/prepare.png"
 width="482"
 height="260"
-srcset="https://emerywan.github.io/blog/blog/p/java/jvm/class-loading/prepare_hu58a397643ad84aca2032de9a3ac6155c_29464_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/java/jvm/class-loading/prepare_hu58a397643ad84aca2032de9a3ac6155c_29464_1024x0_resize_box_3.png 1024w"
+srcset="https://blog.letout.cn/p/java/jvm/class-loading/prepare_hu58a397643ad84aca2032de9a3ac6155c_29464_480x0_resize_box_3.png 480w, https://blog.letout.cn/p/java/jvm/class-loading/prepare_hu58a397643ad84aca2032de9a3ac6155c_29464_1024x0_resize_box_3.png 1024w"
 loading="lazy"
 alt="prepare"
 class="gallery-image"
@@ -692,10 +692,10 @@ data-flex-basis="444px"
 &lt;/li>
 &lt;/ul>
 &lt;p>🎾 解析部分是灵活的，可以在初始化环节后再进行，实现所谓的“后期绑定”。（方法调用直到运行时才会解析，因为无法在编译时确定方法调用所需的所有信息，所以方法定义和方法调用直到运行时才绑定。）&lt;/p>
-&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/java/jvm/class-loading/resolve_1.png"
+&lt;p>&lt;img src="https://blog.letout.cn/p/java/jvm/class-loading/resolve_1.png"
 width="163"
 height="370"
-srcset="https://emerywan.github.io/blog/blog/p/java/jvm/class-loading/resolve_1_hua9ef48196efa3564a4ef1eaa93606c3a_10102_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/java/jvm/class-loading/resolve_1_hua9ef48196efa3564a4ef1eaa93606c3a_10102_1024x0_resize_box_3.png 1024w"
+srcset="https://blog.letout.cn/p/java/jvm/class-loading/resolve_1_hua9ef48196efa3564a4ef1eaa93606c3a_10102_480x0_resize_box_3.png 480w, https://blog.letout.cn/p/java/jvm/class-loading/resolve_1_hua9ef48196efa3564a4ef1eaa93606c3a_10102_1024x0_resize_box_3.png 1024w"
 loading="lazy"
 alt="resolve"
 class="gallery-image"
@@ -711,10 +711,10 @@ data-flex-basis="105px"
 &lt;p>在运行阶段，&lt;code>A&lt;/code> 发生了加载，在解析时，发现其中的 &lt;code>B&lt;/code> 还未被加载，就会触发类 &lt;code>B&lt;/code> 的加载，将 &lt;code>B&lt;/code> 加载到虚拟机中。此时，&lt;code>A&lt;/code> 中的符号引用会被替换为 &lt;code>B&lt;/code> 中的实际地址（直接引用）。&lt;/p>
 &lt;/li>
 &lt;/ul>
-&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/java/jvm/class-loading/resolve.png"
+&lt;p>&lt;img src="https://blog.letout.cn/p/java/jvm/class-loading/resolve.png"
 width="922"
 height="538"
-srcset="https://emerywan.github.io/blog/blog/p/java/jvm/class-loading/resolve_hu45e5622ef4d0eaddcde37871cfee2a7a_117190_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/java/jvm/class-loading/resolve_hu45e5622ef4d0eaddcde37871cfee2a7a_117190_1024x0_resize_box_3.png 1024w"
+srcset="https://blog.letout.cn/p/java/jvm/class-loading/resolve_hu45e5622ef4d0eaddcde37871cfee2a7a_117190_480x0_resize_box_3.png 480w, https://blog.letout.cn/p/java/jvm/class-loading/resolve_hu45e5622ef4d0eaddcde37871cfee2a7a_117190_1024x0_resize_box_3.png 1024w"
 loading="lazy"
 alt="resolve"
 class="gallery-image"
@@ -734,10 +734,10 @@ data-flex-basis="411px"
 &lt;h3 id="-初始化">🥎 初始化&lt;/h3>
 &lt;p>虚拟机真正开始执行类中编写的代码，完成一些主动的资源初始化动作。&lt;/p>
 &lt;p>&lt;strong>执行的是类层面的初始化。&lt;/strong> 只有显式调用 new 才会执行构造函数的初始化。&lt;/p>
-&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/java/jvm/class-loading/init.png"
+&lt;p>&lt;img src="https://blog.letout.cn/p/java/jvm/class-loading/init.png"
 width="533"
 height="388"
-srcset="https://emerywan.github.io/blog/blog/p/java/jvm/class-loading/init_hud5162327100fcc16da85dffebeccc0e0_46268_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/java/jvm/class-loading/init_hud5162327100fcc16da85dffebeccc0e0_46268_1024x0_resize_box_3.png 1024w"
+srcset="https://blog.letout.cn/p/java/jvm/class-loading/init_hud5162327100fcc16da85dffebeccc0e0_46268_480x0_resize_box_3.png 480w, https://blog.letout.cn/p/java/jvm/class-loading/init_hud5162327100fcc16da85dffebeccc0e0_46268_1024x0_resize_box_3.png 1024w"
 loading="lazy"
 alt="init"
 class="gallery-image"

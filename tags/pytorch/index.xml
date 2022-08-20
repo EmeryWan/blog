@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>PyTorch on 一层</title><link>https://emerywan.github.io/blog/tags/pytorch/</link><description>Recent content in PyTorch on 一层</description><generator>Hugo -- gohugo.io</generator><lastBuildDate>Thu, 01 Apr 2021 21:14:45 +0800</lastBuildDate><atom:link href="https://emerywan.github.io/blog/tags/pytorch/index.xml" rel="self" type="application/rss+xml"/><item><title>PyTorch 火速上手</title><link>https://emerywan.github.io/blog/p/pytorch-handbook/</link><pubDate>Thu, 01 Apr 2021 21:14:45 +0800</pubDate><guid>https://emerywan.github.io/blog/p/pytorch-handbook/</guid><description>&lt;img src="https://emerywan.github.io/blog/imgs/10.jpeg" alt="Featured image of post PyTorch 火速上手" />&lt;h2 id="pytorch-是什么">PyTorch 是什么？&lt;/h2>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>PyTorch on 一层</title><link>https://blog.letout.cn/tags/pytorch/</link><description>Recent content in PyTorch on 一层</description><generator>Hugo -- gohugo.io</generator><language>zh-cn</language><lastBuildDate>Thu, 01 Apr 2021 21:14:45 +0800</lastBuildDate><atom:link href="https://blog.letout.cn/tags/pytorch/index.xml" rel="self" type="application/rss+xml"/><item><title>PyTorch 火速上手</title><link>https://blog.letout.cn/p/pytorch-handbook/</link><pubDate>Thu, 01 Apr 2021 21:14:45 +0800</pubDate><guid>https://blog.letout.cn/p/pytorch-handbook/</guid><description>&lt;img src="https://blog.letout.cn/imgs/10.jpeg" alt="Featured image of post PyTorch 火速上手" />&lt;h2 id="pytorch-是什么">PyTorch 是什么？&lt;/h2>
 &lt;p>基于 Python 的科学计算包，服务于以下两种场景：&lt;/p>
 &lt;ul>
 &lt;li>Numpy 的替代品，可以使用 GPU 的强大计算力&lt;/li>
@@ -484,10 +484,10 @@
 &lt;h2 id="神经网络">神经网络&lt;/h2>
 &lt;p>上一节，我们了解到 nn 包依赖 autograd 包来定义模型并求导。下面，我们将了解如何定义一个网络。一个 nn.Module 包含个 layer 和一个 forward(input) 方法，该方法返回 output。&lt;/p>
 &lt;p>如下，这是一个对手写数字图像进行分类的卷积神经网络：&lt;/p>
-&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/pytorch-handbook/CNN.png"
+&lt;p>&lt;img src="https://blog.letout.cn/p/pytorch-handbook/CNN.png"
 width="759"
 height="209"
-srcset="https://emerywan.github.io/blog/blog/p/pytorch-handbook/CNN_hufa4266fb90da2cc9816f33e05e560204_9416_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/pytorch-handbook/CNN_hufa4266fb90da2cc9816f33e05e560204_9416_1024x0_resize_box_3.png 1024w"
+srcset="https://blog.letout.cn/p/pytorch-handbook/CNN_hufa4266fb90da2cc9816f33e05e560204_9416_480x0_resize_box_3.png 480w, https://blog.letout.cn/p/pytorch-handbook/CNN_hufa4266fb90da2cc9816f33e05e560204_9416_1024x0_resize_box_3.png 1024w"
 loading="lazy"
 alt="CNN"
 class="gallery-image"
@@ -752,10 +752,10 @@ data-flex-basis="871px"
 &lt;/ul>
 &lt;p>对于图像任务，其中包含了一个 &lt;code>torchvision&lt;/code> 的包，含有常见的数据集（Imagenet，CIFAR10，MNIST等）的数据加载器，以及用于图像的数据转换器（torchvision.datasets 和 torch.utils.data.DataLoader）。&lt;/p>
 &lt;p>在本示例中，将使用 CIFAR10 数据集。其中包含 10 分类的图像：“飞机”，“汽车”，“鸟”，“猫”，“鹿”，“狗”，“青蛙”，“马”，“船”，“卡车”。图像的尺寸为 3 * 32 * 32，即尺寸为 32 * 32 像素的 3 通道彩色图像。&lt;/p>
-&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/pytorch-handbook/CIFAR-10.png"
+&lt;p>&lt;img src="https://blog.letout.cn/p/pytorch-handbook/CIFAR-10.png"
 width="472"
 height="369"
-srcset="https://emerywan.github.io/blog/blog/p/pytorch-handbook/CIFAR-10_hubd3e6b51c00827c9a17b1eaa7622a23e_30944_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/pytorch-handbook/CIFAR-10_hubd3e6b51c00827c9a17b1eaa7622a23e_30944_1024x0_resize_box_3.png 1024w"
+srcset="https://blog.letout.cn/p/pytorch-handbook/CIFAR-10_hubd3e6b51c00827c9a17b1eaa7622a23e_30944_480x0_resize_box_3.png 480w, https://blog.letout.cn/p/pytorch-handbook/CIFAR-10_hubd3e6b51c00827c9a17b1eaa7622a23e_30944_1024x0_resize_box_3.png 1024w"
 loading="lazy"
 alt="CIFAR-10"
 class="gallery-image"

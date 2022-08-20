@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>并发 on 一层</title><link>https://emerywan.github.io/blog/tags/%E5%B9%B6%E5%8F%91/</link><description>Recent content in 并发 on 一层</description><generator>Hugo -- gohugo.io</generator><lastBuildDate>Tue, 03 May 2022 23:02:02 +0800</lastBuildDate><atom:link href="https://emerywan.github.io/blog/tags/%E5%B9%B6%E5%8F%91/index.xml" rel="self" type="application/rss+xml"/><item><title>Java 并发 - CyclicBarrier 实现原理</title><link>https://emerywan.github.io/blog/p/thread/cyclicbarrier/</link><pubDate>Tue, 03 May 2022 23:02:02 +0800</pubDate><guid>https://emerywan.github.io/blog/p/thread/cyclicbarrier/</guid><description>&lt;img src="https://emerywan.github.io/blog/imgs/14.jpeg" alt="Featured image of post Java 并发 - CyclicBarrier 实现原理" />&lt;h2 id="原理">原理&lt;/h2>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>并发 on 一层</title><link>https://blog.letout.cn/tags/%E5%B9%B6%E5%8F%91/</link><description>Recent content in 并发 on 一层</description><generator>Hugo -- gohugo.io</generator><language>zh-cn</language><lastBuildDate>Tue, 03 May 2022 23:02:02 +0800</lastBuildDate><atom:link href="https://blog.letout.cn/tags/%E5%B9%B6%E5%8F%91/index.xml" rel="self" type="application/rss+xml"/><item><title>Java 并发 - CyclicBarrier 实现原理</title><link>https://blog.letout.cn/p/thread/cyclicbarrier/</link><pubDate>Tue, 03 May 2022 23:02:02 +0800</pubDate><guid>https://blog.letout.cn/p/thread/cyclicbarrier/</guid><description>&lt;img src="https://blog.letout.cn/imgs/14.jpeg" alt="Featured image of post Java 并发 - CyclicBarrier 实现原理" />&lt;h2 id="原理">原理&lt;/h2>
 &lt;p>&lt;code>CyclicBarrier&lt;/code> 通过可重入锁 &lt;code>CyclicBarrier&lt;/code> 实现，内部使用静态内部类 &lt;code>Generation&lt;/code> 维护 &lt;code>broken&lt;/code> 标记，表示屏障是否可用。&lt;/p>
 &lt;p>通过构造方法传入等待线程数 &lt;code>parties&lt;/code>。&lt;/p>
 &lt;p>每次有一个线程到达屏障， &lt;code>count - 1&lt;/code>，直到 &lt;code>count = 0&lt;/code>，会释放屏障，唤醒所有等待的线程，并使用 &lt;code>nextGeneration()&lt;/code> 对 &lt;code>count&lt;/code> 和 &lt;code>generation&lt;/code> 进行重置，进行下一轮循环。&lt;/p>
@@ -371,7 +371,7 @@
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">}&lt;/span>
 &lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
 &lt;/div>
-&lt;/div></description></item><item><title>Java 并发 - CountDownLatch 实现原理</title><link>https://emerywan.github.io/blog/p/thread/countdownlatch/</link><pubDate>Tue, 03 May 2022 14:02:02 +0800</pubDate><guid>https://emerywan.github.io/blog/p/thread/countdownlatch/</guid><description>&lt;img src="https://emerywan.github.io/blog/imgs/6.jpeg" alt="Featured image of post Java 并发 - CountDownLatch 实现原理" />&lt;h2 id="基本实现思路">基本实现思路：&lt;/h2>
+&lt;/div></description></item><item><title>Java 并发 - CountDownLatch 实现原理</title><link>https://blog.letout.cn/p/thread/countdownlatch/</link><pubDate>Tue, 03 May 2022 14:02:02 +0800</pubDate><guid>https://blog.letout.cn/p/thread/countdownlatch/</guid><description>&lt;img src="https://blog.letout.cn/imgs/6.jpeg" alt="Featured image of post Java 并发 - CountDownLatch 实现原理" />&lt;h2 id="基本实现思路">基本实现思路：&lt;/h2>
 &lt;ul>
 &lt;li>
 &lt;p>利用 &lt;strong>共享锁&lt;/strong> 实现&lt;/p>
@@ -521,7 +521,7 @@
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">}&lt;/span>
 &lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
 &lt;/div>
-&lt;/div></description></item><item><title>Java 并发 - AQS</title><link>https://emerywan.github.io/blog/p/thread/aqs/</link><pubDate>Wed, 13 Apr 2022 14:02:02 +0800</pubDate><guid>https://emerywan.github.io/blog/p/thread/aqs/</guid><description>&lt;img src="https://emerywan.github.io/blog/imgs/6.jpeg" alt="Featured image of post Java 并发 - AQS" />&lt;h2 id="aqs">AQS&lt;/h2>
+&lt;/div></description></item><item><title>Java 并发 - AQS</title><link>https://blog.letout.cn/p/thread/aqs/</link><pubDate>Wed, 13 Apr 2022 14:02:02 +0800</pubDate><guid>https://blog.letout.cn/p/thread/aqs/</guid><description>&lt;img src="https://blog.letout.cn/imgs/6.jpeg" alt="Featured image of post Java 并发 - AQS" />&lt;h2 id="aqs">AQS&lt;/h2>
 &lt;p>AQS &lt;code>AbstractQueuedSynchronized&lt;/code> 是一个用来构建锁和同步器的框架，是对 CAS 的一种封装和丰富，AQS 引入了独占锁，共享锁等性质。&lt;/p>
 &lt;p>使用 AQS 能够基于 Java API，简单高效地构建出应用广泛的大量同步器，用于 Java 多线程之间的同步。&lt;/p>
 &lt;h2 id="核心思想">核心思想&lt;/h2>
@@ -673,10 +673,10 @@
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">}&lt;/span>
 &lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
 &lt;/div>
-&lt;/div>&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/thread/aqs/countdownlatch.png"
+&lt;/div>&lt;p>&lt;img src="https://blog.letout.cn/p/thread/aqs/countdownlatch.png"
 width="605"
 height="416"
-srcset="https://emerywan.github.io/blog/blog/p/thread/aqs/countdownlatch_hu76805997e75031fb962291546eee5c35_69221_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/thread/aqs/countdownlatch_hu76805997e75031fb962291546eee5c35_69221_1024x0_resize_box_3.png 1024w"
+srcset="https://blog.letout.cn/p/thread/aqs/countdownlatch_hu76805997e75031fb962291546eee5c35_69221_480x0_resize_box_3.png 480w, https://blog.letout.cn/p/thread/aqs/countdownlatch_hu76805997e75031fb962291546eee5c35_69221_1024x0_resize_box_3.png 1024w"
 loading="lazy"
 alt="countdownlatch"
 class="gallery-image"
@@ -688,10 +688,10 @@ data-flex-basis="349px"
 &lt;p>直到所有的子线程都执行完毕之后，&lt;code>state=0&lt;/code>，主线程会结束等待，继续执行后续任务。&lt;/p>
 &lt;h3 id="cyclicbarrier">CyclicBarrier&lt;/h3>
 &lt;p>&lt;code>CyclicBarrier&lt;/code> 用于多个线程相互等待对方执行到某个状态后，这些线程再继续执行。&lt;/p>
-&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/thread/aqs/cyclicbarrier.jpg"
+&lt;p>&lt;img src="https://blog.letout.cn/p/thread/aqs/cyclicbarrier.jpg"
 width="890"
 height="282"
-srcset="https://emerywan.github.io/blog/blog/p/thread/aqs/cyclicbarrier_hu4bbc637d91d993b0f3842d2bee476984_33199_480x0_resize_q75_box.jpg 480w, https://emerywan.github.io/blog/blog/p/thread/aqs/cyclicbarrier_hu4bbc637d91d993b0f3842d2bee476984_33199_1024x0_resize_q75_box.jpg 1024w"
+srcset="https://blog.letout.cn/p/thread/aqs/cyclicbarrier_hu4bbc637d91d993b0f3842d2bee476984_33199_480x0_resize_q75_box.jpg 480w, https://blog.letout.cn/p/thread/aqs/cyclicbarrier_hu4bbc637d91d993b0f3842d2bee476984_33199_1024x0_resize_q75_box.jpg 1024w"
 loading="lazy"
 alt="cyclicbarrier"
 class="gallery-image"
@@ -776,10 +776,10 @@ data-flex-basis="757px"
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">}&lt;/span>
 &lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
 &lt;/div>
-&lt;/div>&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/thread/aqs/cyclicbarrier-result.png"
+&lt;/div>&lt;p>&lt;img src="https://blog.letout.cn/p/thread/aqs/cyclicbarrier-result.png"
 width="576"
 height="450"
-srcset="https://emerywan.github.io/blog/blog/p/thread/aqs/cyclicbarrier-result_huabd0a32719e9e0c5e0894dc282a3eb45_80712_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/thread/aqs/cyclicbarrier-result_huabd0a32719e9e0c5e0894dc282a3eb45_80712_1024x0_resize_box_3.png 1024w"
+srcset="https://blog.letout.cn/p/thread/aqs/cyclicbarrier-result_huabd0a32719e9e0c5e0894dc282a3eb45_80712_480x0_resize_box_3.png 480w, https://blog.letout.cn/p/thread/aqs/cyclicbarrier-result_huabd0a32719e9e0c5e0894dc282a3eb45_80712_1024x0_resize_box_3.png 1024w"
 loading="lazy"
 alt="cyclicbarrier result"
 class="gallery-image"
@@ -808,10 +808,10 @@ data-flex-basis="307px"
 &lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
 &lt;/div>
 &lt;/div>&lt;p>将子线程的数量设置为 &lt;code>10&lt;/code>，循环屏障设置为 &lt;code>5&lt;/code>，将会得到如下结果：每有 &lt;code>5&lt;/code> 个，线程到达“屏障”点，就会释放一次。&lt;/p>
-&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/thread/aqs/cyclicbarrier-result-2.png"
+&lt;p>&lt;img src="https://blog.letout.cn/p/thread/aqs/cyclicbarrier-result-2.png"
 width="585"
 height="811"
-srcset="https://emerywan.github.io/blog/blog/p/thread/aqs/cyclicbarrier-result-2_hu2373c7ae3a7710cd05edc6f1f466fc13_156183_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/thread/aqs/cyclicbarrier-result-2_hu2373c7ae3a7710cd05edc6f1f466fc13_156183_1024x0_resize_box_3.png 1024w"
+srcset="https://blog.letout.cn/p/thread/aqs/cyclicbarrier-result-2_hu2373c7ae3a7710cd05edc6f1f466fc13_156183_480x0_resize_box_3.png 480w, https://blog.letout.cn/p/thread/aqs/cyclicbarrier-result-2_hu2373c7ae3a7710cd05edc6f1f466fc13_156183_1024x0_resize_box_3.png 1024w"
 loading="lazy"
 alt="cyclicbarrier result"
 class="gallery-image"
@@ -860,7 +860,7 @@ data-flex-basis="173px"
 &lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
 &lt;/div>
 &lt;/div>&lt;h3 id="reentrantlock">ReentrantLock&lt;/h3>
-&lt;h3 id="reentrantreadwritelock">ReentrantReadWriteLock&lt;/h3></description></item><item><title>线程安全的单例模式</title><link>https://emerywan.github.io/blog/p/thread/singleton/</link><pubDate>Mon, 11 Apr 2022 18:02:02 +0800</pubDate><guid>https://emerywan.github.io/blog/p/thread/singleton/</guid><description>&lt;img src="https://emerywan.github.io/blog/imgs/8.jpeg" alt="Featured image of post 线程安全的单例模式" />&lt;h2 id="单例模式">单例模式&lt;/h2>
+&lt;h3 id="reentrantreadwritelock">ReentrantReadWriteLock&lt;/h3></description></item><item><title>线程安全的单例模式</title><link>https://blog.letout.cn/p/thread/singleton/</link><pubDate>Mon, 11 Apr 2022 18:02:02 +0800</pubDate><guid>https://blog.letout.cn/p/thread/singleton/</guid><description>&lt;img src="https://blog.letout.cn/imgs/8.jpeg" alt="Featured image of post 线程安全的单例模式" />&lt;h2 id="单例模式">单例模式&lt;/h2>
 &lt;p>单例模式所要实现的目标：保持一个类有且只有一个实例。&lt;/p>
 &lt;p>出于性能的考虑，不少单例模式都会采用延迟加载的方式。&lt;/p>
 &lt;p>根据是否延迟加载，可以分为：&lt;/p>
@@ -1076,7 +1076,7 @@ data-flex-basis="173px"
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">}&lt;/span>
 &lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
 &lt;/div>
-&lt;/div>&lt;p>字段 &lt;code>INSTANCE&lt;/code> 是枚举类的唯一实例。在 &lt;code>Singleton.INSTANCE&lt;/code> 初次被引用时才会被初始化。&lt;/p></description></item><item><title>Java 并发 - 锁机制</title><link>https://emerywan.github.io/blog/p/thread/lock/</link><pubDate>Mon, 11 Apr 2022 14:02:02 +0800</pubDate><guid>https://emerywan.github.io/blog/p/thread/lock/</guid><description>&lt;img src="https://emerywan.github.io/blog/imgs/7.jpeg" alt="Featured image of post Java 并发 - 锁机制" />&lt;p>在并发情况下，多个线程会对同一个资源进行争抢，可能会导致数据不一致的问题。&lt;/p>
+&lt;/div>&lt;p>字段 &lt;code>INSTANCE&lt;/code> 是枚举类的唯一实例。在 &lt;code>Singleton.INSTANCE&lt;/code> 初次被引用时才会被初始化。&lt;/p></description></item><item><title>Java 并发 - 锁机制</title><link>https://blog.letout.cn/p/thread/lock/</link><pubDate>Mon, 11 Apr 2022 14:02:02 +0800</pubDate><guid>https://blog.letout.cn/p/thread/lock/</guid><description>&lt;img src="https://blog.letout.cn/imgs/7.jpeg" alt="Featured image of post Java 并发 - 锁机制" />&lt;p>在并发情况下，多个线程会对同一个资源进行争抢，可能会导致数据不一致的问题。&lt;/p>
 &lt;p>为了解决这个问题，通过引入&lt;strong>锁机制&lt;/strong>，使用一种抽象的锁，对资源进行锁定，达到同步访问。&lt;/p>
 &lt;h2 id="实现">实现&lt;/h2>
 &lt;p>Java 采用了两种实现方式：&lt;/p>
@@ -1095,10 +1095,10 @@ data-flex-basis="173px"
 &lt;/li>
 &lt;/ul>
 &lt;h2 id="-悲观锁">😢 悲观锁&lt;/h2>
-&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/thread/lock/pessimistic_lock.png"
+&lt;p>&lt;img src="https://blog.letout.cn/p/thread/lock/pessimistic_lock.png"
 width="1203"
 height="435"
-srcset="https://emerywan.github.io/blog/blog/p/thread/lock/pessimistic_lock_hu0c6cbd403a1714d2f5c0f487acc85888_127050_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/thread/lock/pessimistic_lock_hu0c6cbd403a1714d2f5c0f487acc85888_127050_1024x0_resize_box_3.png 1024w"
+srcset="https://blog.letout.cn/p/thread/lock/pessimistic_lock_hu0c6cbd403a1714d2f5c0f487acc85888_127050_480x0_resize_box_3.png 480w, https://blog.letout.cn/p/thread/lock/pessimistic_lock_hu0c6cbd403a1714d2f5c0f487acc85888_127050_1024x0_resize_box_3.png 1024w"
 loading="lazy"
 alt="pessimistic"
 class="gallery-image"
@@ -1187,10 +1187,10 @@ data-flex-basis="663px"
 &lt;/ul>
 &lt;p>对象锁状态被标记为重量级锁，需要通过 Monitor 来对线程进行控制。&lt;/p>
 &lt;h2 id="-乐观锁-cas">😁 乐观锁 CAS&lt;/h2>
-&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/thread/lock/optimistic_lock.png"
+&lt;p>&lt;img src="https://blog.letout.cn/p/thread/lock/optimistic_lock.png"
 width="1037"
 height="468"
-srcset="https://emerywan.github.io/blog/blog/p/thread/lock/optimistic_lock_hu036037785ffcb4d154b9171a46e6bd40_99684_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/thread/lock/optimistic_lock_hu036037785ffcb4d154b9171a46e6bd40_99684_1024x0_resize_box_3.png 1024w"
+srcset="https://blog.letout.cn/p/thread/lock/optimistic_lock_hu036037785ffcb4d154b9171a46e6bd40_99684_480x0_resize_box_3.png 480w, https://blog.letout.cn/p/thread/lock/optimistic_lock_hu036037785ffcb4d154b9171a46e6bd40_99684_1024x0_resize_box_3.png 1024w"
 loading="lazy"
 alt="optimistic"
 class="gallery-image"
@@ -1424,7 +1424,7 @@ data-flex-basis="531px"
 &lt;ul>
 &lt;li>&lt;a class="link" href="https://tech.meituan.com/2018/11/15/java-lock.html" target="_blank" rel="noopener"
 >https://tech.meituan.com/2018/11/15/java-lock.html&lt;/a>&lt;/li>
-&lt;/ul></description></item><item><title>Java并发 - 线程池</title><link>https://emerywan.github.io/blog/p/thread/threadpool/</link><pubDate>Wed, 30 Mar 2022 16:02:02 +0800</pubDate><guid>https://emerywan.github.io/blog/p/thread/threadpool/</guid><description>&lt;img src="https://emerywan.github.io/blog/imgs/9.jpeg" alt="Featured image of post Java并发 - 线程池" />&lt;h2 id="创建">创建&lt;/h2>
+&lt;/ul></description></item><item><title>Java并发 - 线程池</title><link>https://blog.letout.cn/p/thread/threadpool/</link><pubDate>Wed, 30 Mar 2022 16:02:02 +0800</pubDate><guid>https://blog.letout.cn/p/thread/threadpool/</guid><description>&lt;img src="https://blog.letout.cn/imgs/9.jpeg" alt="Featured image of post Java并发 - 线程池" />&lt;h2 id="创建">创建&lt;/h2>
 &lt;div class="highlight">&lt;div class="chroma">
 &lt;table class="lntable">&lt;tr>&lt;td class="lntd">
 &lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
@@ -1764,7 +1764,7 @@ data-flex-basis="531px"
 &lt;ul>
 &lt;li>&lt;a class="link" href="https://segmentfault.com/a/1190000039267451" target="_blank" rel="noopener"
 >https://segmentfault.com/a/1190000039267451&lt;/a>&lt;/li>
-&lt;/ul></description></item><item><title>Java 多线程</title><link>https://emerywan.github.io/blog/p/thread/thread/</link><pubDate>Wed, 30 Mar 2022 14:02:02 +0800</pubDate><guid>https://emerywan.github.io/blog/p/thread/thread/</guid><description>&lt;img src="https://emerywan.github.io/blog/imgs/9.jpeg" alt="Featured image of post Java 多线程" />&lt;h2 id="进程与线程">进程与线程&lt;/h2>
+&lt;/ul></description></item><item><title>Java 多线程</title><link>https://blog.letout.cn/p/thread/thread/</link><pubDate>Wed, 30 Mar 2022 14:02:02 +0800</pubDate><guid>https://blog.letout.cn/p/thread/thread/</guid><description>&lt;img src="https://blog.letout.cn/imgs/9.jpeg" alt="Featured image of post Java 多线程" />&lt;h2 id="进程与线程">进程与线程&lt;/h2>
 &lt;p>&lt;strong>进程&lt;/strong>是程序向操作系统申请资源的基本单位。&lt;/p>
 &lt;p>&lt;strong>线程&lt;/strong>是进程中可独立执行的最小单位。&lt;/p>
 &lt;p>一个进程可以包括多个线程，同一进程中所有线程共享该进程中的资源。&lt;/p>
@@ -1853,10 +1853,10 @@ data-flex-basis="531px"
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">}&lt;/span>
 &lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
 &lt;/div>
-&lt;/div>&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/thread/thread/FutureTask.png"
+&lt;/div>&lt;p>&lt;img src="https://blog.letout.cn/p/thread/thread/FutureTask.png"
 width="964"
 height="706"
-srcset="https://emerywan.github.io/blog/blog/p/thread/thread/FutureTask_hu6b05634f3a5f84702cb4db413d8bbef5_51410_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/thread/thread/FutureTask_hu6b05634f3a5f84702cb4db413d8bbef5_51410_1024x0_resize_box_3.png 1024w"
+srcset="https://blog.letout.cn/p/thread/thread/FutureTask_hu6b05634f3a5f84702cb4db413d8bbef5_51410_480x0_resize_box_3.png 480w, https://blog.letout.cn/p/thread/thread/FutureTask_hu6b05634f3a5f84702cb4db413d8bbef5_51410_1024x0_resize_box_3.png 1024w"
 loading="lazy"
 alt="FutureTask"
 class="gallery-image"
