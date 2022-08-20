@@ -1,0 +1,772 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>JVM on 一层</title><link>https://emerywan.github.io/blog/tags/jvm/</link><description>Recent content in JVM on 一层</description><generator>Hugo -- gohugo.io</generator><lastBuildDate>Mon, 08 Aug 2022 15:02:02 +0800</lastBuildDate><atom:link href="https://emerywan.github.io/blog/tags/jvm/index.xml" rel="self" type="application/rss+xml"/><item><title>JVM 内存区域</title><link>https://emerywan.github.io/blog/p/java/jvm/memory-area/</link><pubDate>Mon, 08 Aug 2022 15:02:02 +0800</pubDate><guid>https://emerywan.github.io/blog/p/java/jvm/memory-area/</guid><description>&lt;img src="https://emerywan.github.io/blog/imgs/27.jpeg" alt="Featured image of post JVM 内存区域" />&lt;ul>
+&lt;li>
+&lt;p>线程隔离&lt;/p>
+&lt;ul>
+&lt;li>程序计数器&lt;/li>
+&lt;li>虚拟机栈&lt;/li>
+&lt;li>本地方法栈&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>
+&lt;p>线程共享&lt;/p>
+&lt;ul>
+&lt;li>方法区&lt;/li>
+&lt;li>堆&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/java/jvm/memory-area/area.png"
+width="875"
+height="550"
+srcset="https://emerywan.github.io/blog/blog/p/java/jvm/memory-area/area_hu77c5f146be5bf31c819ffe7a07cc3500_205102_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/java/jvm/memory-area/area_hu77c5f146be5bf31c819ffe7a07cc3500_205102_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+alt="area"
+class="gallery-image"
+data-flex-grow="159"
+data-flex-basis="381px"
+>&lt;/p>
+&lt;h2 id="-程序计数器">🎋 程序计数器&lt;/h2>
+&lt;p>当前线程执行字节码的行号指示器。&lt;/p>
+&lt;p>唯一一个不会出现 &lt;code>OutOfMemoryError&lt;/code> 的内存区域，随线程的创建而创建，随线程的结束而死亡。&lt;/p>
+&lt;h2 id="-虚拟机栈">🎋 虚拟机栈&lt;/h2>
+&lt;p>每一次方法的调用都会有一个对应的栈帧被压入栈中，每一个方法调用结束后，都会有一个栈帧被弹出。&lt;/p>
+&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/java/jvm/memory-area/stack.png"
+width="302"
+height="551"
+srcset="https://emerywan.github.io/blog/blog/p/java/jvm/memory-area/stack_hu387fe9e9614436cd46058aff5c85565a_61440_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/java/jvm/memory-area/stack_hu387fe9e9614436cd46058aff5c85565a_61440_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+alt="stack"
+class="gallery-image"
+data-flex-grow="54"
+data-flex-basis="131px"
+>&lt;/p>
+&lt;p>当线程请求栈的深度超过当前 Java 虚拟机最大深度时，会抛出 &lt;code>StackOverFlowError&lt;/code>。&lt;/p>
+&lt;ul>
+&lt;li>局部变量表&lt;/li>
+&lt;/ul>
+&lt;p>存放编译期可知的各种数据类型，对象引用地址。&lt;/p>
+&lt;ul>
+&lt;li>操作数栈&lt;/li>
+&lt;/ul>
+&lt;p>方法执行过程中的计算结果，计算过程中产生的临时变量。&lt;/p>
+&lt;ul>
+&lt;li>动态链接&lt;/li>
+&lt;/ul>
+&lt;p>服务于一个方法需要调用其他方法的场景。&lt;/p>
+&lt;ul>
+&lt;li>方法返回地址
+&lt;ul>
+&lt;li>正常返回&lt;/li>
+&lt;li>异常返回&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;h2 id="-本地方法栈">🎋 本地方法栈&lt;/h2>
+&lt;p>本地方法栈是虚拟为执行 Native 方法服务。&lt;/p>
+&lt;h2 id="-方法区">🎍 方法区&lt;/h2>
+&lt;p>方法区是 Java 虚拟机的抽象概念。实现方式在不同虚拟机中可能不同。&lt;/p>
+&lt;ul>
+&lt;li>
+&lt;p>JDK 8 之前，HotSpot 虚拟机使用永久带实现方法区&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>JDK 8 及之后，使用元空间（直接内存）实现&lt;/p>
+&lt;/li>
+&lt;/ul>
+&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/java/jvm/memory-area/function-before.png"
+width="382"
+height="436"
+srcset="https://emerywan.github.io/blog/blog/p/java/jvm/memory-area/function-before_hu5ba856b5fa83b596c5da12a50d62fcb1_75748_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/java/jvm/memory-area/function-before_hu5ba856b5fa83b596c5da12a50d62fcb1_75748_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+alt="before"
+class="gallery-image"
+data-flex-grow="87"
+data-flex-basis="210px"
+>&lt;/p>
+&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/java/jvm/memory-area/function-after.png"
+width="484"
+height="433"
+srcset="https://emerywan.github.io/blog/blog/p/java/jvm/memory-area/function-after_hue0bd0747c11f9c8962eb0e412965ba30_84329_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/java/jvm/memory-area/function-after_hue0bd0747c11f9c8962eb0e412965ba30_84329_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+alt="after"
+class="gallery-image"
+data-flex-grow="111"
+data-flex-basis="268px"
+>&lt;/p>
+&lt;ul>
+&lt;li>类的元信息&lt;/li>
+&lt;/ul>
+&lt;p>类名，访问修饰符，字段描述，方法描述等&lt;/p>
+&lt;ul>
+&lt;li>运行时常量池&lt;/li>
+&lt;/ul>
+&lt;p>存放编译后的各种字面量，符号引用，常量（final）池表等&lt;/p>
+&lt;ul>
+&lt;li>字符串常量池&lt;/li>
+&lt;/ul>
+&lt;p>JVM 为了减少字符串对内存的消耗，并提升性能，专门开辟的区域&lt;/p>
+&lt;ul>
+&lt;li>静态变量&lt;/li>
+&lt;/ul>
+&lt;p>类变量（static）&lt;/p>
+&lt;h2 id="-堆">🎍 堆&lt;/h2>
+&lt;p>用来存放和管理对象实例，几乎所有的对象实例都在这里分配（逃逸分析，栈上分配）。&lt;/p>
+&lt;p>Java 堆是垃圾回收的主要区域，因此也被称为 GC 堆。&lt;/p>
+&lt;ul>
+&lt;li>
+&lt;p>JDK 8 之前，堆被分为&lt;/p>
+&lt;ul>
+&lt;li>新生代（Eden、Survivor1、Survivor2）&lt;/li>
+&lt;li>老年代&lt;/li>
+&lt;li>永久代&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>
+&lt;p>JDK 8 之后，永久代被取消&lt;/p>
+&lt;/li>
+&lt;/ul>
+&lt;p>大部分情况下，对象首先会在 Eden 区进行分配；在一次垃圾回收后，如果对象还存活，会进入 S0 或 S1；当对象年龄增长到一定程度（默认 15），或累积的年龄超过了 Survivor 的一半，会晋升到老年代。&lt;/p></description></item><item><title>JVM 垃圾回收</title><link>https://emerywan.github.io/blog/p/java/jvm/garbage-collection/</link><pubDate>Sun, 07 Aug 2022 12:02:02 +0800</pubDate><guid>https://emerywan.github.io/blog/p/java/jvm/garbage-collection/</guid><description>&lt;img src="https://emerywan.github.io/blog/imgs/26.jpeg" alt="Featured image of post JVM 垃圾回收" />&lt;h2 id="-对象存活判定">🌴 对象存活判定&lt;/h2>
+&lt;h3 id="-引用计数法">🪨 引用计数法&lt;/h3>
+&lt;p>给每个对象添加一个引用计数器：&lt;/p>
+&lt;ul>
+&lt;li>当有地方引用该对象，计数器 &lt;code>+1&lt;/code>&lt;/li>
+&lt;li>当引用失效，计数器 &lt;code>-1&lt;/code>&lt;/li>
+&lt;li>当计数器为 &lt;code>0&lt;/code> 时，表示对象不可用&lt;/li>
+&lt;/ul>
+&lt;p>该方法简单高效，但主流的虚拟机都没有选择该方法管理内存，难以解决对象之间循环引用的问题。&lt;/p>
+&lt;h3 id="-可达性分析法">🪨 可达性分析法&lt;/h3>
+&lt;p>通过一系列称为 &lt;code>GC Root&lt;/code> 的对象作为起点，从这些起点向下搜索，节点走过的路径称为引用链，当一个对象与 &lt;code>GC Root&lt;/code> 之间没有任何引用链相连的话，说明对象不可用，需要被回收。&lt;/p>
+&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/java/jvm/garbage-collection/gcroot.png"
+width="935"
+height="581"
+srcset="https://emerywan.github.io/blog/blog/p/java/jvm/garbage-collection/gcroot_hud8e4c62b0ef63778b91f8329965428a2_102739_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/java/jvm/garbage-collection/gcroot_hud8e4c62b0ef63778b91f8329965428a2_102739_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+alt="gcroot"
+class="gallery-image"
+data-flex-grow="160"
+data-flex-basis="386px"
+>&lt;/p>
+&lt;p>可以作为 &lt;code>GC Root&lt;/code> 的对象：&lt;/p>
+&lt;ul>
+&lt;li>虚拟机栈（栈帧中局部变量表）引用的对象&lt;/li>
+&lt;li>本地方法栈中引用的对象&lt;/li>
+&lt;li>类静态属性引用的对象&lt;/li>
+&lt;li>方法区中常量引用的对象&lt;/li>
+&lt;li>所有被同步锁（synchronized）持有的对象&lt;/li>
+&lt;/ul>
+&lt;!-- raw HTML omitted -->
+&lt;!-- raw HTML omitted -->
+&lt;h2 id="-垃圾回收算法">🌴 垃圾回收算法&lt;/h2>
+&lt;h3 id="-标记-清除">🪵 标记-清除&lt;/h3>
+&lt;ul>
+&lt;li>标记出所有需要回收的对象&lt;/li>
+&lt;li>标记结束后，统一回收掉所有被标记的对象&lt;/li>
+&lt;/ul>
+&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/java/jvm/garbage-collection/clear.png"
+width="962"
+height="488"
+srcset="https://emerywan.github.io/blog/blog/p/java/jvm/garbage-collection/clear_hu3ebff86a38831b55ce513a2b74335841_65435_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/java/jvm/garbage-collection/clear_hu3ebff86a38831b55ce513a2b74335841_65435_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+alt="clear"
+class="gallery-image"
+data-flex-grow="197"
+data-flex-basis="473px"
+>&lt;/p>
+&lt;ul>
+&lt;li>执行效率不稳定，大部分对象需要回收时，需要大量标记和清除操作&lt;/li>
+&lt;li>内存空间碎片化问题&lt;/li>
+&lt;/ul>
+&lt;h3 id="-标记-复制">🪵 标记-复制&lt;/h3>
+&lt;ul>
+&lt;li>将内存分为两块，每次只使用其中的一块&lt;/li>
+&lt;li>当一块内存使用完后，将存活的对象复制到另外一块去&lt;/li>
+&lt;li>将以使用的空间一次性清除掉&lt;/li>
+&lt;/ul>
+&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/java/jvm/garbage-collection/copy.png"
+width="955"
+height="495"
+srcset="https://emerywan.github.io/blog/blog/p/java/jvm/garbage-collection/copy_hu6b5a3b19d23e61d87d481fdc4629a5cf_68281_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/java/jvm/garbage-collection/copy_hu6b5a3b19d23e61d87d481fdc4629a5cf_68281_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+alt="copy"
+class="gallery-image"
+data-flex-grow="192"
+data-flex-basis="463px"
+>&lt;/p>
+&lt;ul>
+&lt;li>可用内存变少，有空间浪费问题&lt;/li>
+&lt;/ul>
+&lt;h3 id="-标记-整理">🪵 标记-整理&lt;/h3>
+&lt;ul>
+&lt;li>标记出所有需要回收的对象&lt;/li>
+&lt;li>让这些存活对象向内存的一端移动&lt;/li>
+&lt;li>直接清除掉边界以外的内存&lt;/li>
+&lt;/ul>
+&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/java/jvm/garbage-collection/move.png"
+width="944"
+height="480"
+srcset="https://emerywan.github.io/blog/blog/p/java/jvm/garbage-collection/move_hu0eec74bf9ebb0cbf4f6fd4cbe2be3a39_63153_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/java/jvm/garbage-collection/move_hu0eec74bf9ebb0cbf4f6fd4cbe2be3a39_63153_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+alt="move"
+class="gallery-image"
+data-flex-grow="196"
+data-flex-basis="472px"
+>&lt;/p>
+&lt;h3 id="-分代收集">🪵 分代收集&lt;/h3>
+&lt;p>根据对象存活周期的不同，将 Java 堆分为新生代和老年代，依据各个区域的特点，选择回收算法。&lt;/p>
+&lt;ul>
+&lt;li>在新生代中，每次收集都会有大量的对象死去，选择 &lt;code>标记-复制&lt;/code> 算法&lt;/li>
+&lt;li>在老年代中，存活对象的几率较高，没有额外的空间进行分配担保，选择 &lt;code>标记-清除&lt;/code> 或 &lt;code>标记-整理&lt;/code> 算法&lt;/li>
+&lt;/ul>
+&lt;h2 id="-垃圾收集方式">🌴 垃圾收集方式&lt;/h2>
+&lt;h3 id="-部分收集">🪨 部分收集&lt;/h3>
+&lt;p>收集堆部分区域。&lt;code>Partial GC&lt;/code>&lt;/p>
+&lt;ul>
+&lt;li>新生代收集 &lt;code>Minor GC / Young GC&lt;/code>&lt;/li>
+&lt;/ul>
+&lt;p>目标只是新生代的垃圾收集。&lt;/p>
+&lt;ul>
+&lt;li>老年代收集 &lt;code>Major GC / Old GC&lt;/code>&lt;/li>
+&lt;/ul>
+&lt;p>目标只是老年代的垃圾收集，目前只有 CMS 收集器会有单独收集老年代的行为。&lt;/p>
+&lt;ul>
+&lt;li>混合收集 &lt;code>Mixed GC&lt;/code>&lt;/li>
+&lt;/ul>
+&lt;p>目标是整个新生代和部分老年代的垃圾收集，目前只有 G1 收集器会有这种行为。&lt;/p>
+&lt;h3 id="-整堆收集">🪨 整堆收集&lt;/h3>
+&lt;p>收集整个堆和方法区。&lt;code>Full GC&lt;/code>&lt;/p>
+&lt;ul>
+&lt;li>晋升到老年代的对象大于老年代的剩余空间&lt;/li>
+&lt;li>Minor GC 后，新生代存活对象超过了老年代的空间（分配担保）&lt;/li>
+&lt;li>手动 System.gc()&lt;/li>
+&lt;li>(Java8之前) 永久代空间不足&lt;/li>
+&lt;/ul>
+&lt;h2 id="-垃圾收集器">🌴 垃圾收集器&lt;/h2>
+&lt;h3 id="-serial--serial-old">🪵 Serial / Serial Old&lt;/h3>
+&lt;p>“单线程”的垃圾收集器，在进行垃圾收集时，必须暂停其他所有工作线程&lt;code>stop the world&lt;/code>，直到收集介绍。&lt;/p>
+&lt;ul>
+&lt;li>新生代采用标记-复制算法，老年代采用标记-整理算法&lt;/li>
+&lt;/ul>
+&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/java/jvm/garbage-collection/serial.png"
+width="953"
+height="209"
+srcset="https://emerywan.github.io/blog/blog/p/java/jvm/garbage-collection/serial_hu902bd566aebd83355bfe0e2769bbc345_79667_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/java/jvm/garbage-collection/serial_hu902bd566aebd83355bfe0e2769bbc345_79667_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+alt="serial"
+class="gallery-image"
+data-flex-grow="455"
+data-flex-basis="1094px"
+>&lt;/p>
+&lt;ul>
+&lt;li>简单高效&lt;/li>
+&lt;li>依旧是现在 HotSpot 虚拟机运行在客户端模式下的默认新生代垃圾回收方式&lt;/li>
+&lt;/ul>
+&lt;h3 id="-parnew">🪵 ParNew&lt;/h3>
+&lt;p>Serial 的多线程版本，可以使用多条线程进行垃圾回收（新生代）。&lt;/p>
+&lt;ul>
+&lt;li>采用标记复制算法&lt;/li>
+&lt;/ul>
+&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/java/jvm/garbage-collection/parnew.png"
+width="960"
+height="202"
+srcset="https://emerywan.github.io/blog/blog/p/java/jvm/garbage-collection/parnew_hub4e3375e7b496e8b6ebc251ec3bf2f26_87679_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/java/jvm/garbage-collection/parnew_hub4e3375e7b496e8b6ebc251ec3bf2f26_87679_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+alt="parnew"
+class="gallery-image"
+data-flex-grow="475"
+data-flex-basis="1140px"
+>&lt;/p>
+&lt;h3 id="-parallel-scavenge--parallel-old">🪵 Parallel Scavenge / Parallel Old&lt;/h3>
+&lt;ul>
+&lt;li>基于 标记-复制 算法实现的新生代垃圾收集器，能够并行收集的多线程收集器，目标是达到一个可控制的“吞吐量”&lt;/li>
+&lt;li>基于 标记-整理 算法实现的老年代多线程收集器。&lt;/li>
+&lt;/ul>
+&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/java/jvm/garbage-collection/parallel.png"
+width="934"
+height="199"
+srcset="https://emerywan.github.io/blog/blog/p/java/jvm/garbage-collection/parallel_hu519cfc57a4a5c97f5f81fc0feaeb8730_92362_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/java/jvm/garbage-collection/parallel_hu519cfc57a4a5c97f5f81fc0feaeb8730_92362_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+alt="parallel"
+class="gallery-image"
+data-flex-grow="469"
+data-flex-basis="1126px"
+>&lt;/p>
+&lt;ul>
+&lt;li>
+&lt;p>Java 8 默认的收集器为 Parallel Sacvenge + Parallel Old&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>吞吐量 TPS ：系统在单位时间内处理请求的数量&lt;/p>
+&lt;/li>
+&lt;/ul>
+&lt;h3 id="-cms">🪵 CMS&lt;/h3>
+&lt;p>&lt;code>Concurrent Mark Swap&lt;/code> 获取最短停顿时间的收集器。&lt;/p>
+&lt;p>是 HotSpot 虚拟机第一款真正意义上的垃圾收集器，实现了用户线程和垃圾回收线程同时工作。基于 标记-清除 算法的 &lt;strong>老年代&lt;/strong> 收集器。&lt;/p>
+&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/java/jvm/garbage-collection/CMS.png"
+width="1121"
+height="230"
+srcset="https://emerywan.github.io/blog/blog/p/java/jvm/garbage-collection/CMS_hu7a65fd9981325c5387fcf294cec67078_167761_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/java/jvm/garbage-collection/CMS_hu7a65fd9981325c5387fcf294cec67078_167761_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+alt="CMS"
+class="gallery-image"
+data-flex-grow="487"
+data-flex-basis="1169px"
+>&lt;/p>
+&lt;p>CMS 收集器整个过程分为四个步骤：&lt;/p>
+&lt;ul>
+&lt;li>🐾 初始标记&lt;/li>
+&lt;/ul>
+&lt;p>标记与 GC Root 直接关联的对象。（stop the world）暂停用户线程，但速度较快。&lt;/p>
+&lt;ul>
+&lt;li>🐾 并发标记&lt;/li>
+&lt;/ul>
+&lt;p>用户线程和垃圾回收线程同时工作，从 GC Root 直接关联的对象开始遍历，根据可达性分析，找出存活对象。&lt;/p>
+&lt;ul>
+&lt;li>🐾 重新标记&lt;/li>
+&lt;/ul>
+&lt;p>修正并发标记过程中，由于程序继续运行，导致的标记错误。暂停用户线程。&lt;/p>
+&lt;ul>
+&lt;li>🐾 并发清除&lt;/li>
+&lt;/ul>
+&lt;p>并发地清理未被标记的区域。&lt;/p>
+&lt;p>缺点：&lt;/p>
+&lt;ul>
+&lt;li>对 CPU 资源敏感&lt;/li>
+&lt;li>无法处理浮动垃圾：运行过程中，有一些垃圾在当次无法处理，需要等待下次垃圾回收&lt;/li>
+&lt;li>会产生内存碎片，连续空间减少，导致 Full GC&lt;/li>
+&lt;/ul>
+&lt;h3 id="-g1">🪵 G1&lt;/h3>
+&lt;p>G1 开创了收集器面向局部收集的设计思路和基于 Region 的内存布局形式。&lt;/p>
+&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/java/jvm/garbage-collection/g1heap.png"
+width="902"
+height="676"
+srcset="https://emerywan.github.io/blog/blog/p/java/jvm/garbage-collection/g1heap_huc8187154c5204389b583a76e76e7dffa_88685_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/java/jvm/garbage-collection/g1heap_huc8187154c5204389b583a76e76e7dffa_88685_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+alt="g1heap"
+class="gallery-image"
+data-flex-grow="133"
+data-flex-basis="320px"
+>&lt;/p>
+&lt;p>将 Java 堆分为 2048 个大小相同的独立 Region，每个 Region 的大小依据堆空间的大小而定，在 JVM 生命周期中不会改变。&lt;/p>
+&lt;p>每个 Region 都可以更新需要，作为新生代的 Eden 区，Survivor 区，或者是老年代；新生代和老年代在内存中不是连续的空间，收集器会根据区域的不同采取不同的策略。&lt;/p>
+&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/java/jvm/garbage-collection/g1.png"
+width="941"
+height="209"
+srcset="https://emerywan.github.io/blog/blog/p/java/jvm/garbage-collection/g1_hu2c13cc7a5d500b4a818a8d3a4dfa26ed_139186_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/java/jvm/garbage-collection/g1_hu2c13cc7a5d500b4a818a8d3a4dfa26ed_139186_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+alt="g1"
+class="gallery-image"
+data-flex-grow="450"
+data-flex-basis="1080px"
+>&lt;/p>
+&lt;p>Region 中还会有一类特殊的巨大区域 Humongous，专门用来存储大对象。当对象的大小超过了一个 Region 的一半，就被判定为大对象。&lt;/p>
+&lt;p>G1 收集器回收的步骤：&lt;/p>
+&lt;ul>
+&lt;li>🐾 初始标记&lt;/li>
+&lt;/ul>
+&lt;p>标记 GC Root 能够直接关联到的对象，需要停顿线程，耗时较短。&lt;/p>
+&lt;ul>
+&lt;li>🐾 并发标记&lt;/li>
+&lt;/ul>
+&lt;p>从 GC Root 开始对堆中的对象进行可达性分析，找出需要回收的对象，与用户线程同时执行。&lt;/p>
+&lt;ul>
+&lt;li>🐾 最终标记&lt;/li>
+&lt;/ul>
+&lt;p>修正并发标记期间因用户程序继续运作而导致标记产生变动。&lt;/p>
+&lt;ul>
+&lt;li>🐾 筛选回收&lt;/li>
+&lt;/ul>
+&lt;p>对各个 Region 的回收价值和成本进行排序，选择会后价值最大的区域进行回收。&lt;/p>
+&lt;p>将回收的 Region 中的存活对象，复制到空的 Region 中，再清理掉整个旧的 Region 区域。&lt;/p>
+&lt;p>涉及对象的移动，必须暂停用户线程，有多条垃圾收集器并发执行。但是只回收一部分Region，时间是用户可控制的。&lt;/p>
+&lt;!-- raw HTML omitted -->
+&lt;h2 id="-对象分配和回收原则">🌴 对象分配和回收原则&lt;/h2>
+&lt;ul>
+&lt;li>🪨 对象优先在 Eden 区分配&lt;/li>
+&lt;/ul>
+&lt;p>大多数情况下，对象在新生代 Eden 区分配，当 Eden 区没有足够空间时，虚拟机会发起一次 Minor GC。&lt;/p>
+&lt;ul>
+&lt;li>🪨 大对象直接进入老年代&lt;/li>
+&lt;/ul>
+&lt;p>需要大量连续内存空间的 Java 对象（数组，很长的字符串），直接在老年代分配，避免在 Eden 区和两个 Survivor 区之间来回复制，产生大量的内存复制操作。&lt;/p>
+&lt;ul>
+&lt;li>🪨 长期存活的对象进入老年代&lt;/li>
+&lt;/ul>
+&lt;p>虚拟机给每个对象一个对象年龄计数器，每经过一次 MinorGC，年龄就会 +1，&lt;/p>
+&lt;p>当年龄增加到一定程度（默认 15），或某个年龄超过了 Survivor 区的一半时，会晋升到老年代。&lt;/p>
+&lt;ul>
+&lt;li>🪨 空间分配担保&lt;/li>
+&lt;/ul>
+&lt;p>确保在 Minor GC 之前，老年代还有容纳新生代所有对象的剩余空间。&lt;/p>
+&lt;p>进行一次 Minor GC 之后，Eden 区中任然存在大量对象，Survivor 中无法容纳，直接送到老年代，让老年代进行空间分配担保。&lt;/p></description></item><item><title>JVM 内存模型</title><link>https://emerywan.github.io/blog/p/java/jvm/memory-model/</link><pubDate>Sun, 07 Aug 2022 06:02:02 +0800</pubDate><guid>https://emerywan.github.io/blog/p/java/jvm/memory-model/</guid><description>&lt;img src="https://emerywan.github.io/blog/imgs/28.jpeg" alt="Featured image of post JVM 内存模型" />&lt;h2 id="jmm">JMM&lt;/h2>
+&lt;p>Java 内存模型屏蔽了不同操作系统和各种硬件的内存访问差异，实现了 Java 程序在各种平台下，都能达到一致性的访问效果。&lt;/p>
+&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/java/jvm/memory-model/JMM.png"
+width="613"
+height="530"
+srcset="https://emerywan.github.io/blog/blog/p/java/jvm/memory-model/JMM_hu7e11e9092393e4f5c6cb98b7857d5889_99528_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/java/jvm/memory-model/JMM_hu7e11e9092393e4f5c6cb98b7857d5889_99528_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+alt="JMM"
+class="gallery-image"
+data-flex-grow="115"
+data-flex-basis="277px"
+>&lt;/p>
+&lt;p>JMM 规定了：&lt;/p>
+&lt;ul>
+&lt;li>所有的变量都存储在主存中&lt;/li>
+&lt;li>每条线程有自己的工作内存&lt;/li>
+&lt;li>线程对变量的所有操作（读取、赋值等），不能直接读写主存中的数据，都必须在工作内存中进行&lt;/li>
+&lt;/ul>
+&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/java/jvm/memory-model/memory.png"
+width="942"
+height="383"
+srcset="https://emerywan.github.io/blog/blog/p/java/jvm/memory-model/memory_hue7fb17d3eb7c4a77bd28c7215dc28c3d_104935_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/java/jvm/memory-model/memory_hue7fb17d3eb7c4a77bd28c7215dc28c3d_104935_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+alt="memory"
+class="gallery-image"
+data-flex-grow="245"
+data-flex-basis="590px"
+>&lt;/p>
+&lt;h2 id="原子性可见性有序性">原子性、可见性、有序性&lt;/h2>
+&lt;p>Java 内存模型是围绕着在并发过程中如何处理原子性、可见性和有序性三个特征来建立的。&lt;/p>
+&lt;h3 id="原子性">原子性&lt;/h3>
+&lt;p>一次或多次操作，要么全部执行且不受到任何干扰，要么全不执行。&lt;/p>
+&lt;ul>
+&lt;li>利用锁，任一时刻只有一个线程访问代码块。&lt;code>synchronized&lt;/code> &lt;code>Lock&lt;/code>&lt;/li>
+&lt;li>利用 &lt;code>CAS&lt;/code> 原子类 保证原子操作&lt;/li>
+&lt;/ul>
+&lt;h3 id="可见性">可见性&lt;/h3>
+&lt;p>一个线程修改了共享变量的值，其他线程能够立即得知这个修改。&lt;/p>
+&lt;ul>
+&lt;li>&lt;code>volatile&lt;/code>&lt;/li>
+&lt;/ul>
+&lt;p>规定每次写操作，都立即同步到主存；每次读操作，都从主存中读取。&lt;/p>
+&lt;ul>
+&lt;li>&lt;code>synchronized&lt;/code> &lt;code>lock&lt;/code>&lt;/li>
+&lt;/ul>
+&lt;p>对一个变量执行执行 unlock 之前，必须把变量同步回主存中。&lt;/p>
+&lt;ul>
+&lt;li>&lt;code>final&lt;/code>&lt;/li>
+&lt;/ul>
+&lt;h3 id="有序性">有序性&lt;/h3>
+&lt;p>指令重排问题，代码的执行顺序不一定。&lt;/p>
+&lt;ul>
+&lt;li>&lt;code>volatile&lt;/code>&lt;/li>
+&lt;/ul>
+&lt;p>包含禁止指令重排序的语义。&lt;/p>
+&lt;ul>
+&lt;li>&lt;code>synchronized&lt;/code>&lt;/li>
+&lt;/ul>
+&lt;p>只有一条线程能够进入临界区。&lt;/p>
+&lt;h2 id="volatile">volatile&lt;/h2>
+&lt;p>Java 虚拟机提供的轻量级内存同步机制。&lt;/p>
+&lt;p>作用：&lt;/p>
+&lt;ul>
+&lt;li>保障了此变量对所有线程的可见性&lt;/li>
+&lt;/ul>
+&lt;p>volatile 的写操作，都会刷新到主内存中，并使其他线程中的 volatile 变量失效；volatile 的读操作，都会从主存中读取。&lt;/p>
+&lt;ul>
+&lt;li>
+&lt;p>禁止指令重排优化（有序性）&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>❗️无法保障原子性&lt;/p>
+&lt;/li>
+&lt;/ul>
+&lt;p>一条字节码在执行时，需要运行多条指令才能实现。&lt;/p>
+&lt;p>实现方式：内存屏障&lt;/p>
+&lt;p>保证：之前的指令一定全部执行，之后的指令一定都没有执行，并且前面语句的结果对后面的语句可见。&lt;/p>
+&lt;h2 id="happens-before">happens-before&lt;/h2>
+&lt;p>对于两个操作 A 和 B，这两个操作可以在不同的线程中执行。如果 A happens-before B（A 优先于 B 执行），那么可以保证，当 A 操作完后，A 的操作对于 B 操作是可见的。&lt;/p>
+&lt;p>指令重排提高了并发性能，但是 Java 虚拟机会对指令重排做一些规则限制，并不能让所有的指令都随意改变执行位置。&lt;/p>
+&lt;p>Java 内存模型天然的先行发生关系：&lt;/p>
+&lt;ul>
+&lt;li>程序顺序规则&lt;/li>
+&lt;/ul>
+&lt;p>在一个线程内，前面的代码操作优于后面的代码操作&lt;/p>
+&lt;ul>
+&lt;li>锁定规则&lt;/li>
+&lt;/ul>
+&lt;p>一个 unlock 操作优于后面对于同一个锁的 lock 操作&lt;/p>
+&lt;ul>
+&lt;li>volatile 规则&lt;/li>
+&lt;/ul>
+&lt;p>一个 volatile 变量的写操作，优于后面这个变量的读操作&lt;/p></description></item><item><title>类加载器</title><link>https://emerywan.github.io/blog/p/java/jvm/classloader/</link><pubDate>Sat, 06 Aug 2022 16:02:02 +0800</pubDate><guid>https://emerywan.github.io/blog/p/java/jvm/classloader/</guid><description>&lt;img src="https://emerywan.github.io/blog/imgs/25.jpeg" alt="Featured image of post 类加载器" />&lt;h2 id="类加载器">类加载器&lt;/h2>
+&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/java/jvm/classloader/menu.png"
+width="1707"
+height="638"
+srcset="https://emerywan.github.io/blog/blog/p/java/jvm/classloader/menu_hu8b8ca38d973bcbde05d207eb8795320e_321907_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/java/jvm/classloader/menu_hu8b8ca38d973bcbde05d207eb8795320e_321907_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+alt="menu"
+class="gallery-image"
+data-flex-grow="267"
+data-flex-basis="642px"
+>&lt;/p>
+&lt;h3 id="bootstrapclassloader">BootstrapClassLoader&lt;/h3>
+&lt;p>启动类加载器&lt;/p>
+&lt;p>最顶层的加载类，由 C++ 实现，负责加载 &lt;code>%JAVA_HOME%/lib&lt;/code> 目录下的 jar 包和类或者被 &lt;code>-Xbootclasspath&lt;/code> 参数指定的路径中的所有类。&lt;/p>
+&lt;h3 id="extensionclassloader">ExtensionClassLoader&lt;/h3>
+&lt;p>扩展类加载器。Java 系统类库的扩展机制。&lt;/p>
+&lt;p>负责加载 &lt;code>%JRE_HOME%/lib/ext&lt;/code> 目录下的 jar 包和类，或被 &lt;code>java.ext.dirs&lt;/code> 系统变量所指定的路径下的 jar 包。&lt;/p>
+&lt;h3 id="applicationclassloader">ApplicationClassLoader&lt;/h3>
+&lt;p>面向用户的加载器，负责加载当前应用 &lt;code>classpath&lt;/code> 下的所有 jar 包和类。&lt;/p>
+&lt;h2 id="双亲委派模型">双亲委派模型&lt;/h2>
+&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/java/jvm/classloader/classloader.png"
+width="1279"
+height="699"
+srcset="https://emerywan.github.io/blog/blog/p/java/jvm/classloader/classloader_hu2885d6b96687a867396da9eda76d4bf0_289144_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/java/jvm/classloader/classloader_hu2885d6b96687a867396da9eda76d4bf0_289144_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+alt="classloader"
+class="gallery-image"
+data-flex-grow="182"
+data-flex-basis="439px"
+>&lt;/p>
+&lt;p>每个类加载器都有自己的命名空间，用不同的类加载器加载了同一个限定名的类，JVM 也会认为是两个不同的类。&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;span class="lnt">11
+&lt;/span>&lt;span class="lnt">12
+&lt;/span>&lt;span class="lnt">13
+&lt;/span>&lt;span class="lnt">14
+&lt;/span>&lt;span class="lnt">15
+&lt;/span>&lt;span class="lnt">16
+&lt;/span>&lt;span class="lnt">17
+&lt;/span>&lt;span class="lnt">18
+&lt;/span>&lt;span class="lnt">19
+&lt;/span>&lt;span class="lnt">20
+&lt;/span>&lt;span class="lnt">21
+&lt;/span>&lt;span class="lnt">22
+&lt;/span>&lt;span class="lnt">23
+&lt;/span>&lt;span class="lnt">24
+&lt;/span>&lt;span class="lnt">25
+&lt;/span>&lt;span class="lnt">26
+&lt;/span>&lt;span class="lnt">27
+&lt;/span>&lt;span class="lnt">28
+&lt;/span>&lt;span class="lnt">29
+&lt;/span>&lt;span class="lnt">30
+&lt;/span>&lt;span class="lnt">31
+&lt;/span>&lt;span class="lnt">32
+&lt;/span>&lt;span class="lnt">33
+&lt;/span>&lt;span class="lnt">34
+&lt;/span>&lt;span class="lnt">35
+&lt;/span>&lt;span class="lnt">36
+&lt;/span>&lt;span class="lnt">37
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-java" data-lang="java">&lt;span class="line">&lt;span class="cl">&lt;span class="kd">protected&lt;/span> &lt;span class="n">Class&lt;/span>&lt;span class="o">&amp;lt;?&amp;gt;&lt;/span> &lt;span class="n">loadClass&lt;/span>&lt;span class="o">(&lt;/span>&lt;span class="n">String&lt;/span> &lt;span class="n">name&lt;/span>&lt;span class="o">,&lt;/span> &lt;span class="kt">boolean&lt;/span> &lt;span class="n">resolve&lt;/span>&lt;span class="o">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kd">throws&lt;/span> &lt;span class="n">ClassNotFoundException&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="o">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kd">synchronized&lt;/span> &lt;span class="o">(&lt;/span>&lt;span class="n">getClassLoadingLock&lt;/span>&lt;span class="o">(&lt;/span>&lt;span class="n">name&lt;/span>&lt;span class="o">))&lt;/span> &lt;span class="o">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c1">// (1) 判断是否加载过该类
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span> &lt;span class="n">Class&lt;/span>&lt;span class="o">&amp;lt;?&amp;gt;&lt;/span> &lt;span class="n">c&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">findLoadedClass&lt;/span>&lt;span class="o">(&lt;/span>&lt;span class="n">name&lt;/span>&lt;span class="o">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">if&lt;/span> &lt;span class="o">(&lt;/span>&lt;span class="n">c&lt;/span> &lt;span class="o">==&lt;/span> &lt;span class="kc">null&lt;/span>&lt;span class="o">)&lt;/span> &lt;span class="o">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kt">long&lt;/span> &lt;span class="n">t0&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">System&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">nanoTime&lt;/span>&lt;span class="o">();&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">try&lt;/span> &lt;span class="o">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">if&lt;/span> &lt;span class="o">(&lt;/span>&lt;span class="n">parent&lt;/span> &lt;span class="o">!=&lt;/span> &lt;span class="kc">null&lt;/span>&lt;span class="o">)&lt;/span> &lt;span class="o">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">c&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">parent&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">loadClass&lt;/span>&lt;span class="o">(&lt;/span>&lt;span class="n">name&lt;/span>&lt;span class="o">,&lt;/span> &lt;span class="kc">false&lt;/span>&lt;span class="o">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="o">}&lt;/span> &lt;span class="k">else&lt;/span> &lt;span class="o">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c1">// (2) parent == null 约定为：parnet 为 Bootstracp ClassLoader
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span> &lt;span class="n">c&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">findBootstrapClassOrNull&lt;/span>&lt;span class="o">(&lt;/span>&lt;span class="n">name&lt;/span>&lt;span class="o">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="o">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="o">}&lt;/span> &lt;span class="k">catch&lt;/span> &lt;span class="o">(&lt;/span>&lt;span class="n">ClassNotFoundException&lt;/span> &lt;span class="n">e&lt;/span>&lt;span class="o">)&lt;/span> &lt;span class="o">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c1">// ClassNotFoundException thrown if class not found
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span> &lt;span class="c1">// from the non-null parent class loader
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span> &lt;span class="o">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">if&lt;/span> &lt;span class="o">(&lt;/span>&lt;span class="n">c&lt;/span> &lt;span class="o">==&lt;/span> &lt;span class="kc">null&lt;/span>&lt;span class="o">)&lt;/span> &lt;span class="o">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c1">// (3) 说明 parent 加载不了，当前 loader 尝试加载 class
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span> &lt;span class="kt">long&lt;/span> &lt;span class="n">t1&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">System&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">nanoTime&lt;/span>&lt;span class="o">();&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">c&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">findClass&lt;/span>&lt;span class="o">(&lt;/span>&lt;span class="n">name&lt;/span>&lt;span class="o">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c1">// this is the defining class loader; record the stats
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span> &lt;span class="n">sun&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">misc&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">PerfCounter&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">getParentDelegationTime&lt;/span>&lt;span class="o">().&lt;/span>&lt;span class="na">addTime&lt;/span>&lt;span class="o">(&lt;/span>&lt;span class="n">t1&lt;/span> &lt;span class="o">-&lt;/span> &lt;span class="n">t0&lt;/span>&lt;span class="o">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">sun&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">misc&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">PerfCounter&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">getFindClassTime&lt;/span>&lt;span class="o">().&lt;/span>&lt;span class="na">addElapsedTimeFrom&lt;/span>&lt;span class="o">(&lt;/span>&lt;span class="n">t1&lt;/span>&lt;span class="o">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">sun&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">misc&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">PerfCounter&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">getFindClasses&lt;/span>&lt;span class="o">().&lt;/span>&lt;span class="na">increment&lt;/span>&lt;span class="o">();&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="o">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="o">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">if&lt;/span> &lt;span class="o">(&lt;/span>&lt;span class="n">resolve&lt;/span>&lt;span class="o">)&lt;/span> &lt;span class="o">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">resolveClass&lt;/span>&lt;span class="o">(&lt;/span>&lt;span class="n">c&lt;/span>&lt;span class="o">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="o">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">return&lt;/span> &lt;span class="n">c&lt;/span>&lt;span class="o">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="o">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="o">}&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>默认情况下，一个限定名的类只会被一个类加载器加载并解析使用，在程序中是唯一的，不会产生歧义。&lt;/p>
+&lt;p>在加载时，首先会判断当前类是否被加载过，如果已经加载，会直接返回，否则才会尝试加载。&lt;/p>
+&lt;p>尝试加载时，不会自己进行加载，而是将请求委派给父类加载器，当父类加载器无法加载时，才会由自己处理。&lt;/p></description></item><item><title>类加载机制</title><link>https://emerywan.github.io/blog/p/java/jvm/class-loading/</link><pubDate>Sat, 06 Aug 2022 13:02:02 +0800</pubDate><guid>https://emerywan.github.io/blog/p/java/jvm/class-loading/</guid><description>&lt;img src="https://emerywan.github.io/blog/imgs/24.jpeg" alt="Featured image of post 类加载机制" />&lt;h2 id="java-类生命周期">Java 类生命周期&lt;/h2>
+&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/java/jvm/class-loading/life.png"
+width="973"
+height="331"
+srcset="https://emerywan.github.io/blog/blog/p/java/jvm/class-loading/life_hue0715323a61c74c3a1d0de4b0a99146c_113100_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/java/jvm/class-loading/life_hue0715323a61c74c3a1d0de4b0a99146c_113100_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+alt="java-class-life"
+class="gallery-image"
+data-flex-grow="293"
+data-flex-basis="705px"
+>&lt;/p>
+&lt;h2 id="类加载过程">类加载过程&lt;/h2>
+&lt;p>类加载主要有三步：&lt;code>加载 - 链接 - 初始化&lt;/code>。&lt;/p>
+&lt;h3 id="-加载">🥎 加载&lt;/h3>
+&lt;p>加载是一个读取 Class 文件，将其转化为某种静态数据结构存储在方法区内，并在堆中生成一个便于调用的 java.lang.Class 类型的对象的过程。&lt;/p>
+&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/java/jvm/class-loading/loading.png"
+width="707"
+height="335"
+srcset="https://emerywan.github.io/blog/blog/p/java/jvm/class-loading/loading_hu8b469e8111e2814cd40ca0f04de26462_22328_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/java/jvm/class-loading/loading_hu8b469e8111e2814cd40ca0f04de26462_22328_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+alt="loading"
+class="gallery-image"
+data-flex-grow="211"
+data-flex-basis="506px"
+>&lt;/p>
+&lt;p>分为三步进行：&lt;/p>
+&lt;ul>
+&lt;li>
+&lt;p>获取定义类的二进制字节流（不限制从哪里获取，文件、网络、即时生成）&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>将字节流代表的静态存储结构，转换成方法区中运行时数据结构&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>在堆中生成一个代表该类的 java.lang.Class 对象，作为方法区这个类的各种数据访问入口&lt;/p>
+&lt;/li>
+&lt;/ul>
+&lt;h3 id="-链接">🥎 链接&lt;/h3>
+&lt;h4 id="-验证">⚾️ 验证&lt;/h4>
+&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/java/jvm/class-loading/verify.png"
+width="915"
+height="390"
+srcset="https://emerywan.github.io/blog/blog/p/java/jvm/class-loading/verify_hu8c1a3959f1e343b5f02da51e1aaf01f3_138925_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/java/jvm/class-loading/verify_hu8c1a3959f1e343b5f02da51e1aaf01f3_138925_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+alt="verify"
+class="gallery-image"
+data-flex-grow="234"
+data-flex-basis="563px"
+>&lt;/p>
+&lt;ul>
+&lt;li>
+&lt;p>文件格式验证&lt;/p>
+&lt;p>验证字节流是否符合 Class 文件格式的规范，能被当前版本的虚拟机处理。&lt;strong>发生在加载阶段&lt;/strong>。&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>元数据、字节码验证&lt;/p>
+&lt;p>对字节码进行语法、语义的分析，保证其符合 Java 虚拟机的规范，不会有危害虚拟机的行为。&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>符号引用验证&lt;/p>
+&lt;p>确保解析行为能够正常执行。&lt;strong>发生在解析阶段&lt;/strong>。&lt;/p>
+&lt;/li>
+&lt;/ul>
+&lt;h4 id="-准备">⚾️ 准备&lt;/h4>
+&lt;p>为类中定义的变量（静态变量 &lt;code>static&lt;/code>）分配内存并设置类变量零值的阶段。&lt;/p>
+&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/java/jvm/class-loading/prepare.png"
+width="482"
+height="260"
+srcset="https://emerywan.github.io/blog/blog/p/java/jvm/class-loading/prepare_hu58a397643ad84aca2032de9a3ac6155c_29464_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/java/jvm/class-loading/prepare_hu58a397643ad84aca2032de9a3ac6155c_29464_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+alt="prepare"
+class="gallery-image"
+data-flex-grow="185"
+data-flex-basis="444px"
+>&lt;/p>
+&lt;ul>
+&lt;li>&lt;code>static&lt;/code> -&amp;gt; 赋零值&lt;/li>
+&lt;li>&lt;code>static final&lt;/code> -&amp;gt; 赋定义的常量值&lt;/li>
+&lt;/ul>
+&lt;h4 id="-解析">⚾️ 解析&lt;/h4>
+&lt;p>解析是将常量池中的符号引用替换为直接引用。&lt;/p>
+&lt;ul>
+&lt;li>
+&lt;p>符号引用：描述引用对象的符号&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>直接引用：指向目标实际地址的指针&lt;/p>
+&lt;/li>
+&lt;/ul>
+&lt;p>🎾 解析部分是灵活的，可以在初始化环节后再进行，实现所谓的“后期绑定”。（方法调用直到运行时才会解析，因为无法在编译时确定方法调用所需的所有信息，所以方法定义和方法调用直到运行时才绑定。）&lt;/p>
+&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/java/jvm/class-loading/resolve_1.png"
+width="163"
+height="370"
+srcset="https://emerywan.github.io/blog/blog/p/java/jvm/class-loading/resolve_1_hua9ef48196efa3564a4ef1eaa93606c3a_10102_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/java/jvm/class-loading/resolve_1_hua9ef48196efa3564a4ef1eaa93606c3a_10102_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+alt="resolve"
+class="gallery-image"
+data-flex-grow="44"
+data-flex-basis="105px"
+>&lt;/p>
+&lt;p>当一个类被编译成 Class 之后，假设这个类称为 &lt;code>A&lt;/code>，并且在 &lt;code>A&lt;/code> 中引用了类 &lt;code>B&lt;/code>。&lt;/p>
+&lt;ul>
+&lt;li>
+&lt;p>在编译阶段，&lt;code>A&lt;/code> 无法确定 &lt;code>B&lt;/code> 是否被编译（现在 &lt;code>B&lt;/code> 一定未加载），此时 &lt;code>A&lt;/code> 无法知道 &lt;code>B&lt;/code> 的实际地址，所有在 &lt;code>A.Class&lt;/code> 中，会使用一个&lt;code>字符串&lt;/code>代表 &lt;code>B&lt;/code>。这个字符串被称为&lt;strong>符号引用&lt;/strong>。&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>在运行阶段，&lt;code>A&lt;/code> 发生了加载，在解析时，发现其中的 &lt;code>B&lt;/code> 还未被加载，就会触发类 &lt;code>B&lt;/code> 的加载，将 &lt;code>B&lt;/code> 加载到虚拟机中。此时，&lt;code>A&lt;/code> 中的符号引用会被替换为 &lt;code>B&lt;/code> 中的实际地址（直接引用）。&lt;/p>
+&lt;/li>
+&lt;/ul>
+&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/java/jvm/class-loading/resolve.png"
+width="922"
+height="538"
+srcset="https://emerywan.github.io/blog/blog/p/java/jvm/class-loading/resolve_hu45e5622ef4d0eaddcde37871cfee2a7a_117190_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/java/jvm/class-loading/resolve_hu45e5622ef4d0eaddcde37871cfee2a7a_117190_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+alt="resolve"
+class="gallery-image"
+data-flex-grow="171"
+data-flex-basis="411px"
+>&lt;/p>
+&lt;ul>
+&lt;li>静态解析&lt;/li>
+&lt;/ul>
+&lt;p>类 &lt;code>B&lt;/code> 是具体的实现类，解析的对象十分明确，即会进行静态解析。&lt;/p>
+&lt;ul>
+&lt;li>动态解析&lt;/li>
+&lt;/ul>
+&lt;p>Java 通过后期绑定的方式实现多态，通过动态解析实现。&lt;/p>
+&lt;p>如果类 &lt;code>B&lt;/code> 是抽象类或者接口，有具体的实现类 &lt;code>C&lt;/code>、&lt;code>D&lt;/code>，当前具体的实现方式并不明确，无法确定使用哪个具体实现。&lt;/p>
+&lt;p>直到运行过程中发生了调用，虚拟机调用栈中会得到具体类的信息，再进行解析，就有明确的直接引用代替符号引用。&lt;/p>
+&lt;h3 id="-初始化">🥎 初始化&lt;/h3>
+&lt;p>虚拟机真正开始执行类中编写的代码，完成一些主动的资源初始化动作。&lt;/p>
+&lt;p>&lt;strong>执行的是类层面的初始化。&lt;/strong> 只有显式调用 new 才会执行构造函数的初始化。&lt;/p>
+&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/java/jvm/class-loading/init.png"
+width="533"
+height="388"
+srcset="https://emerywan.github.io/blog/blog/p/java/jvm/class-loading/init_hud5162327100fcc16da85dffebeccc0e0_46268_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/java/jvm/class-loading/init_hud5162327100fcc16da85dffebeccc0e0_46268_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+alt="init"
+class="gallery-image"
+data-flex-grow="137"
+data-flex-basis="329px"
+>&lt;/p>
+&lt;ul>
+&lt;li>成员变量的直接赋值&lt;/li>
+&lt;li>静态变量的赋值&lt;/li>
+&lt;li>静态代码块&lt;/li>
+&lt;/ul>
+&lt;h2 id="判断无用类">判断无用类&lt;/h2>
+&lt;ul>
+&lt;li>该类的所有实例对象全部被 GC，在堆中不存在该类的任何实例对象&lt;/li>
+&lt;li>该类对应的 java.lang.Class 对象，在任何地方都没有被引用&lt;/li>
+&lt;li>该类的类加载器已经被回收&lt;/li>
+&lt;/ul>
+&lt;p>满足以上三个条件，说明该类可以被回收，但是与对象不同，无用类不一定会被回收。&lt;/p>
+&lt;h2 id="参考">参考&lt;/h2>
+&lt;ul>
+&lt;li>
+&lt;p>&lt;a class="link" href="https://javaguide.cn/java/jvm/class-loading-process.html" target="_blank" rel="noopener"
+>https://javaguide.cn/java/jvm/class-loading-process.html&lt;/a>&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;a class="link" href="https://www.bilibili.com/video/BV14U4y1L75q/?spm_id_from=333.788" target="_blank" rel="noopener"
+>https://www.bilibili.com/video/BV14U4y1L75q/?spm_id_from=333.788&lt;/a>&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>深入理解 Java 虚拟机&lt;/p>
+&lt;/li>
+&lt;/ul></description></item></channel></rss>

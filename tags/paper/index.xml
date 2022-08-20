@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Paper on 一层</title><link>https://emerywan.github.io/blog/tags/paper/</link><description>Recent content in Paper on 一层</description><generator>Hugo -- gohugo.io</generator><lastBuildDate>Wed, 01 Sep 2021 21:14:45 +0800</lastBuildDate><atom:link href="https://emerywan.github.io/blog/tags/paper/index.xml" rel="self" type="application/rss+xml"/><item><title>Modularized Interaction Network for Named Entity Recognition</title><link>https://emerywan.github.io/blog/p/modularizedinteractionnetworkfornamed-entityrecognition/</link><pubDate>Wed, 01 Sep 2021 21:14:45 +0800</pubDate><guid>https://emerywan.github.io/blog/p/modularizedinteractionnetworkfornamed-entityrecognition/</guid><description>&lt;img src="https://emerywan.github.io/blog/imgs/9.jpeg" alt="Featured image of post Modularized Interaction Network for Named Entity Recognition" />&lt;p>现有NER模型缺点：&lt;/p>
+&lt;ul>
+&lt;li>
+&lt;p>基于序列标注的NER模型（The sequence labeling-based NERmodels）&lt;/p>
+&lt;ul>
+&lt;li>长实体识别不佳，只关注词级信息&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>
+&lt;p>基于分段的NER模型（The segment-based NERmodels）&lt;/p>
+&lt;ul>
+&lt;li>处理分段，而非单个词，不能捕获分段中的词级依赖关系&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;p>边界检测（boundary detection）和类型预测（type pre-diction）可以相互配合，两个子任务可共享信息，相互加强。&lt;/p>
+&lt;p>提出模块化交互网络模型MIN（Modularized Interaction Network）&lt;/p>
+&lt;p>利用段级信息和词级依赖关系，结合一种交互机制，支持边界检测和类型预测之间的信息共享。&lt;/p>
+&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/modularizedinteractionnetworkfornamed-entityrecognition/1.png"
+width="493"
+height="408"
+srcset="https://emerywan.github.io/blog/blog/p/modularizedinteractionnetworkfornamed-entityrecognition/1_huf69a1b5e1975a497801b13aa3110264f_41598_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/modularizedinteractionnetworkfornamed-entityrecognition/1_huf69a1b5e1975a497801b13aa3110264f_41598_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+alt="1"
+class="gallery-image"
+data-flex-grow="120"
+data-flex-basis="290px"
+>&lt;/p>
+&lt;p>a recurrentneural network encoder-decoder framework with apointer network is used to detect entity segmentsfor segment information.&lt;/p>
+&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/modularizedinteractionnetworkfornamed-entityrecognition/2.png"
+width="790"
+height="399"
+srcset="https://emerywan.github.io/blog/blog/p/modularizedinteractionnetworkfornamed-entityrecognition/2_hu67c580ff6778a63552a8e24eeebbd582_54929_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/modularizedinteractionnetworkfornamed-entityrecognition/2_hu67c580ff6778a63552a8e24eeebbd582_54929_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+alt="2"
+class="gallery-image"
+data-flex-grow="197"
+data-flex-basis="475px"
+>&lt;/p></description></item><item><title>A Sequence-to-Set Network for Nested Named Entity Recognition</title><link>https://emerywan.github.io/blog/p/sequence-to-set/</link><pubDate>Mon, 07 Jun 2021 21:14:45 +0800</pubDate><guid>https://emerywan.github.io/blog/p/sequence-to-set/</guid><description>&lt;img src="https://emerywan.github.io/blog/imgs/14.jpeg" alt="Featured image of post A Sequence-to-Set Network for Nested Named Entity Recognition" />&lt;p>借鉴图像领域的目标检测任务，将嵌套任务转化成span的预测，解决嵌套命名实体识别任务。&lt;/p>
+&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/sequence-to-set/model.png"
+width="693"
+height="366"
+srcset="https://emerywan.github.io/blog/blog/p/sequence-to-set/model_hu04a3cb5aafa3b0d4955b742068e6104d_64624_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/sequence-to-set/model_hu04a3cb5aafa3b0d4955b742068e6104d_64624_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+alt="model"
+class="gallery-image"
+data-flex-grow="189"
+data-flex-basis="454px"
+>&lt;/p>
+&lt;p>具体是采用两阶段：&lt;/p>
+&lt;ul>
+&lt;li>第一步 Locate，即定位实体的边界&lt;/li>
+&lt;li>第二步 Label，即对识别span进行实体类型判断。&lt;/li>
+&lt;/ul>
+&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/sequence-to-set/1.png"
+width="357"
+height="52"
+srcset="https://emerywan.github.io/blog/blog/p/sequence-to-set/1_huec6c826749de8343d0aee5d973132caa_9180_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/sequence-to-set/1_huec6c826749de8343d0aee5d973132caa_9180_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+alt="1"
+class="gallery-image"
+data-flex-grow="686"
+data-flex-basis="1647px"
+>&lt;/p>
+&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/sequence-to-set/2.png"
+width="347"
+height="320"
+srcset="https://emerywan.github.io/blog/blog/p/sequence-to-set/2_hu4391112aaed5160844ed6f4005b28fce_42441_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/sequence-to-set/2_hu4391112aaed5160844ed6f4005b28fce_42441_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+alt="2"
+class="gallery-image"
+data-flex-grow="108"
+data-flex-basis="260px"
+>&lt;/p></description></item><item><title>Named Entity Recognition As Dependency Parsing</title><link>https://emerywan.github.io/blog/p/namedentityrecognitionasdependencyparsing/</link><pubDate>Tue, 01 Jun 2021 21:14:45 +0800</pubDate><guid>https://emerywan.github.io/blog/p/namedentityrecognitionasdependencyparsing/</guid><description>&lt;img src="https://emerywan.github.io/blog/imgs/7.jpeg" alt="Featured image of post Named Entity Recognition As Dependency Parsing" />&lt;p>文中将每个 token 用 BERT 和 fastText 进行 embedding，拼接上用 CNN 编码的字符级别向量，送入一个双向 LSTM 编码上下文信息，获得每个词的表达。之后采用两个独立的 FFNN 来得到作为实体开始和结束的位置的表达。&lt;/p>
+&lt;p>最后用一个仿射模型得到一个 $l×l×c$ 的 tensor，其中 l 是句子长度，c 是实体类别数量加一（表示无实体）。运用该矩阵，文中对于嵌套和非嵌套采用了两种不同的策略，从而得到了实体的起止位置。&lt;/p>
+&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/namedentityrecognitionasdependencyparsing/model.png"
+width="500"
+height="501"
+srcset="https://emerywan.github.io/blog/blog/p/namedentityrecognitionasdependencyparsing/model_hue39a704d975d112c4ae2b387bb0aa5be_45180_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/namedentityrecognitionasdependencyparsing/model_hue39a704d975d112c4ae2b387bb0aa5be_45180_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+alt="model"
+class="gallery-image"
+data-flex-grow="99"
+data-flex-basis="239px"
+>&lt;/p>
+&lt;p>code: &lt;a class="link" href="https://github.com/juntaoy/biaffine-ner" target="_blank" rel="noopener"
+>https://github.com/juntaoy/biaffine-ner&lt;/a>&lt;/p>
+&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/namedentityrecognitionasdependencyparsing/ner.png"
+width="325"
+height="669"
+srcset="https://emerywan.github.io/blog/blog/p/namedentityrecognitionasdependencyparsing/ner_huff0969dccbb13cbf7d246862faeafc4d_75035_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/namedentityrecognitionasdependencyparsing/ner_huff0969dccbb13cbf7d246862faeafc4d_75035_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+alt="ner"
+class="gallery-image"
+data-flex-grow="48"
+data-flex-basis="116px"
+>&lt;/p>
+&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/namedentityrecognitionasdependencyparsing/nested.png"
+width="323"
+height="618"
+srcset="https://emerywan.github.io/blog/blog/p/namedentityrecognitionasdependencyparsing/nested_hu30723d7bae4f05520cc9500a93ac4824_73991_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/namedentityrecognitionasdependencyparsing/nested_hu30723d7bae4f05520cc9500a93ac4824_73991_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+alt="nested"
+class="gallery-image"
+data-flex-grow="52"
+data-flex-basis="125px"
+>&lt;/p></description></item></channel></rss>

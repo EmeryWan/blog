@@ -1,0 +1,286 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Linux on 一层</title><link>https://emerywan.github.io/blog/tags/linux/</link><description>Recent content in Linux on 一层</description><generator>Hugo -- gohugo.io</generator><lastBuildDate>Thu, 23 Jun 2022 02:02:02 +0800</lastBuildDate><atom:link href="https://emerywan.github.io/blog/tags/linux/index.xml" rel="self" type="application/rss+xml"/><item><title>Linux 目录结构介绍</title><link>https://emerywan.github.io/blog/p/linux-dir/</link><pubDate>Thu, 23 Jun 2022 02:02:02 +0800</pubDate><guid>https://emerywan.github.io/blog/p/linux-dir/</guid><description>&lt;img src="https://emerywan.github.io/blog/imgs/10.jpeg" alt="Featured image of post Linux 目录结构介绍" />&lt;p>Linux 是一个开源的系统，使得 Linux 发行版本有很多，利用 Linux 开发产品的团队也有很多，如果任由每个人都按照自己的想法来配置 Linux 系统文件目录，后期可能会产生诸多的管理问题。&lt;/p>
+&lt;p>为了避免诸多使用者对 Linux 系统目录结构天马行空，Linux 基金会发布了 FHS 标准。多数 Linux 发行版系统都遵循这一标准。&lt;/p>
+&lt;blockquote>
+&lt;p>FHS（Filesystem Hierarchy Standard），文件系统层次化标准，该标准规定了 Linux 系统中所有一级目录以及部分二级目录（/usr 和 /var）的用途。发布此标准的主要目的就是为了让用户清楚地了解每个目录应该存放什么类型的文件。&lt;/p>
+&lt;/blockquote>
+&lt;p>几乎所有的 Linux 发行版都包含以下的目录结构：&lt;/p>
+&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/linux-dir/directory.png"
+width="950"
+height="450"
+srcset="https://emerywan.github.io/blog/blog/p/linux-dir/directory_hua98ec03a363a3999681794ab96f9f09a_36725_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/linux-dir/directory_hua98ec03a363a3999681794ab96f9f09a_36725_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+alt="directory"
+class="gallery-image"
+data-flex-grow="211"
+data-flex-basis="506px"
+>&lt;/p>
+&lt;p>不同的发行版可能会添加一下独有的目录，例如 Ubuntu 中包含 &lt;code>/snap&lt;/code> 来放置 snap 应用。&lt;/p>
+&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/linux-dir/root.png"
+width="893"
+height="485"
+srcset="https://emerywan.github.io/blog/blog/p/linux-dir/root_hu18035549831c69e974e5e46a3403bc3f_73150_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/linux-dir/root_hu18035549831c69e974e5e46a3403bc3f_73150_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+alt="root"
+class="gallery-image"
+data-flex-grow="184"
+data-flex-basis="441px"
+>&lt;/p>
+&lt;h2 id="bin">/bin&lt;/h2>
+&lt;p>Binary&lt;/p>
+&lt;p>二进制可执行文件和可执行文件的快捷方式（软链接），存放着常用的命令。&lt;/p>
+&lt;p>例如常用的 &lt;code>ls&lt;/code> &lt;code>cp&lt;/code> &lt;code>cd&lt;/code> 等命令都存放在这里。&lt;/p>
+&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/linux-dir/bin.png"
+width="893"
+height="485"
+srcset="https://emerywan.github.io/blog/blog/p/linux-dir/bin_hu88e8cbe9114805e25899e6212c3f7b45_50694_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/linux-dir/bin_hu88e8cbe9114805e25899e6212c3f7b45_50694_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+alt="bin"
+class="gallery-image"
+data-flex-grow="184"
+data-flex-basis="441px"
+>&lt;/p>
+&lt;h2 id="boot">/boot&lt;/h2>
+&lt;p>启动 Linux 时使用的一些核心文件，包括一些连接文件以及镜像文件。&lt;/p>
+&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/linux-dir/boot.png"
+width="893"
+height="485"
+srcset="https://emerywan.github.io/blog/blog/p/linux-dir/boot_hu918783384ee5a012af8445662a5570f5_99689_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/linux-dir/boot_hu918783384ee5a012af8445662a5570f5_99689_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+alt="boot"
+class="gallery-image"
+data-flex-grow="184"
+data-flex-basis="441px"
+>&lt;/p>
+&lt;p>如果是以 UEFI 方式安装的系统，其中 &lt;code>efi&lt;/code> 文件夹中的为 &lt;code>EFI&lt;/code> 分区中的引导。&lt;/p>
+&lt;h2 id="dev">/dev&lt;/h2>
+&lt;p>Device&lt;/p>
+&lt;p>存放着所有的设备文件。在 Linux 中，所有东西都是以文件的形式存在的，包括硬件设备。&lt;/p>
+&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/linux-dir/dev.png"
+width="893"
+height="485"
+srcset="https://emerywan.github.io/blog/blog/p/linux-dir/dev_hu5755a852922f274414d0e5a0eab070dd_98725_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/linux-dir/dev_hu5755a852922f274414d0e5a0eab070dd_98725_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+alt="dev"
+class="gallery-image"
+data-flex-grow="184"
+data-flex-basis="441px"
+>&lt;/p>
+&lt;h2 id="etc">/etc&lt;/h2>
+&lt;p>Etcetera&lt;/p>
+&lt;p>存放程序的配置信息，大多数安装的应用配置信息都会在这里。&lt;/p>
+&lt;p>例如：&lt;/p>
+&lt;ul>
+&lt;li>&lt;code>/etc/apt&lt;/code> apt 源配置目录&lt;/li>
+&lt;li>&lt;code>/ect/vim&lt;/code> vim 配置目录&lt;/li>
+&lt;li>&lt;code>/etc/nginx&lt;/code> nginx 配置目录&lt;/li>
+&lt;li>&lt;code>/ect/redis&lt;/code> redis 配置目录&lt;/li>
+&lt;/ul>
+&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/linux-dir/etc.png"
+width="893"
+height="485"
+srcset="https://emerywan.github.io/blog/blog/p/linux-dir/etc_hu7a52980e1c04af5a90bf8edab9585ec6_85844_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/linux-dir/etc_hu7a52980e1c04af5a90bf8edab9585ec6_85844_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+alt="etc"
+class="gallery-image"
+data-flex-grow="184"
+data-flex-basis="441px"
+>&lt;/p>
+&lt;h2 id="home">/home&lt;/h2>
+&lt;p>用户的主目录。&lt;/p>
+&lt;p>在 Linux 中，每个用户都有一个自己的目录，一般该目录名是以用户的账号命名。&lt;/p>
+&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/linux-dir/home.png"
+width="893"
+height="485"
+srcset="https://emerywan.github.io/blog/blog/p/linux-dir/home_hud18e334789b3c740b9a20da6a45ce695_61060_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/linux-dir/home_hud18e334789b3c740b9a20da6a45ce695_61060_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+alt="home"
+class="gallery-image"
+data-flex-grow="184"
+data-flex-basis="441px"
+>&lt;/p>
+&lt;h2 id="lib">/lib&lt;/h2>
+&lt;p>Library&lt;/p>
+&lt;p>系统最基本的动态连接共享库，其作用类似于 Windows 里的 DLL 文件。&lt;/p>
+&lt;p>几乎所有的应用程序都需要用到这些共享库。包含 bin 和 sbin 中可执行文件的依赖。&lt;/p>
+&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/linux-dir/lib.png"
+width="893"
+height="485"
+srcset="https://emerywan.github.io/blog/blog/p/linux-dir/lib_hub083733446fb3cb4ae55f28313c8182b_83036_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/linux-dir/lib_hub083733446fb3cb4ae55f28313c8182b_83036_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+alt="lib"
+class="gallery-image"
+data-flex-grow="184"
+data-flex-basis="441px"
+>&lt;/p>
+&lt;h2 id="media">/media&lt;/h2>
+&lt;p>自动挂载的设备，比如 U 盘，移动硬盘，网络设备等的目录。&lt;/p>
+&lt;p>比如现在有一个 U 盘，插到电脑上之后，系统会把 U 盘自动挂载到 &lt;code>/media/$USER&lt;/code> 文件夹中。&lt;/p>
+&lt;h2 id="mnt">/mnt&lt;/h2>
+&lt;p>提供给用户临时手动挂载设备文件夹，一般是空文件夹。&lt;/p>
+&lt;p>比如现在要手动挂载一个硬盘，可用如下挂载到 &lt;code>/mnt&lt;/code>：&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-sh" data-lang="sh">&lt;span class="line">&lt;span class="cl">mount /dev/sdb1 /mnt/disk
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;h2 id="opt">/opt&lt;/h2>
+&lt;p>Optional&lt;/p>
+&lt;p>一些第三方软件安装的目录。&lt;/p>
+&lt;p>比如 Chrome 浏览器，WPS 等软件，都会安装在这里。&lt;/p>
+&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/linux-dir/opt.png"
+width="893"
+height="485"
+srcset="https://emerywan.github.io/blog/blog/p/linux-dir/opt_huea96cc753b9c5430ebdf81edcd8754fb_76369_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/linux-dir/opt_huea96cc753b9c5430ebdf81edcd8754fb_76369_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+alt="opt"
+class="gallery-image"
+data-flex-grow="184"
+data-flex-basis="441px"
+>&lt;/p>
+&lt;h2 id="root">/root&lt;/h2>
+&lt;p>这是 root 用户的家目录。&lt;/p>
+&lt;h2 id="proc">/proc&lt;/h2>
+&lt;p>Processes&lt;/p>
+&lt;p>&lt;code>/proc&lt;/code> 是一种伪文件系统（也即虚拟文件系统），存储的是当前内核运行状态的一系列特殊文件，这个目录是一个虚拟的目录，它是系统内存的映射，我们可以通过直接访问这个目录来获取系统信息。&lt;/p>
+&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/linux-dir/procversion.png"
+width="734"
+height="476"
+srcset="https://emerywan.github.io/blog/blog/p/linux-dir/procversion_hua30e25cc62b3a6421f2f9b1383e8ea4d_32573_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/linux-dir/procversion_hua30e25cc62b3a6421f2f9b1383e8ea4d_32573_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+alt="procversion"
+class="gallery-image"
+data-flex-grow="154"
+data-flex-basis="370px"
+>&lt;/p>
+&lt;p>&lt;code>/proc&lt;/code> 里面有一大堆数字命名的文件夹，这个数字其实是 Process ID（PID），对应着运行的服务。&lt;/p>
+&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/linux-dir/procps.png"
+width="734"
+height="476"
+srcset="https://emerywan.github.io/blog/blog/p/linux-dir/procps_hu3633a821f850bd2d5d2ffca1ae08eb64_38818_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/linux-dir/procps_hu3633a821f850bd2d5d2ffca1ae08eb64_38818_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+alt="procps"
+class="gallery-image"
+data-flex-grow="154"
+data-flex-basis="370px"
+>&lt;/p>
+&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/linux-dir/proccat.png"
+width="734"
+height="476"
+srcset="https://emerywan.github.io/blog/blog/p/linux-dir/proccat_hu433bb9e8c82cee4321d94d03495747e7_47919_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/linux-dir/proccat_hu433bb9e8c82cee4321d94d03495747e7_47919_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+alt="proccat"
+class="gallery-image"
+data-flex-grow="154"
+data-flex-basis="370px"
+>&lt;/p>
+&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/linux-dir/proc1929.png"
+width="893"
+height="485"
+srcset="https://emerywan.github.io/blog/blog/p/linux-dir/proc1929_hue982c12fdacf4a0dd83c56ac9a4d5cac_81321_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/linux-dir/proc1929_hue982c12fdacf4a0dd83c56ac9a4d5cac_81321_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+alt="proc1929"
+class="gallery-image"
+data-flex-grow="184"
+data-flex-basis="441px"
+>&lt;/p>
+&lt;h2 id="sbin">/sbin&lt;/h2>
+&lt;p>Superuser Binaries&lt;/p>
+&lt;p>这里存放的是系统管理员使用的系统管理程序。&lt;/p>
+&lt;p>例如常见的 &lt;code>groupadd&lt;/code> &lt;code>groupdel&lt;/code>。&lt;/p>
+&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/linux-dir/sbin.png"
+width="893"
+height="485"
+srcset="https://emerywan.github.io/blog/blog/p/linux-dir/sbin_hufd2d26ea46f84ef22af6fb59ef9f4da6_85048_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/linux-dir/sbin_hufd2d26ea46f84ef22af6fb59ef9f4da6_85048_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+alt="sbin"
+class="gallery-image"
+data-flex-grow="184"
+data-flex-basis="441px"
+>&lt;/p>
+&lt;h2 id="srv">/srv&lt;/h2>
+&lt;p>Service&lt;/p>
+&lt;p>主要用来存放服务数据。对于桌面版 Linux 系统，这个文件夹一般是空的，但是对于 Linux 服务器，Web 服务或者 FTP 文件服务的资源可以存放在这里。&lt;/p>
+&lt;h2 id="tmp">/tmp&lt;/h2>
+&lt;p>Temporary&lt;/p>
+&lt;p>存储一些程序的临时文件。&lt;/p>
+&lt;p>临时文件可能起到很重要的作用。比如有时候 Word 文档崩溃了，好不容易写的东西全没了，Linux 的很多文本编辑器都会在 &lt;code>/tmp&lt;/code> 放一份当前文本的 copy 作为临时文件，如果你的编辑器意外崩溃，有机会在 &lt;code>/tmp&lt;/code> 找一找临时文件抢救一下。&lt;/p>
+&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/linux-dir/tmp.png"
+width="893"
+height="485"
+srcset="https://emerywan.github.io/blog/blog/p/linux-dir/tmp_hu1b50e9a39b2feae689bf9b3fbfb30a17_96039_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/linux-dir/tmp_hu1b50e9a39b2feae689bf9b3fbfb30a17_96039_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+alt="tmp"
+class="gallery-image"
+data-flex-grow="184"
+data-flex-basis="441px"
+>&lt;/p>
+&lt;h2 id="usr">/usr&lt;/h2>
+&lt;p>Unix Shared Resources&lt;/p>
+&lt;p>共享资源，这是一个非常重要的目录，用户的很多应用程序和文件都放在这个目录下，类似于 windows 下的 program files 目录。&lt;/p>
+&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/linux-dir/usr.png"
+width="893"
+height="485"
+srcset="https://emerywan.github.io/blog/blog/p/linux-dir/usr_hu2204c3c3a7c106aec9dea68c29029999_46168_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/linux-dir/usr_hu2204c3c3a7c106aec9dea68c29029999_46168_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+alt="usr"
+class="gallery-image"
+data-flex-grow="184"
+data-flex-basis="441px"
+>&lt;/p>
+&lt;h3 id="usrbin---usrsbin">/usr/bin /usr/sbin&lt;/h3>
+&lt;p>系统用户 / 超级管理员 使用的应用程序。&lt;/p>
+&lt;p>在 Ubuntu 中，&lt;code>/bin&lt;/code> &lt;code>/sbin&lt;/code> 其实就是 &lt;code>/usr/bin&lt;/code> &lt;code>/usr/sbin&lt;/code> 的一个链接。&lt;/p>
+&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/linux-dir/usrbin.png"
+width="734"
+height="476"
+srcset="https://emerywan.github.io/blog/blog/p/linux-dir/usrbin_hu6a478b7090e2cf503d0d2abd86c3db3e_22476_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/linux-dir/usrbin_hu6a478b7090e2cf503d0d2abd86c3db3e_22476_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+alt="usrbin"
+class="gallery-image"
+data-flex-grow="154"
+data-flex-basis="370px"
+>&lt;/p>
+&lt;h3 id="usrsrc">/usr/src&lt;/h3>
+&lt;p>内核源代码默认的放置目录。&lt;/p>
+&lt;h3 id="usrlib">/usr/lib&lt;/h3>
+&lt;p>包含所有那些用户不能直接执行的库文件。包含着所有 &amp;lsquo;/usr/bin&amp;rsquo; 和 &amp;lsquo;/usr/sbin&amp;rsquo; 目录中可执行命令程序需调用的二进制库文件。&lt;/p>
+&lt;p>例如使用 &lt;code>apt&lt;/code> 安装 openjdk 的目录在 &lt;code>/usr/lib/jvm&lt;/code>。&lt;/p>
+&lt;h3 id="usrshare">/usr/share&lt;/h3>
+&lt;p>包含独立于架构的共享数据。&lt;/p>
+&lt;p>例如系统桌面图标目录 &lt;code>/user/share/applications&lt;/code>。&lt;/p>
+&lt;h3 id="usrlocal">/usr/local&lt;/h3>
+&lt;p>用于本地安装软件的目标目录。从源代码安装的用户程序都将安装到这里。&lt;/p>
+&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/linux-dir/usrlocal.png"
+width="893"
+height="485"
+srcset="https://emerywan.github.io/blog/blog/p/linux-dir/usrlocal_hu79bfa6340b43e74ca17a031487cf8d3c_78872_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/linux-dir/usrlocal_hu79bfa6340b43e74ca17a031487cf8d3c_78872_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+alt="usrlocal"
+class="gallery-image"
+data-flex-grow="184"
+data-flex-basis="441px"
+>&lt;/p>
+&lt;h2 id="var">/var&lt;/h2>
+&lt;p>Variable&lt;/p>
+&lt;p>存放着在不断扩充着的东西，我们习惯将那些经常被修改的目录放在这个目录下。&lt;/p>
+&lt;p>例如日志文件。&lt;/p>
+&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/linux-dir/var.png"
+width="893"
+height="485"
+srcset="https://emerywan.github.io/blog/blog/p/linux-dir/var_hu71c741f1b1910044aff61d309cf9c7cd_50789_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/linux-dir/var_hu71c741f1b1910044aff61d309cf9c7cd_50789_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+alt="var"
+class="gallery-image"
+data-flex-grow="184"
+data-flex-basis="441px"
+>&lt;/p>
+&lt;h2 id="参考">参考&lt;/h2>
+&lt;ul>
+&lt;li>&lt;a class="link" href="https://segmentfault.com/a/1190000038497705" target="_blank" rel="noopener"
+>https://segmentfault.com/a/1190000038497705&lt;/a>&lt;/li>
+&lt;li>&lt;a class="link" href="https://www.runoob.com/linux/linux-system-contents.html" target="_blank" rel="noopener"
+>https://www.runoob.com/linux/linux-system-contents.html&lt;/a>&lt;/li>
+&lt;/ul></description></item></channel></rss>

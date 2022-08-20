@@ -1,0 +1,1341 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>MySQL on 一层</title><link>https://emerywan.github.io/blog/tags/mysql/</link><description>Recent content in MySQL on 一层</description><generator>Hugo -- gohugo.io</generator><lastBuildDate>Sun, 31 Jul 2022 13:02:02 +0800</lastBuildDate><atom:link href="https://emerywan.github.io/blog/tags/mysql/index.xml" rel="self" type="application/rss+xml"/><item><title>InnoDB 存储引擎</title><link>https://emerywan.github.io/blog/p/mysql/innodb/</link><pubDate>Sun, 31 Jul 2022 13:02:02 +0800</pubDate><guid>https://emerywan.github.io/blog/p/mysql/innodb/</guid><description>&lt;img src="https://emerywan.github.io/blog/imgs/23.jpeg" alt="Featured image of post InnoDB 存储引擎" />&lt;h2 id="事务">事务&lt;/h2>
+&lt;p>事务是一组逻辑上的数据库操作，这些操作要么全部成功，要么全部失败。&lt;/p>
+&lt;h3 id="特性">特性&lt;/h3>
+&lt;ul>
+&lt;li>
+&lt;p>原子性：事务是不可分割的最小操作单元，要么全部成功，要么全部失败。&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>一致性：事务完成时，必须使所有的数据都保持一致状态。&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>隔离性：数据库系统提供的隔离机制，保证事务在不受外部并发操作影响的独立环境下运行。&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>持久性：事务一旦提交或回滚，它对数据库中的数据的改变就是永久的。&lt;/p>
+&lt;/li>
+&lt;/ul>
+&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/mysql/innodb/1.png"
+width="869"
+height="333"
+srcset="https://emerywan.github.io/blog/blog/p/mysql/innodb/1_hu3fd49fc1a58d123f3498503f7ff7204f_68265_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/mysql/innodb/1_hu3fd49fc1a58d123f3498503f7ff7204f_68265_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+alt="1"
+class="gallery-image"
+data-flex-grow="260"
+data-flex-basis="626px"
+>&lt;/p>
+&lt;h2 id="redo-log">redo log&lt;/h2>
+&lt;p>重做日志，记录的是“某个数据页上做了什么修改”。属于物理日志。&lt;/p>
+&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/mysql/innodb/redolog.png"
+width="889"
+height="359"
+srcset="https://emerywan.github.io/blog/blog/p/mysql/innodb/redolog_huec6805565d40a88bf7c70b51e3ee84c7_38212_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/mysql/innodb/redolog_huec6805565d40a88bf7c70b51e3ee84c7_38212_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+alt="redolog"
+class="gallery-image"
+data-flex-grow="247"
+data-flex-basis="594px"
+>&lt;/p>
+&lt;p>redo log 用来保障数据库的持久性。&lt;/p>
+&lt;p>在一个事务中，执行多个增删改的操作时，InnoDB 引擎会先操作缓冲池中的数据，如果缓冲区没有对应的数据，会通过后台线程将磁盘中的数据加载出来，存放在缓冲区中，再将缓冲池中的数据修改，修改后的数据页我们称为脏页。&lt;/p>
+&lt;p>脏页则会在一定的时机，通过后台线程刷新到磁盘中，从而保证缓冲区与磁盘的数据一致。&lt;/p>
+&lt;p>缓冲区的脏页数据并不是实时刷新的，而是一段时间之后将缓冲区的数据刷新到磁盘中（随机磁盘 IO）。&lt;/p>
+&lt;p>当对缓冲区的数据进行增删改之后，会首先将操作的数据页的变化，记录在 redo log buffer 中。在事务提交时，会将 redo log buffer 中的数据刷新到 redo log 磁盘文件中（顺序磁盘 IO）。&lt;/p>
+&lt;p>如果刷新缓冲区的脏页到磁盘时，发生错误，此时就可以借助于 redo log 进行数据恢复，这样就保证了事务的持久性。&lt;/p>
+&lt;h2 id="undo-log">undo log&lt;/h2>
+&lt;p>回滚日志。记录操作数据库的逆操作，用于进行回滚。&lt;/p>
+&lt;p>作用：&lt;/p>
+&lt;ul>
+&lt;li>提供回滚（保障事务的原子性）&lt;/li>
+&lt;li>MVCC&lt;/li>
+&lt;/ul>
+&lt;p>undo log 是逻辑日志，可以认为当 delete 一条记录时，undo log 中会记录一条对应的 insert 记录；当 update 一条记录时，它记录一条对应相反的 update 记录。&lt;/p>
+&lt;h2 id="mvcc">MVCC&lt;/h2>
+&lt;p>多版本并发控制，同一条记录在数据库中，可以存在多个版本。&lt;/p>
+&lt;ul>
+&lt;li>隐式字段
+&lt;ul>
+&lt;li>DB_TRX_ID 事务 id&lt;/li>
+&lt;li>DB_ROLL_PTR 回滚指针（记录这条记录的上一个版本）&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>undo log&lt;/li>
+&lt;li>readview&lt;/li>
+&lt;/ul>
+&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/mysql/innodb/2.png"
+width="447"
+height="293"
+srcset="https://emerywan.github.io/blog/blog/p/mysql/innodb/2_hu6914e1ba0252a0a630b3ee48cb8867a4_30147_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/mysql/innodb/2_hu6914e1ba0252a0a630b3ee48cb8867a4_30147_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+alt="2"
+class="gallery-image"
+data-flex-grow="152"
+data-flex-basis="366px"
+>&lt;/p>
+&lt;h3 id="当前读">当前读&lt;/h3>
+&lt;p>读取的是记录的最新版本。&lt;/p>
+&lt;p>&lt;code>update&lt;/code> &lt;code>insert&lt;/code> &lt;code>delete&lt;/code> &lt;code>select ... for update&lt;/code> &lt;code>select ... lock in share mode&lt;/code> 都是进行当前读。&lt;/p>
+&lt;h3 id="快照读">快照读&lt;/h3>
+&lt;p>简单的不加锁 &lt;code>select&lt;/code> 就是快照读。读取的是快照版本，通过 MVCC 进行并发控制。&lt;/p>
+&lt;h2 id="一致性">一致性&lt;/h2>
+&lt;p>数据库通过原子性、隔离性、持久性来保证一致性。&lt;/p>
+&lt;p>C(一致性)是目的，A(原子性)、I(隔离性)、D(持久性)是是为了保证一致性，数据库提供的手段。&lt;/p></description></item><item><title>MySQL 存储引擎</title><link>https://emerywan.github.io/blog/p/mysql/engine/</link><pubDate>Fri, 29 Jul 2022 19:02:02 +0800</pubDate><guid>https://emerywan.github.io/blog/p/mysql/engine/</guid><description>&lt;img src="https://emerywan.github.io/blog/imgs/22.jpeg" alt="Featured image of post MySQL 存储引擎" />&lt;h2 id="mysql-体系结构">MySQL 体系结构&lt;/h2>
+&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/mysql/engine/1.png"
+width="1176"
+height="639"
+srcset="https://emerywan.github.io/blog/blog/p/mysql/engine/1_hu5b4a85ab8f594ef5edc02d326d256cb0_206182_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/mysql/engine/1_hu5b4a85ab8f594ef5edc02d326d256cb0_206182_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+alt="1"
+class="gallery-image"
+data-flex-grow="184"
+data-flex-basis="441px"
+>&lt;/p>
+&lt;h3 id="连接层">连接层&lt;/h3>
+&lt;p>主要完成一些类似于连接处理、授权认证、及相关的安全方案。&lt;/p>
+&lt;p>为通过认证安全接入的客户端提供线程，服务器也会为安全接入的每个客户端验证它所具有的操作权限。&lt;/p>
+&lt;h3 id="服务层">服务层&lt;/h3>
+&lt;p>主要完成大多数的核心服务功能，如SQL接口，并完成缓存的查询，SQL的分析和优化，部分内置函数的执行。&lt;/p>
+&lt;p>所有跨存储引擎的功能也在这一层实现，如 过程、函数等。在该层，服务器会解析查询并创建相应的内部解析树，并对其完成相应的优化如确定表的查询的顺序，是否利用索引等，最后生成相应的执行操作。&lt;/p>
+&lt;p>如果是select语句，服务器还会查询内部的缓存，如果缓存空间足够大，这样在解决大量读操作的环境中能够很好的提升系统的性能。&lt;/p>
+&lt;h3 id="引擎层">引擎层&lt;/h3>
+&lt;p>真正的负责了MySQL中数据的存储和提取，服务器通过API和存储引擎进行通信。不同的存储引擎具有不同的功能，这样我们可以根据自己的需要，来选取合适的存储引擎。数据库中的索引是在存储引擎层实现的。&lt;/p>
+&lt;h3 id="存储层">存储层&lt;/h3>
+&lt;p>数据存储层， 主要是将数据（如: redolog、undolog、数据、索引、二进制日志、错误日志、查询日志、慢查询日志等）存储在文件系统之上，并完成与存储引擎的交互。&lt;/p>
+&lt;h2 id="存储引擎">存储引擎&lt;/h2>
+&lt;p>存储引擎就是存储数据，建立索引，更新、查询数据等技术的具体实现方式。&lt;/p>
+&lt;p>存储引擎是基于表的，而不是基于库的，所以存储引擎可以被称为表类型，可在创建表的时候，指定选择的存储引擎。&lt;/p>
+&lt;ul>
+&lt;li>当前数据库支持的存储引擎&lt;/li>
+&lt;/ul>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-sql" data-lang="sql">&lt;span class="line">&lt;span class="cl">&lt;span class="k">show&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">engines&lt;/span>&lt;span class="p">;&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;h2 id="innodb">InnoDB&lt;/h2>
+&lt;p>InnoDB 是 MySQL 5.5 之后默认的 MySQL 存储引擎。&lt;/p>
+&lt;p>特点：&lt;/p>
+&lt;ul>
+&lt;li>DML 操作遵循 ACID 模型，支持事务&lt;/li>
+&lt;li>支持行级锁，提高并发访问性能&lt;/li>
+&lt;li>支持外键约束，保证数据的完整性和正确性&lt;/li>
+&lt;/ul>
+&lt;p>InnoDB 的逻辑存储结构：&lt;/p>
+&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/mysql/engine/innodb.png"
+width="1207"
+height="503"
+srcset="https://emerywan.github.io/blog/blog/p/mysql/engine/innodb_hu255dad38c999e36f2d3fd079c10a9f22_82479_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/mysql/engine/innodb_hu255dad38c999e36f2d3fd079c10a9f22_82479_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+alt="innodb"
+class="gallery-image"
+data-flex-grow="239"
+data-flex-basis="575px"
+>&lt;/p>
+&lt;ul>
+&lt;li>表空间&lt;/li>
+&lt;/ul>
+&lt;p>InnoDB 存储引擎逻辑结构的最高层，idb 文件就是表空间文件。在表空间中可以包含多个 Segment 段。&lt;/p>
+&lt;ul>
+&lt;li>段&lt;/li>
+&lt;/ul>
+&lt;p>表空间是由各个段组成的，常见的段有数据段、索引段、回滚段等。InnoDB 对于段的管理，都是引擎自身完成，不需要人为控制，一个段中包含多个区。&lt;/p>
+&lt;ul>
+&lt;li>区（1M）&lt;/li>
+&lt;/ul>
+&lt;p>区是表空间的单元结构，每个区的大小为 1M。默认情况下，InnoDB 存储引擎页的大小为 16K，即一个区中一共有 64 个连续的页。&lt;/p>
+&lt;ul>
+&lt;li>页（16K）&lt;/li>
+&lt;/ul>
+&lt;p>页是组成区的最小单元，也是 InnoDB 存储引擎磁盘管理的最小单元，每个页默认为 16K。为了保证页的连续性，InnoDB 存储引擎每次从磁盘申请 4-5 个区。&lt;/p>
+&lt;ul>
+&lt;li>行&lt;/li>
+&lt;/ul>
+&lt;p>InnoDB 存储引擎是面向行的，也就是说数据是按行进行存放的，在每一行中，除了定义表时指定的字段外，还包括隐藏字段。&lt;/p>
+&lt;h2 id="myisam">MyISAM&lt;/h2>
+&lt;p>MyISAM 是 MySQL 早期的默认存储引擎。&lt;/p>
+&lt;p>特点：&lt;/p>
+&lt;ul>
+&lt;li>不支持事务，不支持外键&lt;/li>
+&lt;li>支持表锁，不支持行锁&lt;/li>
+&lt;li>适合 select&lt;/li>
+&lt;/ul>
+&lt;p>存储文件：&lt;/p>
+&lt;ul>
+&lt;li>.sdi
+存储表结构信息&lt;/li>
+&lt;li>.MYD
+存储数据&lt;/li>
+&lt;li>.MYI
+存储索引&lt;/li>
+&lt;/ul>
+&lt;h2 id="memory">Memory&lt;/h2>
+&lt;p>Memory 引擎的表数据是存放在内存中的，由于受到硬件、断电等问题的影响，只能将这些表作为临时表或缓存使用。&lt;/p>
+&lt;p>特点：&lt;/p>
+&lt;ul>
+&lt;li>内存存放数据，宕机后数据会丢失&lt;/li>
+&lt;li>hash 索引（默认）&lt;/li>
+&lt;/ul>
+&lt;p>文件：&lt;/p>
+&lt;ul>
+&lt;li>.sdi 存储表结构信息&lt;/li>
+&lt;/ul></description></item><item><title>MySQL 优化</title><link>https://emerywan.github.io/blog/p/mysql/sql-optimize/</link><pubDate>Fri, 01 Jul 2022 18:02:02 +0800</pubDate><guid>https://emerywan.github.io/blog/p/mysql/sql-optimize/</guid><description>&lt;img src="https://emerywan.github.io/blog/imgs/20.jpeg" alt="Featured image of post MySQL 优化" />&lt;h2 id="insert-优化">insert 优化&lt;/h2>
+&lt;p>一次性往数据库中插入多条数据，可从以下三方面优化：&lt;/p>
+&lt;ul>
+&lt;li>批量插入数据&lt;/li>
+&lt;/ul>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-sql" data-lang="sql">&lt;span class="line">&lt;span class="cl">&lt;span class="k">insert&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">into&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">tb_test&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">values&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="mi">1&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="s1">&amp;#39;Tom&amp;#39;&lt;/span>&lt;span class="p">),&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="mi">2&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="s1">&amp;#39;Cat&amp;#39;&lt;/span>&lt;span class="p">),&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="mi">3&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="s1">&amp;#39;Jerry&amp;#39;&lt;/span>&lt;span class="p">);&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;ul>
+&lt;li>手动控制事务&lt;/li>
+&lt;/ul>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;span class="lnt">4
+&lt;/span>&lt;span class="lnt">5
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-sql" data-lang="sql">&lt;span class="line">&lt;span class="cl">&lt;span class="k">start&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">transaction&lt;/span>&lt;span class="p">;&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="k">insert&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">into&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">tb_test&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">values&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="mi">1&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="s1">&amp;#39;Tom&amp;#39;&lt;/span>&lt;span class="p">),&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="mi">2&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="s1">&amp;#39;Cat&amp;#39;&lt;/span>&lt;span class="p">),&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="mi">3&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="s1">&amp;#39;Jerry&amp;#39;&lt;/span>&lt;span class="p">);&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="k">insert&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">into&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">tb_test&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">values&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="mi">4&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="s1">&amp;#39;Tom&amp;#39;&lt;/span>&lt;span class="p">),&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="mi">5&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="s1">&amp;#39;Cat&amp;#39;&lt;/span>&lt;span class="p">),&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="mi">6&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="s1">&amp;#39;Jerry&amp;#39;&lt;/span>&lt;span class="p">);&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="k">insert&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">into&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">tb_test&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">values&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="mi">7&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="s1">&amp;#39;Tom&amp;#39;&lt;/span>&lt;span class="p">),&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="mi">8&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="s1">&amp;#39;Cat&amp;#39;&lt;/span>&lt;span class="p">),&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="mi">9&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="s1">&amp;#39;Jerry&amp;#39;&lt;/span>&lt;span class="p">);&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="k">commit&lt;/span>&lt;span class="p">;&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;ul>
+&lt;li>主键顺序插入&lt;/li>
+&lt;/ul>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-fallback" data-lang="fallback">&lt;span class="line">&lt;span class="cl">主键乱序插入 : 8 1 9 21 88 2 4 15 89 5 7 3
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">主键顺序插入 : 1 2 3 4 5 7 8 9 15 21 88 89
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;h3 id="主键优化">主键优化&lt;/h3>
+&lt;ul>
+&lt;li>满足业务需求的情况下，尽量降低主键的长度，减少磁盘 IO&lt;/li>
+&lt;li>插入数据尽量选择顺序插入，选择使用 auto_increment 自增主键&lt;/li>
+&lt;li>尽量不要使用 UUID 或其他自然主键（如身份证号） 作为主键&lt;/li>
+&lt;li>业务操作避免对主键的修改&lt;/li>
+&lt;/ul>
+&lt;p>在 InnoDB 存储引擎中，表数据是根据主键顺序组织存放的。这种存储方式为索引组织表（index organized table IOT）。&lt;/p>
+&lt;p>在 InnoDB 引擎中，数据行是记录在逻辑结构 page 页中的，而每一个页的大小是固定的，默认 16K。
+那也就意味着，一个页中所存储的行也是有限的，如果插入的数据行在该页存储不下，将会存储到下一个页中，页与页之间会通过指针连接。&lt;/p>
+&lt;h4 id="页分裂">页分裂&lt;/h4>
+&lt;p>页可以为空，也可以填充一半，也可以填充100%。每个页包含了 2-N 行数据(如果一行数据过大，会行
+溢出)，根据主键排列。&lt;/p>
+&lt;p>乱序插入：&lt;/p>
+&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/mysql/sql-optimize/primary_index_1.png"
+width="898"
+height="636"
+srcset="https://emerywan.github.io/blog/blog/p/mysql/sql-optimize/primary_index_1_hu563b35cba82cad8802163900e924e8ca_143837_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/mysql/sql-optimize/primary_index_1_hu563b35cba82cad8802163900e924e8ca_143837_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+alt="primary_index_1"
+class="gallery-image"
+data-flex-grow="141"
+data-flex-basis="338px"
+>&lt;/p>
+&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/mysql/sql-optimize/primary_index_2.png"
+width="915"
+height="659"
+srcset="https://emerywan.github.io/blog/blog/p/mysql/sql-optimize/primary_index_2_hua83dc9b4ef4e3c90fc06cafc64e9881b_251787_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/mysql/sql-optimize/primary_index_2_hua83dc9b4ef4e3c90fc06cafc64e9881b_251787_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+alt="primary_index_2"
+class="gallery-image"
+data-flex-grow="138"
+data-flex-basis="333px"
+>&lt;/p>
+&lt;h4 id="页合并">页合并&lt;/h4>
+&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/mysql/sql-optimize/primary_index_3.png"
+width="906"
+height="382"
+srcset="https://emerywan.github.io/blog/blog/p/mysql/sql-optimize/primary_index_3_hu3b7e2aa6c3e2312a91f1497a31cd1dee_78730_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/mysql/sql-optimize/primary_index_3_hu3b7e2aa6c3e2312a91f1497a31cd1dee_78730_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+alt="primary_index_3"
+class="gallery-image"
+data-flex-grow="237"
+data-flex-basis="569px"
+>&lt;/p>
+&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/mysql/sql-optimize/primary_index_4.png"
+width="887"
+height="573"
+srcset="https://emerywan.github.io/blog/blog/p/mysql/sql-optimize/primary_index_4_hu41da46b964a6401e487c72fb3de2f351_108741_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/mysql/sql-optimize/primary_index_4_hu41da46b964a6401e487c72fb3de2f351_108741_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+alt="primary_index_4"
+class="gallery-image"
+data-flex-grow="154"
+data-flex-basis="371px"
+>&lt;/p>
+&lt;h2 id="order-by-优化">order by 优化&lt;/h2>
+&lt;p>MySQL的排序，有两种方式：&lt;/p>
+&lt;ul>
+&lt;li>
+&lt;p>Using filesort : 通过表的索引或全表扫描，读取满足条件的数据行，然后在排序缓冲区 sort
+buffer 中完成排序操作，所有不是通过索引直接返回排序结果的排序都叫 FileSort 排序&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>Using index : 通过有序索引顺序扫描直接返回有序数据，这种情况即为 using index，不需要
+额外排序，操作效率高&lt;/p>
+&lt;/li>
+&lt;/ul>
+&lt;p>优化原则：&lt;/p>
+&lt;ul>
+&lt;li>
+&lt;p>根据排序字段建立合适的索引，多字段排序时，也遵循最左前缀法则&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>尽量使用覆盖索引，否则不生效(filesort)&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>多字段排序, 一个升序一个降序，此时需要注意联合索引在创建时的规则（ASC/DESC）&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>如果不可避免的出现 filesort，大数据量排序时，可以适当增大排序缓冲区大小 sort_buffer_size(默认 256k)&lt;/p>
+&lt;/li>
+&lt;/ul>
+&lt;h2 id="limit-优化">limit 优化&lt;/h2>
+&lt;p>在数据量比较大时，如果进行 limit 分页查询，在查询时，越往后，分页查询效率越低。&lt;/p>
+&lt;p>当在进行分页查询时，如果执行 &lt;code>limit 2000000,10&lt;/code> ，此时需要MySQL排序前2000010 记
+录，仅仅返回 2000000 - 2000010 的记录，其他记录丢弃，查询排序的代价非常大 。&lt;/p>
+&lt;p>优化思路: 一般分页查询时，通过创建覆盖索引能够比较好地提高性能，可以通过覆盖索引加子查
+询形式进行优化。&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-sql" data-lang="sql">&lt;span class="line">&lt;span class="cl">&lt;span class="k">select&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">*&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="k">from&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">tb_sku&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">t&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="k">select&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">id&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">from&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">tb_sku&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">order&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">by&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">id&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">limit&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="mi">2000000&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="mi">10&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">a&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="k">where&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">t&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">id&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="n">a&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">id&lt;/span>&lt;span class="p">;&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;h2 id="count-优化">count 优化&lt;/h2>
+&lt;ul>
+&lt;li>
+&lt;p>count(主键)&lt;/p>
+&lt;ul>
+&lt;li>InnoDB 引擎会遍历整张表，把每一行的 主键id 值都取出来，返回给服务层。服务层拿到主键后，直接按行进行累加(主键不可能为null)&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>
+&lt;p>count(字段)&lt;/p>
+&lt;ul>
+&lt;li>没有 not null 约束: InnoDB 引擎会遍历整张表把每一行的字段值都取出来，返回给服务层，服务层判断是否为null，不为null，计数累加。&lt;/li>
+&lt;li>有 not null 约束：InnoDB 引擎会遍历整张表把每一行的字段值都取出来，返回给服务层，直接按行进行累加。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>
+&lt;p>count(数字)&lt;/p>
+&lt;ul>
+&lt;li>InnoDB 引擎遍历整张表，但不取值。服务层对于返回的每一行，放一个数字“1”进去，直接按行进行累加。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>
+&lt;p>count(*)&lt;/p>
+&lt;ul>
+&lt;li>InnoDB引擎并不会把全部字段取出来，而是专门做了优化，不取值，服务层直接按行进行累加。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;h2 id="update-优化">update 优化&lt;/h2>
+&lt;p>InnoDB的行锁是针对索引加的锁，不是针对记录加的锁，并且该索引不能失效，否则会从行锁
+升级为表锁。&lt;/p>
+&lt;p>开启多个事务，在执行 SQL 时，防止行锁升级为了表锁。&lt;/p></description></item><item><title>MySQL 日志</title><link>https://emerywan.github.io/blog/p/mysql/log/</link><pubDate>Thu, 30 Jun 2022 18:02:02 +0800</pubDate><guid>https://emerywan.github.io/blog/p/mysql/log/</guid><description>&lt;img src="https://emerywan.github.io/blog/imgs/19.jpeg" alt="Featured image of post MySQL 日志" />&lt;h2 id="日志">日志&lt;/h2>
+&lt;h3 id="错误日志">错误日志&lt;/h3>
+&lt;p>错误日志是 MySQL 中最重要的日志之一，它记录了当 mysqld 启动和停止时，以及服务器在运行过程中发生任何严重错误时的相关信息。&lt;/p>
+&lt;p>当数据库出现任何故障导致无法正常使用时，建议首先查看此日志。&lt;/p>
+&lt;p>查看日志位置：&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-sql" data-lang="sql">&lt;span class="line">&lt;span class="cl">&lt;span class="k">show&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">variables&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">like&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="s1">&amp;#39;%log_error%&amp;#39;&lt;/span>&lt;span class="p">;&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/mysql/log/errorlog.png"
+width="669"
+height="214"
+srcset="https://emerywan.github.io/blog/blog/p/mysql/log/errorlog_huaf2aa946fc0c9a4be25a1e7ae77fcd38_27013_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/mysql/log/errorlog_huaf2aa946fc0c9a4be25a1e7ae77fcd38_27013_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+alt="errorlog"
+class="gallery-image"
+data-flex-grow="312"
+data-flex-basis="750px"
+>&lt;/p>
+&lt;h3 id="二进制日志归档日志">二进制日志（归档日志）&lt;/h3>
+&lt;p>二进制日志（BINLOG）记录了所有的 DDL（数据定义语言）语句和 DML（数据操纵语言）语句。&lt;/p>
+&lt;p>作用：&lt;/p>
+&lt;ul>
+&lt;li>灾难时数据恢复&lt;/li>
+&lt;li>MySQL 主从复制&lt;/li>
+&lt;/ul>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-sql" data-lang="sql">&lt;span class="line">&lt;span class="cl">&lt;span class="k">show&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">variables&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">like&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="s1">&amp;#39;%log_bin%&amp;#39;&lt;/span>&lt;span class="p">;&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/mysql/log/binlog.png"
+width="602"
+height="240"
+srcset="https://emerywan.github.io/blog/blog/p/mysql/log/binlog_hue4b3570af35eb515872cd8390aac573d_28397_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/mysql/log/binlog_hue4b3570af35eb515872cd8390aac573d_28397_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+alt="binlog"
+class="gallery-image"
+data-flex-grow="250"
+data-flex-basis="602px"
+>&lt;/p>
+&lt;ul>
+&lt;li>
+&lt;p>log_bin_basename&lt;/p>
+&lt;ul>
+&lt;li>当前数据库服务器的binlog日志的基础名称(前缀)，具体的binlog文件名需要再该basename的基础上加上编号(编号从000001开始)。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>
+&lt;p>log_bin_index&lt;/p>
+&lt;ul>
+&lt;li>binlog的索引文件，里面记录了当前服务器关联的binlog文件有哪些。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;h4 id="binlog-格式">binlog 格式&lt;/h4>
+&lt;p>MySQL 服务器中提供了多种格式来记录二进制日志：&lt;/p>
+&lt;p>配置二进制日志的格式，只需要在 /etc/my.cnf 中配置 binlog_format 参数即可。&lt;/p>
+&lt;ul>
+&lt;li>
+&lt;p>&lt;code>statement&lt;/code>&lt;/p>
+&lt;ul>
+&lt;li>基于 SQL 语句的日志记录，记录的是 SQL 语句，对数据进行修改的 SQL 都会记录在日志文件中。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;code>row&lt;/code> （默认）&lt;/p>
+&lt;ul>
+&lt;li>基于行的日志记录，记录的是每一行的数据变更。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;code>mixed&lt;/code>&lt;/p>
+&lt;ul>
+&lt;li>混合了 statememt 和 row 两种格式，默认采用statement，在某些特殊情况下会自动切换为 row 进行记录。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-sql" data-lang="sql">&lt;span class="line">&lt;span class="cl">&lt;span class="k">show&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">variables&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">like&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="s1">&amp;#39;%binlog_format%&amp;#39;&lt;/span>&lt;span class="p">;&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/mysql/log/binlogformat.png"
+width="432"
+height="156"
+srcset="https://emerywan.github.io/blog/blog/p/mysql/log/binlogformat_hu025aaab383e907dcebf622698b084bf9_13882_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/mysql/log/binlogformat_hu025aaab383e907dcebf622698b084bf9_13882_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+alt="binlogformat"
+class="gallery-image"
+data-flex-grow="276"
+data-flex-basis="664px"
+>&lt;/p>
+&lt;h4 id="查看-binlog">查看 binlog&lt;/h4>
+&lt;p>日志是以二进制方式存储的，不能直接读取，需要通过二进制日志查询工具 &lt;code>mysqlbinlog&lt;/code> 来查看。&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;span class="lnt">4
+&lt;/span>&lt;span class="lnt">5
+&lt;/span>&lt;span class="lnt">6
+&lt;/span>&lt;span class="lnt">7
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-fallback" data-lang="fallback">&lt;span class="line">&lt;span class="cl">mysqlbinlog [参数] logfilename
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">参数选项：
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> -d 指定数据库名称，只列出指定的数据库相关操作
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> -o 忽略掉日志中的前 n 行命令
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> -v 将行事件(数据变更)重构为SQL语句
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> -vv 将行事件(数据变更)重构为SQL语句，并输出注释信息
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;h4 id="清理-binlog">清理 binlog&lt;/h4>
+&lt;ul>
+&lt;li>
+&lt;p>&lt;code>reset master&lt;/code>&lt;/p>
+&lt;ul>
+&lt;li>删除全部 binlog 日志，删除之后，日志编号，将从 binlog.000001重新开始&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;code>purge master logs to 'binlog.000005'&lt;/code>&lt;/p>
+&lt;ul>
+&lt;li>删除 000005 之前的所有日志&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;code>purge master logs before 'yyyy-mm-dd hh24:mi:ss'&lt;/code>&lt;/p>
+&lt;ul>
+&lt;li>删除日志为 &amp;ldquo;yyyy-mm-dd hh24:mi:ss&amp;rdquo; 之前产生的所有日志&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;p>可以在 mysql 的配置文件中配置二进制日志的过期时间，设置了之后，二进制日志过期会自动删除。&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-sql" data-lang="sql">&lt;span class="line">&lt;span class="cl">&lt;span class="k">show&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">variables&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">like&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="s1">&amp;#39;%binlog_expire_logs_seconds%&amp;#39;&lt;/span>&lt;span class="p">;&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/mysql/log/binlogexpire.png"
+width="541"
+height="153"
+srcset="https://emerywan.github.io/blog/blog/p/mysql/log/binlogexpire_hua71c1465b703f02a37880ff6dd450f1c_15632_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/mysql/log/binlogexpire_hua71c1465b703f02a37880ff6dd450f1c_15632_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+alt="binlogexpire"
+class="gallery-image"
+data-flex-grow="353"
+data-flex-basis="848px"
+>&lt;/p>
+&lt;h3 id="查询日志">查询日志&lt;/h3>
+&lt;p>查询日志中记录了客户端的所有操作语句。（binlog 不包含查询数据的 SQL 语句）&lt;/p>
+&lt;p>默认情况下，查询日志是未开启的。&lt;/p>
+&lt;p>如果需要开启查询日志，可以修改MySQL的配置文件 /etc/my.cnf 文件，添加如下内容：&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;span class="lnt">4
+&lt;/span>&lt;span class="lnt">5
+&lt;/span>&lt;span class="lnt">6
+&lt;/span>&lt;span class="lnt">7
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-fallback" data-lang="fallback">&lt;span class="line">&lt;span class="cl"># 该选项用来开启查询日志
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"># 可选值 0 关闭 1 开启
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">general_log=1
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"># 设置日志的文件名
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"># 如果没有指定，默认的文件名为 host_name.log
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">general_log_file=mysql_query.log
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>开启了查询日志之后，/var/lib/mysql/ 目录下就会出现 mysql_query.log 文件。&lt;/p>
+&lt;p>所有的客户端的增删改查操作都会记录在该日志文件之中，长时间运行后，该日志文件将会非常大。&lt;/p>
+&lt;h3 id="慢查询日志">慢查询日志&lt;/h3>
+&lt;p>慢查询日志记录了：&lt;/p>
+&lt;ul>
+&lt;li>执行时间超过 &lt;code>long_query_time&lt;/code>&lt;/li>
+&lt;li>扫描记录数大于 &lt;code>min_examined_row_limit&lt;/code>
+的所有的SQL语句的日志，默认未开启。&lt;/li>
+&lt;/ul>
+&lt;p>如果需要开启慢查询日志，需要在 MySQL 的配置文件 /etc/my.cnf 中配置如下参数：&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;span class="lnt">4
+&lt;/span>&lt;span class="lnt">5
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-fallback" data-lang="fallback">&lt;span class="line">&lt;span class="cl"># 慢查询日志
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">slow_query_log=1
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"># 执行时间参数
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">long_query_time=2
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>默认情况下，不会记录管理语句，也不会记录不使用索引进行查找的查询。&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;span class="lnt">4
+&lt;/span>&lt;span class="lnt">5
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-fallback" data-lang="fallback">&lt;span class="line">&lt;span class="cl"># 记录执行较慢的管理语句
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">log_slow_admin_statements=1
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"># 记录执行较慢的未使用索引的语句
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">log_queries_not_using_indexes= 1
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div></description></item><item><title>MySQL 索引</title><link>https://emerywan.github.io/blog/p/mysql/index/</link><pubDate>Thu, 30 Jun 2022 14:02:02 +0800</pubDate><guid>https://emerywan.github.io/blog/p/mysql/index/</guid><description>&lt;img src="https://emerywan.github.io/blog/imgs/15.jpeg" alt="Featured image of post MySQL 索引" />&lt;h2 id="索引">索引&lt;/h2>
+&lt;p>索引（index）是帮助 MySQL 高效获取数据的数据结构，提高查询效率。&lt;/p>
+&lt;ul>
+&lt;li>
+&lt;p>优点&lt;/p>
+&lt;ul>
+&lt;li>提高数据的查询速度&lt;/li>
+&lt;li>降低数据库的 IO 成本&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>
+&lt;p>缺点&lt;/p>
+&lt;ul>
+&lt;li>占用磁盘空间&lt;/li>
+&lt;li>增删改需要维护索引，性能可能会下降&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;h2 id="索引的分类">索引的分类&lt;/h2>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-sql" data-lang="sql">&lt;span class="line">&lt;span class="cl">&lt;span class="c1">-- 查看表中的索引
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span>&lt;span class="k">show&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">index&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">from&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">table_name&lt;/span>&lt;span class="p">;&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;h3 id="主键索引">主键索引&lt;/h3>
+&lt;p>当一张表，把某个列设为主键的时候，则该列就是主键索引。&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-sql" data-lang="sql">&lt;span class="line">&lt;span class="cl">&lt;span class="k">create&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">table&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">demo&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="n">id&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nb">int&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">primary&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">key&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">auto_increment&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="p">);&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;h3 id="普通索引">普通索引&lt;/h3>
+&lt;p>用表中的普通列构建的索引，没有任何限制。&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;span class="lnt">4
+&lt;/span>&lt;span class="lnt">5
+&lt;/span>&lt;span class="lnt">6
+&lt;/span>&lt;span class="lnt">7
+&lt;/span>&lt;span class="lnt">8
+&lt;/span>&lt;span class="lnt">9
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-sql" data-lang="sql">&lt;span class="line">&lt;span class="cl">&lt;span class="k">create&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">table&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">demo&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="n">id&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nb">int&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">primary&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">key&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">auto_increment&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="n">name&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nb">varchar&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="mi">128&lt;/span>&lt;span class="p">),&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="k">index&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">demo_index_name&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">name&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="p">);&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="c1">---
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="k">create&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">index&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">demo_index_name&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">on&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">demo_table&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">name&lt;/span>&lt;span class="p">);&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;h3 id="唯一索引">唯一索引&lt;/h3>
+&lt;p>索引列的值必须唯一，允许有多个空值 null（和主键不同，主键不允许为空）。&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;span class="lnt">4
+&lt;/span>&lt;span class="lnt">5
+&lt;/span>&lt;span class="lnt">6
+&lt;/span>&lt;span class="lnt">7
+&lt;/span>&lt;span class="lnt">8
+&lt;/span>&lt;span class="lnt">9
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-sql" data-lang="sql">&lt;span class="line">&lt;span class="cl">&lt;span class="k">create&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">table&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">demo&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="n">id&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nb">int&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">primary&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">key&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">auto_increment&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="n">name&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nb">varchar&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="mi">128&lt;/span>&lt;span class="p">),&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="k">unique&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">index&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">new_unique_index_name&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">name&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="p">);&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="c1">---
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="k">create&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">unique&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">index&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">new_unique_index_name&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">on&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">demo_table&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">name&lt;/span>&lt;span class="p">);&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;h3 id="全文索引">全文索引&lt;/h3>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;span class="lnt">4
+&lt;/span>&lt;span class="lnt">5
+&lt;/span>&lt;span class="lnt">6
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-sql" data-lang="sql">&lt;span class="line">&lt;span class="cl">&lt;span class="k">create&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">table&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">demo&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="n">id&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nb">int&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">primary&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">key&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">auto_increment&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="n">name&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nb">varchar&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="mi">128&lt;/span>&lt;span class="p">),&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="n">content&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nb">text&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="n">fulltext&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">index&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">demo_fulltext_index_content&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">content&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="p">);&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;h3 id="组合索引">组合索引&lt;/h3>
+&lt;p>组合索引 / 联合索引&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-sql" data-lang="sql">&lt;span class="line">&lt;span class="cl">&lt;span class="k">create&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">index&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">demo_name_age_index&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">on&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">demo&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">name&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">age&lt;/span>&lt;span class="p">);&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;h3 id="聚簇索引">聚簇索引&lt;/h3>
+&lt;ul>
+&lt;li>
+&lt;p>索引和数据放在一起，索引结构的叶子节点保存了行数据，找到了索引就找到了数据。&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>访问数据更快，聚簇索引将索引和数据保存在一个B+树上。&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>插入速度严重依赖于插入顺序。&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>更新聚簇索引列的代价很高。&lt;/p>
+&lt;/li>
+&lt;/ul>
+&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/mysql/index/index8.png"
+width="722"
+height="369"
+srcset="https://emerywan.github.io/blog/blog/p/mysql/index/index8_hu9d45f79d8b338c019791de22ea52eb90_62479_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/mysql/index/index8_hu9d45f79d8b338c019791de22ea52eb90_62479_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+alt="index8"
+class="gallery-image"
+data-flex-grow="195"
+data-flex-basis="469px"
+>&lt;/p>
+&lt;h3 id="非聚簇索引二级索引">非聚簇索引（二级索引）&lt;/h3>
+&lt;p>将数据与索引分开存储，索引结构的叶子节点关联的是对应的主键。&lt;/p>
+&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/mysql/index/clustering-index.png"
+width="840"
+height="571"
+srcset="https://emerywan.github.io/blog/blog/p/mysql/index/clustering-index_hub32172b742ab96d724c643b42699b935_232051_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/mysql/index/clustering-index_hub32172b742ab96d724c643b42699b935_232051_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+alt="clustering-index"
+class="gallery-image"
+data-flex-grow="147"
+data-flex-basis="353px"
+>&lt;/p>
+&lt;ul>
+&lt;li>二级索引访问需要两次索引查找，要回表。&lt;/li>
+&lt;/ul>
+&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/mysql/index/index9.png"
+width="727"
+height="389"
+srcset="https://emerywan.github.io/blog/blog/p/mysql/index/index9_hua49cf0193b83cd4f61e5b4747229532b_46178_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/mysql/index/index9_hua49cf0193b83cd4f61e5b4747229532b_46178_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+alt="index9"
+class="gallery-image"
+data-flex-grow="186"
+data-flex-basis="448px"
+>&lt;/p>
+&lt;h2 id="索引的结构">索引的结构&lt;/h2>
+&lt;h3 id="b-tree">B Tree&lt;/h3>
+&lt;p>B 树是一种多叉平衡查找树，其主要特点：&lt;/p>
+&lt;ul>
+&lt;li>
+&lt;p>树的节点中存储着多个元素，每个内节点有多个分叉。&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>在所有的节点都储存数据。每个节点中包含键值和数据，节点中的键值从小到大排列。&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>父节点当中的元素不会出现在子节点中。&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>所有的叶子结点都位于同一层，叶节点具有相同的深度，叶节点之间没有指针连接。&lt;/p>
+&lt;/li>
+&lt;/ul>
+&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/mysql/index/BTree.png"
+width="824"
+height="496"
+srcset="https://emerywan.github.io/blog/blog/p/mysql/index/BTree_hu5a2ea9e01a7974b484f27a03994c1eb9_162577_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/mysql/index/BTree_hu5a2ea9e01a7974b484f27a03994c1eb9_162577_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+alt="BTree"
+class="gallery-image"
+data-flex-grow="166"
+data-flex-basis="398px"
+>&lt;/p>
+&lt;h3 id="b-tree-1">B+ Tree&lt;/h3>
+&lt;p>B+ 树是 B 树的升级版。B+ 树在结构上和B树的区别在于：&lt;/p>
+&lt;ul>
+&lt;li>
+&lt;p>只有叶子节点才会存储数据，非叶子节点只存储键值，用于查找。&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>叶子节点之间使用双向指针连接，最底层的叶子节点形成了一个双向有序链表。&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>叶子节点保存了父节点所有关键字记录的指针。&lt;/p>
+&lt;/li>
+&lt;/ul>
+&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/mysql/index/BTree2.png"
+width="726"
+height="486"
+srcset="https://emerywan.github.io/blog/blog/p/mysql/index/BTree2_hu9d51150ef65d39ad05b8ca626e16e349_124398_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/mysql/index/BTree2_hu9d51150ef65d39ad05b8ca626e16e349_124398_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+alt="B&amp;#43;Tree"
+class="gallery-image"
+data-flex-grow="149"
+data-flex-basis="358px"
+>&lt;/p>
+&lt;p>相比与 B 树，B+ 树有以下提升：&lt;/p>
+&lt;ul>
+&lt;li>
+&lt;p>扫表能力更强（进行全表扫描，只需要遍历叶子节点即可）&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>具有更好的磁盘读写能力（非叶子节点不存储数据，使树更矮，IO 操作更少，一次磁盘加载扫描范围更大）&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>查询效率稳定（数据都存储在叶子节点，IO 次数稳定）&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>增删数据效率更高（数据在叶子节点以有序链表存储，可提高数据增删效率）&lt;/p>
+&lt;/li>
+&lt;/ul>
+&lt;p>数据库中，B+ 树的高度一般都在 2~4 层。由于 MySQL 的 INNODB 引擎在设计时是将 B+ 树的根节点常驻内存的，因此在查找某一键值的行记录时，最多只需要 1~3 次磁盘IO。&lt;/p>
+&lt;h3 id="hash">Hash&lt;/h3>
+&lt;p>支持 hash 索引的是 Memory 存储引擎。采用一定的 hash 算法，将键值换算成新的 hash 值，映射到对应的槽位上，然后存储在 hash 表中。&lt;/p>
+&lt;p>&lt;a class="link" href="hash.png" >hash&lt;/a>&lt;/p>
+&lt;p>特点：&lt;/p>
+&lt;ul>
+&lt;li>只能用于对等比较（=, in），不支持范围查询（between, &amp;gt;, &amp;lt;）&lt;/li>
+&lt;li>无法利用索引完成排序操作&lt;/li>
+&lt;li>查询效率高，通常只需要一次检索（无 hash 冲突的情况）&lt;/li>
+&lt;/ul>
+&lt;h2 id="创建索引的原则">创建索引的原则&lt;/h2>
+&lt;h3 id="-建议创建索引">🙆 建议创建索引&lt;/h3>
+&lt;ul>
+&lt;li>✅ &lt;code>select&lt;/code> 语句，频繁作为 &lt;code>where&lt;/code> 条件的字段&lt;/li>
+&lt;/ul>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;span class="lnt">4
+&lt;/span>&lt;span class="lnt">5
+&lt;/span>&lt;span class="lnt">6
+&lt;/span>&lt;span class="lnt">7
+&lt;/span>&lt;span class="lnt">8
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-sql" data-lang="sql">&lt;span class="line">&lt;span class="cl">&lt;span class="k">select&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">*&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">from&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">employees&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">where&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">first_name&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s2">&amp;#34;Georgi&amp;#34;&lt;/span>&lt;span class="p">;&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="c1">-- index(first_name)
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="k">select&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">*&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">from&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">employees&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">where&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">first_name&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s2">&amp;#34;Georgi&amp;#34;&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">and&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">last_name&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s2">&amp;#34;Cools&amp;#34;&lt;/span>&lt;span class="p">;&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="c1">-- 联合索引
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">-- index(first_name, last_name)
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">-- 注意满足：最左前缀原则
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">-- index(last_name, first_name) -&amp;gt; where first_name=&amp;#34;Georgi&amp;#34; 无法使用索引
+&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;ul>
+&lt;li>✅ &lt;code>update/delete&lt;/code> 语句的 &lt;code>where&lt;/code> 条件&lt;/li>
+&lt;/ul>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-sql" data-lang="sql">&lt;span class="line">&lt;span class="cl">&lt;span class="k">update&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">employees&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">set&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">first_name&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s2">&amp;#34;Jim&amp;#34;&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">where&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">emp_no&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s2">&amp;#34;100001&amp;#34;&lt;/span>&lt;span class="p">;&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="k">delete&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">from&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">employees&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">where&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">fitst_name&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s2">&amp;#34;Georgi&amp;#34;&lt;/span>&lt;span class="p">;&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;ul>
+&lt;li>✅ 需要分组，排序的字段&lt;/li>
+&lt;/ul>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-sql" data-lang="sql">&lt;span class="line">&lt;span class="cl">&lt;span class="k">select&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">dept_no&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">count&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="o">*&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">from&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">dept_emp&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">group&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">by&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">dept_no&lt;/span>&lt;span class="p">;&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;ul>
+&lt;li>✅ 使用 &lt;code>distinct&lt;/code> 的字段&lt;/li>
+&lt;/ul>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-sql" data-lang="sql">&lt;span class="line">&lt;span class="cl">&lt;span class="k">select&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">distinct&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">first_name&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">from&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">employees&lt;/span>&lt;span class="p">;&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;ul>
+&lt;li>
+&lt;p>✅ 字段需要唯一性约束&lt;/p>
+&lt;ul>
+&lt;li>唯一索引&lt;/li>
+&lt;li>主键索引&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>
+&lt;p>✅ 多表查询，连接字段应创建索引&lt;/p>
+&lt;ul>
+&lt;li>&lt;strong>类型务必保持一致&lt;/strong>，避免隐式装换&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;span class="lnt">4
+&lt;/span>&lt;span class="lnt">5
+&lt;/span>&lt;span class="lnt">6
+&lt;/span>&lt;span class="lnt">7
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-sql" data-lang="sql">&lt;span class="line">&lt;span class="cl">&lt;span class="k">select&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">emp&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="o">*&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">d&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">dept_name&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="k">from&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">employees&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">emp&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="k">left&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">join&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">dept_emp&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">de&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">on&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">emp&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">emp_no&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="n">de&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">emp_no&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="k">left&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">join&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">departments&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">d&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">on&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">de&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">dept_no&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="n">d&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">dept_no&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="k">where&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">de&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">emp_no&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s2">&amp;#34;100001&amp;#34;&lt;/span>&lt;span class="p">;&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="c1">-- employees.emp_no dept_emp.emp_no 类型务必保持一致
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">-- dept_emp.dept_no departmants.dept_no 类型务必保持一致
+&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;h3 id="-不建议创建索引">🙅 不建议创建索引&lt;/h3>
+&lt;ul>
+&lt;li>❌ &lt;code>where&lt;/code> 子句中用不到的字段&lt;/li>
+&lt;/ul>
+&lt;p>索引的作用是快速定位到想要的数据，用不到就没有必要创建数据了。&lt;/p>
+&lt;ul>
+&lt;li>❌ 表里的记录非常少&lt;/li>
+&lt;/ul>
+&lt;p>如只有 100 条数据，有无影响不大。&lt;/p>
+&lt;ul>
+&lt;li>❌ 有大量重复数据，选择性低&lt;/li>
+&lt;/ul>
+&lt;p>如：性别字段，导致大量回表。&lt;/p>
+&lt;p>索引的选择性越高，查询效率越好，可以在查找过程中过滤更多的行&lt;/p>
+&lt;ul>
+&lt;li>❌ 频繁更新的字段，创建索引要考虑维护索引的开销&lt;/li>
+&lt;/ul>
+&lt;p>频繁修改但查询少的字段，不推荐创建索引&lt;/p>
+&lt;h2 id="索引失效与解决方案">索引失效与解决方案&lt;/h2>
+&lt;h3 id="-索引列不独立进行了计算或变成了参数">⚠️ 索引列不独立，进行了计算或变成了参数&lt;/h3>
+&lt;ul>
+&lt;li>索引字段进行了表达式计算&lt;/li>
+&lt;/ul>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-sql" data-lang="sql">&lt;span class="line">&lt;span class="cl">&lt;span class="k">explain&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="k">select&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">*&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">form&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">employees&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="k">where&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">emp_no&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">+&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="mi">1&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="mi">100003&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/mysql/index/index1.png"
+width="1185"
+height="157"
+srcset="https://emerywan.github.io/blog/blog/p/mysql/index/index1_huaa761d032e691cca90bef5eef1dadb87_81724_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/mysql/index/index1_huaa761d032e691cca90bef5eef1dadb87_81724_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+alt="1"
+class="gallery-image"
+data-flex-grow="754"
+data-flex-basis="1811px"
+>&lt;/p>
+&lt;p>应事先计算好表达式的值，再传入，避免在 SQL &lt;code>where&lt;/code> 的左侧做计算。&lt;/p>
+&lt;ul>
+&lt;li>索引字段是函数的参数&lt;/li>
+&lt;/ul>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;span class="lnt">4
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-sql" data-lang="sql">&lt;span class="line">&lt;span class="cl">&lt;span class="k">explain&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="k">select&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">*&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="k">from&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">employees&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="k">where&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">substring&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">fitst_name&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="mi">1&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="mi">2&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="s2">&amp;#34;Geo&amp;#34;&lt;/span>&lt;span class="p">;&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>事先计算好再传入。&lt;/p>
+&lt;p>或者使用一些等价的 SQL。&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;span class="lnt">4
+&lt;/span>&lt;span class="lnt">5
+&lt;/span>&lt;span class="lnt">6
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-sql" data-lang="sql">&lt;span class="line">&lt;span class="cl">&lt;span class="k">explain&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="k">select&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">*&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="k">from&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">employees&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="k">where&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">first_name&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">list&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="s2">&amp;#34;Geo%&amp;#34;&lt;/span>&lt;span class="p">;&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="c1">-- first_name 需要是索引的情况下有效（根据实际场景）
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">-- 注意 like 索引失效的情况
+&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/mysql/index/index2.png"
+width="1169"
+height="154"
+srcset="https://emerywan.github.io/blog/blog/p/mysql/index/index2_hu58e272ce7b5bb61c6085e6a94f631f41_86327_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/mysql/index/index2_hu58e272ce7b5bb61c6085e6a94f631f41_86327_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+alt="2"
+class="gallery-image"
+data-flex-grow="759"
+data-flex-basis="1821px"
+>&lt;/p>
+&lt;h3 id="-使用了左模糊">⚠️ 使用了左模糊&lt;/h3>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;span class="lnt">4
+&lt;/span>&lt;span class="lnt">5
+&lt;/span>&lt;span class="lnt">6
+&lt;/span>&lt;span class="lnt">7
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-sql" data-lang="sql">&lt;span class="line">&lt;span class="cl">&lt;span class="k">explain&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="k">select&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">*&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">from&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">employees&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="k">where&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">first_name&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">like&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="s2">&amp;#34;%Geo%&amp;#34;&lt;/span>&lt;span class="p">;&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="c1">-- 无法使用索引
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="k">explain&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="k">select&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">*&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">from&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">employee&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="k">where&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">first_name&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">like&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="s2">&amp;#34;Geo%&amp;#34;&lt;/span>&lt;span class="p">;&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="c1">-- 可以使用索引
+&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>如果无法避免，且有较高需求，可以考虑使用搜索引擎。&lt;/p>
+&lt;h3 id="-or-查询的部分字段没有索引">⚠️ or 查询的部分字段没有索引&lt;/h3>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;span class="lnt">4
+&lt;/span>&lt;span class="lnt">5
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-sql" data-lang="sql">&lt;span class="line">&lt;span class="cl">&lt;span class="k">explain&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="k">select&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">*&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">from&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">employees&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="k">where&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">first_name&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s2">&amp;#34;Georgi&amp;#34;&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">or&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">last_name&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s2">&amp;#34;Georgi&amp;#34;&lt;/span>&lt;span class="p">;&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="c1">-- 假设当前 first_name 有索引，last_name 没有索引，该条 sql 无法使用索引
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">-- index(fitst_name)
+&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/mysql/index/index3.png"
+width="1148"
+height="176"
+srcset="https://emerywan.github.io/blog/blog/p/mysql/index/index3_hua5c1e2b296fd025c6e1f6de1e5790543_84429_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/mysql/index/index3_hua5c1e2b296fd025c6e1f6de1e5790543_84429_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+alt="3"
+class="gallery-image"
+data-flex-grow="652"
+data-flex-basis="1565px"
+>&lt;/p>
+&lt;p>解决：根据实际业务，添加相应的索引。&lt;/p>
+&lt;p>添加索引后，索引合并，避免了全表扫描。&lt;/p>
+&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/mysql/index/index4.png"
+width="1129"
+height="139"
+srcset="https://emerywan.github.io/blog/blog/p/mysql/index/index4_hu903a3bbf3d6eb2ece40fc0c15484c985_86767_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/mysql/index/index4_hu903a3bbf3d6eb2ece40fc0c15484c985_86767_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+alt="4"
+class="gallery-image"
+data-flex-grow="812"
+data-flex-basis="1949px"
+>&lt;/p>
+&lt;h3 id="-字符串条件没有使用-">⚠️ 字符串条件没有使用 &amp;quot;&amp;quot;&lt;/h3>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-sql" data-lang="sql">&lt;span class="line">&lt;span class="cl">&lt;span class="k">explain&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="k">select&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">*&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">from&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">dept_emp&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="k">where&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">dept_no&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="mi">3&lt;/span>&lt;span class="p">;&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="c1">-- 这里 dept_no 在数据库定义为 varchar
+&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;h3 id="-不符合最左前缀原则的查询">⚠️ 不符合最左前缀原则的查询&lt;/h3>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;span class="lnt">4
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-sql" data-lang="sql">&lt;span class="line">&lt;span class="cl">&lt;span class="k">explain&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="k">select&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">*&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">from&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">employees&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="k">where&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">first_name&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s2">&amp;#34;Facello&amp;#34;&lt;/span>&lt;span class="p">;&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="c1">-- index(last_name, first_name)
+&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/mysql/index/index5.png"
+width="1156"
+height="155"
+srcset="https://emerywan.github.io/blog/blog/p/mysql/index/index5_huc69773c1cc30429ec167298f8192f5a8_78720_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/mysql/index/index5_huc69773c1cc30429ec167298f8192f5a8_78720_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+alt="5"
+class="gallery-image"
+data-flex-grow="745"
+data-flex-basis="1789px"
+>&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;span class="lnt">4
+&lt;/span>&lt;span class="lnt">5
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-sql" data-lang="sql">&lt;span class="line">&lt;span class="cl">&lt;span class="k">explain&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="k">select&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">*&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">from&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">employees&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="k">where&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">first_name&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s2">&amp;#34;Facello&amp;#34;&lt;/span>&lt;span class="p">;&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="c1">-- 更换索引顺序
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">-- index(first_name, last_name)
+&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/mysql/index/index6.png"
+width="1144"
+height="179"
+srcset="https://emerywan.github.io/blog/blog/p/mysql/index/index6_huc94bdeb83f55eebd5e2d4f615313b023_79724_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/mysql/index/index6_huc94bdeb83f55eebd5e2d4f615313b023_79724_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+alt="6"
+class="gallery-image"
+data-flex-grow="639"
+data-flex-basis="1533px"
+>&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;span class="lnt">4
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-sql" data-lang="sql">&lt;span class="line">&lt;span class="cl">&lt;span class="k">select&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">*&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">from&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">employees&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="k">where&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">last_name&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s2">&amp;#34;&amp;#34;&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">and&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">first_name&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s2">&amp;#34;&amp;#34;&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="c1">-- index(first_name, last_name)
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">-- MySQL 的引擎为更好利用复合索引，会动态调整字段顺序
+&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;h3 id="-null-条件查询">⚠️ null 条件查询&lt;/h3>
+&lt;ul>
+&lt;li>
+&lt;p>单列索引无法存储 null 值，复合索引无法存储全为 null 的值&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>查询时，采用 &lt;code>is null&lt;/code> &lt;code>is not null&lt;/code> 条件，根据表中的数据分布，MySQL 判断是否走索引，并不固定&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>MySQL 官方建议尽量把字段定义为 &lt;code>NOT NULL&lt;/code>&lt;/p>
+&lt;/li>
+&lt;/ul>
+&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/mysql/index/index7.png"
+width="821"
+height="497"
+srcset="https://emerywan.github.io/blog/blog/p/mysql/index/index7_hu4d7b4705c5cf93f7dc141b75d9f23067_225180_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/mysql/index/index7_hu4d7b4705c5cf93f7dc141b75d9f23067_225180_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+alt="7"
+class="gallery-image"
+data-flex-grow="165"
+data-flex-basis="396px"
+>&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-sql" data-lang="sql">&lt;span class="line">&lt;span class="cl">&lt;span class="k">explain&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="k">select&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">*&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">from&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">users&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="k">where&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">mobile&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">is&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">null&lt;/span>&lt;span class="p">;&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;h3 id="-隐式转换导致索引失效">⚠️ 隐式转换导致索引失效&lt;/h3>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;span class="lnt">4
+&lt;/span>&lt;span class="lnt">5
+&lt;/span>&lt;span class="lnt">6
+&lt;/span>&lt;span class="lnt">7
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-sql" data-lang="sql">&lt;span class="line">&lt;span class="cl">&lt;span class="k">select&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">emp&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="o">*&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">d&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">dept_name&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="k">from&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">employees&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">emp&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="k">left&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">join&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">dept_emp&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">de&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">on&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">emp&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">emp_no&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="n">de&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">emp_no&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="k">left&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">join&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">departments&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">d&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">on&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">de&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">dept_no&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="n">d&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">dept_no&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="k">where&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">de&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">emp_no&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s2">&amp;#34;100001&amp;#34;&lt;/span>&lt;span class="p">;&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="c1">-- employees.emp_no dept_emp.emp_no 类型不一致时会导致隐式转换
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">-- dept_emp de departments.dept_no 类型不一致时会导致隐式转换
+&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;h3 id="-mysql-评估">⚠️ MySQL 评估&lt;/h3>
+&lt;p>MySQL 在查询时，会评估使用索引的效率与走全表扫描的效率，如果走全表扫描更快，则放弃
+索引，走全表扫描。&lt;/p>
+&lt;p>因为索引是用来索引少量数据的，如果通过索引查询返回大批量的数据，则还不
+如走全表扫描来的快，此时索引就会失效。&lt;/p>
+&lt;h2 id="最左前缀法则">最左前缀法则&lt;/h2>
+&lt;p>最左前缀法则指的是查询从索引的最左列开始，并且不跳过索引中的列。&lt;/p>
+&lt;p>如果跳跃某一列，索引将会部分失效(后面的字段索引失效)。&lt;/p>
+&lt;p>中间不能跳过某一列，否则该列后面的字段索引将失效。&lt;/p>
+&lt;h2 id="范围查询">范围查询&lt;/h2>
+&lt;p>联合索引中，出现范围查询(&amp;gt;, &amp;lt;)，范围查询右侧的列索引失效。&lt;/p>
+&lt;h2 id="覆盖索引">覆盖索引&lt;/h2>
+&lt;p>对于索引 X，&lt;code>SELECT&lt;/code> 的字段只需要从索引中就能获得，而无需回表获取。&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;span class="lnt">4
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-sql" data-lang="sql">&lt;span class="line">&lt;span class="cl">&lt;span class="c1">-- index(name, age, pos)
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="k">select&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">pos&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">from&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">staffs&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="k">where&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">name&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s2">&amp;#34;July&amp;#34;&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">and&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">age&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="mi">14&lt;/span>&lt;span class="p">;&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;h2 id="前缀索引">前缀索引&lt;/h2>
+&lt;p>当字段类型为字符串（varchar，text，longtext等）时，有时候需要索引很长的字符串，这会让
+索引变得很大，查询时，浪费大量的磁盘 IO， 影响查询效率。&lt;/p>
+&lt;p>可以只将字符串的一部分前缀，建立索引，这样可以大大节约索引空间，从而提高索引效率。&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-sql" data-lang="sql">&lt;span class="line">&lt;span class="cl">&lt;span class="c1">-- 为 email 字段，建立索引长度为 5 的前缀索引
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span>&lt;span class="k">create&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">index&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">index_email_5&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">on&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">tb_user&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">email&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="mi">5&lt;/span>&lt;span class="p">));&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;h2 id="explain">explain&lt;/h2>
+&lt;p>查看 SQL 语句的执行计划。字段含义：&lt;/p>
+&lt;ul>
+&lt;li>
+&lt;p>id&lt;/p>
+&lt;ul>
+&lt;li>查询中执行 select 子句或者是操作表的顺序&lt;/li>
+&lt;li>id 相同，执行顺序从上到下；id 不同，值越大，越先执行&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>
+&lt;p>select_type&lt;/p>
+&lt;ul>
+&lt;li>表示 select 的类型&lt;/li>
+&lt;li>SIMPLE (简单 select,不使用 union 或子查询等)&lt;/li>
+&lt;li>PRIMARY (查询中若包含任何复杂的子部分,最外层的 select 被标记为 PRIMARY)&lt;/li>
+&lt;li>UNION (union 中的第二个或后面的 select 语句)&lt;/li>
+&lt;li>SUBQUERY (子查询中的第一个 select)&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>
+&lt;p>table&lt;/p>
+&lt;ul>
+&lt;li>这一行的数据是关于哪张表&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>
+&lt;p>type&lt;/p>
+&lt;ul>
+&lt;li>MySQL在表中找到所需行的方式&lt;/li>
+&lt;li>性能由好到差的连接类型为：NULL、system、const、eq_ref、ref、range、index、all&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>
+&lt;p>possible_keys&lt;/p>
+&lt;ul>
+&lt;li>可能应用在这张表上的索引，一个或多个&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>
+&lt;p>key
+-实际使用的索引，如果为 NULL，则没有使用索引&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>key_len&lt;/p>
+&lt;ul>
+&lt;li>表示索引中使用的字节数，该值为索引字段最大可能长度，并非实际使用长度，在不损失精确性的前提下，长度越短越好&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>
+&lt;p>ref&lt;/p>
+&lt;ul>
+&lt;li>上述表的连接匹配条件，即哪些列或常量被用于查找索引列上的值&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>
+&lt;p>rows&lt;/p>
+&lt;ul>
+&lt;li>MySQL 认为必须要执行查询的行数，在 innodb 引擎的表中，是一个估计值，可能并不总是准确的&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>
+&lt;p>Extra&lt;/p>
+&lt;ul>
+&lt;li>MySQL解决查询的详细信息&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;h2 id="参考">参考&lt;/h2>
+&lt;ul>
+&lt;li>&lt;a class="link" href="https://juejin.cn/post/6936032090546765837" target="_blank" rel="noopener"
+>https://juejin.cn/post/6936032090546765837&lt;/a>&lt;/li>
+&lt;/ul></description></item></channel></rss>

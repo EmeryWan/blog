@@ -1,0 +1,908 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>日常 on 一层</title><link>https://emerywan.github.io/blog/categories/%E6%97%A5%E5%B8%B8/</link><description>Recent content in 日常 on 一层</description><generator>Hugo -- gohugo.io</generator><lastBuildDate>Sat, 01 Jan 2022 01:00:00 +0800</lastBuildDate><atom:link href="https://emerywan.github.io/blog/categories/%E6%97%A5%E5%B8%B8/index.xml" rel="self" type="application/rss+xml"/><item><title>Linux 目录结构介绍</title><link>https://emerywan.github.io/blog/p/linux-dir/</link><pubDate>Thu, 23 Jun 2022 02:02:02 +0800</pubDate><guid>https://emerywan.github.io/blog/p/linux-dir/</guid><description>&lt;img src="https://emerywan.github.io/blog/imgs/10.jpeg" alt="Featured image of post Linux 目录结构介绍" />&lt;p>Linux 是一个开源的系统，使得 Linux 发行版本有很多，利用 Linux 开发产品的团队也有很多，如果任由每个人都按照自己的想法来配置 Linux 系统文件目录，后期可能会产生诸多的管理问题。&lt;/p>
+&lt;p>为了避免诸多使用者对 Linux 系统目录结构天马行空，Linux 基金会发布了 FHS 标准。多数 Linux 发行版系统都遵循这一标准。&lt;/p>
+&lt;blockquote>
+&lt;p>FHS（Filesystem Hierarchy Standard），文件系统层次化标准，该标准规定了 Linux 系统中所有一级目录以及部分二级目录（/usr 和 /var）的用途。发布此标准的主要目的就是为了让用户清楚地了解每个目录应该存放什么类型的文件。&lt;/p>
+&lt;/blockquote>
+&lt;p>几乎所有的 Linux 发行版都包含以下的目录结构：&lt;/p>
+&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/linux-dir/directory.png"
+width="950"
+height="450"
+srcset="https://emerywan.github.io/blog/blog/p/linux-dir/directory_hua98ec03a363a3999681794ab96f9f09a_36725_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/linux-dir/directory_hua98ec03a363a3999681794ab96f9f09a_36725_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+alt="directory"
+class="gallery-image"
+data-flex-grow="211"
+data-flex-basis="506px"
+>&lt;/p>
+&lt;p>不同的发行版可能会添加一下独有的目录，例如 Ubuntu 中包含 &lt;code>/snap&lt;/code> 来放置 snap 应用。&lt;/p>
+&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/linux-dir/root.png"
+width="893"
+height="485"
+srcset="https://emerywan.github.io/blog/blog/p/linux-dir/root_hu18035549831c69e974e5e46a3403bc3f_73150_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/linux-dir/root_hu18035549831c69e974e5e46a3403bc3f_73150_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+alt="root"
+class="gallery-image"
+data-flex-grow="184"
+data-flex-basis="441px"
+>&lt;/p>
+&lt;h2 id="bin">/bin&lt;/h2>
+&lt;p>Binary&lt;/p>
+&lt;p>二进制可执行文件和可执行文件的快捷方式（软链接），存放着常用的命令。&lt;/p>
+&lt;p>例如常用的 &lt;code>ls&lt;/code> &lt;code>cp&lt;/code> &lt;code>cd&lt;/code> 等命令都存放在这里。&lt;/p>
+&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/linux-dir/bin.png"
+width="893"
+height="485"
+srcset="https://emerywan.github.io/blog/blog/p/linux-dir/bin_hu88e8cbe9114805e25899e6212c3f7b45_50694_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/linux-dir/bin_hu88e8cbe9114805e25899e6212c3f7b45_50694_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+alt="bin"
+class="gallery-image"
+data-flex-grow="184"
+data-flex-basis="441px"
+>&lt;/p>
+&lt;h2 id="boot">/boot&lt;/h2>
+&lt;p>启动 Linux 时使用的一些核心文件，包括一些连接文件以及镜像文件。&lt;/p>
+&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/linux-dir/boot.png"
+width="893"
+height="485"
+srcset="https://emerywan.github.io/blog/blog/p/linux-dir/boot_hu918783384ee5a012af8445662a5570f5_99689_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/linux-dir/boot_hu918783384ee5a012af8445662a5570f5_99689_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+alt="boot"
+class="gallery-image"
+data-flex-grow="184"
+data-flex-basis="441px"
+>&lt;/p>
+&lt;p>如果是以 UEFI 方式安装的系统，其中 &lt;code>efi&lt;/code> 文件夹中的为 &lt;code>EFI&lt;/code> 分区中的引导。&lt;/p>
+&lt;h2 id="dev">/dev&lt;/h2>
+&lt;p>Device&lt;/p>
+&lt;p>存放着所有的设备文件。在 Linux 中，所有东西都是以文件的形式存在的，包括硬件设备。&lt;/p>
+&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/linux-dir/dev.png"
+width="893"
+height="485"
+srcset="https://emerywan.github.io/blog/blog/p/linux-dir/dev_hu5755a852922f274414d0e5a0eab070dd_98725_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/linux-dir/dev_hu5755a852922f274414d0e5a0eab070dd_98725_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+alt="dev"
+class="gallery-image"
+data-flex-grow="184"
+data-flex-basis="441px"
+>&lt;/p>
+&lt;h2 id="etc">/etc&lt;/h2>
+&lt;p>Etcetera&lt;/p>
+&lt;p>存放程序的配置信息，大多数安装的应用配置信息都会在这里。&lt;/p>
+&lt;p>例如：&lt;/p>
+&lt;ul>
+&lt;li>&lt;code>/etc/apt&lt;/code> apt 源配置目录&lt;/li>
+&lt;li>&lt;code>/ect/vim&lt;/code> vim 配置目录&lt;/li>
+&lt;li>&lt;code>/etc/nginx&lt;/code> nginx 配置目录&lt;/li>
+&lt;li>&lt;code>/ect/redis&lt;/code> redis 配置目录&lt;/li>
+&lt;/ul>
+&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/linux-dir/etc.png"
+width="893"
+height="485"
+srcset="https://emerywan.github.io/blog/blog/p/linux-dir/etc_hu7a52980e1c04af5a90bf8edab9585ec6_85844_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/linux-dir/etc_hu7a52980e1c04af5a90bf8edab9585ec6_85844_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+alt="etc"
+class="gallery-image"
+data-flex-grow="184"
+data-flex-basis="441px"
+>&lt;/p>
+&lt;h2 id="home">/home&lt;/h2>
+&lt;p>用户的主目录。&lt;/p>
+&lt;p>在 Linux 中，每个用户都有一个自己的目录，一般该目录名是以用户的账号命名。&lt;/p>
+&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/linux-dir/home.png"
+width="893"
+height="485"
+srcset="https://emerywan.github.io/blog/blog/p/linux-dir/home_hud18e334789b3c740b9a20da6a45ce695_61060_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/linux-dir/home_hud18e334789b3c740b9a20da6a45ce695_61060_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+alt="home"
+class="gallery-image"
+data-flex-grow="184"
+data-flex-basis="441px"
+>&lt;/p>
+&lt;h2 id="lib">/lib&lt;/h2>
+&lt;p>Library&lt;/p>
+&lt;p>系统最基本的动态连接共享库，其作用类似于 Windows 里的 DLL 文件。&lt;/p>
+&lt;p>几乎所有的应用程序都需要用到这些共享库。包含 bin 和 sbin 中可执行文件的依赖。&lt;/p>
+&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/linux-dir/lib.png"
+width="893"
+height="485"
+srcset="https://emerywan.github.io/blog/blog/p/linux-dir/lib_hub083733446fb3cb4ae55f28313c8182b_83036_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/linux-dir/lib_hub083733446fb3cb4ae55f28313c8182b_83036_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+alt="lib"
+class="gallery-image"
+data-flex-grow="184"
+data-flex-basis="441px"
+>&lt;/p>
+&lt;h2 id="media">/media&lt;/h2>
+&lt;p>自动挂载的设备，比如 U 盘，移动硬盘，网络设备等的目录。&lt;/p>
+&lt;p>比如现在有一个 U 盘，插到电脑上之后，系统会把 U 盘自动挂载到 &lt;code>/media/$USER&lt;/code> 文件夹中。&lt;/p>
+&lt;h2 id="mnt">/mnt&lt;/h2>
+&lt;p>提供给用户临时手动挂载设备文件夹，一般是空文件夹。&lt;/p>
+&lt;p>比如现在要手动挂载一个硬盘，可用如下挂载到 &lt;code>/mnt&lt;/code>：&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-sh" data-lang="sh">&lt;span class="line">&lt;span class="cl">mount /dev/sdb1 /mnt/disk
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;h2 id="opt">/opt&lt;/h2>
+&lt;p>Optional&lt;/p>
+&lt;p>一些第三方软件安装的目录。&lt;/p>
+&lt;p>比如 Chrome 浏览器，WPS 等软件，都会安装在这里。&lt;/p>
+&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/linux-dir/opt.png"
+width="893"
+height="485"
+srcset="https://emerywan.github.io/blog/blog/p/linux-dir/opt_huea96cc753b9c5430ebdf81edcd8754fb_76369_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/linux-dir/opt_huea96cc753b9c5430ebdf81edcd8754fb_76369_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+alt="opt"
+class="gallery-image"
+data-flex-grow="184"
+data-flex-basis="441px"
+>&lt;/p>
+&lt;h2 id="root">/root&lt;/h2>
+&lt;p>这是 root 用户的家目录。&lt;/p>
+&lt;h2 id="proc">/proc&lt;/h2>
+&lt;p>Processes&lt;/p>
+&lt;p>&lt;code>/proc&lt;/code> 是一种伪文件系统（也即虚拟文件系统），存储的是当前内核运行状态的一系列特殊文件，这个目录是一个虚拟的目录，它是系统内存的映射，我们可以通过直接访问这个目录来获取系统信息。&lt;/p>
+&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/linux-dir/procversion.png"
+width="734"
+height="476"
+srcset="https://emerywan.github.io/blog/blog/p/linux-dir/procversion_hua30e25cc62b3a6421f2f9b1383e8ea4d_32573_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/linux-dir/procversion_hua30e25cc62b3a6421f2f9b1383e8ea4d_32573_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+alt="procversion"
+class="gallery-image"
+data-flex-grow="154"
+data-flex-basis="370px"
+>&lt;/p>
+&lt;p>&lt;code>/proc&lt;/code> 里面有一大堆数字命名的文件夹，这个数字其实是 Process ID（PID），对应着运行的服务。&lt;/p>
+&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/linux-dir/procps.png"
+width="734"
+height="476"
+srcset="https://emerywan.github.io/blog/blog/p/linux-dir/procps_hu3633a821f850bd2d5d2ffca1ae08eb64_38818_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/linux-dir/procps_hu3633a821f850bd2d5d2ffca1ae08eb64_38818_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+alt="procps"
+class="gallery-image"
+data-flex-grow="154"
+data-flex-basis="370px"
+>&lt;/p>
+&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/linux-dir/proccat.png"
+width="734"
+height="476"
+srcset="https://emerywan.github.io/blog/blog/p/linux-dir/proccat_hu433bb9e8c82cee4321d94d03495747e7_47919_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/linux-dir/proccat_hu433bb9e8c82cee4321d94d03495747e7_47919_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+alt="proccat"
+class="gallery-image"
+data-flex-grow="154"
+data-flex-basis="370px"
+>&lt;/p>
+&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/linux-dir/proc1929.png"
+width="893"
+height="485"
+srcset="https://emerywan.github.io/blog/blog/p/linux-dir/proc1929_hue982c12fdacf4a0dd83c56ac9a4d5cac_81321_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/linux-dir/proc1929_hue982c12fdacf4a0dd83c56ac9a4d5cac_81321_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+alt="proc1929"
+class="gallery-image"
+data-flex-grow="184"
+data-flex-basis="441px"
+>&lt;/p>
+&lt;h2 id="sbin">/sbin&lt;/h2>
+&lt;p>Superuser Binaries&lt;/p>
+&lt;p>这里存放的是系统管理员使用的系统管理程序。&lt;/p>
+&lt;p>例如常见的 &lt;code>groupadd&lt;/code> &lt;code>groupdel&lt;/code>。&lt;/p>
+&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/linux-dir/sbin.png"
+width="893"
+height="485"
+srcset="https://emerywan.github.io/blog/blog/p/linux-dir/sbin_hufd2d26ea46f84ef22af6fb59ef9f4da6_85048_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/linux-dir/sbin_hufd2d26ea46f84ef22af6fb59ef9f4da6_85048_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+alt="sbin"
+class="gallery-image"
+data-flex-grow="184"
+data-flex-basis="441px"
+>&lt;/p>
+&lt;h2 id="srv">/srv&lt;/h2>
+&lt;p>Service&lt;/p>
+&lt;p>主要用来存放服务数据。对于桌面版 Linux 系统，这个文件夹一般是空的，但是对于 Linux 服务器，Web 服务或者 FTP 文件服务的资源可以存放在这里。&lt;/p>
+&lt;h2 id="tmp">/tmp&lt;/h2>
+&lt;p>Temporary&lt;/p>
+&lt;p>存储一些程序的临时文件。&lt;/p>
+&lt;p>临时文件可能起到很重要的作用。比如有时候 Word 文档崩溃了，好不容易写的东西全没了，Linux 的很多文本编辑器都会在 &lt;code>/tmp&lt;/code> 放一份当前文本的 copy 作为临时文件，如果你的编辑器意外崩溃，有机会在 &lt;code>/tmp&lt;/code> 找一找临时文件抢救一下。&lt;/p>
+&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/linux-dir/tmp.png"
+width="893"
+height="485"
+srcset="https://emerywan.github.io/blog/blog/p/linux-dir/tmp_hu1b50e9a39b2feae689bf9b3fbfb30a17_96039_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/linux-dir/tmp_hu1b50e9a39b2feae689bf9b3fbfb30a17_96039_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+alt="tmp"
+class="gallery-image"
+data-flex-grow="184"
+data-flex-basis="441px"
+>&lt;/p>
+&lt;h2 id="usr">/usr&lt;/h2>
+&lt;p>Unix Shared Resources&lt;/p>
+&lt;p>共享资源，这是一个非常重要的目录，用户的很多应用程序和文件都放在这个目录下，类似于 windows 下的 program files 目录。&lt;/p>
+&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/linux-dir/usr.png"
+width="893"
+height="485"
+srcset="https://emerywan.github.io/blog/blog/p/linux-dir/usr_hu2204c3c3a7c106aec9dea68c29029999_46168_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/linux-dir/usr_hu2204c3c3a7c106aec9dea68c29029999_46168_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+alt="usr"
+class="gallery-image"
+data-flex-grow="184"
+data-flex-basis="441px"
+>&lt;/p>
+&lt;h3 id="usrbin---usrsbin">/usr/bin /usr/sbin&lt;/h3>
+&lt;p>系统用户 / 超级管理员 使用的应用程序。&lt;/p>
+&lt;p>在 Ubuntu 中，&lt;code>/bin&lt;/code> &lt;code>/sbin&lt;/code> 其实就是 &lt;code>/usr/bin&lt;/code> &lt;code>/usr/sbin&lt;/code> 的一个链接。&lt;/p>
+&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/linux-dir/usrbin.png"
+width="734"
+height="476"
+srcset="https://emerywan.github.io/blog/blog/p/linux-dir/usrbin_hu6a478b7090e2cf503d0d2abd86c3db3e_22476_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/linux-dir/usrbin_hu6a478b7090e2cf503d0d2abd86c3db3e_22476_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+alt="usrbin"
+class="gallery-image"
+data-flex-grow="154"
+data-flex-basis="370px"
+>&lt;/p>
+&lt;h3 id="usrsrc">/usr/src&lt;/h3>
+&lt;p>内核源代码默认的放置目录。&lt;/p>
+&lt;h3 id="usrlib">/usr/lib&lt;/h3>
+&lt;p>包含所有那些用户不能直接执行的库文件。包含着所有 &amp;lsquo;/usr/bin&amp;rsquo; 和 &amp;lsquo;/usr/sbin&amp;rsquo; 目录中可执行命令程序需调用的二进制库文件。&lt;/p>
+&lt;p>例如使用 &lt;code>apt&lt;/code> 安装 openjdk 的目录在 &lt;code>/usr/lib/jvm&lt;/code>。&lt;/p>
+&lt;h3 id="usrshare">/usr/share&lt;/h3>
+&lt;p>包含独立于架构的共享数据。&lt;/p>
+&lt;p>例如系统桌面图标目录 &lt;code>/user/share/applications&lt;/code>。&lt;/p>
+&lt;h3 id="usrlocal">/usr/local&lt;/h3>
+&lt;p>用于本地安装软件的目标目录。从源代码安装的用户程序都将安装到这里。&lt;/p>
+&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/linux-dir/usrlocal.png"
+width="893"
+height="485"
+srcset="https://emerywan.github.io/blog/blog/p/linux-dir/usrlocal_hu79bfa6340b43e74ca17a031487cf8d3c_78872_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/linux-dir/usrlocal_hu79bfa6340b43e74ca17a031487cf8d3c_78872_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+alt="usrlocal"
+class="gallery-image"
+data-flex-grow="184"
+data-flex-basis="441px"
+>&lt;/p>
+&lt;h2 id="var">/var&lt;/h2>
+&lt;p>Variable&lt;/p>
+&lt;p>存放着在不断扩充着的东西，我们习惯将那些经常被修改的目录放在这个目录下。&lt;/p>
+&lt;p>例如日志文件。&lt;/p>
+&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/linux-dir/var.png"
+width="893"
+height="485"
+srcset="https://emerywan.github.io/blog/blog/p/linux-dir/var_hu71c741f1b1910044aff61d309cf9c7cd_50789_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/linux-dir/var_hu71c741f1b1910044aff61d309cf9c7cd_50789_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+alt="var"
+class="gallery-image"
+data-flex-grow="184"
+data-flex-basis="441px"
+>&lt;/p>
+&lt;h2 id="参考">参考&lt;/h2>
+&lt;ul>
+&lt;li>&lt;a class="link" href="https://segmentfault.com/a/1190000038497705" target="_blank" rel="noopener"
+>https://segmentfault.com/a/1190000038497705&lt;/a>&lt;/li>
+&lt;li>&lt;a class="link" href="https://www.runoob.com/linux/linux-system-contents.html" target="_blank" rel="noopener"
+>https://www.runoob.com/linux/linux-system-contents.html&lt;/a>&lt;/li>
+&lt;/ul></description></item><item><title>使用 Github Actions 在腾讯云 CloudBase 部署 Hugo</title><link>https://emerywan.github.io/blog/p/hugo-in-cloudbase/</link><pubDate>Wed, 22 Jun 2022 21:14:45 +0800</pubDate><guid>https://emerywan.github.io/blog/p/hugo-in-cloudbase/</guid><description>&lt;img src="https://emerywan.github.io/blog/imgs/3.jpeg" alt="Featured image of post 使用 Github Actions 在腾讯云 CloudBase 部署 Hugo" />&lt;h2 id="-介绍">🌱 介绍&lt;/h2>
+&lt;p>许多平台都提供了免费的静态页面托管的服务，如 &lt;code>Github Pages&lt;/code>，&lt;code>Vercel&lt;/code>，&lt;code>Netlify&lt;/code>等。但在国内由于一些“原因”，这些国外的服务在国内的访问并不稳定。&lt;/p>
+&lt;p>国内的免费托管平台如 &lt;code>Gitee&lt;/code> 限制很多，不可以自定义域名而且之前出现了防盗链问题，访问也不是很快，不太推荐作为托管平台。&lt;/p>
+&lt;p>腾讯云推出的云开发 &lt;code>CloudBase&lt;/code> 也有静态页面托管服务。其实它相比这些静态托管平台，有更多强大的功能，甚至能够搭一整套系统。虽然是付费服务，但是在按量付费的情况下资费不是很高，在博客访问量不是很高的情况下十分合适。&lt;/p>
+&lt;p>目前在腾讯云中暂时还没有 &lt;code>Hugo&lt;/code> 的模板。目前有两种方式可以达到自动部署的功能：&lt;/p>
+&lt;ul>
+&lt;li>
+&lt;p>🌰 使用 &lt;code>Github Actions&lt;/code> 编译，通过 &lt;code>Tencent CloudBase Github Action&lt;/code> 自动部署到 &lt;code>CloudBase&lt;/code>。&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>🌰 使用 &lt;code>Github Actions&lt;/code> 编译，推送到 &lt;code>Web 应用托管（webify）&lt;/code> 的简易静态页面模板。&lt;/p>
+&lt;/li>
+&lt;/ul>
+&lt;h2 id="-使用-cloudbase">🏖 使用 CloudBase&lt;/h2>
+&lt;p>&lt;strong>使用 CloudBse 时，使用按量计费环境会有一些免费用量。&lt;/strong>&lt;/p>
+&lt;h3 id="-腾讯云">☁️ 腾讯云&lt;/h3>
+&lt;h4 id="创建环境">创建环境&lt;/h4>
+&lt;p>在 &lt;code>云开发 CloudBase&lt;/code> 新建一个应用，选择 &lt;strong>空模板&lt;/strong>，根据自身需求填写信息。&lt;/p>
+&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/hugo-in-cloudbase/new.png"
+width="1896"
+height="1608"
+srcset="https://emerywan.github.io/blog/blog/p/hugo-in-cloudbase/new_hu99910b72135936b76933bc6c60d2f8a9_394958_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/hugo-in-cloudbase/new_hu99910b72135936b76933bc6c60d2f8a9_394958_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+alt="new"
+class="gallery-image"
+data-flex-grow="117"
+data-flex-basis="282px"
+>&lt;/p>
+&lt;p>创建成功后，获得 &lt;code>环境ID&lt;/code>。&lt;/p>
+&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/hugo-in-cloudbase/env_id.png"
+width="796"
+height="406"
+srcset="https://emerywan.github.io/blog/blog/p/hugo-in-cloudbase/env_id_hucc29efc322e6de70f5fc042978c8e74b_42486_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/hugo-in-cloudbase/env_id_hucc29efc322e6de70f5fc042978c8e74b_42486_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+alt="env_id"
+class="gallery-image"
+data-flex-grow="196"
+data-flex-basis="470px"
+>&lt;/p>
+&lt;h4 id="获取-api-密钥">获取 API 密钥&lt;/h4>
+&lt;p>为部署新建一个密钥对。在 &lt;code>访问管理 -&amp;gt; 用户列表 -&amp;gt; 新建用户 -&amp;gt; 自定义创建 -&amp;gt; 可访问资源并接收消息&lt;/code>。&lt;a class="link" href="https://console.cloud.tencent.com/cam" target="_blank" rel="noopener"
+>🔗 传送门&lt;/a>&lt;/p>
+&lt;p>根据自己的需要，新建用户名后选择 &lt;code>编程访问&lt;/code>，点击下一步。&lt;/p>
+&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/hugo-in-cloudbase/new_user.png"
+width="2122"
+height="1158"
+srcset="https://emerywan.github.io/blog/blog/p/hugo-in-cloudbase/new_user_hu5db7ae8d8e85e220ba3039161cacacd8_188871_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/hugo-in-cloudbase/new_user_hu5db7ae8d8e85e220ba3039161cacacd8_188871_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+alt="new_user"
+class="gallery-image"
+data-flex-grow="183"
+data-flex-basis="439px"
+>&lt;/p>
+&lt;p>在自定义策略中勾选：&lt;/p>
+&lt;ul>
+&lt;li>&lt;code>QcloudAccessForTCBRole&lt;/code>：授予云开发（TCB）对云资源的访问权限；&lt;/li>
+&lt;li>&lt;code>QcloudAccessForTCBRoleInAccessCloudBaseRun&lt;/code>：供云开发（TCB）服务角色（TCB_QcsRole）进行关联，用于 TCB 访问其他云服务资源。包含私有网络 VPC、云服务器 CVM 相关操作权限。&lt;/li>
+&lt;/ul>
+&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/hugo-in-cloudbase/access.png"
+width="2048"
+height="626"
+srcset="https://emerywan.github.io/blog/blog/p/hugo-in-cloudbase/access_hu76f892695bd748244f5434357abaf2d0_122725_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/hugo-in-cloudbase/access_hu76f892695bd748244f5434357abaf2d0_122725_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+alt="access"
+class="gallery-image"
+data-flex-grow="327"
+data-flex-basis="785px"
+>&lt;/p>
+&lt;p>点一下一步后，新建用户成功。可以获得 &lt;code>SecretId&lt;/code> 和 &lt;code>SecretKey&lt;/code>。&lt;/p>
+&lt;h3 id="-github-actions">⚙️ Github Actions&lt;/h3>
+&lt;h4 id="设置-github-secrets">设置 Github Secrets&lt;/h4>
+&lt;p>在项目的 &lt;code>Settings -&amp;gt; Secrets -&amp;gt; Actions&lt;/code> 中添加上述得到的 &lt;code>ENV_ID&lt;/code>，&lt;code>SECRET_ID&lt;/code>，&lt;code>SECRET_KEY&lt;/code>（名称可以自定义）。&lt;/p>
+&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/hugo-in-cloudbase/secret.png"
+width="1616"
+height="366"
+srcset="https://emerywan.github.io/blog/blog/p/hugo-in-cloudbase/secret_hu55ad514f0e88b8a75da2092c1dc5a21a_68162_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/hugo-in-cloudbase/secret_hu55ad514f0e88b8a75da2092c1dc5a21a_68162_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+alt="secret"
+class="gallery-image"
+data-flex-grow="441"
+data-flex-basis="1059px"
+>&lt;/p>
+&lt;h4 id="添加-workflows">添加 workflows&lt;/h4>
+&lt;p>可以在仓库的 &lt;code>Actions&lt;/code> 中 &lt;code>new workflow&lt;/code>，或者在项目中 &lt;code>.github/workflows&lt;/code> 添加。&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;span class="lnt">11
+&lt;/span>&lt;span class="lnt">12
+&lt;/span>&lt;span class="lnt">13
+&lt;/span>&lt;span class="lnt">14
+&lt;/span>&lt;span class="lnt">15
+&lt;/span>&lt;span class="lnt">16
+&lt;/span>&lt;span class="lnt">17
+&lt;/span>&lt;span class="lnt">18
+&lt;/span>&lt;span class="lnt">19
+&lt;/span>&lt;span class="lnt">20
+&lt;/span>&lt;span class="lnt">21
+&lt;/span>&lt;span class="lnt">22
+&lt;/span>&lt;span class="lnt">23
+&lt;/span>&lt;span class="lnt">24
+&lt;/span>&lt;span class="lnt">25
+&lt;/span>&lt;span class="lnt">26
+&lt;/span>&lt;span class="lnt">27
+&lt;/span>&lt;span class="lnt">28
+&lt;/span>&lt;span class="lnt">29
+&lt;/span>&lt;span class="lnt">30
+&lt;/span>&lt;span class="lnt">31
+&lt;/span>&lt;span class="lnt">32
+&lt;/span>&lt;span class="lnt">33
+&lt;/span>&lt;span class="lnt">34
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-yaml" data-lang="yaml">&lt;span class="line">&lt;span class="cl">&lt;span class="nt">name&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">Tencent CloudBase&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="nt">on&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">push&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">branches&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>- &lt;span class="l">main&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="nt">jobs&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">hugo-publish&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">name&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">publish content to static website&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">runs-on&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">ubuntu-latest&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">steps&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>- &lt;span class="nt">name&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">Checkout&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">uses&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">actions/checkout@v3&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">with&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">submodules&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="kc">true&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">fetch-depth&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="m">0&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>- &lt;span class="nt">name&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">Setup Hugo&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">uses&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">peaceiris/actions-hugo@v2&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">with&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">hugo-version&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">latest&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">extended&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="kc">true&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>- &lt;span class="nt">name&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">Build&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">run&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">hugo --minify --gc&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="c"># 使用云开发 Github Action 部署&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>- &lt;span class="nt">name&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">Deploy to Tencent CloudBase&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">uses&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">TencentCloudBase/cloudbase-action@v2&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">with&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">secretId&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">${{ secrets.QCLOUD_SECRET_ID }}&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">secretKey&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">${{ secrets.QCLOUD_SECRET_KEY }}&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">envId&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">${{ secrets.QCLOUD_ENV_ID }}&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;blockquote>
+&lt;p>🚧 提示：&lt;/p>
+&lt;p>这里使用了 &lt;code>TencentCloudBase/cloudbase-action@v2&lt;/code>，需要在项目根目录添加 &lt;code>cloudbaserc.json&lt;/code>。&lt;/p>
+&lt;/blockquote>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;span class="lnt">11
+&lt;/span>&lt;span class="lnt">12
+&lt;/span>&lt;span class="lnt">13
+&lt;/span>&lt;span class="lnt">14
+&lt;/span>&lt;span class="lnt">15
+&lt;/span>&lt;span class="lnt">16
+&lt;/span>&lt;span class="lnt">17
+&lt;/span>&lt;span class="lnt">18
+&lt;/span>&lt;span class="lnt">19
+&lt;/span>&lt;span class="lnt">20
+&lt;/span>&lt;span class="lnt">21
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-json" data-lang="json">&lt;span class="line">&lt;span class="cl">&lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;#34;envId&amp;#34;&lt;/span>&lt;span class="p">:&lt;/span> &lt;span class="s2">&amp;#34;{{env.ENV_ID}}&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="c1">// 这里需要更改为你的 环境ID，或者在 .env 文件中配置
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span> &lt;span class="nt">&amp;#34;$schema&amp;#34;&lt;/span>&lt;span class="p">:&lt;/span> &lt;span class="s2">&amp;#34;https://framework-1258016615.tcloudbaseapp.com/schema/latest.json&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;#34;version&amp;#34;&lt;/span>&lt;span class="p">:&lt;/span> &lt;span class="s2">&amp;#34;2.0&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;#34;framework&amp;#34;&lt;/span>&lt;span class="p">:&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;#34;name&amp;#34;&lt;/span>&lt;span class="p">:&lt;/span> &lt;span class="s2">&amp;#34;hugo-blog&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;#34;plugins&amp;#34;&lt;/span>&lt;span class="p">:&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;#34;client&amp;#34;&lt;/span>&lt;span class="p">:&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;#34;use&amp;#34;&lt;/span>&lt;span class="p">:&lt;/span> &lt;span class="s2">&amp;#34;@cloudbase/framework-plugin-website&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;#34;inputs&amp;#34;&lt;/span>&lt;span class="p">:&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;#34;outputPath&amp;#34;&lt;/span>&lt;span class="p">:&lt;/span> &lt;span class="s2">&amp;#34;public&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nt">&amp;#34;ignore&amp;#34;&lt;/span>&lt;span class="p">:&lt;/span> &lt;span class="p">[&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="s2">&amp;#34;.git&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="s2">&amp;#34;.github&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="s2">&amp;#34;cloudbaserc.js&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">]&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;blockquote>
+&lt;p>🚧 提示：&lt;/p>
+&lt;p>这里也可以选择 &lt;code> Tencent CloudBase Github Action V1&lt;/code>。🙋‍♂️ &lt;strong>（推荐）&lt;/strong>&lt;/p>
+&lt;p>V2 比 V1 有更多功能，比如拉取代码在腾讯云端编译，但目前没有 Hugo 模板。我们已经在 Github Actions 产出了静态文件，直接推送即可。所以目前对于 hugo 来说，没什么区别，使用甚至 V1 更快更简洁。&lt;/p>
+&lt;/blockquote>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;span class="lnt">4
+&lt;/span>&lt;span class="lnt">5
+&lt;/span>&lt;span class="lnt">6
+&lt;/span>&lt;span class="lnt">7
+&lt;/span>&lt;span class="lnt">8
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-yaml" data-lang="yaml">&lt;span class="line">&lt;span class="cl">&lt;span class="c"># 将上述 jobs 内替换为&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>- &lt;span class="nt">name&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">Deploy to Tencent CloudBase&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">uses&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">TencentCloudBase/cloudbase-action@v1.1.1&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">with&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">secretId&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">${{ secrets.QCLOUD_SECRET_ID }}&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">secretKey&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">${{ secrets.QCLOUD_SECRET_KEY }}&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">envId&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">${{ secrets.QCLOUD_ENV_ID }}&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">staticSrcPath&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">public&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;h2 id="-使用-webify">🏝 使用 webify&lt;/h2>
+&lt;p>使用 Web 应用托管（webify）主要是利用 &lt;code>Github Actions&lt;/code> 生成 静态页面到另一个分支，再托管这个分支的内容。&lt;/p>
+&lt;h3 id="-创建服务">☁️ 创建服务&lt;/h3>
+&lt;p>在 &lt;code>Web 应用托管 -&amp;gt; 新建应用&lt;/code> 新建一个简易静态页面模板。根据需求填写信息。选择纯静态页面。&lt;/p>
+&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/hugo-in-cloudbase/webify.png"
+width="2530"
+height="1256"
+srcset="https://emerywan.github.io/blog/blog/p/hugo-in-cloudbase/webify_hu211af589e3a728aa0fd91d8fdf6a5a77_643488_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/hugo-in-cloudbase/webify_hu211af589e3a728aa0fd91d8fdf6a5a77_643488_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+alt="webify"
+class="gallery-image"
+data-flex-grow="201"
+data-flex-basis="483px"
+>&lt;/p>
+&lt;p>在 &lt;code>应用列表 -&amp;gt; 应用设置&lt;/code> 中配置仓库信息，并根据自身情况选择静态文件的部署分支。（如果当前没有生成静态页面的分支，可完成后面操作后再进行此步骤）。&lt;/p>
+&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/hugo-in-cloudbase/webify_info.png"
+width="1896"
+height="1164"
+srcset="https://emerywan.github.io/blog/blog/p/hugo-in-cloudbase/webify_info_hufa1571ab4508131ee643c8a2551cf3ff_136359_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/hugo-in-cloudbase/webify_info_hufa1571ab4508131ee643c8a2551cf3ff_136359_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+alt="webify_info"
+class="gallery-image"
+data-flex-grow="162"
+data-flex-basis="390px"
+>&lt;/p>
+&lt;h3 id="-github-actions-1">⚙️ Github Actions&lt;/h3>
+&lt;h4 id="设置-github-token">设置 Github Token&lt;/h4>
+&lt;p>在用户的 &lt;code>Settings -&amp;gt; Developer settings -&amp;gt; Personal access tokens -&amp;gt; Generate new token&lt;/code> 获取一个 &lt;code>Repo Token&lt;/code>。&lt;a class="link" href="https://github.com/settings/tokens" target="_blank" rel="noopener"
+>🔗 传送门&lt;/a>&lt;/p>
+&lt;p>在项目的 &lt;code>Settings -&amp;gt; Secrets -&amp;gt; Actions&lt;/code> 中添加上述得到的 &lt;code>Token&lt;/code>。&lt;/p>
+&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/hugo-in-cloudbase/access_token.png"
+width="1600"
+height="598"
+srcset="https://emerywan.github.io/blog/blog/p/hugo-in-cloudbase/access_token_hu161bb7d01a4edfa7f2231ebb5df9a1e4_123158_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/hugo-in-cloudbase/access_token_hu161bb7d01a4edfa7f2231ebb5df9a1e4_123158_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+alt="access_token"
+class="gallery-image"
+data-flex-grow="267"
+data-flex-basis="642px"
+>&lt;/p>
+&lt;h4 id="添加-workflows-1">添加 workflows&lt;/h4>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;span class="lnt">11
+&lt;/span>&lt;span class="lnt">12
+&lt;/span>&lt;span class="lnt">13
+&lt;/span>&lt;span class="lnt">14
+&lt;/span>&lt;span class="lnt">15
+&lt;/span>&lt;span class="lnt">16
+&lt;/span>&lt;span class="lnt">17
+&lt;/span>&lt;span class="lnt">18
+&lt;/span>&lt;span class="lnt">19
+&lt;/span>&lt;span class="lnt">20
+&lt;/span>&lt;span class="lnt">21
+&lt;/span>&lt;span class="lnt">22
+&lt;/span>&lt;span class="lnt">23
+&lt;/span>&lt;span class="lnt">24
+&lt;/span>&lt;span class="lnt">25
+&lt;/span>&lt;span class="lnt">26
+&lt;/span>&lt;span class="lnt">27
+&lt;/span>&lt;span class="lnt">28
+&lt;/span>&lt;span class="lnt">29
+&lt;/span>&lt;span class="lnt">30
+&lt;/span>&lt;span class="lnt">31
+&lt;/span>&lt;span class="lnt">32
+&lt;/span>&lt;span class="lnt">33
+&lt;/span>&lt;span class="lnt">34
+&lt;/span>&lt;span class="lnt">35
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-yaml" data-lang="yaml">&lt;span class="line">&lt;span class="cl">&lt;span class="nt">name&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">Tencent CloudBase&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="nt">on&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">push&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">branches&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>- &lt;span class="l">main&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="nt">jobs&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">hugo-publish&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">name&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">publish content to static website&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">runs-on&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">ubuntu-latest&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">steps&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>- &lt;span class="nt">name&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">Checkout&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">uses&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">actions/checkout@v3&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">with&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">submodules&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="kc">true&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">fetch-depth&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="m">0&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>- &lt;span class="nt">name&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">Setup Hugo&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">uses&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">peaceiris/actions-hugo@v2&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">with&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">hugo-version&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">latest&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">extended&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="kc">true&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>- &lt;span class="nt">name&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">Build&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">run&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">hugo --minify --gc&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>- &lt;span class="nt">name&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">Deploy to Branch&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">uses&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">peaceiris/actions-gh-pages@v3&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">with&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">github_token&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">${{ secrets.ACCESS_TOKEN }}&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">keep_files&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="kc">false&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">publish_branch&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">gh-pages &lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="c"># 更改为你想要生成的分支&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">publich_dir&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">./public&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">commit_message&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">${{ github.event.head_commit.message }}&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;h2 id="-参考">⛓ 参考&lt;/h2>
+&lt;ul>
+&lt;li>🔗 &lt;a class="link" href="https://blog.wangjunfeng.com/post/hugo-cloudbase/" target="_blank" rel="noopener"
+>https://blog.wangjunfeng.com/post/hugo-cloudbase/&lt;/a>&lt;/li>
+&lt;li>🔗 &lt;a class="link" href="https://cloud.tencent.com/document/product/1210/43389" target="_blank" rel="noopener"
+>https://cloud.tencent.com/document/product/1210/43389&lt;/a>&lt;/li>
+&lt;li>🔗 &lt;a class="link" href="https://github.com/TencentCloudBase/cloudbase-action" target="_blank" rel="noopener"
+>https://github.com/TencentCloudBase/cloudbase-action&lt;/a>&lt;/li>
+&lt;li>🔗 &lt;a class="link" href="https://github.com/TencentCloudBase/cloudbase-action/blob/3354b442713265aa9d7c5bf03b0b8cb0173f546f/README.md" target="_blank" rel="noopener"
+>https://github.com/TencentCloudBase/cloudbase-action/blob/3354b442713265aa9d7c5bf03b0b8cb0173f546f/README.md&lt;/a>&lt;/li>
+&lt;/ul></description></item><item><title>Ubuntu 安装软件推荐方式</title><link>https://emerywan.github.io/blog/p/ubuntu-software-install/</link><pubDate>Mon, 02 May 2022 02:02:02 +0800</pubDate><guid>https://emerywan.github.io/blog/p/ubuntu-software-install/</guid><description>&lt;img src="https://emerywan.github.io/blog/imgs/4.jpeg" alt="Featured image of post Ubuntu 安装软件推荐方式" />&lt;h2 id="说明">说明&lt;/h2>
+&lt;p>Ubuntu 有些第三方软件只提供二进制执行文件（压缩包或 AppImage），而不是安装包或者 apt 源，这时候需要我们去自己解压文件，放在自定义目录，并进行配置。&lt;/p>
+&lt;p>平常使用桌面环境的话，这样安装后，更新还是有点麻烦的，一更新就要修改很多地方。&lt;/p>
+&lt;p>这里介绍我平常的配置方式，每次更新后，只需要修改软链接即可，感觉还是挺方便的。&lt;/p>
+&lt;h2 id="方式">方式&lt;/h2>
+&lt;p>以 &lt;a class="link" href="https://github.com/Fndroid/clash_for_windows_pkg/releases" target="_blank" rel="noopener"
+>cfw&lt;/a> 安装为例，Linux 提供 &lt;code>.tar.gz&lt;/code> 的执行文件。&lt;/p>
+&lt;p>我通常都把这样的软件都统一放到 &lt;code>~/Applications&lt;/code> 中。&lt;/p>
+&lt;ul>
+&lt;li>🏕️ 首先创建一个安装的软件的文件夹&lt;/li>
+&lt;/ul>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-sh" data-lang="sh">&lt;span class="line">&lt;span class="cl">mkdir -p ~/Application/clash
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;ul>
+&lt;li>🏞️ 将下载的文件解压到该文件夹中&lt;/li>
+&lt;/ul>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-sh" data-lang="sh">&lt;span class="line">&lt;span class="cl">tar -xzvf Clash.for.Windows-0.19.12 -C ~/Application/clash
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;ul>
+&lt;li>🏜️ 创建启动文件的软连接&lt;/li>
+&lt;/ul>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-sh" data-lang="sh">&lt;span class="line">&lt;span class="cl">ln -s ./Clash&lt;span class="se">\ &lt;/span>&lt;span class="k">for&lt;/span>&lt;span class="se">\ &lt;/span>Windows-0.19.12-x64-linux/cfw ./clash
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>通过这种方式，每次启动应用都使用这个软链接进行操作，当需要升级应用时，只需要创建新的软链接，指向新的启动文件。最后的效果如下：&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;span class="lnt">4
+&lt;/span>&lt;span class="lnt">5
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-fallback" data-lang="fallback">&lt;span class="line">&lt;span class="cl">$ tree . -L 1
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">.
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">├── clash -&amp;gt; ./Clash for Windows-0.19.12-x64-linux/cfw
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">├── Clash for Windows-0.19.12-x64-linux
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">└── Clash for Windows-0.19.2-x64-linux
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;ul>
+&lt;li>🏖️ 添加桌面图标&lt;/li>
+&lt;/ul>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-sh" data-lang="sh">&lt;span class="line">&lt;span class="cl">vim ~/.local/share/applications/clw.desktop
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>添加以下内容：&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;span class="lnt">4
+&lt;/span>&lt;span class="lnt">5
+&lt;/span>&lt;span class="lnt">6
+&lt;/span>&lt;span class="lnt">7
+&lt;/span>&lt;span class="lnt">8
+&lt;/span>&lt;span class="lnt">9
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-fallback" data-lang="fallback">&lt;span class="line">&lt;span class="cl">[Desktop Entry]
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">Name=Clash for Linux
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">Icon=/home/emery/Applications/icon/clash_icon.png # 替换为自己的目录
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">Comment=Clash for Linux
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">Exec=&amp;#34;/home/emery/Applications/Clash/clash&amp;#34; %u # 替换为自己的目录
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">Type=Application
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">Categories=Network
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">Terminal=false
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">StartupNotify=true
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div></description></item><item><title>在 Ubuntu 中搭建 CUDA 环境</title><link>https://emerywan.github.io/blog/p/cuda/</link><pubDate>Mon, 02 May 2022 02:02:02 +0800</pubDate><guid>https://emerywan.github.io/blog/p/cuda/</guid><description>&lt;img src="https://emerywan.github.io/blog/imgs/11.jpeg" alt="Featured image of post 在 Ubuntu 中搭建 CUDA 环境" />&lt;h2 id="nvdia-驱动">Nvdia 驱动&lt;/h2>
+&lt;p>首先，请确保在系统中安装了英伟达显卡驱动，可以使用 &lt;code>nvidia-msi&lt;/code> 命令查看显卡对应信息。&lt;/p>
+&lt;p>如果没有安装驱动，可以参考该章节。&lt;a class="link" href="https://emerywan.github.io/blog/guide/prepare/driver.html" >传送门➡️&lt;/a>&lt;/p>
+&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/cuda/nvidia-msi.png"
+width="734"
+height="512"
+srcset="https://emerywan.github.io/blog/blog/p/cuda/nvidia-msi_hu25fedbd9e105d28334236f2eb0bd81d5_56804_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/cuda/nvidia-msi_hu25fedbd9e105d28334236f2eb0bd81d5_56804_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+alt="nvidia-msi"
+class="gallery-image"
+data-flex-grow="143"
+data-flex-basis="344px"
+>&lt;/p>
+&lt;p>推荐使用系统自带软件 &lt;code>软件和更新&lt;/code> 安装显卡驱动。打开应用后，点击 &lt;code>附加驱动&lt;/code> 选项，会对所有可选的附加驱动进行搜索。&lt;/p>
+&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/cuda/nvidia-install.png"
+width="877"
+height="500"
+srcset="https://emerywan.github.io/blog/blog/p/cuda/nvidia-install_hud8377b5c2eaf750be9838eb34291d82b_111878_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/cuda/nvidia-install_hud8377b5c2eaf750be9838eb34291d82b_111878_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+alt="nvidia-install"
+class="gallery-image"
+data-flex-grow="175"
+data-flex-basis="420px"
+>&lt;/p>
+&lt;p>其中，&lt;code>Nouveau&lt;/code> 为英伟达显卡开源驱动（默认安装），选择需要的 &lt;code>NVIDIA drive&lt;/code> 驱动选项，点击 &lt;code>应用更改&lt;/code>。&lt;/p>
+&lt;p>等待进度条结束后，重启电脑，即完成了显卡驱动的安装。&lt;/p>
+&lt;h2 id="cuda">CUDA&lt;/h2>
+&lt;p>你可以在 &lt;a class="link" href="https://docs.nvidia.com/cuda/cuda-toolkit-release-notes/index.html" target="_blank" rel="noopener"
+>这里&lt;/a> 看到显卡驱动版本与 CUDA 版本的对应关系。&lt;/p>
+&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/cuda/cuda.png"
+width="1540"
+height="358"
+srcset="https://emerywan.github.io/blog/blog/p/cuda/cuda_hu06d82653b392e263a912d34e822f7d1a_74559_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/cuda/cuda_hu06d82653b392e263a912d34e822f7d1a_74559_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+alt="cuda"
+class="gallery-image"
+data-flex-grow="430"
+data-flex-basis="1032px"
+>&lt;/p>
+&lt;p>🌰 在这里的显卡驱动版本为 &lt;code>470.103.01&lt;/code>，根据对应表可知，最高可选的 CUDA Toolkit 的版本号为 &lt;code>CUDA 11.4 Update 4&lt;/code>。&lt;/p>
+&lt;p>之后，可在官网 &lt;a class="link" href="https://developer.nvidia.com/cuda-toolkit-archive" target="_blank" rel="noopener"
+>该页面&lt;/a> 中，选择对应的 CUDA Toolkit。&lt;/p>
+&lt;p>可根据当前系统环境，选择对应的下载选项（推荐下载 &lt;code>.drunfile&lt;/code>，&lt;code>.deb&lt;/code> 会覆盖系统安装的显卡驱动）：&lt;/p>
+&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/cuda/cuda-platform.png"
+width="2506"
+height="894"
+srcset="https://emerywan.github.io/blog/blog/p/cuda/cuda-platform_hu9bf542e30b48a580f041a55f80ab65bc_245327_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/cuda/cuda-platform_hu9bf542e30b48a580f041a55f80ab65bc_245327_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+alt="cuda-platform"
+class="gallery-image"
+data-flex-grow="280"
+data-flex-basis="672px"
+>&lt;/p>
+&lt;p>下载完成后，使用以下命令进行安装：&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;span class="lnt">4
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-sh" data-lang="sh">&lt;span class="line">&lt;span class="cl">&lt;span class="nb">cd&lt;/span> &lt;span class="si">${&lt;/span>&lt;span class="nv">DOWNLOAD_DIR&lt;/span>&lt;span class="si">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">chmod +x ./cuda_&lt;span class="o">{&lt;/span>Version&lt;span class="o">}&lt;/span>_linux.run
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">sudo sh ./cuda_&lt;span class="o">{&lt;/span>Version&lt;span class="o">}&lt;/span>_linux.run
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>::: warning 警告 🚧
+注意：在安装过程中，请取消勾选安装驱动选项。
+:::&lt;/p>
+&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/cuda/cuda-install.png"
+width="734"
+height="476"
+srcset="https://emerywan.github.io/blog/blog/p/cuda/cuda-install_hu423287ac940ffb3bc75497440c5c47d7_30663_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/cuda/cuda-install_hu423287ac940ffb3bc75497440c5c47d7_30663_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+alt="cuda-install"
+class="gallery-image"
+data-flex-grow="154"
+data-flex-basis="370px"
+>&lt;/p>
+&lt;p>配置环境变量，在对应配置文件中添加如下内容：&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-sh" data-lang="sh">&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># bash -&amp;gt; .bashrc / zsh -&amp;gt; .zshrc&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nb">export&lt;/span> &lt;span class="nv">CUDA_HOME&lt;/span>&lt;span class="o">=&lt;/span>/usr/local/cuda-&lt;span class="o">{&lt;/span>Version&lt;span class="o">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nb">export&lt;/span> &lt;span class="nv">PATH&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="si">${&lt;/span>&lt;span class="nv">CUDA_HOME&lt;/span>&lt;span class="si">}&lt;/span>/bin:&lt;span class="si">${&lt;/span>&lt;span class="nv">PATH&lt;/span>&lt;span class="si">}&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;h2 id="cudnn">cuDNN&lt;/h2>
+&lt;p>你可以在官网 &lt;a class="link" href="https://developer.nvidia.com/rdp/cudnn-download" target="_blank" rel="noopener"
+>此链接&lt;/a> 下载 CUDNN，需要注册开发者账号，可能还需要一个“良好的网络环境”。&lt;/p>
+&lt;p>选择与 CUDA 相对应用的 cuDNN，推荐下载压缩包格式。&lt;/p>
+&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/cuda/cudnn.png"
+width="2228"
+height="1498"
+srcset="https://emerywan.github.io/blog/blog/p/cuda/cudnn_hu2d2e598f2ebb22e3f94073a6174ea5e2_332327_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/cuda/cudnn_hu2d2e598f2ebb22e3f94073a6174ea5e2_332327_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+alt="cudnn"
+class="gallery-image"
+data-flex-grow="148"
+data-flex-basis="356px"
+>&lt;/p>
+&lt;p>下载完成后，解压文件夹，并根据以下命令复制解压后文件夹中的 &lt;code>lib64&lt;/code> &lt;code>include&lt;/code> 文件夹：&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;span class="lnt">4
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-sh" data-lang="sh">&lt;span class="line">&lt;span class="cl">tar -xzvf cudnn-linux-&lt;span class="o">{&lt;/span>Version&lt;span class="o">}&lt;/span>.tar.gz
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">sudo cp cudnn-linux-&lt;span class="o">{&lt;/span>Version&lt;span class="o">}&lt;/span>/lib64/* /usr/local/cuda/lib64
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">sudo cp cudnn-linux-&lt;span class="o">{&lt;/span>Version&lt;span class="o">}&lt;/span>/include/* /usr/local/cuda/include
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>复制完成后，可以通过以下命令查看 cuDNN 版本信息：&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-sh" data-lang="sh">&lt;span class="line">&lt;span class="cl">cat /usr/local/cuda-10.1/include/cudnn.h &lt;span class="p">|&lt;/span> grep CUDNN_MAJOR -A &lt;span class="m">2&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div></description></item><item><title>Ubuntu 耳机没有声音</title><link>https://emerywan.github.io/blog/p/ubuntu-sound/</link><pubDate>Sat, 02 Jan 2021 02:02:02 +0800</pubDate><guid>https://emerywan.github.io/blog/p/ubuntu-sound/</guid><description>&lt;img src="https://emerywan.github.io/blog/imgs/5.jpeg" alt="Featured image of post Ubuntu 耳机没有声音" />&lt;h2 id="ubuntu-耳机没有声音">Ubuntu 耳机没有声音&lt;/h2>
+&lt;p>笔记本使用 Ubuntu 插有线耳机后，并没有反应，该外放还是外放。&lt;/p>
+&lt;p>感觉是适配问题，windows 下没有问题。找了一圈办法，只能通过软件手动切换了，效果还不错。&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-fallback" data-lang="fallback">&lt;span class="line">&lt;span class="cl">sudo apt install pavucontrol
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>可以在这里切换输出设备：&lt;/p>
+&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/ubuntu-sound/output.png"
+width="514"
+height="446"
+srcset="https://emerywan.github.io/blog/blog/p/ubuntu-sound/output_hubad1730db6fbe32ffe9d254c812a9365_52081_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/ubuntu-sound/output_hubad1730db6fbe32ffe9d254c812a9365_52081_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+alt="output"
+class="gallery-image"
+data-flex-grow="115"
+data-flex-basis="276px"
+>&lt;/p>
+&lt;p>切换输入设备：&lt;/p>
+&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/ubuntu-sound/input.png"
+width="517"
+height="448"
+srcset="https://emerywan.github.io/blog/blog/p/ubuntu-sound/input_hufb6fce95f1bcffd19d35ec16e321d778_54938_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/ubuntu-sound/input_hufb6fce95f1bcffd19d35ec16e321d778_54938_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+alt="input"
+class="gallery-image"
+data-flex-grow="115"
+data-flex-basis="276px"
+>&lt;/p></description></item></channel></rss>

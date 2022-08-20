@@ -1,0 +1,250 @@
+<!doctype html><html lang dir=ltr><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><meta name=description content="数据类型 数组 numpy.array np.zeros 创建指定大小的数组，数组元素以 0 填充。 numpy.zeros(shape, dtype=None, order = &amp;lsquo;C&amp;rsquo;) shape 数组形状 dtype 数据类型 order &amp;lsquo;C&amp;rsquo; 用于 C 的行数组，或者 &amp;lsquo;F&amp;rsquo; 用于 FORTRAN 的列数组 1 2 3 4 5 6 7 8"><title>NumPy</title><link rel=canonical href=https://emerywan.github.io/blog/p/numpy/><link rel=stylesheet href=/blog/scss/style.min.9fdfe1d69c4486d1a84c3c7b288ce74b0111a02a60a6c12f21c6b7cc02b131b4.css><meta property="og:title" content="NumPy"><meta property="og:description" content="数据类型 数组 numpy.array np.zeros 创建指定大小的数组，数组元素以 0 填充。 numpy.zeros(shape, dtype=None, order = &amp;lsquo;C&amp;rsquo;) shape 数组形状 dtype 数据类型 order &amp;lsquo;C&amp;rsquo; 用于 C 的行数组，或者 &amp;lsquo;F&amp;rsquo; 用于 FORTRAN 的列数组 1 2 3 4 5 6 7 8"><meta property="og:url" content="https://emerywan.github.io/blog/p/numpy/"><meta property="og:site_name" content="一层"><meta property="og:type" content="article"><meta property="article:section" content="Post"><meta property="article:tag" content="NumPy"><meta property="article:published_time" content="2020-12-01T21:14:45+08:00"><meta property="article:modified_time" content="2020-12-01T21:14:45+08:00"><meta property="og:image" content="https://emerywan.github.io/blog/imgs/3.jpeg"><meta name=twitter:title content="NumPy"><meta name=twitter:description content="数据类型 数组 numpy.array np.zeros 创建指定大小的数组，数组元素以 0 填充。 numpy.zeros(shape, dtype=None, order = &amp;lsquo;C&amp;rsquo;) shape 数组形状 dtype 数据类型 order &amp;lsquo;C&amp;rsquo; 用于 C 的行数组，或者 &amp;lsquo;F&amp;rsquo; 用于 FORTRAN 的列数组 1 2 3 4 5 6 7 8"><meta name=twitter:card content="summary_large_image"><meta name=twitter:image content="https://emerywan.github.io/blog/imgs/3.jpeg"><link rel="shortcut icon" href=https://emerywan.github.io/blog/imgs/favicon.ico></head><body class=article-page><script>(function(){const e="StackColorScheme";localStorage.getItem(e)||localStorage.setItem(e,"auto")})()</script><script>(function(){const t="StackColorScheme",e=localStorage.getItem(t),n=window.matchMedia("(prefers-color-scheme: dark)").matches===!0;e=="dark"||e==="auto"&&n?document.documentElement.dataset.scheme="dark":document.documentElement.dataset.scheme="light"})()</script><div class="container main-container flex on-phone--column extended"><aside class="sidebar left-sidebar sticky"><button class="hamburger hamburger--spin" type=button id=toggle-menu aria-label=切换菜单>
+<span class=hamburger-box><span class=hamburger-inner></span></span></button><header><figure class=site-avatar><a href=/blog><img src=/blog/img/avatar_hud10ed4afecf1b63b1391b35c2778f738_36574_300x0_resize_box_3.png width=300 height=300 class=site-logo loading=lazy alt=Avatar></a></figure><div class=site-meta><h1 class=site-name><a href=/blog>一层</a></h1><h2 class=site-description>迎着这岁月的风。</h2></div></header><ol class=social-menu><li><a href=https://github.com/emerywan target=_blank title=GitHub><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-brand-github" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M9 19c-4.3 1.4-4.3-2.5-6-3m12 5v-3.5c0-1 .1-1.4-.5-2 2.8-.3 5.5-1.4 5.5-6a4.6 4.6.0 00-1.3-3.2 4.2 4.2.0 00-.1-3.2s-1.1-.3-3.5 1.3a12.3 12.3.0 00-6.2.0C6.5 2.8 5.4 3.1 5.4 3.1a4.2 4.2.0 00-.1 3.2A4.6 4.6.0 004 9.5c0 4.6 2.7 5.7 5.5 6-.6.6-.6 1.2-.5 2V21"/></svg></a></li><li><a href=https://www.letout.cn target=_blank title=Home><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-smart-home" width="44" height="44" viewBox="0 0 24 24" stroke-width="1.5" stroke="#6f32be" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M19 8.71l-5.333-4.148a2.666 2.666.0 00-3.274.0L5.059 8.71A2.665 2.665.0 004.03 10.815v7.2a2 2 0 002 2h12a2 2 0 002-2v-7.2c0-.823-.38-1.6-1.03-2.105"/><path d="M16 15c-2.21 1.333-5.792 1.333-8 0"/></svg></a></li></ol><ol class=menu id=main-menu><li><a href=/blog/><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><polyline points="5 12 3 12 12 3 21 12 19 12"/><path d="M5 12v7a2 2 0 002 2h10a2 2 0 002-2v-7"/><path d="M9 21v-6a2 2 0 012-2h2a2 2 0 012 2v6"/></svg><span>首页</span></a></li><li><a href=/blog/archives/><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><rect x="3" y="4" width="18" height="4" rx="2"/><path d="M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8"/><line x1="10" y1="12" x2="14" y2="12"/></svg><span>归档</span></a></li><li><a href=/blog/categories/><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><line x1="5" y1="9" x2="19" y2="9"/><line x1="5" y1="15" x2="19" y2="15"/><line x1="11" y1="4" x2="7" y2="20"/><line x1="17" y1="4" x2="13" y2="20"/></svg><span>分类</span></a></li><li><a href=/blog/about/><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="7" r="4"/><path d="M6 21v-2a4 4 0 014-4h4a4 4 0 014 4v2"/></svg><span>关于</span></a></li><li><a href=/blog/search/><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="10" cy="10" r="7"/><line x1="21" y1="21" x2="15" y2="15"/></svg><span>搜索</span></a></li><div class=menu-bottom-section><li id=dark-mode-toggle><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="8" cy="12" r="2"/><rect x="2" y="6" width="20" height="12" rx="6"/></svg><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="16" cy="12" r="2"/><rect x="2" y="6" width="20" height="12" rx="6"/></svg><span>Dark Mode</span></li></div></ol></aside><main class="main full-width"><article class="has-image main-article"><header class=article-header><div class=article-image><a href=/blog/p/numpy/><img src=/blog/imgs/3.jpeg loading=lazy alt="Featured image of post NumPy"></a></div><div class=article-details><header class=article-category><a href=/blog/categories/%E6%8A%80%E6%9C%AF/ style=background-color:#91d5ff;color:#fff>技术</a></header><div class=article-title-wrapper><h2 class=article-title><a href=/blog/p/numpy/>NumPy</a></h2></div><footer class=article-time><div><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><path d="M11.795 21H5a2 2 0 01-2-2V7a2 2 0 012-2h12a2 2 0 012 2v4"/><circle cx="18" cy="18" r="4"/><path d="M15 3v4"/><path d="M7 3v4"/><path d="M3 11h16"/><path d="M18 16.496V18l1 1"/></svg><time class=article-time--published>12 - 01, 2020</time></div></footer></div></header><section class=article-content><h1 id=数据类型>数据类型</h1><h1 id=数组-numpyarray>数组 numpy.array</h1><h4 id=npzeros>np.zeros</h4><p>创建指定大小的数组，数组元素以 0 填充。</p><blockquote><ul><li>numpy.zeros(shape, dtype=None, order = &lsquo;C&rsquo;)</li></ul></blockquote><ul><li>shape 数组形状</li><li>dtype 数据类型</li><li>order &lsquo;C&rsquo; 用于 C 的行数组，或者 &lsquo;F&rsquo; 用于 FORTRAN 的列数组</li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-python data-lang=python><span class=line><span class=cl><span class=n>np</span><span class=o>.</span><span class=n>zero</span><span class=p>(</span><span class=mi>5</span><span class=p>)</span>
+</span></span><span class=line><span class=cl><span class=c1># [0. 0. 0. 0. 0.]</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=n>np</span><span class=o>.</span><span class=n>zero</span><span class=p>(</span><span class=mi>5</span><span class=p>,</span> <span class=n>dtype</span><span class=o>=</span><span class=nb>int</span><span class=p>)</span>
+</span></span><span class=line><span class=cl><span class=c1># [0 0 0 0 0]</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=n>np</span><span class=o>.</span><span class=n>zero</span><span class=p>((</span><span class=mi>3</span><span class=p>,</span> <span class=mi>5</span><span class=p>))</span>       <span class=c1># 三行五列</span>
+</span></span><span class=line><span class=cl><span class=n>np</span><span class=o>.</span><span class=n>zero</span><span class=p>(</span><span class=n>shape</span><span class=o>=</span><span class=p>(</span><span class=mi>3</span><span class=p>,</span> <span class=mi>5</span><span class=p>))</span>
+</span></span><span class=line><span class=cl><span class=c1># [</span>
+</span></span><span class=line><span class=cl><span class=c1>#   [0., 0., 0., 0., 0.],</span>
+</span></span><span class=line><span class=cl><span class=c1>#   [0., 0., 0., 0., 0.],</span>
+</span></span><span class=line><span class=cl><span class=c1>#   [0., 0., 0., 0., 0.],</span>
+</span></span><span class=line><span class=cl><span class=c1># ]</span>
+</span></span></code></pre></td></tr></table></div></div><h4 id=npones>np.ones</h4><p>创建指定大小的数组，数组元素以 1 填充。</p><blockquote><ul><li>numpy.ones(shape, dtype=None, order=&lsquo;C&rsquo;)</li></ul></blockquote><h4 id=npfull>np.full</h4><p>创建指定大小和数据的数组</p><blockquote><ul><li>numpy.full(shape, fill_value, dtype=None, order=&lsquo;C&rsquo;)</li></ul></blockquote><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-python data-lang=python><span class=line><span class=cl><span class=c1># 创建一个 三行五列 值为 666.0 的矩阵</span>
+</span></span><span class=line><span class=cl><span class=n>np</span><span class=o>.</span><span class=n>full</span><span class=p>((</span><span class=mi>3</span><span class=p>,</span> <span class=mi>5</span><span class=p>),</span> <span class=mf>666.0</span><span class=p>)</span>
+</span></span></code></pre></td></tr></table></div></div><h4 id=nparange>np.arange</h4><p>在数组中，可以使用 range 创建指定范围的数组（不能传递浮点数）。</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-python data-lang=python><span class=line><span class=cl><span class=c1># [0, 20)  步长为 2</span>
+</span></span><span class=line><span class=cl><span class=p>[</span><span class=n>i</span> <span class=k>for</span> <span class=n>i</span> <span class=ow>in</span> <span class=nb>range</span><span class=p>(</span><span class=mi>0</span><span class=p>,</span> <span class=mi>20</span><span class=p>,</span> <span class=mi>2</span><span class=p>)]</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># [0, 2, 4, 6, 8, 10, 12, 14, 16, 18]</span>
+</span></span></code></pre></td></tr></table></div></div><p>在 numpy 中，可以使用 arange 创建数组范围并返回 ndarray 对象。</p><blockquote><ul><li>numpy.arange(start, stop, step, dtype)</li></ul></blockquote><ul><li>start 起始值，默认为 0</li><li>stop 终止值，不包含</li><li>step 步长，默认为 1</li><li>dtype 数据类型</li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-python data-lang=python><span class=line><span class=cl><span class=n>np</span><span class=o>.</span><span class=n>arange</span><span class=p>(</span><span class=mi>0</span><span class=p>,</span> <span class=mi>20</span><span class=p>,</span> <span class=mi>2</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 可以传递浮点数</span>
+</span></span><span class=line><span class=cl><span class=n>np</span><span class=o>.</span><span class=n>arange</span><span class=p>(</span><span class=mi>0</span><span class=p>,</span> <span class=mi>1</span><span class=p>,</span> <span class=mf>0.2</span><span class=p>)</span>
+</span></span><span class=line><span class=cl><span class=c1># [0., 0.2, 0.4, 0.6, 0.8]</span>
+</span></span></code></pre></td></tr></table></div></div><h4 id=nplinspace>np.linspace</h4><p>创建一个一维数组，构成一个等差数列。</p><blockquote><ul><li>numpy.linspace(start, stop, num=50, endpoint=True, retstep=False,dtype=None, axis=0)</li></ul></blockquote><ul><li>start 起始值</li><li>stop 终止值（默认包含 endpoint=True）</li><li>endpoint 当为 True 时，会包含 stop 的值</li><li>retstep 当为 True 时，生成的数组中会显示间距</li><li>dtype 数据类型</li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-python data-lang=python><span class=line><span class=cl><span class=c1># 生成 [0, 20] 间距为 2 的 10 个数</span>
+</span></span><span class=line><span class=cl><span class=n>np</span><span class=o>.</span><span class=n>linspace</span><span class=p>(</span><span class=mi>0</span><span class=p>,</span> <span class=mi>20</span><span class=p>,</span> <span class=mi>11</span><span class=p>)</span>
+</span></span><span class=line><span class=cl><span class=c1># [0., 2., 4., 6., 8., 10., 12., 14., 16., 18., 20.]</span>
+</span></span></code></pre></td></tr></table></div></div><h4 id=nprandom>np.random</h4><blockquote><ul><li>numpy.random.randint(low, high=None, size=None, dtype=None)</li></ul></blockquote><p>生成指定的整数。</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-python data-lang=python><span class=line><span class=cl><span class=c1># 在 [0, 10) 间生成一个随机数</span>
+</span></span><span class=line><span class=cl><span class=n>np</span><span class=o>.</span><span class=n>random</span><span class=o>.</span><span class=n>randint</span><span class=p>(</span><span class=mi>0</span><span class=p>,</span> <span class=mi>10</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 在 [0, 10) 间生成一个大小为 10 的一维数组</span>
+</span></span><span class=line><span class=cl><span class=n>np</span><span class=o>.</span><span class=n>random</span><span class=o>.</span><span class=n>randint</span><span class=p>(</span><span class=mi>0</span><span class=p>,</span> <span class=mi>10</span><span class=p>,</span> <span class=n>size</span><span class=o>=</span><span class=mi>10</span><span class=p>)</span>
+</span></span><span class=line><span class=cl><span class=c1># [7, 7, 7, 7, 7, 4, 5, 6, 4, 7]</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 在 [0, 10) 间生成一个 3行6列 的矩阵</span>
+</span></span><span class=line><span class=cl><span class=n>np</span><span class=o>.</span><span class=n>random</span><span class=o>.</span><span class=n>randint</span><span class=p>(</span><span class=mi>0</span><span class=p>,</span> <span class=mi>10</span><span class=p>,</span> <span class=n>size</span><span class=o>=</span><span class=p>(</span><span class=mi>3</span><span class=p>,</span> <span class=mi>5</span><span class=p>))</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 指定随机种子，使生成的数据在测试时保持一致</span>
+</span></span><span class=line><span class=cl><span class=n>np</span><span class=o>.</span><span class=n>random</span><span class=o>.</span><span class=n>seed</span><span class=p>(</span><span class=mi>666</span><span class=p>)</span>
+</span></span></code></pre></td></tr></table></div></div><blockquote><ul><li>numpy.random.random(size=None)</li></ul></blockquote><p>生成 [0.0, 1.0) 间的浮点数。</p><blockquote><ul><li>numpy.random.normal(loc=0.0, scale=1.0, size=None)</li></ul></blockquote><p>生成一个符合正态分布的浮点数。</p><ul><li>loc 均值</li><li>scale 方差</li><li>size 大小</li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-python data-lang=python><span class=line><span class=cl><span class=c1># 生成 均值为 10 方差为 100 的浮点数</span>
+</span></span><span class=line><span class=cl><span class=n>np</span><span class=o>.</span><span class=n>random</span><span class=o>.</span><span class=n>normal</span><span class=p>(</span><span class=mi>10</span><span class=p>,</span> <span class=mi>100</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 生成 均值为 0 方差为 1 的 3行5列的矩阵</span>
+</span></span><span class=line><span class=cl><span class=n>np</span><span class=o>.</span><span class=n>random</span><span class=o>.</span><span class=n>normal</span><span class=p>(</span><span class=mi>0</span><span class=p>,</span> <span class=mi>1</span><span class=p>,</span> <span class=p>(</span><span class=mi>3</span><span class=p>,</span> <span class=mi>5</span><span class=p>))</span>
+</span></span></code></pre></td></tr></table></div></div><h1 id=numpyarray-基本操作>numpy.array 基本操作</h1><p>假设有如下一个一维的数组 x 和 一个三行五列的矩阵 X：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-python data-lang=python><span class=line><span class=cl><span class=kn>import</span> <span class=nn>numpy</span> <span class=k>as</span> <span class=nn>np</span>
+</span></span><span class=line><span class=cl><span class=n>np</span><span class=o>.</span><span class=n>random</span><span class=o>.</span><span class=n>seed</span><span class=p>(</span><span class=mi>0</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=n>x</span> <span class=o>=</span> <span class=n>np</span><span class=o>.</span><span class=n>arange</span><span class=p>(</span><span class=mi>10</span><span class=p>)</span>
+</span></span><span class=line><span class=cl><span class=c1># [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=n>X</span> <span class=o>=</span> <span class=n>np</span><span class=o>.</span><span class=n>arange</span><span class=p>(</span><span class=mi>15</span><span class=p>)</span><span class=o>.</span><span class=n>reshape</span><span class=p>(</span><span class=mi>3</span><span class=p>,</span> <span class=mi>5</span><span class=p>)</span>
+</span></span><span class=line><span class=cl><span class=c1># [</span>
+</span></span><span class=line><span class=cl><span class=c1>#   [ 0,  1,  2,  3,  4],</span>
+</span></span><span class=line><span class=cl><span class=c1>#   [ 5,  6,  7,  8,  9],</span>
+</span></span><span class=line><span class=cl><span class=c1>#   [10, 11, 12, 13, 14]</span>
+</span></span><span class=line><span class=cl><span class=c1># ]</span>
+</span></span></code></pre></td></tr></table></div></div><h2 id=reshape>Reshape</h2><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span><span class=lnt>28
+</span><span class=lnt>29
+</span><span class=lnt>30
+</span><span class=lnt>31
+</span><span class=lnt>32
+</span><span class=lnt>33
+</span><span class=lnt>34
+</span><span class=lnt>35
+</span><span class=lnt>36
+</span><span class=lnt>37
+</span><span class=lnt>38
+</span><span class=lnt>39
+</span><span class=lnt>40
+</span><span class=lnt>41
+</span><span class=lnt>42
+</span><span class=lnt>43
+</span><span class=lnt>44
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-python data-lang=python><span class=line><span class=cl><span class=c1># 将 x 转置为 2行5列的 矩阵</span>
+</span></span><span class=line><span class=cl><span class=n>A</span> <span class=o>=</span> <span class=n>x</span><span class=o>.</span><span class=n>reshape</span><span class=p>(</span><span class=mi>2</span><span class=p>,</span> <span class=mi>5</span><span class=p>)</span>
+</span></span><span class=line><span class=cl><span class=c1># [</span>
+</span></span><span class=line><span class=cl><span class=c1>#   [0, 1, 2, 3, 4],</span>
+</span></span><span class=line><span class=cl><span class=c1>#   [5, 6, 7, 8, 9]</span>
+</span></span><span class=line><span class=cl><span class=c1># ] </span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 将向量装置成矩阵</span>
+</span></span><span class=line><span class=cl><span class=n>B</span> <span class=o>=</span> <span class=n>x</span><span class=o>.</span><span class=n>reshape</span><span class=p>(</span><span class=mi>1</span><span class=p>,</span> <span class=mi>10</span><span class=p>)</span>
+</span></span><span class=line><span class=cl><span class=c1># [</span>
+</span></span><span class=line><span class=cl><span class=c1>#   [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]</span>
+</span></span><span class=line><span class=cl><span class=c1># ]</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># -1：让 numpy 自己决定维度</span>
+</span></span><span class=line><span class=cl><span class=c1># 10列</span>
+</span></span><span class=line><span class=cl><span class=n>C</span> <span class=o>=</span> <span class=n>x</span><span class=o>.</span><span class=n>reshape</span><span class=p>(</span><span class=o>-</span><span class=mi>1</span><span class=p>,</span> <span class=mi>10</span><span class=p>)</span>
+</span></span><span class=line><span class=cl><span class=c1># [</span>
+</span></span><span class=line><span class=cl><span class=c1>#   [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]</span>
+</span></span><span class=line><span class=cl><span class=c1># ]</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 10行</span>
+</span></span><span class=line><span class=cl><span class=n>D</span> <span class=o>=</span> <span class=n>x</span><span class=o>.</span><span class=n>reshape</span><span class=p>(</span><span class=mi>10</span><span class=p>,</span> <span class=o>-</span><span class=mi>1</span><span class=p>)</span>
+</span></span><span class=line><span class=cl><span class=c1># [</span>
+</span></span><span class=line><span class=cl><span class=c1>#   [0],</span>
+</span></span><span class=line><span class=cl><span class=c1>#   [1],</span>
+</span></span><span class=line><span class=cl><span class=c1>#   [2],</span>
+</span></span><span class=line><span class=cl><span class=c1>#   [3],</span>
+</span></span><span class=line><span class=cl><span class=c1>#   [4],</span>
+</span></span><span class=line><span class=cl><span class=c1>#   [5],</span>
+</span></span><span class=line><span class=cl><span class=c1>#   [6],</span>
+</span></span><span class=line><span class=cl><span class=c1>#   [7],</span>
+</span></span><span class=line><span class=cl><span class=c1>#   [8],</span>
+</span></span><span class=line><span class=cl><span class=c1>#   [9],</span>
+</span></span><span class=line><span class=cl><span class=c1># ]</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 2行</span>
+</span></span><span class=line><span class=cl><span class=n>E</span> <span class=o>=</span> <span class=n>x</span><span class=o>.</span><span class=n>reshape</span><span class=p>(</span><span class=mi>2</span><span class=p>,</span> <span class=o>-</span><span class=mi>1</span><span class=p>)</span>
+</span></span><span class=line><span class=cl><span class=c1># [</span>
+</span></span><span class=line><span class=cl><span class=c1>#   [0, 1, 2, 3, 4],</span>
+</span></span><span class=line><span class=cl><span class=c1>#   [5, 6, 7, 8, 9]</span>
+</span></span><span class=line><span class=cl><span class=c1># ]</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 数据不能整除的情况下，不能 reshape</span>
+</span></span><span class=line><span class=cl><span class=n>F</span> <span class=o>=</span> <span class=n>x</span><span class=o>.</span><span class=n>reshape</span><span class=p>(</span><span class=mi>3</span><span class=p>,</span> <span class=o>-</span><span class=mi>1</span><span class=p>)</span>
+</span></span></code></pre></td></tr></table></div></div><h2 id=基本属性>基本属性</h2><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-python data-lang=python><span class=line><span class=cl><span class=c1># ndarray.ndim    秩，即轴的数量或维度的数量</span>
+</span></span><span class=line><span class=cl><span class=n>x</span><span class=o>.</span><span class=n>ndim</span>
+</span></span><span class=line><span class=cl><span class=c1># 1</span>
+</span></span><span class=line><span class=cl><span class=n>X</span><span class=o>.</span><span class=n>ndim</span>
+</span></span><span class=line><span class=cl><span class=c1># 2</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># ndarray.shape   数组维度，对于矩阵为n行m列</span>
+</span></span><span class=line><span class=cl><span class=n>x</span><span class=o>.</span><span class=n>shape</span>
+</span></span><span class=line><span class=cl><span class=c1># (10, )</span>
+</span></span><span class=line><span class=cl><span class=n>X</span><span class=o>.</span><span class=n>shape</span>
+</span></span><span class=line><span class=cl><span class=c1># (3, 5)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># ndarray.size    数组元素的总个数，对于矩阵为 n*m 个</span>
+</span></span><span class=line><span class=cl><span class=n>x</span><span class=o>.</span><span class=n>size</span>
+</span></span><span class=line><span class=cl><span class=c1># 10</span>
+</span></span><span class=line><span class=cl><span class=n>X</span><span class=o>.</span><span class=n>size</span>
+</span></span><span class=line><span class=cl><span class=c1># 15</span>
+</span></span></code></pre></td></tr></table></div></div><h2 id=数据访问>数据访问</h2><p>一维 numpy.array 可以和数组一样进行访问。</p><p>多维 numpy.array 在访问时，推荐传入多个参数。</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-python data-lang=python><span class=line><span class=cl><span class=c1># 一维</span>
+</span></span><span class=line><span class=cl><span class=n>x</span><span class=p>[</span><span class=mi>0</span><span class=p>]</span>
+</span></span><span class=line><span class=cl><span class=c1># 0</span>
+</span></span></code></pre></td></tr></table></div></div></section><footer class=article-footer><section class=article-tags><a href=/blog/tags/numpy/>NumPy</a></section><section class=article-copyright><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-copyright" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><path d="M14.5 9a3.5 4 0 100 6"/></svg><span>Licensed under CC BY-NC-SA 4.0</span></section></footer><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/katex@0.13.13/dist/katex.min.css integrity=sha384-RZU/ijkSsFbcmivfdRBQDtwuwVqK7GMOw6IMvKyeWL2K5UAlyp6WonmB8m7Jd0Hn crossorigin=anonymous><script src=https://cdn.jsdelivr.net/npm/katex@0.13.13/dist/katex.min.js integrity=sha384-pK1WpvzWVBQiP0/GjnvRxV4mOb0oxFuyRxJlk6vVw146n3egcN5C925NCP7a7BY8 crossorigin=anonymous defer></script><script src=https://cdn.jsdelivr.net/npm/katex@0.13.13/dist/contrib/auto-render.min.js integrity=sha384-vZTG03m+2yp6N6BNi5iM4rW4oIwk5DfcNdFfxkk9ZWpDriOkXX8voJBFrAO7MpVl crossorigin=anonymous defer></script><script>window.addEventListener("DOMContentLoaded",()=>{renderMathInElement(document.querySelector(`.article-content`),{delimiters:[{left:"$$",right:"$$",display:!0},{left:"$",right:"$",display:!1},{left:"\\(",right:"\\)",display:!1},{left:"\\[",right:"\\]",display:!0}]})})</script></article><aside class=related-contents--wrapper><h2 class=section-title>相关文章</h2><div class=related-contents><div class="flex article-list--tile"><article class=has-image><a href=/blog/p/java/jvm/memory-area/><div class=article-image><img src=/blog/imgs/27.jpeg loading=lazy data-key=/java/jvm/memory-area data-hash=/blog/imgs/27.jpeg></div><div class=article-details><h2 class=article-title>JVM 内存区域</h2></div></a></article><article class=has-image><a href=/blog/p/java/jvm/garbage-collection/><div class=article-image><img src=/blog/imgs/26.jpeg loading=lazy data-key=/java/jvm/garbage-collection data-hash=/blog/imgs/26.jpeg></div><div class=article-details><h2 class=article-title>JVM 垃圾回收</h2></div></a></article><article class=has-image><a href=/blog/p/java/jvm/memory-model/><div class=article-image><img src=/blog/imgs/28.jpeg loading=lazy data-key=/java/jvm/memory-model data-hash=/blog/imgs/28.jpeg></div><div class=article-details><h2 class=article-title>JVM 内存模型</h2></div></a></article><article class=has-image><a href=/blog/p/java/jvm/classloader/><div class=article-image><img src=/blog/imgs/25.jpeg loading=lazy data-key=/java/jvm/classloader data-hash=/blog/imgs/25.jpeg></div><div class=article-details><h2 class=article-title>类加载器</h2></div></a></article><article class=has-image><a href=/blog/p/java/jvm/class-loading/><div class=article-image><img src=/blog/imgs/24.jpeg loading=lazy data-key=/java/jvm/class-loading data-hash=/blog/imgs/24.jpeg></div><div class=article-details><h2 class=article-title>类加载机制</h2></div></a></article></div></div></aside><footer class=site-footer><section class=copyright>&copy;
+2022 一层</section><section class=powerby><b><a href=http://beian.miit.gov.cn/ target=_blank rel="nofollow noopener">赣ICP备19004365号-3</a></b><br>Built with <a href=https://gohugo.io/ target=_blank rel=noopener>Hugo</a> & <b><a href=https://github.com/CaiJimmy/hugo-theme-stack target=_blank rel=noopener data-version=%s>Stack</a></b> by <a href=https://jimmycai.com target=_blank rel=noopener>Jimmy</a><br></section></footer><div class=pswp tabindex=-1 role=dialog aria-hidden=true><div class=pswp__bg></div><div class=pswp__scroll-wrap><div class=pswp__container><div class=pswp__item></div><div class=pswp__item></div><div class=pswp__item></div></div><div class="pswp__ui pswp__ui--hidden"><div class=pswp__top-bar><div class=pswp__counter></div><button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+<button class="pswp__button pswp__button--share" title=Share></button>
+<button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+<button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button><div class=pswp__preloader><div class=pswp__preloader__icn><div class=pswp__preloader__cut><div class=pswp__preloader__donut></div></div></div></div></div><div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap"><div class=pswp__share-tooltip></div></div><button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)"></button>
+<button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)"></button><div class=pswp__caption><div class=pswp__caption__center></div></div></div></div></div><script src=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo=" crossorigin=anonymous defer></script><script src=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU=" crossorigin=anonymous defer></script><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.css integrity="sha256-c0uckgykQ9v5k+IqViZOZKc47Jn7KQil4/MP3ySA3F8=" crossorigin=anonymous><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.css integrity="sha256-SBLU4vv6CA6lHsZ1XyTdhyjJxCjPif/TRkjnsyGAGnE=" crossorigin=anonymous></main><aside class="sidebar right-sidebar sticky"><section class="widget archives"><div class=widget-icon><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><line x1="5" y1="9" x2="19" y2="9"/><line x1="5" y1="15" x2="19" y2="15"/><line x1="11" y1="4" x2="7" y2="20"/><line x1="17" y1="4" x2="13" y2="20"/></svg></div><h2 class="widget-title section-title">目录</h2><div class=widget--toc><nav id=TableOfContents><ol><li><ol><li><ol><li><a href=#npzeros>np.zeros</a></li><li><a href=#npones>np.ones</a></li><li><a href=#npfull>np.full</a></li><li><a href=#nparange>np.arange</a></li><li><a href=#nplinspace>np.linspace</a></li><li><a href=#nprandom>np.random</a></li></ol></li></ol></li></ol><ol><li><a href=#reshape>Reshape</a></li><li><a href=#基本属性>基本属性</a></li><li><a href=#数据访问>数据访问</a></li></ol></nav></div></section></aside></div><script src=https://cdn.jsdelivr.net/npm/node-vibrant@3.1.5/dist/vibrant.min.js integrity="sha256-5NovOZc4iwiAWTYIFiIM7DxKUXKWvpVEuMEPLzcm5/g=" crossorigin=anonymous></script><script type=text/javascript src=/blog/ts/main.js defer></script>
+<script>(function(){const e=document.createElement("link");e.href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap",e.type="text/css",e.rel="stylesheet",document.head.appendChild(e)})()</script></body></html>

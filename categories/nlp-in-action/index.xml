@@ -1,0 +1,605 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>NLP in action on 一层</title><link>https://emerywan.github.io/blog/categories/nlp-in-action/</link><description>Recent content in NLP in action on 一层</description><generator>Hugo -- gohugo.io</generator><lastBuildDate>Sat, 01 Jan 2022 01:00:00 +0800</lastBuildDate><atom:link href="https://emerywan.github.io/blog/categories/nlp-in-action/index.xml" rel="self" type="application/rss+xml"/><item><title>Long Shorter Term Memory</title><link>https://emerywan.github.io/blog/p/nlp-in-action/long-short-term-memory/</link><pubDate>Sat, 19 Mar 2022 20:36:14 +0800</pubDate><guid>https://emerywan.github.io/blog/p/nlp-in-action/long-short-term-memory/</guid><description>&lt;img src="https://nlp.letout.cn/img/banner.png" alt="Featured image of post Long Shorter Term Memory" />&lt;p>这一节，将介绍 &lt;code>LSTM (Long Shorter Term Memory)&lt;/code>，以及用 &lt;code>pytorch&lt;/code> 实现 &lt;code>LSTM &lt;/code>。&lt;/p>
+&lt;p>&lt;code>LSTM&lt;/code> 是一种 &lt;code>RNN&lt;/code> 模型，是对 &lt;code>simple RNN&lt;/code> 的改进，&lt;code>LSTM&lt;/code> 可以避免梯度消失的问题，可以有更长的记忆。&lt;code>LSTM&lt;/code> 的论文在 1997 年发表。&lt;/p>
+&lt;blockquote>
+&lt;p>Hochreiter and Schmidhuber. Long short-term memory. Neural computation, 1997.&lt;/p>
+&lt;/blockquote>
+&lt;h2 id="-lstm">🔖 LSTM&lt;/h2>
+&lt;p>&lt;code>LSTM&lt;/code> 也是一种循环神经网络，原理跟 &lt;code>simple RNN&lt;/code> 差不多，每当读取一个新的输入 $x$，就会更新状态 $h$。&lt;/p>
+&lt;p>&lt;img src="https://nlp.letout.cn/img/nlp/04/1.png"
+loading="lazy"
+alt="1"
+>&lt;/p>
+&lt;p>&lt;code>LSTM&lt;/code> 的结构比 &lt;code>simple RNN&lt;/code> 要复杂很多，&lt;code>simple RNN&lt;/code> 只有一个参数矩阵， &lt;code>LSTM&lt;/code> 有四个参数矩阵。接下来我们具体来看看 &lt;code>LSTM&lt;/code> 的内部结构。&lt;/p>
+&lt;h3 id="-传送带">🚠 传送带&lt;/h3>
+&lt;p>&lt;code>LSTM&lt;/code> 最重要的设计是这个传送带 &lt;code>Conveyor belt&lt;/code>，即为向量 $C$。过去的信息通过传送带，直接送到下一个时刻，不会发生太大的变化。&lt;code>LSTM&lt;/code> 就是靠传送带来避免梯度消失的问题。&lt;/p>
+&lt;p>&lt;img src="https://nlp.letout.cn/img/nlp/04/2.png"
+loading="lazy"
+alt="2"
+>&lt;/p>
+&lt;p>&lt;code>LSTM&lt;/code> 中有很多个门 &lt;code>gate&lt;/code>，可以有选择的让信息通过。&lt;/p>
+&lt;h3 id="-forgate-gate">🚪 Forgate Gate&lt;/h3>
+&lt;p>首先介绍 &lt;code>forget gate&lt;/code> 遗忘门。遗忘门由 ☘️ &lt;code>sigmoid&lt;/code> 函数，和 🍀 元素积 &lt;code>element wise multiplication&lt;/code> 两部分组成。&lt;/p>
+&lt;p>&lt;img src="https://nlp.letout.cn/img/nlp/04/3.png"
+loading="lazy"
+alt="3"
+>&lt;/p>
+&lt;p>🌼 输入 &lt;code>sigmoid&lt;/code> 的是一个向量 $a$，&lt;code>sigmoid&lt;/code> 作用到向量 $a$ 的每一个元素上，把每一个元素都压到 &lt;code>0&lt;/code> 和 &lt;code>1&lt;/code> 之间。&lt;/p>
+&lt;p>举个例子，假如向量 $a$ 是：&lt;code>[1, 3, 0, -2]&lt;/code>，那么，&lt;code>sigmoid&lt;/code> 函数将分别作用在这四个元素上。然后分别输出：&lt;code>[0.73, 0.95, 0.5, 0.12]&lt;/code> 。&lt;/p>
+&lt;p>&lt;img src="https://nlp.letout.cn/img/nlp/04/4.png"
+loading="lazy"
+alt="4"
+>&lt;/p>
+&lt;p>输入的向量 $a$，与输出的向量 $f$ 应该有相同的维度，这个例子里，向量 $a$ 是四维的，向量 $f$ 也会是四维的。&lt;/p>
+&lt;p>🌸 算出 $f$ 向量之后，计算传送带向量 $c$ 与遗忘门向量 $f$ 的元素积。元素积 &lt;code>element wise multiplication&lt;/code> 是这样算的：&lt;/p>
+&lt;p>$c$ 和 $f$ 都是四维的向量，将它们的每一个元素分别相乘。所以元素积的结果也是个四维的向量。&lt;/p>
+&lt;p>&lt;img src="https://nlp.letout.cn/img/nlp/04/5.png"
+loading="lazy"
+alt="5"
+>&lt;/p>
+&lt;p>这个遗忘门 $f$，有选择的让传送带 $c$ 的值通过：&lt;/p>
+&lt;ul>
+&lt;li>
+&lt;p>🌰 假如 $f$ 的一个元素是 $0$，那么 $c$ 对应的元素不能通过，对应的输出是 $0$；&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>🌰 假如 $f$ 的一个元素是 $1$，那么 $c$ 对应的元素就全部通过，对应的输出是 $c$ 本身。&lt;/p>
+&lt;/li>
+&lt;/ul>
+&lt;p>遗忘门 $f$ 具体是这么算出来的：首先看这张结构图，$f_t$ 是上一个状态 $h_{t-1}$，与当前输入 $x$ 的函数。&lt;/p>
+&lt;p>&lt;img src="https://nlp.letout.cn/img/nlp/04/6.png"
+loading="lazy"
+alt="6"
+>&lt;/p>
+&lt;p>把状态 $h_{t-1}$ 与输入 $x_t$ 做拼接 &lt;code>concatnation&lt;/code>，得到更高维度的向量。然后计算矩阵 $w_f$ 与这个向量的乘积，得到一个向量，再用 &lt;code>sigmoid&lt;/code> 函数，得到向量 $f_t$，$f_t$ 的每一个元素都介于 &lt;code>0&lt;/code> 和 &lt;code>1&lt;/code> 之间，遗忘门有一个参数矩阵 $w_f$，需要通过 &lt;strong>反向传播&lt;/strong> 从训练数据里学习。&lt;/p>
+&lt;p>&lt;img src="https://nlp.letout.cn/img/nlp/04/7.png"
+loading="lazy"
+alt="7"
+>&lt;/p>
+&lt;h3 id="-input-gate">🚪 Input Gate&lt;/h3>
+&lt;p>刚才讲了遗忘门，现在来看一看 &lt;code>input gate&lt;/code> 输入门。在这张结构图里，输入门 $i_t$，依赖于旧的状态向量 $h_{t-1}$，和新的输入 $x_t$。&lt;/p>
+&lt;p>&lt;img src="https://nlp.letout.cn/img/nlp/04/8.png"
+loading="lazy"
+alt="8"
+>&lt;/p>
+&lt;p>输入门 $i_t$ 的计算类似于遗忘门，把旧的状态 $h_{t-1}$，与新的输入 $x_t$ 做拼接 &lt;code>concatnation&lt;/code>，得到更高维的向量。&lt;/p>
+&lt;p>然后计算矩阵 $w_i$ 与这个向量的乘积得到一个向量，最后使用激活函数 &lt;code>sigmod&lt;/code>，得到向量 $i_t$（$i_t$ 的每一个元素都介于 $0$ 和 $1$ 之间）。&lt;/p>
+&lt;p>&lt;img src="https://nlp.letout.cn/img/nlp/04/9.png"
+loading="lazy"
+alt="8"
+>&lt;/p>
+&lt;p>输入门也有自己的参数矩阵，计作 $W_i$，$W_i$ 也需要从训练数据中学习。&lt;/p>
+&lt;h3 id="-new-value">🆕 New Value&lt;/h3>
+&lt;p>还需要计算新的输入值 &lt;code>new value&lt;/code> $\widetilde{c}_t$，$\widetilde{c}_t$ 是个向量，计算方法跟遗忘门和输入门都很像。也是把旧状态 $h_{t-1}$，与新输入 $x_t$ 做拼接，再乘到参数矩阵上。&lt;/p>
+&lt;p>区别在于激活函数不是 &lt;code>sigmoid&lt;/code>，而是双曲正切函数 &lt;code>tanh&lt;/code>，所以算出的向量 $\widetilde{c}_t$ 的元素都介于 &lt;code>(-1, +1)&lt;/code>。&lt;/p>
+&lt;p>&lt;img src="https://nlp.letout.cn/img/nlp/04/10.png"
+loading="lazy"
+alt="8"
+>&lt;/p>
+&lt;p>计算 &lt;code>new value&lt;/code> $\widetilde{c}_t$，也需要一个单独的参数矩阵矩阵 $w_c$。&lt;/p>
+&lt;h3 id="-更新-传输带">🚂 更新 传输带&lt;/h3>
+&lt;p>我们已经算出了遗忘门 $f_t$，输入门 $i_t$，以及新的输入值 $\widetilde{c}_t$，我们还知道传送带旧的值 $c_{t-1}$，现在可以更新传送带 $c$ 了。&lt;/p>
+&lt;p>&lt;img src="https://nlp.letout.cn/img/nlp/04/11.png"
+loading="lazy"
+alt="8"
+>&lt;/p>
+&lt;p>1️⃣ 计算遗忘门 $f_t$ 和传送带旧的值 $c_{t-1}$ 的元素积。&lt;/p>
+&lt;p>遗忘门 $f_t$，和传送带 $c_{t-1}$ 是维度相同的向量，算出的乘积也是个向量。遗忘门 $f_t$，可以选择性的遗忘 $c_{t-1}$ 中的一些元素，如果 $f_t$ 中的一个元素是 $0$，那么 $c_{t-1}$ 相应的元素就会被遗忘。&lt;/p>
+&lt;p>上一步通过 🚪 遗忘门 选择性删除掉了传送带 $c_{t-1}$ 的一些元素，现在要往传送带上添加新的信息。&lt;/p>
+&lt;p>2️⃣ 计算输入门 $i_t$，和新的输入值 $\widetilde{c}_t$ 的元素积。&lt;/p>
+&lt;p>输入门 $i_t$ 和新的值 $\widetilde{c}_t$ 都是维度相同的向量，他们的乘积也是维度相同的向量，把乘积加到传送带上，这样就完成了对传送带的一轮更新。&lt;/p>
+&lt;p>用遗忘门删除了传送带上的一些信息，然后用遗忘门输入加入新的信息，得到了传送带新的值 $c_t$，到现在，已经更新完传送带 $c$ 。&lt;/p>
+&lt;h3 id="-output-gate">🚪 Output Gate&lt;/h3>
+&lt;p>最后一步是计算 &lt;code>LSTM&lt;/code> 的输出，也就是状态向量 $h_t$。&lt;/p>
+&lt;p>$h_t$ 是这么计算的：首先计算输出门 $o_t$，输出门 $o_t$ 跟前面的遗忘门，输入门的计算基本一样。&lt;/p>
+&lt;p>把旧的状态 $h_{t-1}$，与新的输入 $x_t$ 做拼接，得到更高维的向量，然后算矩阵 $W_o$ 与这个向量的乘积，得到一个向量，最后使用激活函数 &lt;code>sigmod&lt;/code> 得到向量 $o_t$。$o_t$ 的每一个元素都介于 &lt;code>(0, 1)&lt;/code>，输出门也有自己的参数向量 $W_o$，$W_o$ 也需要从训练数据中学习。&lt;/p>
+&lt;p>&lt;img src="https://nlp.letout.cn/img/nlp/04/12.png"
+loading="lazy"
+alt="12"
+>&lt;/p>
+&lt;p>现在计算状态向量 $h_t$，对传送带 $c_t$ 的每一个元素求双曲正切&lt;code>tanh&lt;/code>，把元素全都压到 &lt;code>(-1, +1)&lt;/code> 区间。&lt;/p>
+&lt;p>然后，求这两个向量的元素积，这个红色向量是刚刚求出的输出门 $o_t$，这样就得到了状态向量 $h_t$。&lt;/p>
+&lt;p>&lt;img src="https://nlp.letout.cn/img/nlp/04/13.png"
+loading="lazy"
+alt="13"
+>&lt;/p>
+&lt;p>看一下结构图，$h_t$ 他有两份 &lt;code>copys&lt;/code>，$h_t$ 的一份 &lt;code>copy&lt;/code> 传输到了下一步，另一份 &lt;code>copy&lt;/code> 成了 &lt;code>LSTM&lt;/code> 的输出。&lt;/p>
+&lt;p>到第 &lt;code>t&lt;/code> 步为止，一共有 &lt;code>t&lt;/code> 个向量 $x$ 被输入了 &lt;code>LSTM&lt;/code>，我们可以认为所有这些 $x$ 向量的信息，都积累在了状态 $h_t$ 里面。&lt;/p>
+&lt;h2 id="-lstm-的参数数量">🧮 LSTM 的参数数量&lt;/h2>
+&lt;p>我们来算一下 &lt;code>LSTM&lt;/code> 的参数数量，&lt;code>LSTM&lt;/code> 有 ❶ 遗忘门；❷ 输入门；❸ 新的输入；❹ 输出门。&lt;/p>
+&lt;p>&lt;img src="https://nlp.letout.cn/img/nlp/04/14.png"
+loading="lazy"
+alt="14"
+>&lt;/p>
+&lt;p>这四个模块都有各自的参数矩阵 $w$，所以一共有 &lt;code>4&lt;/code> 个参数矩阵，矩阵的行数是：$shape(h)$，列数是： $shape(h)+shape(x)$&lt;/p>
+&lt;p>所以，&lt;code>LSTM&lt;/code> 参数的数量是：&lt;/p>
+&lt;p>$4 * shape(h) * [ shape(h) + shape(x)]$&lt;/p>
+&lt;h2 id="-实现-lstm">🛠 实现 LSTM&lt;/h2>
+&lt;p>&lt;strong>Doing&lt;/strong>&lt;/p>
+&lt;h2 id="-总结">🎐 总结&lt;/h2>
+&lt;p>总结一下这一节的内容，这节介绍了 &lt;code>LSTM&lt;/code> 模型和用 &lt;code>PyTorch&lt;/code> 的实现。&lt;/p>
+&lt;p>&lt;code>LSTM&lt;/code> 和 &lt;code>simple RNN&lt;/code> 主要的区别，是用了一条传送带，让过去的信息可以很容易传输到下一时刻，这样就有了更长的记忆。&lt;/p>
+&lt;p>&lt;code>LSTM&lt;/code> 的表现总是比 &lt;code>simple RNN&lt;/code> 要好，所以当我们想使用 &lt;code>RNN&lt;/code> 的时候就用 🙋‍♂️ &lt;code>LSTM&lt;/code> 模型，而不要用 🙅‍♂️ &lt;code>simple RNN&lt;/code> 模型。&lt;/p>
+&lt;p>&lt;code>LSTM&lt;/code> 有四个组件，分别是：&lt;/p>
+&lt;ul>
+&lt;li>🚪 &lt;code>Forget Gate&lt;/code> 遗忘门&lt;/li>
+&lt;li>🚪 &lt;code>Input Gate&lt;/code> 输入门&lt;/li>
+&lt;li>🆕 &lt;code>New Value&lt;/code> 新的输入&lt;/li>
+&lt;li>🚪 &lt;code>Output Gate&lt;/code> 输出门&lt;/li>
+&lt;/ul>
+&lt;p>这四个组件各自有一个参数矩阵，所以一共有四个参数矩阵，&lt;code>LSTM&lt;/code> 参数的数量是：&lt;/p>
+&lt;p>$4 * shape(h) * [ shape(h) + shape(x)]$&lt;/p>
+&lt;p>下一节将介绍：&lt;/p>
+&lt;ul>
+&lt;li>&lt;code>stacked RNN&lt;/code>&lt;/li>
+&lt;li>&lt;code>bi-directional RNN&lt;/code>&lt;/li>
+&lt;li>预训练&lt;/li>
+&lt;/ul>
+&lt;h2 id="-参考">⛓ 参考&lt;/h2>
+&lt;ul>
+&lt;li>🔗 &lt;a class="link" href="https://github.com/wangshusen/DeepLearning/blob/master/Slides/9_RNN_3.pdf" target="_blank" rel="noopener"
+>https://github.com/wangshusen/DeepLearning/blob/master/Slides/9_RNN_3.pdf&lt;/a>&lt;/li>
+&lt;li>🔗 &lt;a class="link" href="https://colah.github.io/posts/2015-08-Understanding-LSTMs/" target="_blank" rel="noopener"
+>https://colah.github.io/posts/2015-08-Understanding-LSTMs/&lt;/a>&lt;/li>
+&lt;li>🔗 &lt;a class="link" href="https://www.youtube.com/watch?v=vTouAvxlphc" target="_blank" rel="noopener"
+>https://www.youtube.com/watch?v=vTouAvxlphc&lt;/a>&lt;/li>
+&lt;li>🔗 &lt;a class="link" href="https://www.bilibili.com/video/BV1UK4y1d7xa" target="_blank" rel="noopener"
+>https://www.bilibili.com/video/BV1UK4y1d7xa&lt;/a>&lt;/li>
+&lt;/ul></description></item><item><title>文本处理与词嵌入</title><link>https://emerywan.github.io/blog/p/nlp-in-action/text-processing-and-word-embedding/</link><pubDate>Fri, 11 Mar 2022 21:14:45 +0800</pubDate><guid>https://emerywan.github.io/blog/p/nlp-in-action/text-processing-and-word-embedding/</guid><description>&lt;img src="https://nlp.letout.cn/img/banner.png" alt="Featured image of post 文本处理与词嵌入" />&lt;p>本节主要内容为 &lt;strong>文本处理&lt;/strong> &lt;code>Text Processing&lt;/code> 和 &lt;strong>词嵌入&lt;/strong> &lt;code>Word Embedding&lt;/code>。本节和下面两节内容都会使用 IMDb 电影评论的数据，用来搭建机器学习模型分析电影评论。&lt;/p>
+&lt;h2 id="-imdb">🌱 IMDb&lt;/h2>
+&lt;p>&lt;a class="link" href="https://zh.wikipedia.org/wiki/%E4%BA%92%E8%81%94%E7%BD%91%E7%94%B5%E5%BD%B1%E8%B5%84%E6%96%99%E5%BA%93" target="_blank" rel="noopener"
+>IMDb&lt;/a> 是最有名的电影评论网站，用户可以在 IMDb 上给电影打分，1 分是非常讨厌，10 分是非常喜欢，如果乐意，还可以写一段电影评论。&lt;/p>
+&lt;p>&lt;img src="https://nlp.letout.cn/img/nlp/02/imdb.png"
+loading="lazy"
+alt="IMDb"
+>&lt;/p>
+&lt;p>如果不给你看分数，只给你看评论，你大概能猜到用户打的分数，但你的猜测可能不太准确。如果换种方式，让你判断电影评论是 &lt;strong>正面&lt;/strong> &lt;code>positive&lt;/code> 的还是 &lt;strong>负面&lt;/strong> &lt;code>negative&lt;/code> 的，你应该会有很高的准确率。有人从 IMDb 上爬了 5 万条电影评论，这些评论都是很极端的，都是强烈的喜欢，或者强烈反感。这个二分类问题对于人来说很简单，人读一下电影评论就能轻易知道这是正面评价还是负面评价，人应该能有 100% 的准确率，这个数据集被分成两半，2 万 5 千条作为训练数据 &lt;code>Train&lt;/code>，另外 2 万 5 千条作为测试数据 &lt;code>Test&lt;/code>。&lt;/p>
+&lt;!-- raw HTML omitted -->
+&lt;p>你可以在下面的链接中获取到数据集：&lt;a class="link" href="https://ai.stanford.edu/~amaas/data/sentiment/" target="_blank" rel="noopener"
+>https://ai.stanford.edu/~amaas/data/sentiment/&lt;/a>&lt;/p>
+&lt;h2 id="-文本处理文本处理">🔖 文本处理文本处理&lt;/h2>
+&lt;p>在词嵌入 &lt;code>Word Embedding&lt;/code> 和搭建机器学习模型之前，首先要进行文本处理，将文本变成序列 &lt;code>Sequence&lt;/code>，文本处理很无聊，但我们应该重视它，文本处理的好坏，会直接影响机器学习模型的准确率。&lt;/p>
+&lt;h3 id="-tokenization">🚀 Tokenization&lt;/h3>
+&lt;p>文本处理的第一步是 &lt;code>Tokenization&lt;/code>，把文本分割成很多 &lt;code>tokens&lt;/code>，这里我们把文本分割成很多单词，一个 &lt;code>token&lt;/code> 就是一个单词（假如你把文本分割成字符，那么一个 &lt;code>token&lt;/code> 就是一个字符），做完 &lt;code>Tokenization&lt;/code>，一个很长的字符串就被分割成一个很多单词的列表。&lt;!-- raw HTML omitted -->&lt;/p>
+&lt;p>&lt;img src="https://nlp.letout.cn/img/nlp/02/1.png"
+loading="lazy"
+alt="1"
+>&lt;/p>
+&lt;p>&lt;code>Tokenization&lt;/code> 看起来很简单，但是讲究很多。比如：&lt;/p>
+&lt;ul>
+&lt;li>🌰 是否应该把大写变成小写？&lt;/li>
+&lt;/ul>
+&lt;p>通常情况下应该把大写变成小写，大小写单词通常是一个意思；但有时候会混淆单词（Apple -&amp;gt; apple），比如 Apple 是苹果公司，apple 是水果，大小写的 apple 并不是相同的单词。&lt;/p>
+&lt;ul>
+&lt;li>🌰 去除停用词。&lt;code>stop word&lt;/code>&lt;/li>
+&lt;/ul>
+&lt;p>有些应用会去除 stop word，它是 the、a、of 等最高频的单词，这些词几乎出现在所有的句子里，对这个二分类问题几乎是没有帮助。&lt;/p>
+&lt;ul>
+&lt;li>🌰 拼写纠错。&lt;/li>
+&lt;/ul>
+&lt;p>用户发电影评论的时候，大部分情况下并不会仔细检查，所以写的东西难免会有拼写错误，所以做拼写纠错通常是有用的。&lt;/p>
+&lt;p>这里只是举了几个例子，实际上做 &lt;code>Tokenization&lt;/code> 的时候需要做大量的工作，&lt;code>Tokenization&lt;/code> 看似简单，但实际上并不容易。&lt;/p>
+&lt;h3 id="-build-dictionary">🧰 Build Dictionary&lt;/h3>
+&lt;p>第二步是建立一个字典。可以先统计词频，去掉一些低频词，让后让每个单词对应一个正整数，比如让 &lt;code>the -&amp;gt; 1; cat -&amp;gt; 2; sat -&amp;gt; 3&lt;/code>。有了这个字典，就可以把每个单词对应到一个整数，这样一来，一句话就可以用正整数的列表表示，这个列表被称为序列 &lt;code>Sequences&lt;/code>。&lt;!-- raw HTML omitted -->&lt;/p>
+&lt;p>&lt;img src="https://nlp.letout.cn/img/nlp/02/2.png"
+loading="lazy"
+alt="2"
+>&lt;/p>
+&lt;p>如果有必要的话，还得进一步做 &lt;code>one-hot encoding&lt;/code>，把单词表示成 &lt;code>one-hot&lt;/code> 向量。&lt;/p>
+&lt;p>在电影评论的例子里，数据是 5 万条电影评论，每条电影评论可以表示成一个字符串。做完 &lt;code>Tokenization&lt;/code> 和 &lt;code>Encoding&lt;/code> 后，每条电影评论都会转换成一个 &lt;code>Sequences&lt;/code>，也就是一个正整数的列表。&lt;!-- raw HTML omitted -->&lt;/p>
+&lt;p>&lt;img src="https://nlp.letout.cn/img/nlp/02/3.png"
+loading="lazy"
+alt="3"
+>&lt;/p>
+&lt;p>电影评论有长有短，有人只能写几个字的评论，有人能洋洋洒洒写几千字，所以得到的这些 &lt;code>Sequences&lt;/code> 的长度也各不相同。比如这两条 &lt;code>Sequences&lt;/code> 的长度分别是 52 和 90。&lt;!-- raw HTML omitted -->&lt;/p>
+&lt;p>&lt;img src="https://nlp.letout.cn/img/nlp/02/4.png"
+loading="lazy"
+alt="4"
+>&lt;/p>
+&lt;p>这就造成了一个问题，训练数据没有对齐，每条 &lt;code>Sequences&lt;/code> 都有不同的长度。做机器学习的时候，我们需要把数据存储到矩阵或者张量里，每条序列都得有相同的长度，需要把序列对齐。&lt;!-- raw HTML omitted -->&lt;/p>
+&lt;p>&lt;img src="https://nlp.letout.cn/img/nlp/02/5.png"
+loading="lazy"
+alt="5"
+>&lt;/p>
+&lt;p>解决方案是这样的：我们可以固定长度为 $w$。假如一个序列长度太长，超过了 $w$ 个词，就砍掉前面的词，只保留最后面 $w$个词（当然保留最前面 $w$ 个词也同样可以）；假如一个序列太短，不到 $w$ 个词，那么就做 &lt;code>zero padding&lt;/code> 用 0 来补齐，把长度增加到 $w$。&lt;!-- raw HTML omitted -->&lt;/p>
+&lt;p>&lt;img src="https://nlp.letout.cn/img/nlp/02/6.png"
+loading="lazy"
+alt="6"
+>&lt;/p>
+&lt;p>这样一来，所有序列的长度都是 $w$，可以存储到一个矩阵里。&lt;/p>
+&lt;h2 id="-词嵌入">🍀️ 词嵌入&lt;/h2>
+&lt;p>文本处理已经完成了，现在每个词都用一个正整数来表示，下一步是 &lt;code>Word Embedding&lt;/code>，把每个词都表示为一个一维向量。&lt;/p>
+&lt;p>现在每个单词都用一个数字来表示，该怎么把这些 &lt;code>Categorical&lt;/code> 特征表示为数值向量呢？&lt;!-- raw HTML omitted -->&lt;/p>
+&lt;p>显然可以做 &lt;code>one-hot encoding&lt;/code>，用一个 &lt;code>one-hot&lt;/code> 向量来表示一个单词。&lt;!-- raw HTML omitted -->
+比如 &lt;code>good: index = 2&lt;/code>，于是使用标准正交积 $e_2$ 来表示，它的第二个元素是 1，其余元素都是 0，$e_2=[0, 1, 0, 0, &amp;hellip;, 0]$&lt;/p>
+&lt;p>假如 &lt;code>vocabulary = v&lt;/code>，也就是说字典里一共有 $v$ 个单词，那么就需要维度 &lt;code>dimension = v&lt;/code> 的 &lt;code>one-hot&lt;/code> 向量，要是字典里有 1 万个单词，那么这些 &lt;code>one-hot&lt;/code> 向量都是 1 万维的，这样的向量维度是在太高了。下一节介绍 RNN 的时候你会看到，RNN 的参数数量正比于输入向量的维度，我们肯定不想让输入的向量是 1 万维的，否则一层 RNN 将会有好几十万个参数。所以我们要做 &lt;code>Word Embedding&lt;/code>，把这些高维 &lt;code>one-hot&lt;/code> 向量映射到低维向量。&lt;/p>
+&lt;p>具体做法是吧 &lt;code>one-hot&lt;/code> 向量 $e_i$ 乘到参数矩阵 $P^T$ 上，矩阵 $P^T$ 的大小是 $d*v$。其中 $d$ 是词向量的维度，由用户自己决定；$v$ 是 &lt;code>vocabulary&lt;/code>，表示字典里单词的数量。&lt;/p>
+&lt;p>&lt;img src="https://nlp.letout.cn/img/nlp/02/7.png"
+loading="lazy"
+alt="7"
+>&lt;/p>
+&lt;p>矩阵的乘法的结果记做向量 $x_i$，$x_i$ 就是一个词向量，维度是 $d*1$，如果 &lt;code>one-hot&lt;/code> 向量 $e$ 的第三个元素是 1，那么 $x_i$ 就是 $P^T$ 矩阵的第三列，可以看出，$P^T$ 矩阵每一列都是一个词向量。&lt;/p>
+&lt;p>同理，下面这个参数矩阵 $P$ 的每一行都是一个词向量。这个矩阵的行数是 $v$，也就是 &lt;code>vocabulary&lt;/code>；每一行对应一个单词，矩阵的列数是 $d$，$d$ 是用户决定的，$d$ 的大小会影响机器学习模型的表现，应该用 交叉验证 &lt;code>Cross Validation&lt;/code> 用来选择一个比较好的 $d$。&lt;/p>
+&lt;p>字典里的第一个词的是 &lt;code>movie&lt;/code>，那么第一行就是 &lt;code>movie&lt;/code> 的词向量；字典里的第二个词是 &lt;code>good&lt;/code>，那么第二行就是 &lt;code>good&lt;/code> 的词向量。&lt;/p>
+&lt;p>&lt;img src="https://nlp.letout.cn/img/nlp/02/8.png"
+loading="lazy"
+alt="8"
+>&lt;/p>
+&lt;p>我们的任务是判断电影评论是正面的还是负面的，这个参数矩阵是从训练数据中学习出来的，所以这些词向量都带有感情色彩，假如这些词向量都是二维的，我们就可以在平面坐标系中标出这些词向量。&lt;/p>
+&lt;p>&lt;img src="https://nlp.letout.cn/img/nlp/02/9.png"
+loading="lazy"
+alt="9"
+>&lt;/p>
+&lt;p>&lt;code>fantastic; good; fun&lt;/code> 这些词向量都带有正面情感，所以这三个词的词向量学出来都比较接近；同理，&lt;code>poor; boring; mediocre&lt;/code> 这些词带有负面情感，所以学出来的词同样也应该比较接近，但是这些词的词向量应该远离正面色彩的词向量。像 &lt;code>movie; is&lt;/code> 这样的中性词，没有感情色彩，它们应该在中间。&lt;/p>
+&lt;h2 id="-总结">🎐 总结&lt;/h2>
+&lt;p>最后总结一下这一章的内容。&lt;/p>
+&lt;p>这一节上半部分，说明了文本处理是什么样的。给我们一条电影评论，首先做 &lt;code>Tokenization&lt;/code>，把电影评论分割成很多单词，然后把很多单词编码成数字，这样一整条电影评论就可以很多正整数来表示，我们把这个正整数序列叫做 &lt;code>Sequences&lt;/code>，就是神经网络中 &lt;code>Embedding&lt;/code> 层的输入。由于电影评论的长短不一，得到的 &lt;code>Sequence&lt;/code> 的长短也不一样，没办法存储在一个矩阵里，解决方案是 &lt;code>Alignment&lt;/code> 对齐。假设最大长度为 &lt;code>20&lt;/code>，如果长度大于&lt;code>20&lt;/code>，就只保留最后 &lt;code>20&lt;/code> 个单词；如果长度不到 &lt;code>20&lt;/code>，就用 &lt;code>0&lt;/code> 补齐，把长度增加到 &lt;code>20&lt;/code>。这样一来，每个 &lt;code>Sequences&lt;/code> 长度都相同。&lt;/p></description></item><item><title>RNN</title><link>https://emerywan.github.io/blog/p/nlp-in-action/simple-rnn/</link><pubDate>Tue, 08 Mar 2022 20:36:14 +0800</pubDate><guid>https://emerywan.github.io/blog/p/nlp-in-action/simple-rnn/</guid><description>&lt;img src="https://nlp.letout.cn/img/banner.png" alt="Featured image of post RNN" />&lt;p>这一节我们来学习&lt;strong>循环神经网络&lt;/strong>&lt;code>Recurrent Neural Networks&lt;/code>。本节的内容是 &lt;code>Simple RNN&lt;/code>，以及用 &lt;code>Pytorch&lt;/code> 编程实现 &lt;code>Simple RNN&lt;/code>。&lt;/p>
+&lt;h2 id="-简介">🌱 简介&lt;/h2>
+&lt;p>现在 &lt;code>RNN&lt;/code> 没有以前流行，尤其是在自然语言处理上，&lt;code>RNN&lt;/code> 已经有一些过时了，如果训练的数据足够多，&lt;code>RNN&lt;/code> 的效果不如 &lt;code>Transformer&lt;/code> 模型，但是在小规模的问题上，&lt;code>RNN&lt;/code> 还是很有用的。&lt;/p>
+&lt;h2 id="-如何建模时序数据">🔖 如何建模时序数据？&lt;/h2>
+&lt;p>机器学习中经常用到文本、语音等 &lt;strong>时序数据&lt;/strong>&lt;code>sequential data&lt;/code>（按时间顺序记录的数据列，有长度不固定的特点）。&lt;/p>
+&lt;p>首先思考一个问题，怎么对这样的时序数据进行建模？
+在上一小节中，我们将一段文字整体输入到一个逻辑回归 &lt;code>Logistic Regression&lt;/code> 模型中，让模型来做二分类，这属于一个 &lt;code>one-to-one&lt;/code> 模型，一个输入对应一个输出。&lt;/p>
+&lt;p>&lt;img src="https://nlp.letout.cn/img/nlp/03/1.png"
+loading="lazy"
+alt="1"
+>&lt;/p>
+&lt;p>全连接神经网络和卷积神经网络都属于 &lt;code>one-to-one&lt;/code> 模型。&lt;/p>
+&lt;p>人脑并不会使用 &lt;code>one-to-one&lt;/code> 模型处理时序数据，不会把一整段文字全部输入到大脑，我们在阅读的时候，会从左到右阅读一段文字，不断地在大脑里积累信息，阅读一段话之后，你脑子里就积累了一段文字的大意。&lt;/p>
+&lt;p>&lt;code>one-to-one&lt;/code> 模型要求一个输入对应一个输出，比如：输入一张图片，输出每一类的概率值，&lt;code>one-to-one&lt;/code> 的模型比较适合这类图片问题，但是不太适合文本问题。&lt;/p>
+&lt;p>对于文本问题，输入和输出的长度并不固定，一段话可长可短，所以输入的长度并不固定；输出的长度也不固定，比如将英语翻译成汉语，一句英语有十个单词，翻译成汉语可能有十个字，可能有八个字，也可能是四个字的成语，输出汉语的字数并不固定，由于输入和输出的长度不固定，&lt;code>one-to-one&lt;/code> 模型就不太适合了。&lt;/p>
+&lt;p>&lt;img src="https://nlp.letout.cn/img/nlp/03/translation.png"
+loading="lazy"
+alt="translation"
+>&lt;/p>
+&lt;p>对于时序数据，更好的是 &lt;code>many-to-one&lt;/code> 或者是 &lt;code>many-to-many&lt;/code> 模型，&lt;code>RNN&lt;/code> 就是这样的模型，输入和输出的长度都不固定。所以 &lt;code>RNN&lt;/code> 很适合语音，文本等时序序列数据。&lt;/p>
+&lt;p>&lt;img src="https://nlp.letout.cn/img/nlp/03/2.png"
+loading="lazy"
+alt="2"
+>&lt;/p>
+&lt;h2 id="-rnn">🍀️ RNN&lt;/h2>
+&lt;p>&lt;code>RNN&lt;/code> 和跟人的阅读习惯很类似：人每次看一个词，会逐渐在大脑里积累信息；&lt;code>RNN&lt;/code> 每看一个词，会用状态向量 $h$ 来积累阅读过的信息。&lt;/p>
+&lt;p>首先，我们将输入的每个词用 词嵌入&lt;code>word embedding&lt;/code> 变成一个词向量 $x$。&lt;/p>
+&lt;p>&lt;img src="https://nlp.letout.cn/img/nlp/03/3.png"
+loading="lazy"
+alt="3"
+>&lt;/p>
+&lt;p>每次把一个词向量输入 &lt;code>RNN&lt;/code>，就会更新状态 $h$ ，把新的输入积累到状态 $h$ 里面。&lt;/p>
+&lt;p>&lt;img src="https://nlp.letout.cn/img/nlp/03/4.png"
+loading="lazy"
+alt="4"
+>&lt;/p>
+&lt;p>在 $h_0$中，包含了第一个词 &lt;code>the&lt;/code> 的信息，在 $h_1$ 里面，包含了前两个 &lt;code>the cat&lt;/code> 的信息；以此类推，状态 $h_2$ 包含 了前三个词 &lt;code>the cat sat&lt;/code> 的信息，最后一个状态 $h_t$ 包含了整句话的信息，可以把 $h_t$ 看做 &lt;code>RNN&lt;/code> 从整句话 &lt;code>the cat sat on the mat&lt;/code> 抽取的特征向量，在更新状态 $h$ 的时候，需要用到参数矩阵 $A$。&lt;/p>
+&lt;p>&lt;img src="https://nlp.letout.cn/img/nlp/03/5.png"
+loading="lazy"
+alt="5"
+>&lt;/p>
+&lt;p>&lt;strong>注意：整个 RNN 只有一个参数矩阵&lt;/strong> $A$。无论这条链有多长，参数 $A$ 只有一个，$A$ 随机初始化，然后利用训练数据来学习 $A$。下面首先讲解 &lt;code>Simple RNN Model&lt;/code>。&lt;/p>
+&lt;h2 id="-simple-rnn">🚀 Simple RNN&lt;/h2>
+&lt;p>我们具体看看，&lt;code>Simple RNN&lt;/code> 简单循环神经网络是怎么把输入的词向量 $x$，结合到状态 $h$ 中的。&lt;/p>
+&lt;p>&lt;img src="https://nlp.letout.cn/img/nlp/03/6.png"
+loading="lazy"
+alt="6"
+>&lt;/p>
+&lt;p>我们将上一个状态记做 $h_t-1$，新输入词向量记做 $x_t$，将这两个向量做拼接 &lt;code>concatenation&lt;/code>，得到一个更高维的向量。&lt;/p>
+&lt;p>&lt;img src="https://nlp.letout.cn/img/nlp/03/8.png"
+loading="lazy"
+alt="8"
+>&lt;/p>
+&lt;p>图中这个矩阵 $A$ 是 &lt;code>RNN&lt;/code> 的模型参数，这里计算矩阵 $A$ 和这个向量的乘积（拼接后的向量），矩阵和向量的乘积是一个向量，然后使用激活函数 &lt;code>tanh&lt;/code> 作用在向量的每一个元素上，最后把激活函数的输出记做新的状态 $h_t$。&lt;/p>
+&lt;p>这个激活函数式 双曲正切函数 &lt;code>hyperbolic tangent function&lt;/code>，输入是任意实数，输出在 $(-1, +1)$ 之间。由于用了双曲正切激活函数，向量 $h_t$ 的每一个元素都在 $(-1, +1)$ 之间。&lt;/p>
+&lt;p>&lt;img src="https://nlp.letout.cn/img/nlp/03/7.png"
+loading="lazy"
+alt="hyperbolic tangent function"
+>&lt;/p>
+&lt;p>这个神经网络的结构图可以这样理解：新的状态 $h_t$，是旧状态 $h_{t-1}$ 和新的输入 $x_t$ 的函数，神经网络模型的参数是 $A$：新的状态 $h_t$，依赖于向量 $h_{t-1}$, 向量 $x_t$ 以及矩阵 $A$。&lt;/p>
+&lt;h3 id="-为什么需要使用-tanh-作为激活函数">🎨 为什么需要使用 &lt;code>tanh&lt;/code> 作为激活函数？&lt;/h3>
+&lt;p>我们思考这样一个问题：为什么需要使用 &lt;code>tanh&lt;/code> 作为激活函数？能否将这个激活函数去掉，去掉之后会发生什么呢？&lt;/p>
+&lt;p>&lt;img src="https://nlp.letout.cn/img/nlp/03/9.png"
+loading="lazy"
+alt="9"
+>&lt;/p>
+&lt;p>首先我们做个简化，假设输入的词向量的元素都是 $0$。如图，这等同于输入的词向量 $x_t$ 都去掉，把矩阵 $A$ 右边一半也去掉。&lt;/p>
+&lt;p>$x_0 = x_1 = &amp;hellip; = x_{100} = 0$&lt;/p>
+&lt;p>&lt;img src="https://nlp.letout.cn/img/nlp/03/10.png"
+loading="lazy"
+alt="10"
+>&lt;/p>
+&lt;p>这么一来，第 &lt;code>100&lt;/code> 维的特征向量 $h_{100} = Ah_{99} = A^2h_{98} = &amp;hellip; = A^{100}h_0$。&lt;/p>
+&lt;ul>
+&lt;li>🌰 假设矩阵 $A$ 最大的特征值略小于 &lt;code>1&lt;/code>&lt;/li>
+&lt;/ul>
+&lt;p>比如，最大的特征值等于 &lt;code>0.9&lt;/code>。那么会发生什么呢？&lt;/p>
+&lt;p>$0.9^{100}$ 非常接近于 &lt;code>0&lt;/code> 了，所以矩阵 $A^{100}$ 非常接近于 &lt;code>0&lt;/code>，那么新的特征向量 $h_{100}$ 也几乎也是一个全零的向量。&lt;/p>
+&lt;ul>
+&lt;li>🌰 假设矩阵 $A$ 最大的特征值略大于 &lt;code>1&lt;/code>&lt;/li>
+&lt;/ul>
+&lt;p>比如，最大的特征值等于 &lt;code>1.2&lt;/code>。&lt;/p>
+&lt;p>$1.2^{100}=82817974.522$，所以矩阵 $A^{100}$ 的元素都超级大，$A^{100}$的每个元素都很大，假如循环的次数更多一些，或者 $A$ 的特征值再大一些，状态向量的值就会爆炸。&lt;/p>
+&lt;p>假如没有这个激活函数 &lt;code>tanh&lt;/code>，数值计算的时候很有可能会出问题，要么计算出的结果全部等于 &lt;code>0&lt;/code>，要么爆炸了全部是 &lt;code>NaN: Not a Number&lt;/code>。通过使用这个激活函数，每次更新状态 $h$ 后，都会做一个标准化操作 &lt;code>normalization&lt;/code>，让 $h$ 恢复到 $(-1, +1)$ 这个合适的区间里。&lt;/p>
+&lt;h3 id="-simple-rnn-模型参数数量">🏝️ Simple RNN 模型参数数量&lt;/h3>
+&lt;p>我们来数一下 &lt;code>Simple RNN&lt;/code> 有多少个模型参数。&lt;/p>
+&lt;p>如图，先看一下这个拼接后向量，这个向量的维度是 $h_{t-1}$ 的维度加上 $x_t$ 的维度：&lt;/p>
+&lt;p>所以 $A$ 一定要有 $shape(h)+shape(x)$ 维度这么多列：&lt;/p>
+&lt;p>&lt;img src="https://nlp.letout.cn/img/nlp/03/11.png"
+loading="lazy"
+alt="11"
+>&lt;/p>
+&lt;p>$A$ 的行数等于 $h$ 的维度：&lt;/p>
+&lt;p>&lt;img src="https://nlp.letout.cn/img/nlp/03/12.png"
+loading="lazy"
+alt="12"
+>&lt;/p>
+&lt;p>所以，最终矩阵 $A$ 的大小等于：&lt;/p>
+&lt;p>$parameter(A) = shape(h) * [shape(h) + shape(x)]$&lt;/p>
+&lt;p>这个乘积 $parameter(A)$ 就是 &lt;code>simple RNN&lt;/code> 的最终的参数数量。&lt;/p>
+&lt;p>我们来搭一个简单的网络。最底层是一个词嵌入层 &lt;code>Word Embedding Layer&lt;/code>，它可以把词映射为词向量。&lt;/p>
+&lt;p>&lt;img src="https://nlp.letout.cn/img/nlp/03/13.png"
+loading="lazy"
+alt="13"
+>&lt;/p>
+&lt;p>词向量的维度由自己设置（这是一个超参数，我们应该使用交叉验证 &lt;code>cross validation&lt;/code> 选择最佳的维度），这里设置 $x$ 的维度是 $32$。&lt;/p>
+&lt;p>然后下一层是 &lt;code>Simple RNN Layer&lt;/code>，输入的是词向量 $x_i$，输出的是状态 $h_i$。&lt;/p>
+&lt;p>&lt;img src="https://nlp.letout.cn/img/nlp/03/14.png"
+loading="lazy"
+alt="14"
+>&lt;/p>
+&lt;p>$h$ 的维度也是由自己设置，我们设置 $h$ 维度为 $32$。这里 $x$ 和 $h$ 的维度都是 $32$，这只是一个巧合而已，$h$ 和 $x$ 的维度通常不一样。&lt;/p>
+&lt;p>前面说过，状态向量 $h$ 会积累输入的信息，比如：$h_0$ 包含第一个单词 &lt;code>I&lt;/code> 的信息，$h_1$ 包含前两个词 &lt;code>I love&lt;/code> 的信息，最后一个状态 $h_t$ 包含整句话 &lt;code>I love the movice so much&lt;/code> 的信息。&lt;/p>
+&lt;p>我们可以从 &lt;code>PyTorch&lt;/code> 中获取所有的状态 $h={h_1, h_2, &amp;hellip;, h_t}$，也可以只获得最后一个状态向量 $h_t$ 的信息。&lt;/p>
+&lt;p>$h_t$ 积累了整句话的信息，所有通常使用 $h_t$ 这一个向量就够了，这里我们只使用 $h_t$，把前面的所有状态 ${h_1, h_2, &amp;hellip;, h_{t-1}}$ 全部都丢掉。&lt;/p>
+&lt;p>&lt;img src="https://nlp.letout.cn/img/nlp/03/15.png"
+loading="lazy"
+alt="15"
+>&lt;/p>
+&lt;p>$h_t$ 相当于从文本中提取的特征向量，把 $h_t$ 输入这个分类器 $sigmoid(v^T h_t)$，分类器就会输出一个 &lt;code>0&lt;/code> 或 &lt;code>1&lt;/code> 之间的数值，&lt;code>0&lt;/code> 代表了负面电影评价，&lt;code>1&lt;/code> 代表正面电影评价。&lt;/p>
+&lt;p>然后我们设置超参数：&lt;/p>
+&lt;ul>
+&lt;li>设置 &lt;code>vocabulary = 1000&lt;/code>，意思是词典里有 &lt;code>10000&lt;/code> 个词汇；&lt;/li>
+&lt;li>&lt;code>embedding_dim = 32&lt;/code>，意思是词向量 $x$ 的维度是 $32$；&lt;/li>
+&lt;li>&lt;code>word_num = 500&lt;/code>，意思是每条电影评价有 &lt;code>500&lt;/code> 个单词，如果超过 &lt;code>500&lt;/code> 个单词，就会被截掉，只保留 &lt;code>500&lt;/code> 个，如果不够 &lt;code>500&lt;/code>，就用 &lt;code>zero_padding&lt;/code> 将句子补成长度为 &lt;code>500&lt;/code>；&lt;/li>
+&lt;li>&lt;code>state_dim = 32&lt;/code>，意思是状态 $h$ 的维度等于 $32$。&lt;/li>
+&lt;/ul>
+&lt;h3 id="-pytorch-实现">👩‍🚒 PyTorch 实现&lt;/h3>
+&lt;p>接下来开始搭网络，首先我们定义一个类 &lt;code>Model&lt;/code>，我们让它继承 &lt;code>nn.Model&lt;/code> 父类。&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;span class="lnt">11
+&lt;/span>&lt;span class="lnt">12
+&lt;/span>&lt;span class="lnt">13
+&lt;/span>&lt;span class="lnt">14
+&lt;/span>&lt;span class="lnt">15
+&lt;/span>&lt;span class="lnt">16
+&lt;/span>&lt;span class="lnt">17
+&lt;/span>&lt;span class="lnt">18
+&lt;/span>&lt;span class="lnt">19
+&lt;/span>&lt;span class="lnt">20
+&lt;/span>&lt;span class="lnt">21
+&lt;/span>&lt;span class="lnt">22
+&lt;/span>&lt;span class="lnt">23
+&lt;/span>&lt;span class="lnt">24
+&lt;/span>&lt;span class="lnt">25
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-python" data-lang="python">&lt;span class="line">&lt;span class="cl">&lt;span class="kn">import&lt;/span> &lt;span class="nn">torch&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="kn">import&lt;/span> &lt;span class="nn">torch.nn&lt;/span> &lt;span class="k">as&lt;/span> &lt;span class="nn">nn&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="k">class&lt;/span> &lt;span class="nc">Model&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">nn&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">Module&lt;/span>&lt;span class="p">):&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">def&lt;/span> &lt;span class="fm">__init__&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="bp">self&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">vocabulary_size&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">embedding_dim&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">state_dim&lt;/span>&lt;span class="p">):&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nb">super&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">Model&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="bp">self&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="fm">__init__&lt;/span>&lt;span class="p">()&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="bp">self&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">vocabulary_size&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">vocabulary_size&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="bp">self&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">embedding_dim&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">embedding_dim&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="bp">self&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">state_dim&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">state_dim&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="bp">self&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">Embedding&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">nn&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">Embedding&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="bp">self&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">vocabulary_size&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="bp">self&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">embedding_dim&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="bp">self&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">RNN&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">nn&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">RNN&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="bp">self&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">embedding_dim&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="bp">self&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">state_dim&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="bp">self&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">fc&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">nn&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">Linear&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="bp">self&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">state_dim&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="mi">1&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="bp">self&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">sigmoid&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">nn&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">Sigmoid&lt;/span>&lt;span class="p">()&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">def&lt;/span> &lt;span class="nf">forward&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="bp">self&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">x&lt;/span>&lt;span class="p">):&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">x&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">x&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">transpose&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="mi">0&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="mi">1&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">embedded&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="bp">self&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">Embedding&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">x&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">output&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">h_n&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="bp">self&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">RNN&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">embedded&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">h_n&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">torch&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">squeeze&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">h_n&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">dim&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="mi">0&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">result&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="bp">self&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">fc&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">h_n&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">return&lt;/span> &lt;span class="bp">self&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">sigmoid&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">result&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>接下来，我们在构造函数 &lt;code>__init__&lt;/code> 中定义我们的模型结构，并重载 &lt;code>forword&lt;/code> 方法。&lt;/p>
+&lt;p>首先是词嵌入层 &lt;code>nn.Embedding()&lt;/code>，它是把词映射成向量。&lt;/p>
+&lt;p>然后是 simple RNN 层 &lt;code>nn.RNN()&lt;/code>，需要指定词向量的维度 &lt;code>embedding_dim&lt;/code> 和状态向量 $h$ 的维度 &lt;code>state_dim&lt;/code>；&lt;/p>
+&lt;p>最后是一个全连接层 &lt;code>nn.Linear()&lt;/code>，并且会使用 &lt;code>nn.Sigmoid()&lt;/code> 作用于它的结果，输入最后一个状态向量 $h$，输出一个 &lt;code>0、1&lt;/code> 之间的数。&lt;/p>
+&lt;p>&lt;code>PyTorch&lt;/code> 中的 &lt;code>RNN&lt;/code> 会有两个返回值：&lt;code>output&lt;/code>，&lt;code>h_n&lt;/code>。&lt;/p>
+&lt;ul>
+&lt;li>&lt;code>output&lt;/code> 是 &lt;code>RNN&lt;/code> 所有时刻的状态向量集合（矩阵）；&lt;/li>
+&lt;li>&lt;code>h_n&lt;/code> 是 &lt;code>RNN&lt;/code> 中最后一个状态向量。&lt;/li>
+&lt;/ul>
+&lt;p>这是模型的一个概要， 词嵌入层 &lt;code>Embedding&lt;/code> 的输出是一个 $500*32$ 的矩阵，&lt;code>500&lt;/code> 的意思是每个句子有 $500$ 个词，&lt;code>32&lt;/code> 的意思是每个词用 $32$ 维的词向量表示。&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;span class="lnt">11
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-fallback" data-lang="fallback">&lt;span class="line">&lt;span class="cl">==========================================================================================
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">Layer (type:depth-idx) Output Shape Param #
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">==========================================================================================
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">Model -- --
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">├─Embedding: 1-1 [500, 1, 32] 320,000
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">├─RNN: 1-2 [500, 1, 32] 2,112
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">├─Linear: 1-3 [1, 1] 33
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">├─Sigmoid: 1-4 [1, 1] --
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">==========================================================================================
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">Total params: 322,145
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">Trainable params: 322,145
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>&lt;code>Simple RNN&lt;/code> 每个状态的输出 $h_t$ 都是一个 &lt;code>32&lt;/code> 维的向量。我们看一下 RNN 的参数，他有 &lt;code>2080&lt;/code> 个参数，它是这样算出来的：&lt;/p>
+&lt;p>$shape(h) * (shape(h)+shape(x)) = 32*(32+32)+32 = 2080$&lt;/p>
+&lt;p>这是矩阵 $A$ 的大小，后面的 $32$ 的维度来自 &lt;code>intercept&lt;/code>，也叫 &lt;code>bias&lt;/code>，偏移量。RNN 会默认使用 &lt;code>intercept&lt;/code>，但这个不重要，这里暂时不管它。&lt;/p>
+&lt;p>剩下的 &lt;code>32&lt;/code> 个参数来自于最后一个状态，因为 &lt;code>PyTorch&lt;/code> 中的 &lt;code>RNN&lt;/code> 会同时输出所有时刻的状态向量集合和最后一个状态向量。&lt;/p>
+&lt;h3 id="-运行模型">🧑‍🔧 运行模型&lt;/h3>
+&lt;p>搭好模型之后，初始化模型，然后用训练数据拟合模型。&lt;/p>
+&lt;p>我们指定算法是 &lt;code>optim.Adam&lt;/code>，损失函数是 &lt;code>nn.BCELoss()&lt;/code>，评价标准是准确率 &lt;code>accuracy&lt;/code>。&lt;/p>
+&lt;p>然后用训练数据拟合模型，我让算法训练 &lt;code>3&lt;/code> 个 &lt;code>epochs&lt;/code>，只让算法运行 &lt;code>3&lt;/code> 个 epochs，是出现了过拟合，&lt;code>3&lt;/code> 个 &lt;code>epochs&lt;/code> 之后，&lt;code>validate accuracy&lt;/code> 会变差。提前让算法停止运行称为 &lt;code>early stoping&lt;/code> 提前终止训练，使 &lt;code>validate accuracy&lt;/code> 变差之前就停止。&lt;/p>
+&lt;p>最后，用测试数据评价模型的表现，把测试数据作为输入，调用 &lt;code>model.evaluate()&lt;/code>，返回 loss 和 accuracy，测试的 accuracy，测试的 accuracy 是 84.36%，比上一节中的 逻辑回归好很多（75%）。&lt;/p>
+&lt;p>刚才搭模型的时候，只使用了RNN最后一个状态 $h_t$，把之前的状态都丢掉了，想用 $h_0$ 到 $h_t$ 所有状态也可以，但并没有太大区别。&lt;/p>
+&lt;p>我们让 &lt;code>RNN&lt;/code> 的第一个输出 &lt;code>output&lt;/code>，它是一个矩阵，矩阵每一行就是一个状态向量 $h$。&lt;/p>
+&lt;p>如果用所有状态，就要加一个 &lt;code>flatten&lt;/code> 层，将状态矩阵变成一个向量，然后把这个向量作为分类器的输入，来判断电影是正面的，还是负面的。只要把网络稍作改动就可以了。&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-python" data-lang="python">&lt;span class="line">&lt;span class="cl">&lt;span class="n">torch&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">flatten&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">output&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">start_dim&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="mi">1&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">end_dim&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="mi">2&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;h2 id="-simple-rnn-的缺陷">🧰 simple RNN 的缺陷&lt;/h2>
+&lt;p>下面看一下 &lt;code>simple RNN&lt;/code> 这种简单的模型有什么缺陷。&lt;/p>
+&lt;p>举个栗子 🌰 ，现在有这样一个问题，给定半句话，要求预测下一个单词。&lt;/p>
+&lt;p>&lt;img src="https://nlp.letout.cn/img/nlp/03/16.png"
+loading="lazy"
+alt="16"
+>&lt;/p>
+&lt;p>输入是 &lt;code>clouds are in the&lt;/code>，正确的输出应该是 &lt;code>sky&lt;/code>，如果在大量文本中预测 RNN，应该是有能力做出这样的预测的。在这个例子里，&lt;code>RNN&lt;/code> 只需要看最近的几个词，尤其是 &lt;code>clouds are&lt;/code>，并不需要更多的上下文看的更远。&lt;/p>
+&lt;p>这个例子是对 &lt;code>simple RNN&lt;/code> 十分有利，&lt;code>simple RNN&lt;/code> 特别擅长这种 &lt;code>short-term dependence&lt;/code>，&lt;code>simple RNN&lt;/code> 不擅长的是 &lt;code>long-term dependence&lt;/code>。&lt;/p>
+&lt;p>&lt;code>RNN&lt;/code> 的状态 $h$，和之前所有的输入 $x$ 都有函数依赖关系，照理来说，如果改变输入的单词 $x_1$，所有的状态 $h$ 都会发生变化，但实际上，&lt;code>simple RNN&lt;/code> 并没有这种性质，所以很不合理。如果把第 &lt;code>100&lt;/code> 个状态向量 $h_{100}$，关于输入 $x_1$ 求导，你会发现导数几乎等于 &lt;code>0&lt;/code>。&lt;/p>
+&lt;p>$\frac{\partial h_{100}}{\partial x_1} \approx 0$&lt;/p>
+&lt;p>&lt;img src="https://nlp.letout.cn/img/nlp/03/17.png"
+loading="lazy"
+alt="17"
+>&lt;/p>
+&lt;p>导数几乎等于 &lt;code>0&lt;/code> 说明什么呢？说明当我们改变 $x_1$时，$h_{100}$ 几乎不会发生任何变化，也就是说状态 $h_{100}$ 和 &lt;code>100&lt;/code> 步之前的输入 $x_1$ 几乎没有关系，这显然不合理，说明状态 $h_{100}$ 几乎把很多步之前的输入都给忘记了，&lt;code>simple RNN&lt;/code> 的这种遗忘会给后续操作造成很多问题。&lt;/p>
+&lt;p>再举个栗子 🌰 ，这是很长的一段话，一开始是 &lt;code>I grow up in China when I was a child, ... ...&lt;/code> 到了很多句话之后，有这样一句，&lt;code>I speak fluent ...&lt;/code>。&lt;/p>
+&lt;p>&lt;img src="https://nlp.letout.cn/img/nlp/03/18.png"
+loading="lazy"
+alt="18"
+>&lt;/p>
+&lt;p>下一个词应该是 &lt;code>Chinese&lt;/code>，我小时候在中国，所有会说流利的中文，然而 &lt;code>simple RNN&lt;/code> 不太可能会做出 &lt;code>Chinese&lt;/code> 这个正确的预测，因为 RNN 已经把前文给忘记了。&lt;code>simple RNN&lt;/code> 擅长的是 &lt;code>short-term dependence&lt;/code>，RNN 看到最近的单词是 &lt;code>speak fluent&lt;/code>，所以 RNN 知道下一个单词可能是某种语言，可能是 &lt;code>Chinese、English、French、Japanese&lt;/code> 等等，但正确答案是 &lt;code>Chinese&lt;/code>，因为上文有 &lt;code>I grow up in china when i was child&lt;/code>，simple RNN 就像金鱼一样记忆力只有 &lt;code>7&lt;/code> 秒，&lt;code>RNN&lt;/code> 根本就不记得上文有这句话，所以 &lt;code>I speak fluent ...&lt;/code> 预测单词可能是 &lt;code>English , French&lt;/code> 等任何一种语言，未必是 &lt;code>Chinese&lt;/code>。&lt;/p>
+&lt;h2 id="-总结">🎐 总结&lt;/h2>
+&lt;p>最后总结一下这一节的内容：&lt;/p>
+&lt;p>&lt;code>RNN&lt;/code> 是一种神经网络，但是他的结构不同于全连接网络和卷积网络，&lt;code>RNN&lt;/code> 适用于文本，语音等时序序列数据，&lt;code>RNN&lt;/code> 按照顺序读取每一个词向量，并且在状态向量 $h$ 中积累看到过得信息，$h_0$ 中包含了 $x_0$ 的信息，$h_1$ 中包含了 $x_0$ 和 $x_1$ 的信息，$h_t$ 中积累了之前所有 $x={x_0, x_1, &amp;hellip;, x_t}$ 的信息。&lt;/p>
+&lt;p>&lt;img src="https://nlp.letout.cn/img/nlp/03/19.png"
+loading="lazy"
+alt="19"
+>&lt;/p>
+&lt;p>有一种错误的看法是 $h_t$ 中只包含了 $x_t$ 的信息，这是不对的，$h_t$ 中包含了之前所有输入的信息，可以认为 $h_t$ 代表了 &lt;code>RNN&lt;/code> 从整个序列中抽取的特征向量，所有我们只需要 $h_t$ 就可以判断电影评价是正面的还是负面的。&lt;/p>
+&lt;p>&lt;code>simple RNN&lt;/code> 有一个参数矩阵 $A$，它可能还会一个 &lt;code>intercept&lt;/code> 参数向量 $b$，上面的介绍中忽略了这个参数向量 $b$，这个参数矩阵 $A$ 的维度是：&lt;/p>
+&lt;p>$shape(h) * [shape(h) + shape(x)]$&lt;/p>
+&lt;p>参数矩阵 $A$ 一开始随机初始化，然后从训练数据上学习。注意：&lt;code>simple RNN&lt;/code> 只有一个参数矩阵，不管这个序列有多长，参数矩阵只有一个，所有模块里的参数都是一样的。&lt;/p>
+&lt;p>&lt;code>RNN&lt;/code> 有一个缺点，&lt;code>RNN&lt;/code> 的记忆比较短，会遗忘很久之前的输入 $x$，如果这个时间序列很长，有好几十步，最终 &lt;code>RNN&lt;/code> 就会忘记了之前的输入。下一节将介绍 &lt;code>LSTM&lt;/code>，&lt;code>LSTM&lt;/code> 的记忆会比 &lt;code>simple RNN&lt;/code> 长很多，但是 &lt;code>RNN&lt;/code> 也还是会有遗忘的问题。&lt;/p></description></item><item><title>数据处理基础</title><link>https://emerywan.github.io/blog/p/nlp-in-action/data-processing/</link><pubDate>Tue, 01 Mar 2022 02:02:02 +0800</pubDate><guid>https://emerywan.github.io/blog/p/nlp-in-action/data-processing/</guid><description>&lt;img src="https://nlp.letout.cn/img/banner.png" alt="Featured image of post 数据处理基础" />&lt;h2 id="-类别特征">🌱 类别特征&lt;/h2>
+&lt;p>机器学习的数据通常有 &lt;strong>类别特征&lt;/strong> &lt;code>Categorical Features&lt;/code> ，我们需要把类别特征 &lt;code>Categorical Features&lt;/code> 转化成机器学习模型能理解的数值特征，下面使用一个例子来具体讲解类别特征数据的处理。&lt;/p>
+&lt;p>这张表的每一行是一个人的数据，包括：年龄、性别、国籍，我们需要把这些数据变成机器学习模型可以理解的数值特征。&lt;/p>
+&lt;p>&lt;img src="https://nlp.letout.cn/img/nlp/01/table.png"
+loading="lazy"
+alt="table"
+>&lt;/p>
+&lt;p>表格的第一列是年龄，年龄本身就是数值特征，所以可以不用做处理，数值特征的特点是可以比较大小，比如 &lt;code>35&lt;/code> 岁的人比 &lt;code>31&lt;/code> 岁的年龄大。&lt;/p>
+&lt;p>第二列是性别，性别是二元特征，我们可以用一个数来表示性别。用 &lt;code>0&lt;/code> 表示女性，用 &lt;code>1&lt;/code> 表示男性。这样一来，性别就表示为一个标量：&lt;code>0&lt;/code> / &lt;code>1&lt;/code>。&lt;/p>
+&lt;p>第三列是国籍，比如中国，美国，印度。国籍是类别特征，机器学习并不理解国籍，所以我们要把国籍编码成数值向量。世界上约有 &lt;code>197&lt;/code> 个国家，我们先用一个 &lt;code>[1 - 197]&lt;/code> 的整数表示一个国家。可以建立一个字典，把国籍映射成一个 &lt;code>[1 - 197]&lt;/code> 的整数。比如：&lt;code>China:1; US:2; India:3; Japan:4; Germany:5&lt;/code>。&lt;/p>
+&lt;!-- raw HTML omitted -->
+&lt;p>&lt;strong>我们要从 1 开始计算，而不能从 0 开始计算。&lt;/strong>&lt;/p>
+&lt;!-- raw HTML omitted -->
+&lt;p>做这种映射，国籍就表示成 &lt;code>[1 - 197]&lt;/code> 之间的整数。仅仅把国籍表示成 &lt;code>[1 - 197]&lt;/code> 的整数还是不行，一个整数只是一种类别，它们之间不能比较大小。&lt;code>US:2; India:3&lt;/code> 这个数字并不表示印度大于美国，这些整数只是类别而已，并不是真正的数值特征。&lt;/p>
+&lt;p>所以要进一步对国籍做 &lt;code>one-hot encoding&lt;/code> ，用 &lt;code>one-hot&lt;/code> 向量来表示国籍：&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-fallback" data-lang="fallback">&lt;span class="line">&lt;span class="cl">China -&amp;gt; 1 -&amp;gt; [1,0,0,0,...,0]
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">US -&amp;gt; 2 -&amp;gt; [0,1,0,0,...,0]
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>比如，中国对应 1，所以用 197 维的 &lt;code>one-hot&lt;/code> 向量 &lt;code>[1,0,0,0...,0]&lt;/code> 来表示，其中第一个元素为 1，其余元素都是 0；美国对应 2，这个 197 维的向量 &lt;code>[0,1,0,0...,0]&lt;/code> 第二个元素是 1，其余元素都是 0。这样一来，每个国籍就由一个 &lt;code>one-hot&lt;/code> 向量表示，一共有 197 个国家，所以每个向量都是 197 维的。&lt;/p>
+&lt;p>&lt;!-- raw HTML omitted -->我们要从 1 开始计算，而不能从 0 开始计算。&lt;!-- raw HTML omitted -->
+因为我们要把 0 保留，用来表示未知或者缺失的国籍。数据库里面经常会有缺失的数据（比如用户没有填写国籍），这样缺失的国籍就用 0 来表示，它的 &lt;code>one-hot&lt;/code> 向量就是一个全 0 的向量&lt;code>[0,0,0,0...,0]&lt;/code>。&lt;/p>
+&lt;p>下面这个例子中，我们用一个 199 维表示一个人的特征。比如这个人 28 岁，女性，国籍是中国。&lt;/p>
+&lt;p>&lt;img src="https://nlp.letout.cn/img/nlp/01/1.png"
+loading="lazy"
+alt="1"
+>&lt;/p>
+&lt;p>其中，一个维度表示年龄，一个维度表示性别，一个 197 维的 &lt;code>one-hot&lt;/code> 向量表示国籍。&lt;/p>
+&lt;p>这个例子里，这个 36 岁，男性，国籍未知的人的特征是这个 199 维的向量，我们用一个 197 维的全 0 向量表示未知国籍。&lt;/p>
+&lt;h2 id="-为什么要用-one-hot-向量表示特征">🔖 为什么要用 one-hot 向量表示特征&lt;/h2>
+&lt;p>在处理类别特征的时候，我们使用 &lt;code>one-hot&lt;/code> 向量表示国籍，每个国籍都用 197 维的向量表示。为什么要用 &lt;code>one-hot&lt;/code> 向量而不用一个数字表示呢？比如用 1 表示中国，2 表示美国，3 表示印度。这样一来，名字就变成了数字，可以做数值计算，而且用一个数字表示的话，可以节省 197 倍的存储空间。当然这是不行的。否则我们就不需要 &lt;code>one-hot encoding&lt;/code> 了。&lt;/p>
+&lt;p>假设我们使用 &lt;code>1 -&amp;gt; China; 2 -&amp;gt; US; 3 -&amp;gt; India&lt;/code>。那么将中国 &lt;code>1&lt;/code> 和美国 &lt;code>2&lt;/code> 的特征加起来：&lt;code>1+2=3&lt;/code> ，相当于 “中国 + 美国 = 印度”。这样的特征完全不合理。&lt;/p>
+&lt;p>&lt;img src="https://nlp.letout.cn/img/nlp/01/2.png"
+loading="lazy"
+alt="2"
+>&lt;/p>
+&lt;p>使用 &lt;code>one-hot&lt;/code> 特征向量更合理。将 China 和 US 的 &lt;code>one-hot&lt;/code> 向量加起来，得到 &lt;code>[1,1,0,0,...,0]&lt;/code>，第一个和第二个元素都是 1，其余元素都是 0，这个特征向量的解释是：既有中国国籍，又有美国国籍。&lt;/p>
+&lt;p>&lt;img src="https://nlp.letout.cn/img/nlp/01/3.png"
+loading="lazy"
+alt="3"
+>&lt;/p>
+&lt;p>所以做机器学习的时候，不能用一个标量来表示一个类别特征，这种特征做法求和等数值计算是没有意义的。正确的做法是使用 &lt;code>one-hot&lt;/code> 向量来表示类别特征。&lt;/p>
+&lt;h2 id="-处理文本数据的流程">🚀 处理文本数据的流程&lt;/h2>
+&lt;p>在自然语言处理的应用中，数据就是文本 &lt;code>document&lt;/code>，文本可以分割成很多单词，我们需要把单词表示成数值向量。其中每个单词都是一个类别，如果字典里有一万个单词，那么就有一万的类别，显然单词就是类别特征。我们需要使用处理类别特征的方法，把单词变成数值向量。&lt;/p>
+&lt;p>文本处理主要分为三个步骤：&lt;/p>
+&lt;ul>
+&lt;li>🔔 把文本分割成单词&lt;/li>
+&lt;li>🔔 计算每个单词出现的次数&lt;/li>
+&lt;li>🔔 进行 one-hot 编码&lt;/li>
+&lt;/ul>
+&lt;p>文本处理的第一步是把文本分割成单词。一段话，一篇文章或者一本书可以表示为一个字符串，可以把文本分割成很多单词，这个步骤称为 &lt;code>Tokenization&lt;/code>。&lt;/p>
+&lt;p>比如说这句话 &lt;code>... to be or not to be ...&lt;/code>， 可以分割成这些单词 &lt;code>[to, be, or, not, to, be]&lt;/code>。Tokenization 就是把文本变成单词的列表。&lt;/p>
+&lt;p>文本处理的第二步是计算词频，也就是每个单词出现的次数。我们可以用一个哈希表 &lt;code>hash Map&lt;/code> 来计算，计算开始之前，哈希表是空的，我们根据以下方式更新哈希表：如果单词 &lt;code>w&lt;/code> 不在表里面，说明到目前为止，&lt;code>w&lt;/code> 还没有出现在文本里，所以我们要把 &lt;code>w&lt;/code> 加入哈希表，并让它的词频等于 1；如果 &lt;code>w&lt;/code> 在哈希表里面，说明 &lt;code>w&lt;/code> 之前在文本里出现过，只需要把 &lt;code>w&lt;/code> 的词频加 1 即可。&lt;/p>
+&lt;p>&lt;img src="https://nlp.letout.cn/img/nlp/01/4.png"
+loading="lazy"
+alt="4"
+>&lt;/p>
+&lt;p>接下来举个例子，我们将挨个处理这个列表里的单词。当处理到单词 &lt;code>to&lt;/code> 的时候，首先查一下哈希表，发现哈希表里面有 &lt;code>to&lt;/code>，它的词频是 398，说明 to 在文章里已经出现过 398 次了，现在这个单词又出现了一次，于是把表里的词频加 1，变成了 399；当处理到单词 &lt;code>or&lt;/code>的时候，在表里找不到，这说明文章里还没有出现过 &lt;code>or&lt;/code> 这个单词，第一次出现在文章里，于是我们把 &lt;code>or&lt;/code> 插入表里，将词频设置为 1。&lt;/p>
+&lt;p>&lt;img src="https://nlp.letout.cn/img/nlp/01/5.png"
+loading="lazy"
+alt="5"
+>&lt;/p>
+&lt;p>完成统计词频之后，需要把哈希表做一个排序，按照词频递减的顺序进行排列，表的最前面是词频最高的，表最后是词频最低的。然后就把词频换成下标 &lt;code>index&lt;/code>，从 1 开始数计数，词频最高的词的 &lt;code>index&lt;/code> 是 1。这个例子里，一共有 8 个单词，每个词对应一个 [1, 8] 之间的正整数。这个表称为字典 ，可以把单词映射为一个数字。&lt;/p>
+&lt;p>字典里单词的个数称为词汇量 &lt;code>vocabulary&lt;/code>。这例子里词汇量等于 8。&lt;/p>
+&lt;p>&lt;img src="https://nlp.letout.cn/img/nlp/01/6.png"
+loading="lazy"
+alt="6"
+>&lt;/p>
+&lt;p>英语里大概有 1 万个常用词，但是统计词频之后，你会发现字典会有几十万甚至上百万个单词。统计词频的目的就是保留常用词，去掉低频词。比如，我们可以保留词频最高的 1 万个单词，删掉其余单词。&lt;/p>
+&lt;p>&lt;strong>为什么要删掉低频词呢？&lt;/strong>&lt;/p>
+&lt;ul>
+&lt;li>🌰 低频词通常没有意义&lt;/li>
+&lt;/ul>
+&lt;p>很多低频词都是名字实体 &lt;code>name entities&lt;/code>，比如我们的名字就是个名字实体，假如我们的名字出现在一个数据集里面，他的频率肯定会很低，在大多数的应用里名字实体没有意义。&lt;/p>
+&lt;p>低频词很多都是拼写错误造成的，如果把 prince 的 c 误写成 s，prinse，那么就创造了一个新的单词，这种词的频率也很低，在很多应用里，去掉这种词没有危害。&lt;/p>
+&lt;ul>
+&lt;li>🌰 去掉低频词的另一个原因是我们不希望 &lt;code>vocabulary&lt;/code> 太大。&lt;/li>
+&lt;/ul>
+&lt;p>下一个步骤做 &lt;code>one-hot encoding&lt;/code> 的时候，向量的维度就是字典的大小。字典越大，向量的维度就越高，这会让计算变慢。下一节详细说明词嵌入 &lt;code>Word Embedding&lt;/code> 的时候就会看到，字典越大，模型的参数就越会越多，就会容易造成过拟合 &lt;code>overfitting&lt;/code>，删掉低频词就会大幅减小 &lt;code>vocabulary&lt;/code>。&lt;/p>
+&lt;p>文本处理的第三步就是对单词做 &lt;code>one-hot encoding&lt;/code>，通过查字典，把单词映射成一个正整数，一个单词的列表就映射成了一个正整数的列表；如果有必要就继续把这些正整数变成 &lt;code>one-hot&lt;/code> 向量。这些 &lt;code>one-hot&lt;/code> 向量的维度正好等于 &lt;code>vocabulary&lt;/code>，在这个例子里面，字典的长度是 8，所以 &lt;code>one-hot&lt;/code> 维度就等于 8。&lt;/p>
+&lt;p>&lt;img src="https://nlp.letout.cn/img/nlp/01/7.png"
+loading="lazy"
+alt="7"
+>&lt;/p>
+&lt;p>上面说过，字典里的低频词可能会被删掉，所以有些词在字典里找不到，例如把 be 错误拼写成单词 bi，这个词在字典里找不到，&lt;code>one-hot encoding&lt;/code> 时，可以忽略这个词，也可以把它编码成全 0 向量。&lt;/p>
+&lt;h2 id="-总结">🎐 总结&lt;/h2>
+&lt;p>最后总结一下这一节的内容。&lt;/p>
+&lt;p>部分机器学习的数据会具备类别特征 &lt;code>Categorical Features&lt;/code>，机器学习模型无法理解，我们需要将其转换成数值特征。类别特征的类别会被映射成一个从 &lt;code>1&lt;/code> 开始计算的整数，&lt;code>0&lt;/code> 被用来表示缺失或者未知的类别，并且使用 &lt;code>one-hot&lt;/code> 向量，能很好的表示类别特征的意义。&lt;/p>
+&lt;p>文本处理主要有三个步骤，第一步 &lt;code>tokenization&lt;/code> 把文本分割成单词的列表；第二步建立了一个字典&lt;code>vocabulary&lt;/code>，把单词映射成一个正整数；第三步进行 &lt;code>one-hot encoding&lt;/code>，将分割后的单词列表映射成正整数的列表或变成 &lt;code>one-hot&lt;/code> 向量。&lt;/p></description></item></channel></rss>

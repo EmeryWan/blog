@@ -1,0 +1,1053 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Hackintosh on 一层</title><link>https://emerywan.github.io/blog/tags/hackintosh/</link><description>Recent content in Hackintosh on 一层</description><generator>Hugo -- gohugo.io</generator><lastBuildDate>Thu, 27 Feb 2020 21:14:45 +0800</lastBuildDate><atom:link href="https://emerywan.github.io/blog/tags/hackintosh/index.xml" rel="self" type="application/rss+xml"/><item><title>雷蛇 灵刃 15 标准版 2018 黑苹果</title><link>https://emerywan.github.io/blog/p/razer-blade-base-hackintosh/</link><pubDate>Thu, 27 Feb 2020 21:14:45 +0800</pubDate><guid>https://emerywan.github.io/blog/p/razer-blade-base-hackintosh/</guid><description>&lt;p>&lt;strong>警告：该教程仅为个人记录，该笔记本安装涉及解锁BIOS，存在一定风险，如您使用该教程对计算机进行更改，所造成的的任何后果我概不负责。&lt;/strong>&lt;/p>
+&lt;h1 id="写在最前">写在最前&lt;/h1>
+&lt;ul>
+&lt;li>
+&lt;p>开学后太忙，并且电脑我换了块更大的硬盘，这台电脑我不打算再安装黑苹果了，本教程可能会不再更新，最新上传的配置文件中，添加了对 type-C 4K 30Hz 的支持，4K 60Hz 显示器会黑屏，无法输出信号。&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>如果想要使用 Clover 安装 10.15 或以下系统的话，可以依旧按照此教程（请将 Clover 和 kext 选择到适应版本）。&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>如果打算安装新系统使用的话，建议使用 Opencore 安装。推荐参考 &lt;a class="link" href="https://github.com/Tyson-Hu/RazerBlade15-Base-Model-Hackintosh_macOS_Monterey" target="_blank" rel="noopener"
+>RazerBlade15-Base-Model-Hackintosh_macOS_Monterey&lt;/a>，该教程写的非常详细，感谢他的付出。&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>建议不要使用 东芝（铠侠）的固态硬盘，我的硬盘为&lt;strong>东芝 tr200&lt;/strong>，在 macOS 中莫名卡顿，我的&lt;strong>东芝U盘&lt;/strong>在 macOS 中也莫名卡顿，其他系统没有什么问题。（玄学问题？）&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>祝你玩得愉快！&lt;/p>
+&lt;/li>
+&lt;/ul>
+&lt;hr>
+&lt;ul>
+&lt;li>
+&lt;p>&lt;a class="link" href="https://github.com/EmeryWan/Razer-Blade-15-2018-Base-Hackintosh" target="_blank" rel="noopener"
+>Github ➡️&lt;/a>&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>因为疫情原因春节一直宅在家，学校假期也延长了，找到了同款笔记本的教程，所以入坑安装黑苹果，最近把步骤整理了一下。&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>安装过程我主要参考了 &lt;a class="link" href="https://www.tonymacx86.com/threads/guide-razer-blade-15-2018-detailed-install-guide-high-sierra-10-13-6-17g2208-17g5019.264017/" target="_blank" rel="noopener"
+>这篇&lt;/a> 和 &lt;a class="link" href="https://github.com/stonevil/Razer_Blade_Advanced_early_2019_Hackintosh" target="_blank" rel="noopener"
+>这篇&lt;/a> 教程，感谢他们的辛苦付出。部分内容为他们所写教程的汉化，详细或精简，我的水平有限，刚接触黑苹果，建议同时参考他们的教程。&lt;/p>
+&lt;/li>
+&lt;/ul>
+&lt;hr>
+&lt;ul>
+&lt;li>硬件介绍&lt;/li>
+&lt;li>结果介绍&lt;/li>
+&lt;li>解锁BIOS&lt;/li>
+&lt;li>安装前准备&lt;/li>
+&lt;li>系统安装&lt;/li>
+&lt;li>DSDT，SSDT制作&lt;/li>
+&lt;li>网卡&lt;/li>
+&lt;li>一些优化&lt;/li>
+&lt;li>参考&lt;/li>
+&lt;li>更新&lt;/li>
+&lt;/ul>
+&lt;h2 id="1-硬件介绍">[1] 硬件介绍&lt;/h2>
+&lt;table>
+&lt;thead>
+&lt;tr>
+&lt;th style="text-align:center">&lt;/th>
+&lt;th style="text-align:center">型号&lt;/th>
+&lt;th style="text-align:center">最终情况&lt;/th>
+&lt;/tr>
+&lt;/thead>
+&lt;tbody>
+&lt;tr>
+&lt;td style="text-align:center">CPU&lt;/td>
+&lt;td style="text-align:center">i7-8750H&lt;/td>
+&lt;td style="text-align:center">可用&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td style="text-align:center">GPU&lt;/td>
+&lt;td style="text-align:center">Nvdia 1060 Max-Q&lt;/td>
+&lt;td style="text-align:center">除 10.13 High Sierra 安装 WebDriver 外不可用&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td style="text-align:center">硬盘&lt;/td>
+&lt;td style="text-align:center">更换了 金士顿 A2000&lt;/td>
+&lt;td style="text-align:center">可用&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td style="text-align:center">网卡&lt;/td>
+&lt;td style="text-align:center">9560NGW&lt;/td>
+&lt;td style="text-align:center">WIFI 目前无解，蓝牙可用&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td style="text-align:center">显示器&lt;/td>
+&lt;td style="text-align:center">1080P&lt;/td>
+&lt;td style="text-align:center">可用&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td style="text-align:center">摄像头&lt;/td>
+&lt;td style="text-align:center">&lt;/td>
+&lt;td style="text-align:center">可用&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td style="text-align:center">扬声器&lt;/td>
+&lt;td style="text-align:center">&lt;/td>
+&lt;td style="text-align:center">可用&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td style="text-align:center">耳机&lt;/td>
+&lt;td style="text-align:center">&lt;/td>
+&lt;td style="text-align:center">无法检测到麦克风&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td style="text-align:center">麦克风&lt;/td>
+&lt;td style="text-align:center">&lt;/td>
+&lt;td style="text-align:center">不可用，已识别，但在设置中未看见输入电平&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td style="text-align:center">触控板&lt;/td>
+&lt;td style="text-align:center">&lt;/td>
+&lt;td style="text-align:center">手势可用（反应稍慢）&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td style="text-align:center">HDMI 接口&lt;/td>
+&lt;td style="text-align:center">&lt;/td>
+&lt;td style="text-align:center">直通显卡，除安装 High Sierra 外不可用&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td style="text-align:center">Mini DP 接口&lt;/td>
+&lt;td style="text-align:center">&lt;/td>
+&lt;td style="text-align:center">直通显卡，除安装 High Sierra 外不可用&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td style="text-align:center">雷电3&lt;/td>
+&lt;td style="text-align:center">&lt;/td>
+&lt;td style="text-align:center">被识别成 USB3.1，可外接拓展坞外接显示器，我的电脑中需要删除SSDT-12-OptTabl.aml&lt;/td>
+&lt;/tr>
+&lt;/tbody>
+&lt;/table>
+&lt;h2 id="2-安装结果">[2] 安装结果&lt;/h2>
+&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/razer-blade-base-hackintosh/2-1.png"
+width="586"
+height="353"
+srcset="https://emerywan.github.io/blog/blog/p/razer-blade-base-hackintosh/2-1_hu2b7930256d93d7df669e002f0ee8a5ea_76515_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/razer-blade-base-hackintosh/2-1_hu2b7930256d93d7df669e002f0ee8a5ea_76515_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+alt="2-1"
+class="gallery-image"
+data-flex-grow="166"
+data-flex-basis="398px"
+>&lt;/p>
+&lt;h3 id="一些小问题">一些小问题&lt;/h3>
+&lt;p>我也是刚刚接触黑苹果，很多问题我也无法解决，有谁了解的话希望能帮助一下，感谢。&lt;/p>
+&lt;ul>
+&lt;li>
+&lt;p>&lt;del>麦克风无法使用，系统能找到但无法使用，耳机麦克风无法找到。想要使用的话只能通过蓝牙耳机了。&lt;/del>&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>耳机麦克无法识别。&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>输出设备默认识别到了扬声器和耳机（即使未插入耳机），无法自动切换，需手动切换。&lt;/p>
+&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/razer-blade-base-hackintosh/2-2.png"
+width="294"
+height="170"
+srcset="https://emerywan.github.io/blog/blog/p/razer-blade-base-hackintosh/2-2_hubc4478c282b951d1ef6fe2ce5f964b3d_36544_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/razer-blade-base-hackintosh/2-2_hubc4478c282b951d1ef6fe2ce5f964b3d_36544_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+alt="2-2"
+class="gallery-image"
+data-flex-grow="172"
+data-flex-basis="415px"
+>&lt;/p>
+&lt;/li>
+&lt;/ul>
+&lt;h3 id="更新">更新&lt;/h3>
+&lt;p>今天本来想根据 &lt;a class="link" href="https://blog.daliansky.net/Use-AppleALC-sound-card-to-drive-the-correct-posture-of-AppleHDA.html" target="_blank" rel="noopener"
+>这篇文章&lt;/a> 尝试自己定制一下 &lt;code>AppleALC&lt;/code> ，当我把有效节点和路径弄完之后，准备下载 &lt;a class="link" href="https://github.com/acidanthera/AppleALC/releases" target="_blank" rel="noopener"
+>AppleALC-DEBUG&lt;/a> 编译的时候，没想到最新版本已经添加了这个笔记本的 &lt;code>layout-id:23&lt;/code>。&lt;/p>
+&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/razer-blade-base-hackintosh/2-3.png"
+width="873"
+height="546"
+srcset="https://emerywan.github.io/blog/blog/p/razer-blade-base-hackintosh/2-3_huecb3588f2c0bb9ac90822e9e02e3e4ec_119856_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/razer-blade-base-hackintosh/2-3_huecb3588f2c0bb9ac90822e9e02e3e4ec_119856_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+alt="2-3"
+class="gallery-image"
+data-flex-grow="159"
+data-flex-basis="383px"
+>&lt;/p>
+&lt;p>请按照如图修改，保存后重启。我的电脑耳机麦克风无法识别（我在 Ubuntu 下也无法找到耳机麦克风的有效节点信息）&lt;/p>
+&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/razer-blade-base-hackintosh/2-4.png"
+width="1279"
+height="678"
+srcset="https://emerywan.github.io/blog/blog/p/razer-blade-base-hackintosh/2-4_hud4d6f2c40445a0b958e52be6265bd97d_161259_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/razer-blade-base-hackintosh/2-4_hud4d6f2c40445a0b958e52be6265bd97d_161259_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+alt="2-4"
+class="gallery-image"
+data-flex-grow="188"
+data-flex-basis="452px"
+>&lt;/p>
+&lt;p>添加 type-c 输出 4k，只能支持到最高 30Hz，输出 60Hz 会直接黑屏。可以安装一个 &lt;a class="link" href="https://github.com/avibrazil/RDM" target="_blank" rel="noopener"
+>RDM&lt;/a> 进行管理。&lt;/p>
+&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/razer-blade-base-hackintosh/2-5.png"
+width="1316"
+height="696"
+srcset="https://emerywan.github.io/blog/blog/p/razer-blade-base-hackintosh/2-5_hu390d568d81002677c5e0774860cb2cfd_174773_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/razer-blade-base-hackintosh/2-5_hu390d568d81002677c5e0774860cb2cfd_174773_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+alt="2-5"
+class="gallery-image"
+data-flex-grow="189"
+data-flex-basis="453px"
+>&lt;/p>
+&lt;h2 id="3-解锁bios">[3] 解锁BIOS&lt;/h2>
+&lt;p>&lt;strong>解锁BIOS，存在一定风险，如您使用该教程对计算机进行更改，所造成的的任何后果我概不负责！！！&lt;/strong>&lt;/p>
+&lt;p>雷蛇国内官网没有提供驱动和BIOS的下载，如有需要，需要访问美国官网。&lt;a class="link" href="https://support.razer.com/gaming-laptops/razer-blade-15-2018-base/" target="_blank" rel="noopener"
+>点我。&lt;/a>&lt;/p>
+&lt;p>该笔记本 DVMT 预分配默认为 32MB，不足以启动 MacOS，在 BIOS 中该设置项默认隐藏，所以要提取本机 BIOS 并且进行解锁，将 DVMT 预分配默认设置为 64MB（1080P），分辨率更高请分配更大空间。&lt;/p>
+&lt;p>&lt;strong>建议在 windows 下操作。&lt;/strong>&lt;/p>
+&lt;h3 id="3-1-提取本机-bios">[3-1] 提取本机 BIOS&lt;/h3>
+&lt;p>&lt;strong>注意备份好。&lt;/strong>&lt;/p>
+&lt;p>打开 &lt;code>AFUWINGUI.exe&lt;/code>，点击 Save 按钮，导出本机当前 BIOS 。&lt;/p>
+&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/razer-blade-base-hackintosh/3-1.png"
+width="625"
+height="463"
+srcset="https://emerywan.github.io/blog/blog/p/razer-blade-base-hackintosh/3-1_hu2b3b289386be70a81cfc03a2fd4a6ba9_25755_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/razer-blade-base-hackintosh/3-1_hu2b3b289386be70a81cfc03a2fd4a6ba9_25755_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+alt="3-1"
+class="gallery-image"
+data-flex-grow="134"
+data-flex-basis="323px"
+>&lt;/p>
+&lt;h3 id="3-2-修改-bios">[3-2] 修改 BIOS&lt;/h3>
+&lt;ul>
+&lt;li>打开 &lt;code>AMIBCP.exe&lt;/code> ，点击 File -&amp;gt; open 打开导出的 BIOS。&lt;/li>
+&lt;li>如图，在左侧选择 / -&amp;gt; Setup -&amp;gt; Chipset，将左侧的 &lt;code>System Agent Configuration&lt;/code> 的 Access 由 Default 修改为 USER&lt;/li>
+&lt;/ul>
+&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/razer-blade-base-hackintosh/3-2.png"
+width="1073"
+height="752"
+srcset="https://emerywan.github.io/blog/blog/p/razer-blade-base-hackintosh/3-2_hu504742517ec89fe4fa26edd955452484_46678_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/razer-blade-base-hackintosh/3-2_hu504742517ec89fe4fa26edd955452484_46678_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+alt="3-2"
+class="gallery-image"
+data-flex-grow="142"
+data-flex-basis="342px"
+>&lt;/p>
+&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/razer-blade-base-hackintosh/3-3.png"
+width="981"
+height="234"
+srcset="https://emerywan.github.io/blog/blog/p/razer-blade-base-hackintosh/3-3_hu384a5070e96805721cfad18ac4b9c8d8_22227_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/razer-blade-base-hackintosh/3-3_hu384a5070e96805721cfad18ac4b9c8d8_22227_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+alt="3-3"
+class="gallery-image"
+data-flex-grow="419"
+data-flex-basis="1006px"
+>&lt;/p>
+&lt;ul>
+&lt;li>修改完后点击 File -&amp;gt; Save as。重命名为新的 BIOS。&lt;/li>
+&lt;/ul>
+&lt;h3 id="3-3-刷入新-bios">[3-3] 刷入新 BIOS&lt;/h3>
+&lt;p>&lt;strong>！！！ 注意，该过程虽然简单，但有一定风险，造成的任何结果与本人无关。&lt;/strong>&lt;/p>
+&lt;ul>
+&lt;li>
+&lt;p>重新打开 AFUWINGUI.exe，点击 Open 打开刚刚修改后的 BIOS。&lt;/p>
+&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/razer-blade-base-hackintosh/3-4.png"
+width="625"
+height="463"
+srcset="https://emerywan.github.io/blog/blog/p/razer-blade-base-hackintosh/3-4_hu3d9923cc8e5f7434310ba01f6dc9c068_25929_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/razer-blade-base-hackintosh/3-4_hu3d9923cc8e5f7434310ba01f6dc9c068_25929_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+alt="3-4"
+class="gallery-image"
+data-flex-grow="134"
+data-flex-basis="323px"
+>&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>尽可能的退出其他程序，尽量保持后台干净，再点击 Flash 刷入新的 BIOS。&lt;/p>
+&lt;/li>
+&lt;/ul>
+&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/razer-blade-base-hackintosh/3-5.png"
+width="625"
+height="463"
+srcset="https://emerywan.github.io/blog/blog/p/razer-blade-base-hackintosh/3-5_hu3d9923cc8e5f7434310ba01f6dc9c068_27476_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/razer-blade-base-hackintosh/3-5_hu3d9923cc8e5f7434310ba01f6dc9c068_27476_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+alt="3-5"
+class="gallery-image"
+data-flex-grow="134"
+data-flex-basis="323px"
+>&lt;/p>
+&lt;ul>
+&lt;li>重启&lt;/li>
+&lt;/ul>
+&lt;h2 id="4-安装前准备">[4] 安装前准备&lt;/h2>
+&lt;h3 id="4-1-准备macos-catalina-安装盘">[4-1] 准备macOS Catalina 安装盘&lt;/h3>
+&lt;p>推荐使用&lt;a class="link" href="https://blog.daliansky.net/" target="_blank" rel="noopener"
+>黑果小兵&lt;/a>制作的镜像，使用 &lt;strong>TransMac&lt;/strong> 制作（软件在文件夹中已提供）。&lt;a class="link" href="https://blog.daliansky.net/macOS-Catalina-10.15.3-19D76-Release-version-with-Clover-5103-original-image-Double-EFI-Version.html" target="_blank" rel="noopener"
+>这里是10.15.3的镜像&lt;/a>。&lt;/p>
+&lt;p>如果您要安装更新的系统，请升级 CLOVER，和 kexts/ 到对应兼容或更新的版本，可将制作好的安装盘中 &lt;code>EFI/CLOVER&lt;/code> 的文件进行同名替换。（未来的新版本可能不可预知的问题，请酌情升级）。&lt;/p>
+&lt;h3 id="4-2-启动盘制作">[4-2] 启动盘制作&lt;/h3>
+&lt;p>请参考，或自行搜索，网上教程很多。&lt;a class="link" href="https://zhuanlan.zhihu.com/p/58630676" target="_blank" rel="noopener"
+>点我。&lt;/a>&lt;/p>
+&lt;h2 id="5-系统安装">[5] 系统安装&lt;/h2>
+&lt;h3 id="5-1-bios-设置">[5-1] BIOS 设置&lt;/h3>
+&lt;ul>
+&lt;li>
+&lt;p>&lt;code>Advanced&lt;/code>&lt;/p>
+&lt;ul>
+&lt;li>&lt;code>Thunderbolt(TM) Configuration&lt;/code>
+&lt;ul>
+&lt;li>&lt;code>Security Level&lt;/code> 设置成 &lt;code>No Security&lt;/code>&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;code>Chipset&lt;/code>&lt;/p>
+&lt;ul>
+&lt;li>&lt;code>System Agent (SA) Configuration&lt;/code>
+&lt;ul>
+&lt;li>&lt;code>Graphics Configuration&lt;/code>
+&lt;ul>
+&lt;li>&lt;code>DVMT Pre-Allocated&lt;/code> 设置成 &lt;code>64&lt;/code>&lt;/li>
+&lt;li>&lt;code>DVMT Total Gfx Mem&lt;/code> 设置成 &lt;code>MAX&lt;/code>&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;code>Security&lt;/code>&lt;/p>
+&lt;ul>
+&lt;li>&lt;code>Secure Boot&lt;/code> 设置成 &lt;code>Disabled&lt;/code>&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;code>Boot&lt;/code>&lt;/p>
+&lt;ul>
+&lt;li>
+&lt;p>&lt;code>Fast Boot&lt;/code> 设置成 &lt;code>Disabled&lt;/code>&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;code>CSM Configuration&lt;/code>&lt;/p>
+&lt;ul>
+&lt;li>&lt;code>CSM Support&lt;/code> 设置成 &lt;code>Disabled&lt;/code>&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;h3 id="5-2-安装过程">[5-2] 安装过程&lt;/h3>
+&lt;p>系统安装过程大致相同，选择U盘启动后进入安装。安装过程会重启几次。&lt;/p>
+&lt;p>可自行搜索，参考其他人的步骤。&lt;/p>
+&lt;h3 id="5-3-安装时可能出现的问题">[5-3] 安装时可能出现的问题&lt;/h3>
+&lt;p>显示程序副本已损坏&lt;/p>
+&lt;ul>
+&lt;li>断网&lt;/li>
+&lt;li>打开终端&lt;/li>
+&lt;li>修改时间为系统发布对应的时间。&lt;/li>
+&lt;/ul>
+&lt;p>如修改为 2019年。输入 &lt;code>date 000000002019&lt;/code>。&lt;/p>
+&lt;h2 id="6-dsdtssdt制作">[6] DSDT，SSDT制作&lt;/h2>
+&lt;p>通过修补DSDT，SSDT驱动触控板，音频，电池状态，亮度控制等。&lt;/p>
+&lt;h3 id="6-1-准备修补">[6-1] 准备修补&lt;/h3>
+&lt;p>[6-1-1]&lt;/p>
+&lt;p>开机在 Clover 引导界面中按 &lt;code>F4&lt;/code>，所需文件会加载到 &lt;code>EFI/Clover/ACPI/origin&lt;/code> 中。通过 Clover Configurator 挂载启动的 EFI（通过U盘启动就挂载U盘）。&lt;/p>
+&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/razer-blade-base-hackintosh/6-1.png"
+width="1279"
+height="678"
+srcset="https://emerywan.github.io/blog/blog/p/razer-blade-base-hackintosh/6-1_hu144b08cce4e790f431926a2da7d31c39_187647_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/razer-blade-base-hackintosh/6-1_hu144b08cce4e790f431926a2da7d31c39_187647_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+alt="6-1"
+class="gallery-image"
+data-flex-grow="188"
+data-flex-basis="452px"
+>&lt;/p>
+&lt;p>[6-1-2]&lt;/p>
+&lt;p>将 origin 文件夹复制到桌面，同时将 &lt;code>iasl&lt;/code> 软件复制到文件夹中。&lt;/p>
+&lt;p>[6-1-3]&lt;/p>
+&lt;p>打开终端&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-zsh" data-lang="zsh">&lt;span class="line">&lt;span class="cl">&lt;span class="nb">cd&lt;/span> ~/Desktop
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">mkdir patched
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">./origin/iasl -da -dl DSDT.aml
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>[6-1-4]&lt;/p>
+&lt;p>打开 origin，使用 &lt;code>MaciASL&lt;/code> 打开生成的 &lt;strong>DSDT.dsl&lt;/strong> 文件。点击 Compile，确保没有错误。（默认应该没有 error，但有很多 warning，warning 不必关系，若有 error 请将 error 处代码注释或删除）&lt;/p>
+&lt;p>[6-1-5]&lt;/p>
+&lt;p>确保没有 errors 后，点击 Patch。&lt;/p>
+&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/razer-blade-base-hackintosh/6-2.png"
+width="1025"
+height="725"
+srcset="https://emerywan.github.io/blog/blog/p/razer-blade-base-hackintosh/6-2_hu66c83b6f1d65cd60613cc338a3dbc89f_356101_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/razer-blade-base-hackintosh/6-2_hu66c83b6f1d65cd60613cc338a3dbc89f_356101_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+alt="6-2"
+class="gallery-image"
+data-flex-grow="141"
+data-flex-basis="339px"
+>&lt;/p>
+&lt;h3 id="6-2-修复电池">[6-2] 修复电池&lt;/h3>
+&lt;p>[1] 在弹窗的左侧点击 &lt;code>_RehabMan Laptop/[bat]Razer Blade (2014)&lt;/code> ，等待右侧进行匹配后点击 Apply。&lt;/p>
+&lt;p>如果网络不好的话可能无法加载（github），请切换到合适的网络，或访问 &lt;a class="link" href="https://github.com/RehabMan/Laptop-DSDT-Patch/blob/master/battery/battery_Razer-Blade-2014.txt" target="_blank" rel="noopener"
+>这里&lt;/a>，或复制以下代码。&lt;/p>
+&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/razer-blade-base-hackintosh/6-3.png"
+width="1025"
+height="725"
+srcset="https://emerywan.github.io/blog/blog/p/razer-blade-base-hackintosh/6-3_hu7d9acb8df49ac7ec09c34c4f5acd4d1b_432072_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/razer-blade-base-hackintosh/6-3_hu7d9acb8df49ac7ec09c34c4f5acd4d1b_432072_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+alt="6-3"
+class="gallery-image"
+data-flex-grow="141"
+data-flex-basis="339px"
+>&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;span class="lnt">11
+&lt;/span>&lt;span class="lnt">12
+&lt;/span>&lt;span class="lnt">13
+&lt;/span>&lt;span class="lnt">14
+&lt;/span>&lt;span class="lnt">15
+&lt;/span>&lt;span class="lnt">16
+&lt;/span>&lt;span class="lnt">17
+&lt;/span>&lt;span class="lnt">18
+&lt;/span>&lt;span class="lnt">19
+&lt;/span>&lt;span class="lnt">20
+&lt;/span>&lt;span class="lnt">21
+&lt;/span>&lt;span class="lnt">22
+&lt;/span>&lt;span class="lnt">23
+&lt;/span>&lt;span class="lnt">24
+&lt;/span>&lt;span class="lnt">25
+&lt;/span>&lt;span class="lnt">26
+&lt;/span>&lt;span class="lnt">27
+&lt;/span>&lt;span class="lnt">28
+&lt;/span>&lt;span class="lnt">29
+&lt;/span>&lt;span class="lnt">30
+&lt;/span>&lt;span class="lnt">31
+&lt;/span>&lt;span class="lnt">32
+&lt;/span>&lt;span class="lnt">33
+&lt;/span>&lt;span class="lnt">34
+&lt;/span>&lt;span class="lnt">35
+&lt;/span>&lt;span class="lnt">36
+&lt;/span>&lt;span class="lnt">37
+&lt;/span>&lt;span class="lnt">38
+&lt;/span>&lt;span class="lnt">39
+&lt;/span>&lt;span class="lnt">40
+&lt;/span>&lt;span class="lnt">41
+&lt;/span>&lt;span class="lnt">42
+&lt;/span>&lt;span class="lnt">43
+&lt;/span>&lt;span class="lnt">44
+&lt;/span>&lt;span class="lnt">45
+&lt;/span>&lt;span class="lnt">46
+&lt;/span>&lt;span class="lnt">47
+&lt;/span>&lt;span class="lnt">48
+&lt;/span>&lt;span class="lnt">49
+&lt;/span>&lt;span class="lnt">50
+&lt;/span>&lt;span class="lnt">51
+&lt;/span>&lt;span class="lnt">52
+&lt;/span>&lt;span class="lnt">53
+&lt;/span>&lt;span class="lnt">54
+&lt;/span>&lt;span class="lnt">55
+&lt;/span>&lt;span class="lnt">56
+&lt;/span>&lt;span class="lnt">57
+&lt;/span>&lt;span class="lnt">58
+&lt;/span>&lt;span class="lnt">59
+&lt;/span>&lt;span class="lnt">60
+&lt;/span>&lt;span class="lnt">61
+&lt;/span>&lt;span class="lnt">62
+&lt;/span>&lt;span class="lnt">63
+&lt;/span>&lt;span class="lnt">64
+&lt;/span>&lt;span class="lnt">65
+&lt;/span>&lt;span class="lnt">66
+&lt;/span>&lt;span class="lnt">67
+&lt;/span>&lt;span class="lnt">68
+&lt;/span>&lt;span class="lnt">69
+&lt;/span>&lt;span class="lnt">70
+&lt;/span>&lt;span class="lnt">71
+&lt;/span>&lt;span class="lnt">72
+&lt;/span>&lt;span class="lnt">73
+&lt;/span>&lt;span class="lnt">74
+&lt;/span>&lt;span class="lnt">75
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-txt" data-lang="txt">&lt;span class="line">&lt;span class="cl">#Maintained by: RehabMan for: Laptop Patches
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">#battery_Razer-Blade-2014.txt
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"># created by sidelia 2016-01-17
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"># changes for Razer Blade Stealth (Kaby Lake) by BlenderSleuth (minor fixes by RehabMan)
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"># works for:
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"># Razer Blade (2014)
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"># Razer Blade Stealth (Kaby Lake), per BlenderSleuth
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"># Razer Blade (14&amp;#34;, late 2016)
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"># Razer Blade Pro (2017)
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"># Razer Blade 15 (2018), per JomanJi/blodtanner
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">into method label B1B2 remove_entry;
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">into definitionblock code_regex . insert
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">begin
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">Method (B1B2, 2, NotSerialized) { Return(Or(Arg0, ShiftLeft(Arg1, 8))) }\n
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">end;
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">into device label EC0 code_regex BIF1,\s+16, replace_matched begin IF10,8,IF11,8, end;
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">into device label EC0 code_regex BIF2,\s+16, replace_matched begin IF20,8,IF21,8, end;
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">into device label EC0 code_regex BIF3,\s+16, replace_matched begin IF30,8,IF31,8, end;
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">into device label EC0 code_regex BIF4,\s+16, replace_matched begin IF40,8,IF41,8, end;
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">into device label EC0 code_regex BST0,\s+16, replace_matched begin ST00,8,ST01,8, end;
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">into device label EC0 code_regex BST1,\s+16, replace_matched begin ST10,8,ST11,8, end;
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">into device label EC0 code_regex BST2,\s+16, replace_matched begin ST20,8,ST21,8, end;
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">into device label EC0 code_regex BST3,\s+16, replace_matched begin ST30,8,ST31,8, end;
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">into method label _BIF code_regex \^\^EC0\.BIF1, replaceall_matched begin B1B2(^^EC0.IF10,^^EC0.IF11), end;
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">into method label _BIF code_regex \^\^EC0\.BIF2, replaceall_matched begin B1B2(^^EC0.IF20,^^EC0.IF21), end;
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">into method label _BIF code_regex \^\^EC0\.BIF3, replaceall_matched begin B1B2(^^EC0.IF30,^^EC0.IF31), end;
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">into method label _BIF code_regex \^\^EC0\.BIF4, replaceall_matched begin B1B2(^^EC0.IF40,^^EC0.IF41), end;
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">into method label _BST code_regex \^\^EC0\.BST0, replaceall_matched begin B1B2(^^EC0.ST00,^^EC0.ST01), end;
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">into method label _BST code_regex \^\^EC0\.BST1, replaceall_matched begin B1B2(^^EC0.ST10,^^EC0.ST11), end;
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">into method label _BST code_regex \^\^EC0\.BST2, replaceall_matched begin B1B2(^^EC0.ST20,^^EC0.ST21), end;
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">into method label _BST code_regex \^\^EC0\.BST3, replaceall_matched begin B1B2(^^EC0.ST30,^^EC0.ST31), end;
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"># added for Razer Blade 15 (2018), per JomanJi
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">into device label EC0 code_regex BIF0,\s+16, replace_matched begin IF00,8,IF01,8, end;
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">into method label _BIF code_regex \(\^\^EC0.BIF0, replaceall_matched begin (B1B2(\^\^EC0.IF00,\^\^EC0.IF01), end;
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"># utility methods to read/write buffers from/to EC
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">into method label RE1B parent_label EC0 remove_entry;
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">into method label RECB parent_label EC0 remove_entry;
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">into device label EC0 insert
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">begin
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">Method (RE1B, 1, NotSerialized)\n
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">{\n
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> OperationRegion(ERAM, EmbeddedControl, Arg0, 1)\n
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> Field(ERAM, ByteAcc, NoLock, Preserve) { BYTE, 8 }\n
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> Return(BYTE)\n
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">}\n
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">Method (RECB, 2, Serialized)\n
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">// Arg0 - offset in bytes from zero-based EC\n
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">// Arg1 - size of buffer in bits\n
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">{\n
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> ShiftRight(Add(Arg1,7), 3, Arg1)\n
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> Name(TEMP, Buffer(Arg1) { })\n
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> Add(Arg0, Arg1, Arg1)\n
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> Store(0, Local0)\n
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> While (LLess(Arg0, Arg1))\n
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> {\n
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> Store(RE1B(Arg0), Index(TEMP, Local0))\n
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> Increment(Arg0)\n
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> Increment(Local0)\n
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> }\n
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> Return(TEMP)\n
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">}\n
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">end;
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"># buffer fields
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">into device label EC0 code_regex (ECCM,)\s+(256) replace_matched begin ECCX,%2,//%1%2 end;
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">into method label _BIF code_regex \(\^\^EC0.ECCM, replaceall_matched begin (^^EC0.RECB(0x60,256), end;
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>[2] 点击 Compile，确保没有错误。（默认情况下没有，不同版本BIOS可能情况不同）。&lt;/p>
+&lt;h3 id="6-4-修复重启保存背光亮度">[6-4] 修复重启保存背光亮度&lt;/h3>
+&lt;p>[6-4-1]&lt;/p>
+&lt;p>在左侧菜单栏向下滑动，找到 &lt;code>[gfx0] Disable/Enable on _WAK/_PTS (DSDT)&lt;/code>，点击都单击 Apply。&lt;/p>
+&lt;p>网络不好可点击 &lt;a class="link" href="https://github.com/RehabMan/Laptop-DSDT-Patch/blob/master/graphics/graphics_PTS_WAK-disable.txt" target="_blank" rel="noopener"
+>这里&lt;/a> 或复制以下代码。&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;span class="lnt">11
+&lt;/span>&lt;span class="lnt">12
+&lt;/span>&lt;span class="lnt">13
+&lt;/span>&lt;span class="lnt">14
+&lt;/span>&lt;span class="lnt">15
+&lt;/span>&lt;span class="lnt">16
+&lt;/span>&lt;span class="lnt">17
+&lt;/span>&lt;span class="lnt">18
+&lt;/span>&lt;span class="lnt">19
+&lt;/span>&lt;span class="lnt">20
+&lt;/span>&lt;span class="lnt">21
+&lt;/span>&lt;span class="lnt">22
+&lt;/span>&lt;span class="lnt">23
+&lt;/span>&lt;span class="lnt">24
+&lt;/span>&lt;span class="lnt">25
+&lt;/span>&lt;span class="lnt">26
+&lt;/span>&lt;span class="lnt">27
+&lt;/span>&lt;span class="lnt">28
+&lt;/span>&lt;span class="lnt">29
+&lt;/span>&lt;span class="lnt">30
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-txt" data-lang="txt">&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">#Maintained by: RehabMan for: Laptop Patches
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">#graphics_PTS_WAK-disable.txt
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">#
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"># The purpose of this patch is to add code to to _WAK
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"># that disables Radeon/nvidia on wake and add code
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"># to _PTS that enables it on _PTS.
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">#
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"># The path of _OFF may have to be customized to match your SSDTs
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"># The patch attempts to identify the correct _REG by using
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"># the ACPI PNP identifier for the EC.
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">#
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"># Use this patch if you experience trouble shutting down
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"># or restarting your laptop when disabling nvida/radeon.
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">#
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">into method label _PTS code_regex ([\s\S]*) replace_matched
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">begin
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">External(\\_SB.PCI0.PEG0.PEGP._ON, MethodObj)\n
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">If (CondRefOf(\\_SB.PCI0.PEG0.PEGP._ON)) { \\_SB.PCI0.PEG0.PEGP._ON() }\n
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">%1
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">end;
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">into method label _WAK code_regex (Return\s+\(.*) replace_matched
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">begin
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">External(\\_SB.PCI0.PEG0.PEGP._OFF, MethodObj)\n
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">If (CondRefOf(\\_SB.PCI0.PEG0.PEGP._OFF)) { \\_SB.PCI0.PEG0.PEGP._OFF() }\n
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">%1
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">end;
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>[6-4-2] 按 command + F 搜索 &lt;code>Device (ALSD)&lt;/code>，找到如图代码，将其替换为以下代码。&lt;/p>
+&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/razer-blade-base-hackintosh/6-4.png"
+width="1025"
+height="725"
+srcset="https://emerywan.github.io/blog/blog/p/razer-blade-base-hackintosh/6-4_hub68a8a966914faccc2fa404696284489_152896_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/razer-blade-base-hackintosh/6-4_hub68a8a966914faccc2fa404696284489_152896_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+alt="6-4"
+class="gallery-image"
+data-flex-grow="141"
+data-flex-basis="339px"
+>&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-txt" data-lang="txt">&lt;span class="line">&lt;span class="cl">Device (_SB.ALS0)
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">{
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> Name (_HID, &amp;#34;ACPI0008&amp;#34;) // _HID: Hardware ID
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> Name (_CID, &amp;#34;smc-als&amp;#34;) // _STA: Status
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> Name (_ALI, 300) // _ALI: Ambient Light Illuminance
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> Name (_ALR, Package () // _ALR: Ambient Light Response
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> {
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> Package () { 100, 300 },
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> })
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">}
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/razer-blade-base-hackintosh/6-5.png"
+width="1025"
+height="725"
+srcset="https://emerywan.github.io/blog/blog/p/razer-blade-base-hackintosh/6-5_hub980ce45be6280fc8a0a8de2a9044e65_256600_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/razer-blade-base-hackintosh/6-5_hub980ce45be6280fc8a0a8de2a9044e65_256600_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+alt="6-5"
+class="gallery-image"
+data-flex-grow="141"
+data-flex-basis="339px"
+>&lt;/p>
+&lt;h3 id="6-3-修复触控板">[6-3] 修复触控板&lt;/h3>
+&lt;p>灵刃 15 的标准版和精英版使用的触控板不同，请根据自己的电脑进行选择修复方案。&lt;/p>
+&lt;h4 id="6-3-1-标准版">[6-3-1] 标准版&lt;/h4>
+&lt;p>[6-3-1-1]&lt;/p>
+&lt;p>继续搜索 &lt;code>SSCN&lt;/code>。找到 Scope 为 &lt;code>_SB.PCI0.I2C0&lt;/code> 下的 SSCN 方法。复制 SSCN 与 FMCN（在 SSCN 下方）这 两个方法。并将这两个方法如图重命名（也可选择删除）。&lt;/p>
+&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/razer-blade-base-hackintosh/6-6.png"
+width="1025"
+height="725"
+srcset="https://emerywan.github.io/blog/blog/p/razer-blade-base-hackintosh/6-6_hu7d9acb8df49ac7ec09c34c4f5acd4d1b_280587_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/razer-blade-base-hackintosh/6-6_hu7d9acb8df49ac7ec09c34c4f5acd4d1b_280587_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+alt="6-6"
+class="gallery-image"
+data-flex-grow="141"
+data-flex-basis="339px"
+>&lt;/p>
+&lt;p>重命名为：&lt;/p>
+&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/razer-blade-base-hackintosh/6-7.png"
+width="1025"
+height="725"
+srcset="https://emerywan.github.io/blog/blog/p/razer-blade-base-hackintosh/6-7_hu3f7d5d77e0868263a4b670cd80a4de9e_282582_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/razer-blade-base-hackintosh/6-7_hu3f7d5d77e0868263a4b670cd80a4de9e_282582_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+alt="6-7"
+class="gallery-image"
+data-flex-grow="141"
+data-flex-basis="339px"
+>&lt;/p>
+&lt;p>[6-3-1-3]&lt;/p>
+&lt;p>搜索 TPD0。将之前剪切的两个方法放到 &lt;code>_INI&lt;/code> 方法后。&lt;/p>
+&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/razer-blade-base-hackintosh/6-8.png"
+width="1025"
+height="725"
+srcset="https://emerywan.github.io/blog/blog/p/razer-blade-base-hackintosh/6-8_hu7d9acb8df49ac7ec09c34c4f5acd4d1b_154135_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/razer-blade-base-hackintosh/6-8_hu7d9acb8df49ac7ec09c34c4f5acd4d1b_154135_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+alt="6-8"
+class="gallery-image"
+data-flex-grow="141"
+data-flex-basis="339px"
+>&lt;/p>
+&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/razer-blade-base-hackintosh/6-9.png"
+width="1025"
+height="725"
+srcset="https://emerywan.github.io/blog/blog/p/razer-blade-base-hackintosh/6-9_hu7d9acb8df49ac7ec09c34c4f5acd4d1b_286656_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/razer-blade-base-hackintosh/6-9_hu7d9acb8df49ac7ec09c34c4f5acd4d1b_286656_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+alt="6-9"
+class="gallery-image"
+data-flex-grow="141"
+data-flex-basis="339px"
+>&lt;/p>
+&lt;p>[6-3-1-4]&lt;/p>
+&lt;p>向下找到如下代码。&lt;/p>
+&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/razer-blade-base-hackintosh/6-10.png"
+width="1025"
+height="725"
+srcset="https://emerywan.github.io/blog/blog/p/razer-blade-base-hackintosh/6-10_hu23d7821cfcc16e2238565e92d2428825_290461_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/razer-blade-base-hackintosh/6-10_hu23d7821cfcc16e2238565e92d2428825_290461_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+alt="6-10"
+class="gallery-image"
+data-flex-grow="141"
+data-flex-basis="339px"
+>&lt;/p>
+&lt;p>将其更改为如图。&lt;/p>
+&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/razer-blade-base-hackintosh/6-11.png"
+width="1025"
+height="725"
+srcset="https://emerywan.github.io/blog/blog/p/razer-blade-base-hackintosh/6-11_hu1c5f5c37fa8eeab89aecaea9b074d8a6_267651_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/razer-blade-base-hackintosh/6-11_hu1c5f5c37fa8eeab89aecaea9b074d8a6_267651_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+alt="6-11"
+class="gallery-image"
+data-flex-grow="141"
+data-flex-basis="339px"
+>&lt;/p>
+&lt;h4 id="6-3-2-精英版">[6-3-2] 精英版&lt;/h4>
+&lt;p>[6-3-2-1]&lt;/p>
+&lt;p>在 Patch 页面中粘贴以下代码代码，点击 Apply。&lt;/p>
+&lt;p>[6-3-2-2]&lt;/p>
+&lt;p>点击 Compile 进行编译确定无 error（默认没有）。&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;span class="lnt">4
+&lt;/span>&lt;span class="lnt">5
+&lt;/span>&lt;span class="lnt">6
+&lt;/span>&lt;span class="lnt">7
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-txt" data-lang="txt">&lt;span class="line">&lt;span class="cl">into method label _STA parent_label GPI0 replace_content begin
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">Return (0x0F)
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">end;
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">into_all method label _CRS parent_label TPD0 replace_content begin
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">ConcatenateResTemplate (SBFB, SBFI)
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">end;
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;h3 id="6-4-保存修改好的-dsdtaml">[6-4] 保存修改好的 DSDT.aml&lt;/h3>
+&lt;ul>
+&lt;li>
+&lt;p>点击 File -&amp;gt; save as 。&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>File Format 选择 &lt;code>ACPI Machine Language Binary&lt;/code>。命名为 DSDT.aml。存入桌面中的 parched 文件夹中。&lt;/p>
+&lt;/li>
+&lt;/ul>
+&lt;h3 id="6-5-屏蔽-nvdia-显卡">[6-5] 屏蔽 Nvdia 显卡&lt;/h3>
+&lt;ul>
+&lt;li>&lt;strong>如果你选择安装 High Sierra 安装 WebDriver 使用 Nvidia 显卡的话，不用该补丁&lt;/strong>。&lt;/li>
+&lt;/ul>
+&lt;p>[点击这里查看支持驱动的 High Sierra ](&lt;a class="link" href="https://www.tonymacx86.com/nvidia-drivers/" target="_blank" rel="noopener"
+>https&lt;/a> : &lt;a class="link" href="https://www.tonymacx86.com/nvidia-drivers/" target="_blank" rel="noopener"
+>//www.tonymacx86.com/nvidia-drivers/&lt;/a>)&lt;/p>
+&lt;ul>
+&lt;li>&lt;strong>在的笔记本上使用该补丁会导致 type-c 转视频接口无信号，无法拓展显示器，若出现相同情况请删除该补丁。&lt;/strong>&lt;/li>
+&lt;/ul>
+&lt;p>[6-5-1]&lt;/p>
+&lt;p>再次进入 origin 文件夹中，在终端输入&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-shell" data-lang="shell">&lt;span class="line">&lt;span class="cl">./origin/iasl -da -dl SSDT-12-OptTabl.aml
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>[6-5-2]&lt;/p>
+&lt;p>根据上方修补电池状态，触控板的方式类似，使用 MaciASL 打开 &lt;strong>SSDT-12-OptTabl.dsl&lt;/strong>&lt;/p>
+&lt;p>[6-5-3]&lt;/p>
+&lt;p>按 command + F 搜索以下代码&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-txt" data-lang="txt">&lt;span class="line">&lt;span class="cl">Method (_OFF, 0, Serialized) // _OFF: Power Off
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/razer-blade-base-hackintosh/6-12.png"
+width="1025"
+height="725"
+srcset="https://emerywan.github.io/blog/blog/p/razer-blade-base-hackintosh/6-12_hu2676900d025708aa224f75aaa3467a9c_159091_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/razer-blade-base-hackintosh/6-12_hu2676900d025708aa224f75aaa3467a9c_159091_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+alt="6-12"
+class="gallery-image"
+data-flex-grow="141"
+data-flex-basis="339px"
+>&lt;/p>
+&lt;p>[6-5-4]&lt;/p>
+&lt;p>在该代码上方，粘贴以下代码&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-txt" data-lang="txt">&lt;span class="line">&lt;span class="cl">Method (_INI) {_OFF() } // added to call _OFF
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>[6-5-5]&lt;/p>
+&lt;p>点击 patch，将以下代码粘贴到弹窗中，点击 apply。&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;span class="lnt">4
+&lt;/span>&lt;span class="lnt">5
+&lt;/span>&lt;span class="lnt">6
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-txt" data-lang="txt">&lt;span class="line">&lt;span class="cl">into method label _INI parent_label \_SB.PCI0.GFX0 insert
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">begin
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">//added to turn nvidia/radeon off\n
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">External(\_SB.PCI0.PEG0.PEGP._OFF, MethodObj)\n
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">\n
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">end;
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>[6-5-6]&lt;/p>
+&lt;p>点击编译，出现一个错误。&lt;/p>
+&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/razer-blade-base-hackintosh/6-13.png"
+width="1025"
+height="725"
+srcset="https://emerywan.github.io/blog/blog/p/razer-blade-base-hackintosh/6-13_hua74e3ca4eeedf7cfd113fba4cc112dcf_385932_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/razer-blade-base-hackintosh/6-13_hua74e3ca4eeedf7cfd113fba4cc112dcf_385932_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+alt="6-13"
+class="gallery-image"
+data-flex-grow="141"
+data-flex-basis="339px"
+>&lt;/p>
+&lt;p>[6-5-7]&lt;/p>
+&lt;p>搜索一下代码，并将其删除，再次编译。&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-shell" data-lang="shell">&lt;span class="line">&lt;span class="cl">External &lt;span class="o">(&lt;/span>_SB_.PCI0.PEG0.TGPC, IntObj&lt;span class="o">)&lt;/span> // &lt;span class="o">(&lt;/span>from opcode&lt;span class="o">)&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/razer-blade-base-hackintosh/6-14.png"
+width="1025"
+height="725"
+srcset="https://emerywan.github.io/blog/blog/p/razer-blade-base-hackintosh/6-14_huc397bebb9da1198e3070ace5d1200979_429156_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/razer-blade-base-hackintosh/6-14_huc397bebb9da1198e3070ace5d1200979_429156_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+alt="6-10"
+class="gallery-image"
+data-flex-grow="141"
+data-flex-basis="339px"
+>&lt;/p>
+&lt;p>[6-5-8]&lt;/p>
+&lt;p>点击 File -&amp;gt; Save As。将最终的 /aml 文件保存。&lt;/p>
+&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/razer-blade-base-hackintosh/6-15.png"
+width="1025"
+height="725"
+srcset="https://emerywan.github.io/blog/blog/p/razer-blade-base-hackintosh/6-15_huc397bebb9da1198e3070ace5d1200979_427498_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/razer-blade-base-hackintosh/6-15_huc397bebb9da1198e3070ace5d1200979_427498_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+alt="6-11"
+class="gallery-image"
+data-flex-grow="141"
+data-flex-basis="339px"
+>&lt;/p>
+&lt;h3 id="6-6-制作-ssdt-usbxaml">[6-6] 制作 SSDT-USBX.aml&lt;/h3>
+&lt;p>如果想制作自己的 SSDT-USBX.aml。请参考 &lt;a class="link" href="https://github.com/stonevil/Razer_Blade_Advanced_early_2019_Hackintosh#usb-mapping" target="_blank" rel="noopener"
+>点我。&lt;/a>&lt;/p>
+&lt;p>使用 USBMap。&lt;a class="link" href="https://github.com/corpnewt/USBMap" target="_blank" rel="noopener"
+>点我&lt;/a>&lt;/p>
+&lt;h3 id="6-7-复制提供的的-aml-文件">[6-7] 复制提供的的 .aml 文件&lt;/h3>
+&lt;p>将文件夹中的 SSDT-PNLF.aml，SSDT-UIAC-ALL.aml，SSDT-USBX.aml，SSDT-XOSI.aml 同上面修补的两个文件一同放入 patched 文件夹中，最后 patched 文件夹中应该有如下6个文件。&lt;/p>
+&lt;p>&lt;strong>如果 type-c 转视频接口无信号，请删除SSDT-12-OptTabl.aml&lt;/strong>&lt;/p>
+&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/razer-blade-base-hackintosh/6-16.png"
+width="618"
+height="293"
+srcset="https://emerywan.github.io/blog/blog/p/razer-blade-base-hackintosh/6-16_hu06ceecd71981737f4621cc2ff5d5371e_32019_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/razer-blade-base-hackintosh/6-16_hu06ceecd71981737f4621cc2ff5d5371e_32019_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+alt="6-16"
+class="gallery-image"
+data-flex-grow="210"
+data-flex-basis="506px"
+>&lt;/p>
+&lt;h2 id="7-网卡">[7] 网卡&lt;/h2>
+&lt;h3 id="7-1-更换博通网卡">[7-1] 更换博通网卡&lt;/h3>
+&lt;p>在网上找过拆机图，网卡附近的位置还是挺多的，我的选择是拆机的 &lt;code>BCM94360cs2&lt;/code> + 转接卡，可直接免驱使用。&lt;/p>
+&lt;p>相比使用原装的网卡位置稍有点高，压在一根的排线上，但是不影响，如选择同款网卡，请注意绝缘，建议上螺丝的时候不要拧太紧，不松动即可。装上之后的效果如图。&lt;/p>
+&lt;p>**小提示: **拧螺丝前最好把易碎贴给清理干净。这个贴纸分量太足，卡在螺丝孔中导致一直滑丝。&lt;/p>
+&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/razer-blade-base-hackintosh/7-1.png"
+width="574"
+height="668"
+srcset="https://emerywan.github.io/blog/blog/p/razer-blade-base-hackintosh/7-1_hu1161da1d8dba47d941a13aa6ae79cf52_787645_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/razer-blade-base-hackintosh/7-1_hu1161da1d8dba47d941a13aa6ae79cf52_787645_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+alt="7-1"
+class="gallery-image"
+data-flex-grow="85"
+data-flex-basis="206px"
+>&lt;/p>
+&lt;p>**使用效果: **2.4G WIFI 和 蓝牙有干扰，尤其是 2.4G WIFI 使用带宽高的时候，蓝牙几乎不能用。其他使用场景基本良好。&lt;/p>
+&lt;ul>
+&lt;li>
+&lt;p>想折腾的话可选择 &lt;code>DW1820A&lt;/code>，可参考 &lt;a class="link" href="https://blog.daliansky.net/DW1820A_BCM94350ZAE-driver-inserts-the-correct-posture.html" target="_blank" rel="noopener"
+>这里。&lt;/a>&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>博通 &lt;code>BCM94352Z&lt;/code> ，现在价钱被炒的很高，目前将近 300，有钱随意。&lt;/p>
+&lt;/li>
+&lt;/ul>
+&lt;h3 id="7-2-使用自带网卡">[7-2] 使用自带网卡&lt;/h3>
+&lt;p>Intel 蓝牙默认免驱，WiFi 目前无解。&lt;/p>
+&lt;p>蓝牙从 windows 重启进入 macOS 可使用（网卡未断电所以上传了驱动）。&lt;/p>
+&lt;p>将 &lt;a class="link" href="https://github.com/zxystd/IntelBluetoothFirmware/releases" target="_blank" rel="noopener"
+>该驱动&lt;/a> 放入 EFI/CLOVER/kexts，可以实现冷启动驱动自带网卡蓝牙。&lt;/p>
+&lt;p>**使用效果: **蓝牙键盘，蓝牙音箱没有问题，蓝牙鼠标貌似不能用。&lt;/p>
+&lt;h3 id="7-3-使用usb网卡">[7-3] 使用USB网卡&lt;/h3>
+&lt;p>usb 网卡驱动安装。&lt;a class="link" href="https://github.com/chris1111/Wireless-USB-Adapter-Clover/releases" target="_blank" rel="noopener"
+>点我。&lt;/a>&lt;/p>
+&lt;ul>
+&lt;li>COMFAST CF-WU815N 150M 单频&lt;/li>
+&lt;li>COMFAST CF-811AC 650M 双频&lt;/li>
+&lt;li>COMFAST CF-812AC 1300M 双频&lt;/li>
+&lt;li>更多其他型号自行搜索&lt;/li>
+&lt;/ul>
+&lt;h2 id="8-一些优化">[8] 一些优化&lt;/h2>
+&lt;h3 id="8-1-hidpi">[8-1] HIDPI&lt;/h3>
+&lt;p>开启 HIDPI 后可能会导致开机第二阶段 Logo 变大，因为分辨率是仿冒的，不影响使用。&lt;/p>
+&lt;p>使用终端执行：&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-zsh" data-lang="zsh">&lt;span class="line">&lt;span class="cl">sh -c &lt;span class="s2">&amp;#34;&lt;/span>&lt;span class="k">$(&lt;/span>curl -fsSL https://raw.githubusercontent.com/xzhih/one-key-hidpi/master/hidpi.sh&lt;span class="k">)&lt;/span>&lt;span class="s2">&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;ul>
+&lt;li>
+&lt;p>选择 &amp;ldquo;开启 HIDPI&amp;rdquo;&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>显示的 ICON 选择 Macbook Pro（在设置界面显示的样式）&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>选择分辨率配置 1080P 显示器（根据自身情况选择）&lt;/p>
+&lt;/li>
+&lt;/ul>
+&lt;p>更多详细情况可参考这篇文章。&lt;a class="link" href="https://www.sqlsec.com/2018/09/hidpi.html" target="_blank" rel="noopener"
+>点我。&lt;/a>&lt;/p>
+&lt;h3 id="8-2-打开-trim">[8-2] 打开 TRIM&lt;/h3>
+&lt;p>如果使用 SSD，一定要打开 TRIM，防止系统多次擦写，确保硬盘寿命。&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-zsh" data-lang="zsh">&lt;span class="line">&lt;span class="cl">sudo trimforce &lt;span class="nb">enable&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>完成后系统会进行一次重启。&lt;/p>
+&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/razer-blade-base-hackintosh/8-1.png"
+width="597"
+height="392"
+srcset="https://emerywan.github.io/blog/blog/p/razer-blade-base-hackintosh/8-1_hu7ef8c94d672dd32ca37ffb306a046a5c_44030_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/razer-blade-base-hackintosh/8-1_hu7ef8c94d672dd32ca37ffb306a046a5c_44030_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+alt="8-1"
+class="gallery-image"
+data-flex-grow="152"
+data-flex-basis="365px"
+>&lt;/p>
+&lt;h3 id="8-3-禁用睡眠">[8-3] 禁用睡眠&lt;/h3>
+&lt;p>在终端运行以下命令，并在 设置 -&amp;gt; 节能 中关闭相应设置。&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;span class="lnt">4
+&lt;/span>&lt;span class="lnt">5
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-zsh" data-lang="zsh">&lt;span class="line">&lt;span class="cl">sudo pmset -a hibernatemode &lt;span class="m">0&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">sudo rm /var/vm/sleepimage
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">sudo mkdir /var/vm/sleepimage
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/razer-blade-base-hackintosh/8-2.png"
+width="668"
+height="447"
+srcset="https://emerywan.github.io/blog/blog/p/razer-blade-base-hackintosh/8-2_hud42e2df37bc11de06acd6253c0889518_56255_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/razer-blade-base-hackintosh/8-2_hud42e2df37bc11de06acd6253c0889518_56255_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+alt="8-2"
+class="gallery-image"
+data-flex-grow="149"
+data-flex-basis="358px"
+>&lt;/p>
+&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/razer-blade-base-hackintosh/8-3.png"
+width="668"
+height="447"
+srcset="https://emerywan.github.io/blog/blog/p/razer-blade-base-hackintosh/8-3_hu811770682d9683eef53048df303f786e_59426_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/razer-blade-base-hackintosh/8-3_hu811770682d9683eef53048df303f786e_59426_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+alt="8-3"
+class="gallery-image"
+data-flex-grow="149"
+data-flex-basis="358px"
+>&lt;/p>
+&lt;h3 id="8-4-洗白序列号">[8-4] “洗白”序列号&lt;/h3>
+&lt;p>网络上已经有很多教程，自行搜一下。&lt;/p>
+&lt;h1 id="参考">参考&lt;/h1>
+&lt;ul>
+&lt;li>&lt;a class="link" href="https://github.com/stonevil/Razer_Blade_Advanced_early_2019_Hackintosh" target="_blank" rel="noopener"
+>https://github.com/stonevil/Razer_Blade_Advanced_early_2019_Hackintosh&lt;/a>&lt;/li>
+&lt;li>&lt;a class="link" href="https://www.tonymacx86.com/threads/guide-razer-blade-15-2018-detailed-install-guide-high-sierra-10-13-6-17g2208-17g5019.264017/" target="_blank" rel="noopener"
+>https://www.tonymacx86.com/threads/guide-razer-blade-15-2018-detailed-install-guide-high-sierra-10-13-6-17g2208-17g5019.264017/&lt;/a>&lt;/li>
+&lt;li>&lt;a class="link" href="https://blog.daliansky.net/" target="_blank" rel="noopener"
+>https://blog.daliansky.net/&lt;/a>&lt;/li>
+&lt;/ul></description></item></channel></rss>
