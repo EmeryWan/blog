@@ -219,7 +219,7 @@ data-flex-basis="472px"
 &lt;/ul>
 &lt;h2 id="-垃圾收集方式">🌴 垃圾收集方式&lt;/h2>
 &lt;h3 id="-部分收集">🪨 部分收集&lt;/h3>
-&lt;p>收集堆部分区域。&lt;/p>
+&lt;p>收集堆部分区域。&lt;code>Partial GC&lt;/code>&lt;/p>
 &lt;ul>
 &lt;li>新生代收集 &lt;code>Minor GC / Young GC&lt;/code>&lt;/li>
 &lt;/ul>
@@ -229,11 +229,11 @@ data-flex-basis="472px"
 &lt;/ul>
 &lt;p>目标只是老年代的垃圾收集，目前只有 CMS 收集器会有单独收集老年代的行为。&lt;/p>
 &lt;ul>
-&lt;li>混合收集&lt;/li>
+&lt;li>混合收集 &lt;code>Mixed GC&lt;/code>&lt;/li>
 &lt;/ul>
 &lt;p>目标是整个新生代和部分老年代的垃圾收集，目前只有 G1 收集器会有这种行为。&lt;/p>
 &lt;h3 id="-整堆收集">🪨 整堆收集&lt;/h3>
-&lt;p>收集整个堆和方法区。Full GC&lt;/p>
+&lt;p>收集整个堆和方法区。&lt;code>Full GC&lt;/code>&lt;/p>
 &lt;ul>
 &lt;li>晋升到老年代的对象大于老年代的剩余空间&lt;/li>
 &lt;li>Minor GC 后，新生代存活对象超过了老年代的空间（分配担保）&lt;/li>
@@ -291,11 +291,16 @@ data-flex-grow="469"
 data-flex-basis="1126px"
 >&lt;/p>
 &lt;ul>
-&lt;li>Java 8 默认的收集器为 Parallel Sacvenge + Parallel Old&lt;/li>
+&lt;li>
+&lt;p>Java 8 默认的收集器为 Parallel Sacvenge + Parallel Old&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>吞吐量 TPS ：系统在单位时间内处理请求的数量&lt;/p>
+&lt;/li>
 &lt;/ul>
 &lt;h3 id="-cms">🪵 CMS&lt;/h3>
 &lt;p>&lt;code>Concurrent Mark Swap&lt;/code> 获取最短停顿时间的收集器。&lt;/p>
-&lt;p>是 HotSpot 虚拟机第一款真正意义上的垃圾收集器，实现了用户线程和垃圾回收线程同时工作。基于 标记-清除 算法。（老年代）&lt;/p>
+&lt;p>是 HotSpot 虚拟机第一款真正意义上的垃圾收集器，实现了用户线程和垃圾回收线程同时工作。基于 标记-清除 算法的 &lt;strong>老年代&lt;/strong> 收集器。&lt;/p>
 &lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/java/jvm/garbage-collection/CMS.png"
 width="1121"
 height="230"
@@ -358,7 +363,7 @@ data-flex-basis="1080px"
 &lt;ul>
 &lt;li>🐾 初始标记&lt;/li>
 &lt;/ul>
-&lt;p>标记 GC Root 能够直接关联到的对象，耗时较短。&lt;/p>
+&lt;p>标记 GC Root 能够直接关联到的对象，需要停顿线程，耗时较短。&lt;/p>
 &lt;ul>
 &lt;li>🐾 并发标记&lt;/li>
 &lt;/ul>
@@ -366,13 +371,13 @@ data-flex-basis="1080px"
 &lt;ul>
 &lt;li>🐾 最终标记&lt;/li>
 &lt;/ul>
-&lt;p>处理并发标记结束后，遗留的&lt;/p>
+&lt;p>修正并发标记期间因用户程序继续运作而导致标记产生变动。&lt;/p>
 &lt;ul>
 &lt;li>🐾 筛选回收&lt;/li>
 &lt;/ul>
 &lt;p>对各个 Region 的回收价值和成本进行排序，选择会后价值最大的区域进行回收。&lt;/p>
-&lt;p>将回收部分的 Region 中的存活对象，复制到空的 Region 中，再清理掉整个旧的 Region 区域。&lt;/p>
-&lt;p>涉及对象的移动，必须暂停用户线程，有多条垃圾收集器并发执行。&lt;/p>
+&lt;p>将回收的 Region 中的存活对象，复制到空的 Region 中，再清理掉整个旧的 Region 区域。&lt;/p>
+&lt;p>涉及对象的移动，必须暂停用户线程，有多条垃圾收集器并发执行。但是只回收一部分Region，时间是用户可控制的。&lt;/p>
 &lt;!-- raw HTML omitted -->
 &lt;h2 id="-对象分配和回收原则">🌴 对象分配和回收原则&lt;/h2>
 &lt;ul>
@@ -408,7 +413,7 @@ data-flex-basis="277px"
 &lt;ul>
 &lt;li>所有的变量都存储在主存中&lt;/li>
 &lt;li>每条线程有自己的工作内存&lt;/li>
-&lt;li>线程对变量的所有操作（读取、赋值等），都必须在工作内存中进行，不能直接读写主存中的数据&lt;/li>
+&lt;li>线程对变量的所有操作（读取、赋值等），不能直接读写主存中的数据，都必须在工作内存中进行&lt;/li>
 &lt;/ul>
 &lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/java/jvm/memory-model/memory.png"
 width="942"
@@ -647,19 +652,21 @@ data-flex-grow="234"
 data-flex-basis="563px"
 >&lt;/p>
 &lt;ul>
-&lt;li>文件格式验证&lt;/li>
-&lt;/ul>
-&lt;p>验证字节流是否符合 Class 文件格式的规范，能被当前版本的虚拟机处理。&lt;/p>
-&lt;ul>
-&lt;li>元数据、字节码验证&lt;/li>
-&lt;/ul>
+&lt;li>
+&lt;p>文件格式验证&lt;/p>
+&lt;p>验证字节流是否符合 Class 文件格式的规范，能被当前版本的虚拟机处理。&lt;strong>发生在加载阶段&lt;/strong>。&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>元数据、字节码验证&lt;/p>
 &lt;p>对字节码进行语法、语义的分析，保证其符合 Java 虚拟机的规范，不会有危害虚拟机的行为。&lt;/p>
-&lt;ul>
-&lt;li>符号引用验证&lt;/li>
+&lt;/li>
+&lt;li>
+&lt;p>符号引用验证&lt;/p>
+&lt;p>确保解析行为能够正常执行。&lt;strong>发生在解析阶段&lt;/strong>。&lt;/p>
+&lt;/li>
 &lt;/ul>
-&lt;p>确保解析行为能够正常执行。&lt;strong>发生在解析阶段。&lt;/strong>&lt;/p>
 &lt;h4 id="-准备">⚾️ 准备&lt;/h4>
-&lt;p>为类中定义的变量（静态变量 &lt;code>static&lt;/code>）分配内存并设置类变量初始值的阶段。&lt;/p>
+&lt;p>为类中定义的变量（静态变量 &lt;code>static&lt;/code>）分配内存并设置类变量零值的阶段。&lt;/p>
 &lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/java/jvm/class-loading/prepare.png"
 width="482"
 height="260"
@@ -738,10 +745,17 @@ data-flex-grow="137"
 data-flex-basis="329px"
 >&lt;/p>
 &lt;ul>
-&lt;li>成员变量的赋值&lt;/li>
+&lt;li>成员变量的直接赋值&lt;/li>
 &lt;li>静态变量的赋值&lt;/li>
 &lt;li>静态代码块&lt;/li>
 &lt;/ul>
+&lt;h2 id="判断无用类">判断无用类&lt;/h2>
+&lt;ul>
+&lt;li>该类的所有实例对象全部被 GC，在堆中不存在该类的任何实例对象&lt;/li>
+&lt;li>该类对应的 java.lang.Class 对象，在任何地方都没有被引用&lt;/li>
+&lt;li>该类的类加载器已经被回收&lt;/li>
+&lt;/ul>
+&lt;p>满足以上三个条件，说明该类可以被回收，但是与对象不同，无用类不一定会被回收。&lt;/p>
 &lt;h2 id="参考">参考&lt;/h2>
 &lt;ul>
 &lt;li>
@@ -749,13 +763,13 @@ data-flex-basis="329px"
 >https://javaguide.cn/java/jvm/class-loading-process.html&lt;/a>&lt;/p>
 &lt;/li>
 &lt;li>
-&lt;p>深入理解 Java 虚拟机&lt;/p>
-&lt;/li>
-&lt;li>
 &lt;p>&lt;a class="link" href="https://www.bilibili.com/video/BV14U4y1L75q/?spm_id_from=333.788" target="_blank" rel="noopener"
 >https://www.bilibili.com/video/BV14U4y1L75q/?spm_id_from=333.788&lt;/a>&lt;/p>
 &lt;/li>
-&lt;/ul></description></item><item><title>MySQL 存储引擎</title><link>https://emerywan.github.io/blog/p/mysql/innodb/</link><pubDate>Sun, 31 Jul 2022 13:02:02 +0800</pubDate><guid>https://emerywan.github.io/blog/p/mysql/innodb/</guid><description>&lt;img src="https://emerywan.github.io/blog/imgs/23.jpeg" alt="Featured image of post MySQL 存储引擎" />&lt;h2 id="事务">事务&lt;/h2>
+&lt;li>
+&lt;p>深入理解 Java 虚拟机&lt;/p>
+&lt;/li>
+&lt;/ul></description></item><item><title>InnoDB 存储引擎</title><link>https://emerywan.github.io/blog/p/mysql/innodb/</link><pubDate>Sun, 31 Jul 2022 13:02:02 +0800</pubDate><guid>https://emerywan.github.io/blog/p/mysql/innodb/</guid><description>&lt;img src="https://emerywan.github.io/blog/imgs/23.jpeg" alt="Featured image of post InnoDB 存储引擎" />&lt;h2 id="事务">事务&lt;/h2>
 &lt;p>事务是一组逻辑上的数据库操作，这些操作要么全部成功，要么全部失败。&lt;/p>
 &lt;h3 id="特性">特性&lt;/h3>
 &lt;ul>
