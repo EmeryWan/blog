@@ -1,4 +1,163 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>部署 on 一层</title><link>https://emerywan.github.io/blog/tags/%E9%83%A8%E7%BD%B2/</link><description>Recent content in 部署 on 一层</description><generator>Hugo -- gohugo.io</generator><lastBuildDate>Wed, 22 Jun 2022 21:14:45 +0800</lastBuildDate><atom:link href="https://emerywan.github.io/blog/tags/%E9%83%A8%E7%BD%B2/index.xml" rel="self" type="application/rss+xml"/><item><title>使用 Github Actions 在腾讯云 CloudBase 部署 Hugo</title><link>https://emerywan.github.io/blog/p/hugo-in-cloudbase/</link><pubDate>Wed, 22 Jun 2022 21:14:45 +0800</pubDate><guid>https://emerywan.github.io/blog/p/hugo-in-cloudbase/</guid><description>&lt;img src="https://emerywan.github.io/blog/imgs/3.jpeg" alt="Featured image of post 使用 Github Actions 在腾讯云 CloudBase 部署 Hugo" />&lt;h2 id="-介绍">🌱 介绍&lt;/h2>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>部署 on 一层</title><link>https://emerywan.github.io/blog/tags/%E9%83%A8%E7%BD%B2/</link><description>Recent content in 部署 on 一层</description><generator>Hugo -- gohugo.io</generator><lastBuildDate>Mon, 22 Aug 2022 18:14:45 +0800</lastBuildDate><atom:link href="https://emerywan.github.io/blog/tags/%E9%83%A8%E7%BD%B2/index.xml" rel="self" type="application/rss+xml"/><item><title>迁移博客到 Webify</title><link>https://emerywan.github.io/blog/p/hugo-in-webify/</link><pubDate>Mon, 22 Aug 2022 18:14:45 +0800</pubDate><guid>https://emerywan.github.io/blog/p/hugo-in-webify/</guid><description>&lt;img src="https://emerywan.github.io/blog/imgs/1.jpeg" alt="Featured image of post 迁移博客到 Webify" />&lt;h2 id="起因">起因&lt;/h2>
+&lt;p>之前博客都部署在腾讯云的 CloudBase，以按量收费的方式，每个月都有一些免费的流程和 CDN，我的博客完全用不完，每月就只需要几毛，基本不用花钱。🫣&lt;/p>
+&lt;p>除了偶尔会无法推送成功之外，国内访问速度相当快，毕竟部署在国内。&lt;/p>
+&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/hugo-in-webify/0.png"
+width="472"
+height="85"
+srcset="https://emerywan.github.io/blog/blog/p/hugo-in-webify/0_huc20776329d75d184c515505bb9bc6a17_15870_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/hugo-in-webify/0_huc20776329d75d184c515505bb9bc6a17_15870_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+alt="0"
+class="gallery-image"
+data-flex-grow="555"
+data-flex-basis="1332px"
+>&lt;/p>
+&lt;p>但是最近改了付费方式，先买套餐，超出再进行按量收费。🤔&lt;/p>
+&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/hugo-in-webify/1.png"
+width="1077"
+height="854"
+srcset="https://emerywan.github.io/blog/blog/p/hugo-in-webify/1_hu56ae18acc6ac70d7209e9eb3aa6fad3a_126909_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/hugo-in-webify/1_hu56ae18acc6ac70d7209e9eb3aa6fad3a_126909_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+alt="1"
+class="gallery-image"
+data-flex-grow="126"
+data-flex-basis="302px"
+>&lt;/p>
+&lt;p>虽然 CloudBase 可以部署完整的项目，但是我只需要托管一点静态页面，最低正常价 39.9 每月，到时候买这个套餐不如直接买个云服务器。果然白嫖是不可能一直白嫖的。🫠&lt;/p>
+&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/hugo-in-webify/2.png"
+width="438"
+height="256"
+srcset="https://emerywan.github.io/blog/blog/p/hugo-in-webify/2_hue69ff45008c2c92db458f250a5d53c45_43271_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/hugo-in-webify/2_hue69ff45008c2c92db458f250a5d53c45_43271_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+alt="2"
+class="gallery-image"
+data-flex-grow="171"
+data-flex-basis="410px"
+>&lt;/p>
+&lt;h2 id="流程">流程&lt;/h2>
+&lt;p>在部署模板里面，只有一些前端框架，没有 Hugo，所以这里利用 Github Action 编译成静态页面后，推送到其他分支/仓库，再托管这些静态代码。&lt;/p>
+&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/hugo-in-webify/3.png"
+width="327"
+height="528"
+srcset="https://emerywan.github.io/blog/blog/p/hugo-in-webify/3_huaa7d4ed28d1f1de02cf9b29093fabf99_48914_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/hugo-in-webify/3_huaa7d4ed28d1f1de02cf9b29093fabf99_48914_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+alt="3"
+class="gallery-image"
+data-flex-grow="61"
+data-flex-basis="148px"
+>&lt;/p>
+&lt;p>推送到 Github 其他分支的静态页面，还可以再托管一个 Github Page 做备份。&lt;/p>
+&lt;p>流程大致为：&lt;/p>
+&lt;p>&lt;code>Hugo -&amp;gt; Github Action -&amp;gt; 静态页面 -&amp;gt; 腾讯云 Webify 拉取静态页面 -&amp;gt; 部署&lt;/code>&lt;/p>
+&lt;ul>
+&lt;li>添加 workflows&lt;/li>
+&lt;/ul>
+&lt;p>这里是选择推送到另外一个仓库，因为在 Webify 服务里，没找到怎么更换部署分支，直接用了默认分支。&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;span class="lnt">11
+&lt;/span>&lt;span class="lnt">12
+&lt;/span>&lt;span class="lnt">13
+&lt;/span>&lt;span class="lnt">14
+&lt;/span>&lt;span class="lnt">15
+&lt;/span>&lt;span class="lnt">16
+&lt;/span>&lt;span class="lnt">17
+&lt;/span>&lt;span class="lnt">18
+&lt;/span>&lt;span class="lnt">19
+&lt;/span>&lt;span class="lnt">20
+&lt;/span>&lt;span class="lnt">21
+&lt;/span>&lt;span class="lnt">22
+&lt;/span>&lt;span class="lnt">23
+&lt;/span>&lt;span class="lnt">24
+&lt;/span>&lt;span class="lnt">25
+&lt;/span>&lt;span class="lnt">26
+&lt;/span>&lt;span class="lnt">27
+&lt;/span>&lt;span class="lnt">28
+&lt;/span>&lt;span class="lnt">29
+&lt;/span>&lt;span class="lnt">30
+&lt;/span>&lt;span class="lnt">31
+&lt;/span>&lt;span class="lnt">32
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-yml" data-lang="yml">&lt;span class="line">&lt;span class="cl">&lt;span class="nt">name&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">Webify Pages&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="nt">on&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">push&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">branches&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>- &lt;span class="l">main&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="nt">jobs&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">deploy&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">runs-on&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">ubuntu-latest&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">steps&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>- &lt;span class="nt">uses&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">actions/checkout@v3&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">with&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">submodules&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="kc">true&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="c"># Fetch Hugo themes (true OR recursive)&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">fetch-depth&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="m">0&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="c"># Fetch all history for .GitInfo and .Lastmod&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>- &lt;span class="nt">name&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">Setup Hugo&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">uses&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">peaceiris/actions-hugo@v2&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">with&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">hugo-version&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="s1">&amp;#39;latest&amp;#39;&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">extended&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="kc">true&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="c"># 是否需要 extended 版本&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>- &lt;span class="nt">name&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">Build&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">run&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">hugo --minify --gc --config config.yaml&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>- &lt;span class="nt">name&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">Deploy&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">uses&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">peaceiris/actions-gh-pages@v3&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">with&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">deploy_key&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">${{ secrets.DEPLOY_KEY }} &lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="c"># 外仓库使用 deploy_key&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">external_repository&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">emerywan/blog&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">publish_dir&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">./public&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="nt">publish_branch&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">main&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;ul>
+&lt;li>新建应用&lt;/li>
+&lt;/ul>
+&lt;p>云产品 - Web 应用托管&lt;/p>
+&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/hugo-in-webify/4.png"
+width="2316"
+height="1230"
+srcset="https://emerywan.github.io/blog/blog/p/hugo-in-webify/4_huf9354845b150a28a9bbe99c4ce9a2902_136523_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/hugo-in-webify/4_huf9354845b150a28a9bbe99c4ce9a2902_136523_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+alt="4"
+class="gallery-image"
+data-flex-grow="188"
+data-flex-basis="451px"
+>&lt;/p>
+&lt;p>选择需要托管的仓库就可以了，下一步就行了。&lt;/p>
+&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/hugo-in-webify/5.png"
+width="571"
+height="248"
+srcset="https://emerywan.github.io/blog/blog/p/hugo-in-webify/5_hu609fa268f17278829789499f6682a8f8_37202_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/hugo-in-webify/5_hu609fa268f17278829789499f6682a8f8_37202_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+alt="5"
+class="gallery-image"
+data-flex-grow="230"
+data-flex-basis="552px"
+>&lt;/p>
+&lt;p>自定义域名，也是可以使用免费 CDN 的 🫣 ，只是没有一些高级功能，设置防盗链什么的，作为国内的服务，已经很不错啦。这个再改计费方式，就打算直接用 Vercel 了。😂&lt;/p>
+&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/hugo-in-webify/6.png"
+width="2458"
+height="382"
+srcset="https://emerywan.github.io/blog/blog/p/hugo-in-webify/6_hu71f99e798b96b20bb419371b96863ee5_50312_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/hugo-in-webify/6_hu71f99e798b96b20bb419371b96863ee5_50312_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+alt="6"
+class="gallery-image"
+data-flex-grow="643"
+data-flex-basis="1544px"
+>&lt;/p></description></item><item><title>使用 Github Actions 在腾讯云 CloudBase 部署 Hugo</title><link>https://emerywan.github.io/blog/p/hugo-in-cloudbase/</link><pubDate>Mon, 02 May 2022 21:14:45 +0800</pubDate><guid>https://emerywan.github.io/blog/p/hugo-in-cloudbase/</guid><description>&lt;img src="https://emerywan.github.io/blog/imgs/3.jpeg" alt="Featured image of post 使用 Github Actions 在腾讯云 CloudBase 部署 Hugo" />&lt;h2 id="-介绍">🌱 介绍&lt;/h2>
 &lt;p>许多平台都提供了免费的静态页面托管的服务，如 &lt;code>Github Pages&lt;/code>，&lt;code>Vercel&lt;/code>，&lt;code>Netlify&lt;/code>等。但在国内由于一些“原因”，这些国外的服务在国内的访问并不稳定。&lt;/p>
 &lt;p>国内的免费托管平台如 &lt;code>Gitee&lt;/code> 限制很多，不可以自定义域名而且之前出现了防盗链问题，访问也不是很快，不太推荐作为托管平台。&lt;/p>
 &lt;p>腾讯云推出的云开发 &lt;code>CloudBase&lt;/code> 也有静态页面托管服务。其实它相比这些静态托管平台，有更多强大的功能，甚至能够搭一整套系统。虽然是付费服务，但是在按量付费的情况下资费不是很高，在博客访问量不是很高的情况下十分合适。&lt;/p>
