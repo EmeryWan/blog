@@ -1,0 +1,259 @@
+<!doctype html><html lang=zh-cn dir=ltr><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><meta name=description content="🚧 遗留的安全集合 如： Hashtable Vector 这些集合的实现方式简单粗暴，在方法上直接使用 synchronized 进行修饰，在进行读写等操作时，会锁住整个对象，并发性能不太好。 📦 Collections 安全"><title>Java 并发 - 并发安全的容器</title><link rel=canonical href=https://blog.letout.cn/p/thread/collection/><link rel=stylesheet href=/scss/style.min.9fdfe1d69c4486d1a84c3c7b288ce74b0111a02a60a6c12f21c6b7cc02b131b4.css><meta property="og:title" content="Java 并发 - 并发安全的容器"><meta property="og:description" content="🚧 遗留的安全集合 如： Hashtable Vector 这些集合的实现方式简单粗暴，在方法上直接使用 synchronized 进行修饰，在进行读写等操作时，会锁住整个对象，并发性能不太好。 📦 Collections 安全"><meta property="og:url" content="https://blog.letout.cn/p/thread/collection/"><meta property="og:site_name" content="一层"><meta property="og:type" content="article"><meta property="article:section" content="Post"><meta property="article:tag" content="java"><meta property="article:tag" content="并发"><meta property="article:published_time" content="2022-04-29T14:02:02+08:00"><meta property="article:modified_time" content="2022-04-29T14:02:02+08:00"><meta property="og:image" content="https://blog.letout.cn/imgs/16.jpeg"><meta name=twitter:title content="Java 并发 - 并发安全的容器"><meta name=twitter:description content="🚧 遗留的安全集合 如： Hashtable Vector 这些集合的实现方式简单粗暴，在方法上直接使用 synchronized 进行修饰，在进行读写等操作时，会锁住整个对象，并发性能不太好。 📦 Collections 安全"><meta name=twitter:card content="summary_large_image"><meta name=twitter:image content="https://blog.letout.cn/imgs/16.jpeg"><link rel="shortcut icon" href=https://blog.letout.cn/imgs/favicon.ico></head><body class=article-page><script>(function(){const e="StackColorScheme";localStorage.getItem(e)||localStorage.setItem(e,"auto")})()</script><script>(function(){const t="StackColorScheme",e=localStorage.getItem(t),n=window.matchMedia("(prefers-color-scheme: dark)").matches===!0;e=="dark"||e==="auto"&&n?document.documentElement.dataset.scheme="dark":document.documentElement.dataset.scheme="light"})()</script><div class="container main-container flex on-phone--column extended"><aside class="sidebar left-sidebar sticky"><button class="hamburger hamburger--spin" type=button id=toggle-menu aria-label=切换菜单>
+<span class=hamburger-box><span class=hamburger-inner></span></span></button><header><figure class=site-avatar><a href=/><img src=/img/avatar_hud10ed4afecf1b63b1391b35c2778f738_36574_300x0_resize_box_3.png width=300 height=300 class=site-logo loading=lazy alt=Avatar></a></figure><div class=site-meta><h1 class=site-name><a href=/>一层</a></h1><h2 class=site-description>迎着这岁月的风。</h2></div></header><ol class=social-menu><li><a href=https://github.com/emerywan target=_blank title=GitHub><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-brand-github" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M9 19c-4.3 1.4-4.3-2.5-6-3m12 5v-3.5c0-1 .1-1.4-.5-2 2.8-.3 5.5-1.4 5.5-6a4.6 4.6.0 00-1.3-3.2 4.2 4.2.0 00-.1-3.2s-1.1-.3-3.5 1.3a12.3 12.3.0 00-6.2.0C6.5 2.8 5.4 3.1 5.4 3.1a4.2 4.2.0 00-.1 3.2A4.6 4.6.0 004 9.5c0 4.6 2.7 5.7 5.5 6-.6.6-.6 1.2-.5 2V21"/></svg></a></li><li><a href=https://www.letout.cn target=_blank title=Home><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-smart-home" width="44" height="44" viewBox="0 0 24 24" stroke-width="1.5" stroke="#6f32be" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M19 8.71l-5.333-4.148a2.666 2.666.0 00-3.274.0L5.059 8.71A2.665 2.665.0 004.03 10.815v7.2a2 2 0 002 2h12a2 2 0 002-2v-7.2c0-.823-.38-1.6-1.03-2.105"/><path d="M16 15c-2.21 1.333-5.792 1.333-8 0"/></svg></a></li></ol><ol class=menu id=main-menu><li><a href=/><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><polyline points="5 12 3 12 12 3 21 12 19 12"/><path d="M5 12v7a2 2 0 002 2h10a2 2 0 002-2v-7"/><path d="M9 21v-6a2 2 0 012-2h2a2 2 0 012 2v6"/></svg><span>首页</span></a></li><li><a href=/archives/><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><rect x="3" y="4" width="18" height="4" rx="2"/><path d="M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8"/><line x1="10" y1="12" x2="14" y2="12"/></svg><span>归档</span></a></li><li><a href=/categories/><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><line x1="5" y1="9" x2="19" y2="9"/><line x1="5" y1="15" x2="19" y2="15"/><line x1="11" y1="4" x2="7" y2="20"/><line x1="17" y1="4" x2="13" y2="20"/></svg><span>分类</span></a></li><li><a href=/about/><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="7" r="4"/><path d="M6 21v-2a4 4 0 014-4h4a4 4 0 014 4v2"/></svg><span>关于</span></a></li><li><a href=/search/><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="10" cy="10" r="7"/><line x1="21" y1="21" x2="15" y2="15"/></svg><span>搜索</span></a></li><div class=menu-bottom-section><li id=dark-mode-toggle><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="8" cy="12" r="2"/><rect x="2" y="6" width="20" height="12" rx="6"/></svg><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="16" cy="12" r="2"/><rect x="2" y="6" width="20" height="12" rx="6"/></svg><span>Dark Mode</span></li></div></ol></aside><main class="main full-width"><article class="has-image main-article"><header class=article-header><div class=article-image><a href=/p/thread/collection/><img src=/imgs/16.jpeg loading=lazy alt="Featured image of post Java 并发 - 并发安全的容器"></a></div><div class=article-details><header class=article-category><a href=/categories/%E6%8A%80%E6%9C%AF/ style=background-color:#91d5ff;color:#fff>技术</a></header><div class=article-title-wrapper><h2 class=article-title><a href=/p/thread/collection/>Java 并发 - 并发安全的容器</a></h2></div><footer class=article-time><div><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><path d="M11.795 21H5a2 2 0 01-2-2V7a2 2 0 012-2h12a2 2 0 012 2v4"/><circle cx="18" cy="18" r="4"/><path d="M15 3v4"/><path d="M7 3v4"/><path d="M3 11h16"/><path d="M18 16.496V18l1 1"/></svg><time class=article-time--published>04 - 29, 2022</time></div></footer></div></header><section class=article-content><h2 id=-遗留的安全集合>🚧 遗留的安全集合</h2><p>如：</p><ul><li>Hashtable</li><li>Vector</li></ul><p>这些集合的实现方式简单粗暴，在方法上直接使用 <code>synchronized</code> 进行修饰，在进行读写等操作时，会锁住整个对象，并发性能不太好。</p><h2 id=-collections-安全集合>📦 Collections 安全集合</h2><p>如：</p><ul><li>Collections.synchronizedCollection(Collection c)</li><li>Collections.synchronizedList(List list)</li><li>Collections.synchronizedMap(Map&lt;K,V> m)</li><li>Collections.synchronizedSet(Set s)</li><li>&mldr;</li></ul><p>使用该方法，传入一个线程不安全的集合，返回一个 Collections 内部的静态类对象，用于将一个不安全的集合变成一个线程安全的集合。</p><p>该方法会将传入的集合作为成员变量，每次操作时，都使用 <code>synchronized</code> 加锁，锁住 <code>mutex</code>（Map 中为当前对象 this）。</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-java data-lang=java><span class=line><span class=cl><span class=kd>private</span> <span class=kd>static</span> <span class=kd>class</span> <span class=nc>SynchronizedMap</span><span class=o>&lt;</span><span class=n>K</span><span class=o>,</span><span class=n>V</span><span class=o>&gt;</span>
+</span></span><span class=line><span class=cl>        <span class=kd>implements</span> <span class=n>Map</span><span class=o>&lt;</span><span class=n>K</span><span class=o>,</span><span class=n>V</span><span class=o>&gt;,</span> <span class=n>Serializable</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>    <span class=kd>private</span> <span class=kd>static</span> <span class=kd>final</span> <span class=kt>long</span> <span class=n>serialVersionUID</span> <span class=o>=</span> <span class=n>1978198479659022715L</span><span class=o>;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=kd>private</span> <span class=kd>final</span> <span class=n>Map</span><span class=o>&lt;</span><span class=n>K</span><span class=o>,</span><span class=n>V</span><span class=o>&gt;</span> <span class=n>m</span><span class=o>;</span>     <span class=c1>// Backing Map
+</span></span></span><span class=line><span class=cl><span class=c1></span>    <span class=kd>final</span> <span class=n>Object</span>      <span class=n>mutex</span><span class=o>;</span>        <span class=c1>// Object on which to synchronize
+</span></span></span><span class=line><span class=cl><span class=c1></span>
+</span></span><span class=line><span class=cl>    <span class=n>SynchronizedMap</span><span class=o>(</span><span class=n>Map</span><span class=o>&lt;</span><span class=n>K</span><span class=o>,</span><span class=n>V</span><span class=o>&gt;</span> <span class=n>m</span><span class=o>)</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>        <span class=k>this</span><span class=o>.</span><span class=na>m</span> <span class=o>=</span> <span class=n>Objects</span><span class=o>.</span><span class=na>requireNonNull</span><span class=o>(</span><span class=n>m</span><span class=o>);</span>
+</span></span><span class=line><span class=cl>        <span class=n>mutex</span> <span class=o>=</span> <span class=k>this</span><span class=o>;</span>
+</span></span><span class=line><span class=cl>    <span class=o>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=n>SynchronizedMap</span><span class=o>(</span><span class=n>Map</span><span class=o>&lt;</span><span class=n>K</span><span class=o>,</span><span class=n>V</span><span class=o>&gt;</span> <span class=n>m</span><span class=o>,</span> <span class=n>Object</span> <span class=n>mutex</span><span class=o>)</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>        <span class=k>this</span><span class=o>.</span><span class=na>m</span> <span class=o>=</span> <span class=n>m</span><span class=o>;</span>
+</span></span><span class=line><span class=cl>        <span class=k>this</span><span class=o>.</span><span class=na>mutex</span> <span class=o>=</span> <span class=n>mutex</span><span class=o>;</span>
+</span></span><span class=line><span class=cl>    <span class=o>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=kd>public</span> <span class=kt>int</span> <span class=nf>size</span><span class=o>()</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>        <span class=kd>synchronized</span> <span class=o>(</span><span class=n>mutex</span><span class=o>)</span> <span class=o>{</span><span class=k>return</span> <span class=n>m</span><span class=o>.</span><span class=na>size</span><span class=o>();}</span>  <span class=c1>// 操作都会锁住 mutex
+</span></span></span><span class=line><span class=cl><span class=c1></span>    <span class=o>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=c1>// ... 其他方法
+</span></span></span><span class=line><span class=cl><span class=c1></span><span class=o>}</span>
+</span></span></code></pre></td></tr></table></div></div><h2 id=-juc-安全集合>🛠 JUC 安全集合</h2><p><code>java.util.concurrent</code> 下提供的线程安全的集合类，可以分为三类：</p><ul><li>Concurrent 系列（适合写多的场景，内部使用 CAS 优化）</li><li>CopyOnWrite 系列（适合于读多写少的场景）</li><li>Blocking 系列（阻塞队列）</li></ul><h3 id=concurrent>Concurrent</h3><ul><li><p><code>ConcurrentHashMap</code></p></li><li><p><code>ConcurrentLinkedQueue</code> / <code>ConcurrentLinkedDeque</code></p></li><li><p><code>ConcurrentSkipListMap</code> / <code>ConcurrentSkipListSet</code></p></li></ul><h3 id=copyonwrite>CopyOnWrite</h3><ul><li><code>CopyOnWriteArrayList</code></li></ul><p>采用了写入时拷贝的思想，更改操作会将底层数组拷贝一份，更改在新的数组上执行，并发时读写操作达到读写分离。</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-java data-lang=java><span class=line><span class=cl><span class=kd>public</span> <span class=kt>boolean</span> <span class=nf>add</span><span class=o>(</span><span class=n>E</span> <span class=n>e</span><span class=o>)</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>    <span class=kd>final</span> <span class=n>ReentrantLock</span> <span class=n>lock</span> <span class=o>=</span> <span class=k>this</span><span class=o>.</span><span class=na>lock</span><span class=o>;</span>
+</span></span><span class=line><span class=cl>    <span class=n>lock</span><span class=o>.</span><span class=na>lock</span><span class=o>();</span>
+</span></span><span class=line><span class=cl>    <span class=k>try</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>        <span class=n>Object</span><span class=o>[]</span> <span class=n>elements</span> <span class=o>=</span> <span class=n>getArray</span><span class=o>();</span>
+</span></span><span class=line><span class=cl>        <span class=kt>int</span> <span class=n>len</span> <span class=o>=</span> <span class=n>elements</span><span class=o>.</span><span class=na>length</span><span class=o>;</span>
+</span></span><span class=line><span class=cl>        <span class=n>Object</span><span class=o>[]</span> <span class=n>newElements</span> <span class=o>=</span> <span class=n>Arrays</span><span class=o>.</span><span class=na>copyOf</span><span class=o>(</span><span class=n>elements</span><span class=o>,</span> <span class=n>len</span> <span class=o>+</span> <span class=n>1</span><span class=o>);</span>
+</span></span><span class=line><span class=cl>        <span class=n>newElements</span><span class=o>[</span><span class=n>len</span><span class=o>]</span> <span class=o>=</span> <span class=n>e</span><span class=o>;</span>
+</span></span><span class=line><span class=cl>        <span class=n>setArray</span><span class=o>(</span><span class=n>newElements</span><span class=o>);</span>  <span class=c1>// 替换数组
+</span></span></span><span class=line><span class=cl><span class=c1></span>        <span class=k>return</span> <span class=kc>true</span><span class=o>;</span>
+</span></span><span class=line><span class=cl>    <span class=o>}</span> <span class=k>finally</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>        <span class=n>lock</span><span class=o>.</span><span class=na>unlock</span><span class=o>();</span>
+</span></span><span class=line><span class=cl>    <span class=o>}</span>
+</span></span><span class=line><span class=cl><span class=o>}</span>
+</span></span></code></pre></td></tr></table></div></div><p>读操作不进行加锁。适合于读多写少的场景。</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span><span class=lnt>7
+</span><span class=lnt>8
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-java data-lang=java><span class=line><span class=cl><span class=nd>@SuppressWarnings</span><span class=o>(</span><span class=s>&#34;unchecked&#34;</span><span class=o>)</span>
+</span></span><span class=line><span class=cl><span class=kd>private</span> <span class=n>E</span> <span class=nf>get</span><span class=o>(</span><span class=n>Object</span><span class=o>[]</span> <span class=n>a</span><span class=o>,</span> <span class=kt>int</span> <span class=n>index</span><span class=o>)</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>    <span class=k>return</span> <span class=o>(</span><span class=n>E</span><span class=o>)</span> <span class=n>a</span><span class=o>[</span><span class=n>index</span><span class=o>];</span>
+</span></span><span class=line><span class=cl><span class=o>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=kd>public</span> <span class=n>E</span> <span class=nf>get</span><span class=o>(</span><span class=kt>int</span> <span class=n>index</span><span class=o>)</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>    <span class=k>return</span> <span class=n>get</span><span class=o>(</span><span class=n>getArray</span><span class=o>(),</span> <span class=n>index</span><span class=o>);</span>
+</span></span><span class=line><span class=cl><span class=o>}</span>
+</span></span></code></pre></td></tr></table></div></div><ul><li><code>CopyOnWriteArraySet</code></li></ul><p><code>CopyOnWriteArraySet</code> 内部由 <code>CopyOnWriteArrayList</code> 实现</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-java data-lang=java><span class=line><span class=cl><span class=kd>public</span> <span class=kd>class</span> <span class=nc>CopyOnWriteArraySet</span><span class=o>&lt;</span><span class=n>E</span><span class=o>&gt;</span> <span class=kd>extends</span> <span class=n>AbstractSet</span><span class=o>&lt;</span><span class=n>E</span><span class=o>&gt;</span>
+</span></span><span class=line><span class=cl>        <span class=kd>implements</span> <span class=n>java</span><span class=o>.</span><span class=na>io</span><span class=o>.</span><span class=na>Serializable</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>    <span class=kd>public</span> <span class=nf>CopyOnWriteArraySet</span><span class=o>()</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>        <span class=n>al</span> <span class=o>=</span> <span class=k>new</span> <span class=n>CopyOnWriteArrayList</span><span class=o>&lt;</span><span class=n>E</span><span class=o>&gt;();</span>
+</span></span><span class=line><span class=cl>    <span class=o>}</span>
+</span></span><span class=line><span class=cl><span class=o>}</span>
+</span></span></code></pre></td></tr></table></div></div><h3 id=阻塞队列>阻塞队列</h3><p>有界队列：有固定大小的队列。</p><p>无界队列：没有固定大小的队列</p><ul><li><p><code>ArrayBlockingQueue</code></p><ul><li>有界带缓冲阻塞队列，数组实现</li></ul></li><li><p><code>LinkedBlockingQueue</code></p><ul><li>由界带缓冲阻塞队列 (Integer.MAX_VALUE)，链表实现，可以自定义上限</li></ul></li><li><p><code>LinkedBlockingDeque</code></p><ul><li>双端队列</li></ul></li><li><p><code>DelayQueue</code></p><ul><li>延时无界阻塞队列，只允许存放可以延时的元素，队列 head 是最先到期的，如果队列中元素没有到期，就算队列中有元素也不能获取到</li></ul></li><li><p><code>SynchronousQueue</code></p><ul><li>没有容量的同步队列，不存储元素，每一个 put 必须要等待一个 take 操作</li></ul></li><li><p><code>PriorityBlockingQueue</code></p><ul><li>无界优先阻塞队列，PriorityQueue 的线程安全版，不允许存放 null</li></ul></li></ul><h4 id=常用方法>常用方法</h4><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-java data-lang=java><span class=line><span class=cl><span class=kd>public</span> <span class=kd>interface</span> <span class=nc>BloockingQueue</span><span class=o>&lt;</span><span class=n>E</span><span class=o>&gt;</span> <span class=kd>extends</span> <span class=n>Queue</span><span class=o>&lt;</span><span class=n>E</span><span class=o>&gt;</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=c1>// 队列满抛出异常
+</span></span></span><span class=line><span class=cl><span class=c1></span>    <span class=kt>boolean</span> <span class=nf>add</span><span class=o>(</span><span class=n>E</span> <span class=n>e</span><span class=o>);</span>
+</span></span><span class=line><span class=cl>    <span class=c1>// 无元素抛出异常
+</span></span></span><span class=line><span class=cl><span class=c1></span>    <span class=kt>boolean</span> <span class=nf>remove</span><span class=o>(</span><span class=n>Object</span> <span class=n>o</span><span class=o>);</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=c1>//
+</span></span></span><span class=line><span class=cl><span class=c1></span>    <span class=c1>// 队列满返回 false 成功添加 true
+</span></span></span><span class=line><span class=cl><span class=c1></span>    <span class=kt>boolean</span> <span class=nf>offer</span><span class=o>(</span><span class=n>E</span> <span class=n>e</span><span class=o>);</span>
+</span></span><span class=line><span class=cl>    <span class=c1>// 队列为空返回 null
+</span></span></span><span class=line><span class=cl><span class=c1></span>    <span class=n>E</span> <span class=nf>poll</span><span class=o>();</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=c1>// 阻塞时等待
+</span></span></span><span class=line><span class=cl><span class=c1></span>    <span class=c1>// 队列满时，阻塞进行等待
+</span></span></span><span class=line><span class=cl><span class=c1></span>    <span class=kt>boolean</span> <span class=nf>put</span><span class=o>(</span><span class=n>E</span> <span class=n>e</span><span class=o>)</span> <span class=kd>throws</span> <span class=n>InterruptedException</span><span class=o>;</span>
+</span></span><span class=line><span class=cl>    <span class=c1>// 队列为空时，阻塞进行等待
+</span></span></span><span class=line><span class=cl><span class=c1></span>    <span class=n>E</span> <span class=nf>take</span><span class=o>()</span> <span class=kd>throws</span> <span class=n>InterruptedException</span><span class=o>;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=o>}</span>
+</span></span></code></pre></td></tr></table></div></div><h4 id=linkedblockingqueue>LinkedBlockingQueue</h4><p>在 <code>LinkedBlockingQeque</code> 中使用了 dummy 节点和两把锁，在同一时刻，可以允许两个线程分别执行 <code>put</code> 和 <code>take</code>。</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-java data-lang=java><span class=line><span class=cl><span class=kd>private</span> <span class=kd>final</span> <span class=n>ReentrantLock</span> <span class=n>putLock</span> <span class=o>=</span> <span class=k>new</span> <span class=n>ReentrantLock</span><span class=o>();</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=kd>private</span> <span class=kd>final</span> <span class=n>ReentrantLock</span> <span class=n>takeLock</span> <span class=o>=</span> <span class=k>new</span> <span class=n>ReentrantLock</span><span class=o>();</span>
+</span></span></code></pre></td></tr></table></div></div><ul><li>put</li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-java data-lang=java><span class=line><span class=cl><span class=kd>public</span> <span class=kt>void</span> <span class=nf>put</span><span class=o>(</span><span class=n>E</span> <span class=n>e</span><span class=o>)</span> <span class=kd>throws</span> <span class=n>InterruptedException</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>    <span class=k>if</span> <span class=o>(</span><span class=n>e</span> <span class=o>==</span> <span class=kc>null</span><span class=o>)</span> <span class=k>throw</span> <span class=k>new</span> <span class=n>NullPointerException</span><span class=o>();</span>
+</span></span><span class=line><span class=cl>    <span class=kt>int</span> <span class=n>c</span> <span class=o>=</span> <span class=o>-</span><span class=n>1</span><span class=o>;</span>
+</span></span><span class=line><span class=cl>    <span class=n>Node</span><span class=o>&lt;</span><span class=n>E</span><span class=o>&gt;</span> <span class=n>node</span> <span class=o>=</span> <span class=k>new</span> <span class=n>Node</span><span class=o>&lt;</span><span class=n>E</span><span class=o>&gt;(</span><span class=n>e</span><span class=o>);</span>
+</span></span><span class=line><span class=cl>    <span class=kd>final</span> <span class=n>ReentrantLock</span> <span class=n>putLock</span> <span class=o>=</span> <span class=k>this</span><span class=o>.</span><span class=na>putLock</span><span class=o>;</span>
+</span></span><span class=line><span class=cl>    <span class=c1>// 计数
+</span></span></span><span class=line><span class=cl><span class=c1></span>    <span class=kd>final</span> <span class=n>AtomicInteger</span> <span class=n>count</span> <span class=o>=</span> <span class=k>this</span><span class=o>.</span><span class=na>count</span><span class=o>;</span>
+</span></span><span class=line><span class=cl>    <span class=n>putLock</span><span class=o>.</span><span class=na>lockInterruptibly</span><span class=o>();</span>
+</span></span><span class=line><span class=cl>    <span class=k>try</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>        <span class=c1>// 如果容量已满，进行等待
+</span></span></span><span class=line><span class=cl><span class=c1></span>        <span class=k>while</span> <span class=o>(</span><span class=n>count</span><span class=o>.</span><span class=na>get</span><span class=o>()</span> <span class=o>==</span> <span class=n>capacity</span><span class=o>)</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>            <span class=n>notFull</span><span class=o>.</span><span class=na>await</span><span class=o>();</span>
+</span></span><span class=line><span class=cl>        <span class=o>}</span>
+</span></span><span class=line><span class=cl>        <span class=c1>// 容量未满，进行入队
+</span></span></span><span class=line><span class=cl><span class=c1></span>        <span class=n>enqueue</span><span class=o>(</span><span class=n>node</span><span class=o>);</span>
+</span></span><span class=line><span class=cl>        <span class=n>c</span> <span class=o>=</span> <span class=n>count</span><span class=o>.</span><span class=na>getAndIncrement</span><span class=o>();</span> 
+</span></span><span class=line><span class=cl>        <span class=c1>// 入队后队列还有空位, 唤醒其他 put 线程
+</span></span></span><span class=line><span class=cl><span class=c1></span>        <span class=k>if</span> <span class=o>(</span><span class=n>c</span> <span class=o>+</span> <span class=n>1</span> <span class=o>&lt;</span> <span class=n>capacity</span><span class=o>)</span>
+</span></span><span class=line><span class=cl>            <span class=n>notFull</span><span class=o>.</span><span class=na>signal</span><span class=o>();</span>  <span class=c1>// 只唤醒一个，减少竞争
+</span></span></span><span class=line><span class=cl><span class=c1></span>    <span class=o>}</span> <span class=k>finally</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>        <span class=n>putLock</span><span class=o>.</span><span class=na>unlock</span><span class=o>();</span>
+</span></span><span class=line><span class=cl>    <span class=o>}</span>
+</span></span><span class=line><span class=cl>    <span class=c1>// 如果队列中有一个元素, 唤醒 take 线程
+</span></span></span><span class=line><span class=cl><span class=c1></span>    <span class=k>if</span> <span class=o>(</span><span class=n>c</span> <span class=o>==</span> <span class=n>0</span><span class=o>)</span>
+</span></span><span class=line><span class=cl>        <span class=c1>// notEmpty.signal() 而不是 notEmpty.signalAll()；减少竞争
+</span></span></span><span class=line><span class=cl><span class=c1></span>        <span class=n>signalNotEmpty</span><span class=o>();</span>
+</span></span><span class=line><span class=cl><span class=o>}</span>
+</span></span></code></pre></td></tr></table></div></div><ul><li>take</li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-java data-lang=java><span class=line><span class=cl><span class=kd>public</span> <span class=n>E</span> <span class=nf>take</span><span class=o>()</span> <span class=kd>throws</span> <span class=n>InterruptedException</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>    <span class=n>E</span> <span class=n>x</span><span class=o>;</span>
+</span></span><span class=line><span class=cl>    <span class=kt>int</span> <span class=n>c</span> <span class=o>=</span> <span class=o>-</span><span class=n>1</span><span class=o>;</span>
+</span></span><span class=line><span class=cl>    <span class=kd>final</span> <span class=n>AtomicInteger</span> <span class=n>count</span> <span class=o>=</span> <span class=k>this</span><span class=o>.</span><span class=na>count</span><span class=o>;</span>
+</span></span><span class=line><span class=cl>    <span class=kd>final</span> <span class=n>ReentrantLock</span> <span class=n>takeLock</span> <span class=o>=</span> <span class=k>this</span><span class=o>.</span><span class=na>takeLock</span><span class=o>;</span>
+</span></span><span class=line><span class=cl>    <span class=n>takeLock</span><span class=o>.</span><span class=na>lockInterruptibly</span><span class=o>();</span>
+</span></span><span class=line><span class=cl>    <span class=k>try</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>        <span class=k>while</span> <span class=o>(</span><span class=n>count</span><span class=o>.</span><span class=na>get</span><span class=o>()</span> <span class=o>==</span> <span class=n>0</span><span class=o>)</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>            <span class=n>notEmpty</span><span class=o>.</span><span class=na>await</span><span class=o>();</span>
+</span></span><span class=line><span class=cl>        <span class=o>}</span>
+</span></span><span class=line><span class=cl>        <span class=n>x</span> <span class=o>=</span> <span class=n>dequeue</span><span class=o>();</span>
+</span></span><span class=line><span class=cl>        <span class=n>c</span> <span class=o>=</span> <span class=n>count</span><span class=o>.</span><span class=na>getAndDecrement</span><span class=o>();</span>
+</span></span><span class=line><span class=cl>        <span class=k>if</span> <span class=o>(</span><span class=n>c</span> <span class=o>&gt;</span> <span class=n>1</span><span class=o>)</span>
+</span></span><span class=line><span class=cl>            <span class=n>notEmpty</span><span class=o>.</span><span class=na>signal</span><span class=o>();</span>
+</span></span><span class=line><span class=cl>    <span class=o>}</span> <span class=k>finally</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>        <span class=n>takeLock</span><span class=o>.</span><span class=na>unlock</span><span class=o>();</span>
+</span></span><span class=line><span class=cl>    <span class=o>}</span>
+</span></span><span class=line><span class=cl>    <span class=c1>// 如果队列中只有一个空位时, 叫醒 put 线程
+</span></span></span><span class=line><span class=cl><span class=c1></span>    <span class=c1>// 如果有多个线程进行出队, 第一个线程 c == capacity, 后续线程 c &lt; capacity
+</span></span></span><span class=line><span class=cl><span class=c1></span>    <span class=k>if</span> <span class=o>(</span><span class=n>c</span> <span class=o>==</span> <span class=n>capacity</span><span class=o>)</span>
+</span></span><span class=line><span class=cl>        <span class=c1>// notFull.signal() 而不是 notFull.signalAll()，减少竞争
+</span></span></span><span class=line><span class=cl><span class=c1></span>        <span class=n>signalNotFull</span><span class=o>();</span>
+</span></span><span class=line><span class=cl>        <span class=k>return</span> <span class=n>x</span><span class=o>;</span> 
+</span></span><span class=line><span class=cl><span class=o>}</span>
+</span></span></code></pre></td></tr></table></div></div></section><footer class=article-footer><section class=article-tags><a href=/tags/java/>Java</a>
+<a href=/tags/%E5%B9%B6%E5%8F%91/>并发</a></section><section class=article-copyright><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-copyright" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><path d="M14.5 9a3.5 4 0 100 6"/></svg><span>Licensed under CC BY-NC-SA 4.0</span></section></footer></article><aside class=related-contents--wrapper><h2 class=section-title>相关文章</h2><div class=related-contents><div class="flex article-list--tile"><article class=has-image><a href=/p/thread/cyclicbarrier/><div class=article-image><img src=/imgs/14.jpeg loading=lazy data-key=/thread/cyclicbarrier data-hash=/imgs/14.jpeg></div><div class=article-details><h2 class=article-title>Java 并发 - CyclicBarrier 实现原理</h2></div></a></article><article class=has-image><a href=/p/thread/countdownlatch/><div class=article-image><img src=/imgs/6.jpeg loading=lazy data-key=/thread/countdownlatch data-hash=/imgs/6.jpeg></div><div class=article-details><h2 class=article-title>Java 并发 - CountDownLatch 实现原理</h2></div></a></article><article class=has-image><a href=/p/thread/aqs/><div class=article-image><img src=/imgs/6.jpeg loading=lazy data-key=/thread/aqs data-hash=/imgs/6.jpeg></div><div class=article-details><h2 class=article-title>Java 并发 - AQS</h2></div></a></article><article class=has-image><a href=/p/thread/singleton/><div class=article-image><img src=/imgs/8.jpeg loading=lazy data-key=/thread/singleton data-hash=/imgs/8.jpeg></div><div class=article-details><h2 class=article-title>线程安全的单例模式</h2></div></a></article><article class=has-image><a href=/p/thread/semaphore/><div class=article-image><img src=/imgs/27.jpeg loading=lazy data-key=/thread/Semaphore data-hash=/imgs/27.jpeg></div><div class=article-details><h2 class=article-title>Java 并发 - Semaphore 实现原理</h2></div></a></article></div></div></aside><footer class=site-footer><section class=copyright>&copy;
+2022 一层</section><section class=powerby><b><a href=http://beian.miit.gov.cn/ target=_blank rel="nofollow noopener">赣ICP备19004365号-3</a></b><br>Built with <a href=https://gohugo.io/ target=_blank rel=noopener>Hugo</a> & <b><a href=https://github.com/CaiJimmy/hugo-theme-stack target=_blank rel=noopener data-version=%s>Stack</a></b> by <a href=https://jimmycai.com target=_blank rel=noopener>Jimmy</a><br></section></footer><div class=pswp tabindex=-1 role=dialog aria-hidden=true><div class=pswp__bg></div><div class=pswp__scroll-wrap><div class=pswp__container><div class=pswp__item></div><div class=pswp__item></div><div class=pswp__item></div></div><div class="pswp__ui pswp__ui--hidden"><div class=pswp__top-bar><div class=pswp__counter></div><button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+<button class="pswp__button pswp__button--share" title=Share></button>
+<button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+<button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button><div class=pswp__preloader><div class=pswp__preloader__icn><div class=pswp__preloader__cut><div class=pswp__preloader__donut></div></div></div></div></div><div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap"><div class=pswp__share-tooltip></div></div><button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)"></button>
+<button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)"></button><div class=pswp__caption><div class=pswp__caption__center></div></div></div></div></div><script src=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo=" crossorigin=anonymous defer></script><script src=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU=" crossorigin=anonymous defer></script><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.css integrity="sha256-c0uckgykQ9v5k+IqViZOZKc47Jn7KQil4/MP3ySA3F8=" crossorigin=anonymous><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.css integrity="sha256-SBLU4vv6CA6lHsZ1XyTdhyjJxCjPif/TRkjnsyGAGnE=" crossorigin=anonymous></main><aside class="sidebar right-sidebar sticky"><section class="widget archives"><div class=widget-icon><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><line x1="5" y1="9" x2="19" y2="9"/><line x1="5" y1="15" x2="19" y2="15"/><line x1="11" y1="4" x2="7" y2="20"/><line x1="17" y1="4" x2="13" y2="20"/></svg></div><h2 class="widget-title section-title">目录</h2><div class=widget--toc><nav id=TableOfContents><ol><li><a href=#-遗留的安全集合>🚧 遗留的安全集合</a></li><li><a href=#-collections-安全集合>📦 Collections 安全集合</a></li><li><a href=#-juc-安全集合>🛠 JUC 安全集合</a><ol><li><a href=#concurrent>Concurrent</a></li><li><a href=#copyonwrite>CopyOnWrite</a></li><li><a href=#阻塞队列>阻塞队列</a><ol><li><a href=#常用方法>常用方法</a></li><li><a href=#linkedblockingqueue>LinkedBlockingQueue</a></li></ol></li></ol></li></ol></nav></div></section></aside></div><script src=https://cdn.jsdelivr.net/npm/node-vibrant@3.1.5/dist/vibrant.min.js integrity="sha256-5NovOZc4iwiAWTYIFiIM7DxKUXKWvpVEuMEPLzcm5/g=" crossorigin=anonymous></script><script type=text/javascript src=/ts/main.js defer></script>
+<script>(function(){const e=document.createElement("link");e.href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap",e.type="text/css",e.rel="stylesheet",document.head.appendChild(e)})()</script></body></html>
