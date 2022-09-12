@@ -398,7 +398,7 @@ data-flex-basis="1080px"
 &lt;/ul>
 &lt;p>确保在 Minor GC 之前，老年代还有容纳新生代所有对象的剩余空间。&lt;/p>
 &lt;p>进行一次 Minor GC 之后，Eden 区中任然存在大量对象，Survivor 中无法容纳，直接送到老年代，让老年代进行空间分配担保。&lt;/p></description></item><item><title>JVM 内存模型</title><link>https://emerywan.github.io/blog/p/java/jvm/memory-model/</link><pubDate>Sun, 07 Aug 2022 06:02:02 +0800</pubDate><guid>https://emerywan.github.io/blog/p/java/jvm/memory-model/</guid><description>&lt;img src="https://emerywan.github.io/blog/imgs/28.jpeg" alt="Featured image of post JVM 内存模型" />&lt;h2 id="jmm">JMM&lt;/h2>
-&lt;p>Java 内存模型屏蔽了不同操作系统和各种硬件的内存访问差异，实现了 Java 程序在各种平台下，都能达到一致性的访问效果。&lt;/p>
+&lt;p>Java 内存模型（Java Memory Model）屏蔽了不同操作系统和各种硬件的内存访问差异，实现了 Java 程序在各种平台下，都能达到一致性的访问效果。&lt;/p>
 &lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/java/jvm/memory-model/JMM.png"
 width="613"
 height="530"
@@ -464,12 +464,11 @@ data-flex-basis="590px"
 &lt;/ul>
 &lt;p>volatile 的写操作，都会刷新到主内存中，并使其他线程中的 volatile 变量失效；volatile 的读操作，都会从主存中读取。&lt;/p>
 &lt;ul>
-&lt;li>
-&lt;p>禁止指令重排优化（有序性）&lt;/p>
-&lt;/li>
-&lt;li>
-&lt;p>❗️无法保障原子性&lt;/p>
-&lt;/li>
+&lt;li>禁止指令重排优化（有序性）&lt;/li>
+&lt;/ul>
+&lt;p>防止写操作之前的代码，重排到写操作之后；防止读操作之后的代码，重排到读操作之前。&lt;/p>
+&lt;ul>
+&lt;li>❗️无法保障原子性&lt;/li>
 &lt;/ul>
 &lt;p>一条字节码在执行时，需要运行多条指令才能实现。&lt;/p>
 &lt;p>实现方式：内存屏障&lt;/p>
@@ -479,17 +478,27 @@ data-flex-basis="590px"
 &lt;p>指令重排提高了并发性能，但是 Java 虚拟机会对指令重排做一些规则限制，并不能让所有的指令都随意改变执行位置。&lt;/p>
 &lt;p>Java 内存模型天然的先行发生关系：&lt;/p>
 &lt;ul>
-&lt;li>程序顺序规则&lt;/li>
-&lt;/ul>
-&lt;p>在一个线程内，前面的代码操作优于后面的代码操作&lt;/p>
-&lt;ul>
-&lt;li>锁定规则&lt;/li>
-&lt;/ul>
-&lt;p>一个 unlock 操作优于后面对于同一个锁的 lock 操作&lt;/p>
-&lt;ul>
-&lt;li>volatile 规则&lt;/li>
-&lt;/ul>
-&lt;p>一个 volatile 变量的写操作，优于后面这个变量的读操作&lt;/p></description></item><item><title>类加载器</title><link>https://emerywan.github.io/blog/p/java/jvm/classloader/</link><pubDate>Sat, 06 Aug 2022 16:02:02 +0800</pubDate><guid>https://emerywan.github.io/blog/p/java/jvm/classloader/</guid><description>&lt;img src="https://emerywan.github.io/blog/imgs/25.jpeg" alt="Featured image of post 类加载器" />&lt;h2 id="类加载器">类加载器&lt;/h2>
+&lt;li>
+&lt;p>程序顺序规则&lt;/p>
+&lt;p>在一个线程内，前面的代码操作优于后面的代码操作。&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>锁定规则&lt;/p>
+&lt;p>一个 unlock 操作优于后面对于同一个锁的 lock 操作。&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>volatile 规则&lt;/p>
+&lt;p>一个 volatile 变量的写操作，优于后面这个变量的读操作。&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>传递规则&lt;/p>
+&lt;p>如果 A happens-before B，且 B happens-before C，那么 A happens-before C。&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>线程启动规则&lt;/p>
+&lt;p>Thread 对象的 start() 方法 happens-before 线程的每一个动作。&lt;/p>
+&lt;/li>
+&lt;/ul></description></item><item><title>类加载器</title><link>https://emerywan.github.io/blog/p/java/jvm/classloader/</link><pubDate>Sat, 06 Aug 2022 16:02:02 +0800</pubDate><guid>https://emerywan.github.io/blog/p/java/jvm/classloader/</guid><description>&lt;img src="https://emerywan.github.io/blog/imgs/25.jpeg" alt="Featured image of post 类加载器" />&lt;h2 id="类加载器">类加载器&lt;/h2>
 &lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/java/jvm/classloader/menu.png"
 width="1707"
 height="638"

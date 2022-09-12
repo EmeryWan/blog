@@ -1,0 +1,261 @@
+<!doctype html><html lang dir=ltr><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><meta name=description content="java.lang.ThreadLocal ThreadLocal 是一个创建线程局部变量的类。 通常创建的共享变量是可以被任一个线程访问并修改的，存在线程安全问题。使用 ThreadLocal 创建的变量只有当前线程才可访问，其"><title>ThreadLocal</title><link rel=canonical href=https://emerywan.github.io/blog/p/thread/threadlocal/><link rel=stylesheet href=/blog/scss/style.min.9fdfe1d69c4486d1a84c3c7b288ce74b0111a02a60a6c12f21c6b7cc02b131b4.css><meta property="og:title" content="ThreadLocal"><meta property="og:description" content="java.lang.ThreadLocal ThreadLocal 是一个创建线程局部变量的类。 通常创建的共享变量是可以被任一个线程访问并修改的，存在线程安全问题。使用 ThreadLocal 创建的变量只有当前线程才可访问，其"><meta property="og:url" content="https://emerywan.github.io/blog/p/thread/threadlocal/"><meta property="og:site_name" content="一层"><meta property="og:type" content="article"><meta property="article:section" content="Post"><meta property="article:tag" content="java"><meta property="article:tag" content="并发"><meta property="article:published_time" content="2022-09-02T16:02:02+08:00"><meta property="article:modified_time" content="2022-09-02T16:02:02+08:00"><meta property="og:image" content="https://emerywan.github.io/blog/imgs/19.jpeg"><meta name=twitter:title content="ThreadLocal"><meta name=twitter:description content="java.lang.ThreadLocal ThreadLocal 是一个创建线程局部变量的类。 通常创建的共享变量是可以被任一个线程访问并修改的，存在线程安全问题。使用 ThreadLocal 创建的变量只有当前线程才可访问，其"><meta name=twitter:card content="summary_large_image"><meta name=twitter:image content="https://emerywan.github.io/blog/imgs/19.jpeg"><link rel="shortcut icon" href=https://emerywan.github.io/blog/imgs/favicon.ico></head><body class=article-page><script>(function(){const e="StackColorScheme";localStorage.getItem(e)||localStorage.setItem(e,"auto")})()</script><script>(function(){const t="StackColorScheme",e=localStorage.getItem(t),n=window.matchMedia("(prefers-color-scheme: dark)").matches===!0;e=="dark"||e==="auto"&&n?document.documentElement.dataset.scheme="dark":document.documentElement.dataset.scheme="light"})()</script><div class="container main-container flex on-phone--column extended"><aside class="sidebar left-sidebar sticky"><button class="hamburger hamburger--spin" type=button id=toggle-menu aria-label=切换菜单>
+<span class=hamburger-box><span class=hamburger-inner></span></span></button><header><figure class=site-avatar><a href=/blog><img src=/blog/img/avatar_hud10ed4afecf1b63b1391b35c2778f738_36574_300x0_resize_box_3.png width=300 height=300 class=site-logo loading=lazy alt=Avatar></a></figure><div class=site-meta><h1 class=site-name><a href=/blog>一层</a></h1><h2 class=site-description>迎着这岁月的风。</h2></div></header><ol class=social-menu><li><a href=https://github.com/emerywan target=_blank title=GitHub><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-brand-github" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M9 19c-4.3 1.4-4.3-2.5-6-3m12 5v-3.5c0-1 .1-1.4-.5-2 2.8-.3 5.5-1.4 5.5-6a4.6 4.6.0 00-1.3-3.2 4.2 4.2.0 00-.1-3.2s-1.1-.3-3.5 1.3a12.3 12.3.0 00-6.2.0C6.5 2.8 5.4 3.1 5.4 3.1a4.2 4.2.0 00-.1 3.2A4.6 4.6.0 004 9.5c0 4.6 2.7 5.7 5.5 6-.6.6-.6 1.2-.5 2V21"/></svg></a></li><li><a href=https://www.letout.cn target=_blank title=Home><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-smart-home" width="44" height="44" viewBox="0 0 24 24" stroke-width="1.5" stroke="#6f32be" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M19 8.71l-5.333-4.148a2.666 2.666.0 00-3.274.0L5.059 8.71A2.665 2.665.0 004.03 10.815v7.2a2 2 0 002 2h12a2 2 0 002-2v-7.2c0-.823-.38-1.6-1.03-2.105"/><path d="M16 15c-2.21 1.333-5.792 1.333-8 0"/></svg></a></li></ol><ol class=menu id=main-menu><li><a href=/blog/><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><polyline points="5 12 3 12 12 3 21 12 19 12"/><path d="M5 12v7a2 2 0 002 2h10a2 2 0 002-2v-7"/><path d="M9 21v-6a2 2 0 012-2h2a2 2 0 012 2v6"/></svg><span>首页</span></a></li><li><a href=/blog/archives/><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><rect x="3" y="4" width="18" height="4" rx="2"/><path d="M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8"/><line x1="10" y1="12" x2="14" y2="12"/></svg><span>归档</span></a></li><li><a href=/blog/categories/><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><line x1="5" y1="9" x2="19" y2="9"/><line x1="5" y1="15" x2="19" y2="15"/><line x1="11" y1="4" x2="7" y2="20"/><line x1="17" y1="4" x2="13" y2="20"/></svg><span>分类</span></a></li><li><a href=/blog/about/><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="7" r="4"/><path d="M6 21v-2a4 4 0 014-4h4a4 4 0 014 4v2"/></svg><span>关于</span></a></li><li><a href=/blog/search/><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="10" cy="10" r="7"/><line x1="21" y1="21" x2="15" y2="15"/></svg><span>搜索</span></a></li><div class=menu-bottom-section><li id=dark-mode-toggle><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="8" cy="12" r="2"/><rect x="2" y="6" width="20" height="12" rx="6"/></svg><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="16" cy="12" r="2"/><rect x="2" y="6" width="20" height="12" rx="6"/></svg><span>Dark Mode</span></li></div></ol></aside><main class="main full-width"><article class="has-image main-article"><header class=article-header><div class=article-image><a href=/blog/p/thread/threadlocal/><img src=/blog/imgs/19.jpeg loading=lazy alt="Featured image of post ThreadLocal"></a></div><div class=article-details><header class=article-category><a href=/blog/categories/%E6%8A%80%E6%9C%AF/ style=background-color:#91d5ff;color:#fff>技术</a></header><div class=article-title-wrapper><h2 class=article-title><a href=/blog/p/thread/threadlocal/>ThreadLocal</a></h2></div><footer class=article-time><div><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><path d="M11.795 21H5a2 2 0 01-2-2V7a2 2 0 012-2h12a2 2 0 012 2v4"/><circle cx="18" cy="18" r="4"/><path d="M15 3v4"/><path d="M7 3v4"/><path d="M3 11h16"/><path d="M18 16.496V18l1 1"/></svg><time class=article-time--published>09 - 02, 2022</time></div></footer></div></header><section class=article-content><h2 id=javalangthreadlocal>java.lang.ThreadLocal</h2><p>ThreadLocal 是一个创建线程局部变量的类。</p><p>通常创建的共享变量是可以被任一个线程访问并修改的，存在线程安全问题。使用 ThreadLocal 创建的变量只有当前线程才可访问，其他线程无法修改和访问。</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-java data-lang=java><span class=line><span class=cl><span class=kd>public</span> <span class=kd>class</span> <span class=nc>DateUtils</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>    <span class=kd>public</span> <span class=kd>static</span> <span class=kd>final</span> <span class=n>ThreadLocal</span><span class=o>&lt;</span><span class=n>DateFormat</span><span class=o>&gt;</span> <span class=n>df</span> <span class=o>=</span> <span class=k>new</span> <span class=n>ThreadLocal</span><span class=o>&lt;&gt;()</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>        <span class=c1>// 重写 initialValue 可设置初始值
+</span></span></span><span class=line><span class=cl><span class=c1></span>        <span class=nd>@Override</span>
+</span></span><span class=line><span class=cl>        <span class=kd>protected</span> <span class=n>DateFormat</span> <span class=nf>initialValue</span><span class=o>()</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>            <span class=k>return</span> <span class=k>new</span> <span class=n>SimpleDateFormat</span><span class=o>(</span><span class=s>&#34;yyyy-MM-dd&#34;</span><span class=o>);</span>
+</span></span><span class=line><span class=cl>        <span class=o>}</span>
+</span></span><span class=line><span class=cl>    <span class=o>}</span>
+</span></span><span class=line><span class=cl><span class=o>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1>// ---
+</span></span></span><span class=line><span class=cl><span class=c1></span>
+</span></span><span class=line><span class=cl><span class=n>DateUtils</span><span class=o>.</span><span class=na>df</span><span class=o>.</span><span class=na>get</span><span class=o>().</span><span class=na>format</span><span class=o>(</span><span class=k>new</span> <span class=n>Date</span><span class=o>());</span>
+</span></span></code></pre></td></tr></table></div></div><h2 id=原理>原理</h2><p>每一个线程的 Thread 对象中都有一个 <code>ThreadLocal.ThreadLocalMap</code> 对象，这个对象存储了一组以 <code>ThreadLocal.threadLocalHashCode</code> 为键，以本地线程变量为值的 <code>Key-Value</code> 对。</p><p><img src=/blog/p/thread/threadlocal/threadlocalmap.png width=561 height=327 srcset="/blog/p/thread/threadlocal/threadlocalmap_hu2f3b0d366a0f121060908fa4912e4768_16111_480x0_resize_box_3.png 480w, /blog/p/thread/threadlocal/threadlocalmap_hu2f3b0d366a0f121060908fa4912e4768_16111_1024x0_resize_box_3.png 1024w" loading=lazy alt=threadlocalmap class=gallery-image data-flex-grow=171 data-flex-basis=411px></p><p><code>ThreadLocal</code> 对象就是当前线程的 <code>ThreadLocalMap</code> 的访问入口，每一个 <code>ThreadLocal</code> 对象都包含了一个独一无二的 <code>threadLocalHashCode</code> 值，使用这个值，就可以在线程 <code>K-V</code> 值对中找到对应的本地线程变量。</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-java data-lang=java><span class=line><span class=cl><span class=kd>public</span> <span class=kd>class</span> <span class=nc>Thread</span> <span class=kd>implements</span> <span class=n>Runnable</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>    <span class=c1>// ...
+</span></span></span><span class=line><span class=cl><span class=c1></span>    <span class=n>ThreadLocal</span><span class=o>.</span><span class=na>ThreadLocalMap</span> <span class=n>threadLocals</span> <span class=o>=</span> <span class=kc>null</span><span class=o>;</span>
+</span></span><span class=line><span class=cl>    <span class=c1>// ...
+</span></span></span><span class=line><span class=cl><span class=c1></span><span class=o>}</span>
+</span></span></code></pre></td></tr></table></div></div><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-java data-lang=java><span class=line><span class=cl><span class=kd>public</span> <span class=kd>class</span> <span class=nc>ThreadLocal</span><span class=o>&lt;</span><span class=n>T</span><span class=o>&gt;</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>    <span class=c1>// ...
+</span></span></span><span class=line><span class=cl><span class=c1></span>    <span class=kd>static</span> <span class=kd>class</span> <span class=nc>ThreadLocalMap</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>        <span class=kd>static</span> <span class=kd>class</span> <span class=nc>Entry</span> <span class=kd>extends</span> <span class=n>WeakReference</span><span class=o>&lt;</span><span class=n>ThreadLocal</span><span class=o>&lt;?&gt;&gt;</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>            <span class=n>Object</span> <span class=n>value</span><span class=o>;</span>
+</span></span><span class=line><span class=cl>            <span class=n>Enrty</span><span class=o>(</span><span class=n>ThreadLocal</span><span class=o>&lt;?&gt;</span> <span class=n>k</span><span class=o>,</span> <span class=n>Object</span> <span class=n>v</span><span class=o>)</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>                <span class=kd>super</span><span class=o>(</span><span class=n>k</span><span class=o>);</span>
+</span></span><span class=line><span class=cl>                <span class=n>value</span> <span class=o>=</span> <span class=n>v</span><span class=o>;</span>
+</span></span><span class=line><span class=cl>            <span class=o>}</span>
+</span></span><span class=line><span class=cl>        <span class=o>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>        <span class=kd>private</span> <span class=n>Enrty</span><span class=o>[]</span> <span class=n>table</span><span class=o>;</span>
+</span></span><span class=line><span class=cl>    <span class=o>}</span>
+</span></span><span class=line><span class=cl>    <span class=c1>// ...
+</span></span></span><span class=line><span class=cl><span class=c1></span><span class=o>}</span>    
+</span></span></code></pre></td></tr></table></div></div><h3 id=set>set()</h3><ul><li>获取当前线程</li><li>利用当前线程作为句柄，获取一个 ThreadLocalMap 对象</li><li>如果 ThreadLocalMap 对象不为空，则设置值，否则创建这个 ThreadLocalMap 对象并设置值</li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-java data-lang=java><span class=line><span class=cl><span class=kd>public</span> <span class=kt>void</span> <span class=nf>set</span><span class=o>(</span><span class=n>T</span> <span class=n>value</span><span class=o>)</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>    <span class=n>Thread</span> <span class=n>t</span> <span class=o>=</span> <span class=n>Thread</span><span class=o>.</span><span class=na>currentThread</span><span class=o>();</span>
+</span></span><span class=line><span class=cl>    <span class=n>ThreadLocalMap</span> <span class=n>map</span> <span class=o>=</span> <span class=n>getMap</span><span class=o>(</span><span class=n>t</span><span class=o>);</span>
+</span></span><span class=line><span class=cl>    <span class=k>if</span> <span class=o>(</span><span class=n>map</span> <span class=o>!=</span> <span class=kc>null</span><span class=o>)</span>
+</span></span><span class=line><span class=cl>        <span class=n>map</span><span class=o>.</span><span class=na>set</span><span class=o>(</span><span class=k>this</span><span class=o>,</span> <span class=n>value</span><span class=o>);</span>
+</span></span><span class=line><span class=cl>    <span class=k>else</span>
+</span></span><span class=line><span class=cl>        <span class=n>createMap</span><span class=o>(</span><span class=n>t</span><span class=o>,</span> <span class=n>value</span><span class=o>);</span>
+</span></span><span class=line><span class=cl><span class=o>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1>// ---
+</span></span></span><span class=line><span class=cl><span class=c1></span><span class=n>ThreadLocalMap</span> <span class=nf>getMap</span><span class=o>(</span><span class=n>Thread</span> <span class=n>t</span><span class=o>)</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>    <span class=k>return</span> <span class=n>t</span><span class=o>.</span><span class=na>threadLocals</span><span class=o>;</span>
+</span></span><span class=line><span class=cl><span class=o>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1>// ---
+</span></span></span><span class=line><span class=cl><span class=c1></span><span class=kt>void</span> <span class=nf>createMap</span><span class=o>(</span><span class=n>Thread</span> <span class=n>t</span><span class=o>,</span> <span class=n>T</span> <span class=n>firstValue</span><span class=o>)</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>    <span class=n>t</span><span class=o>.</span><span class=na>threadLocals</span> <span class=o>=</span> <span class=k>new</span> <span class=n>ThreadLocalMap</span><span class=o>(</span><span class=k>this</span><span class=o>,</span> <span class=n>firstValue</span><span class=o>);</span>
+</span></span><span class=line><span class=cl><span class=o>}</span>
+</span></span></code></pre></td></tr></table></div></div><h3 id=get>get()</h3><ul><li>获取当前线程，并获取当前线程的 ThreadLocalMap 对象</li><li>如果当前线程的 ThreadLocalMap 已经初始化，返回当前 ThreadLocal 为 Key 的值</li><li>如果 ThreadLocalMap 没有被初始化，或者不存在以 ThreadLocal 为 Key 的值，将创建一个新的 Value，并返回</li><li>initialValue 默认为 null，可进行重写</li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span><span class=lnt>28
+</span><span class=lnt>29
+</span><span class=lnt>30
+</span><span class=lnt>31
+</span><span class=lnt>32
+</span><span class=lnt>33
+</span><span class=lnt>34
+</span><span class=lnt>35
+</span><span class=lnt>36
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-java data-lang=java><span class=line><span class=cl><span class=c1>// ThreadLocal#get
+</span></span></span><span class=line><span class=cl><span class=c1></span><span class=kd>public</span> <span class=n>T</span> <span class=nf>get</span><span class=o>()</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>    <span class=n>Thread</span> <span class=n>t</span> <span class=o>=</span> <span class=n>Thread</span><span class=o>.</span><span class=na>currentThread</span><span class=o>();</span>
+</span></span><span class=line><span class=cl>    <span class=n>ThreadLocalMap</span> <span class=n>map</span> <span class=o>=</span> <span class=n>getMap</span><span class=o>(</span><span class=n>t</span><span class=o>);</span>
+</span></span><span class=line><span class=cl>    <span class=k>if</span> <span class=o>(</span><span class=n>map</span> <span class=o>!=</span> <span class=kc>null</span><span class=o>)</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>        <span class=n>ThreadLocalMap</span><span class=o>.</span><span class=na>Entry</span> <span class=n>e</span> <span class=o>=</span> <span class=n>map</span><span class=o>.</span><span class=na>getEntry</span><span class=o>(</span><span class=k>this</span><span class=o>);</span>
+</span></span><span class=line><span class=cl>        <span class=k>if</span> <span class=o>(</span><span class=n>e</span> <span class=o>!=</span> <span class=kc>null</span><span class=o>)</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>            <span class=nd>@SuppressWarnings</span><span class=o>(</span><span class=s>&#34;unchecked&#34;</span><span class=o>)</span>
+</span></span><span class=line><span class=cl>            <span class=n>T</span> <span class=n>result</span> <span class=o>=</span> <span class=o>(</span><span class=n>T</span><span class=o>)</span><span class=n>e</span><span class=o>.</span><span class=na>value</span><span class=o>;</span>
+</span></span><span class=line><span class=cl>            <span class=k>return</span> <span class=n>result</span><span class=o>;</span>
+</span></span><span class=line><span class=cl>        <span class=o>}</span>
+</span></span><span class=line><span class=cl>    <span class=o>}</span>
+</span></span><span class=line><span class=cl>    <span class=k>return</span> <span class=n>setInitialValue</span><span class=o>();</span>
+</span></span><span class=line><span class=cl><span class=o>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1>// ThreadLocal#setInitialValue
+</span></span></span><span class=line><span class=cl><span class=c1></span><span class=kd>private</span> <span class=n>T</span> <span class=nf>setInitialValue</span><span class=o>()</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>    <span class=n>T</span> <span class=n>value</span> <span class=o>=</span> <span class=n>initialValue</span><span class=o>();</span>  <span class=c1>// 获得一个初始值，未重写默认为 null
+</span></span></span><span class=line><span class=cl><span class=c1></span>    <span class=n>Thread</span> <span class=n>t</span> <span class=o>=</span> <span class=n>Thread</span><span class=o>.</span><span class=na>currentThread</span><span class=o>();</span>
+</span></span><span class=line><span class=cl>    <span class=n>ThreadLocalMap</span> <span class=n>map</span> <span class=o>=</span> <span class=n>getMap</span><span class=o>(</span><span class=n>t</span><span class=o>);</span>
+</span></span><span class=line><span class=cl>    <span class=k>if</span> <span class=o>(</span><span class=n>map</span> <span class=o>!=</span> <span class=kc>null</span><span class=o>)</span>
+</span></span><span class=line><span class=cl>        <span class=n>map</span><span class=o>.</span><span class=na>set</span><span class=o>(</span><span class=k>this</span><span class=o>,</span> <span class=n>value</span><span class=o>);</span>
+</span></span><span class=line><span class=cl>    <span class=k>else</span>
+</span></span><span class=line><span class=cl>        <span class=n>createMap</span><span class=o>(</span><span class=n>t</span><span class=o>,</span> <span class=n>value</span><span class=o>);</span>
+</span></span><span class=line><span class=cl>    <span class=k>return</span> <span class=n>value</span><span class=o>;</span>
+</span></span><span class=line><span class=cl><span class=o>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1>// ThreadLocal#initialValue
+</span></span></span><span class=line><span class=cl><span class=c1></span><span class=kd>protected</span> <span class=n>T</span> <span class=nf>initialValue</span><span class=o>()</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>    <span class=k>return</span> <span class=kc>null</span><span class=o>;</span>  <span class=c1>// 默认为 null，可被重写
+</span></span></span><span class=line><span class=cl><span class=c1></span><span class=o>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1>// ThreadLocalMap#createMap
+</span></span></span><span class=line><span class=cl><span class=c1></span><span class=kt>void</span> <span class=nf>createMap</span><span class=o>(</span><span class=n>Thread</span> <span class=n>t</span><span class=o>,</span> <span class=n>T</span> <span class=n>firstValue</span><span class=o>)</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>    <span class=n>t</span><span class=o>.</span><span class=na>threadLocals</span> <span class=o>=</span> <span class=k>new</span> <span class=n>ThreadLocalMap</span><span class=o>(</span><span class=k>this</span><span class=o>,</span> <span class=n>firstValue</span><span class=o>);</span>
+</span></span><span class=line><span class=cl><span class=o>}</span>
+</span></span></code></pre></td></tr></table></div></div><h3 id=remove>remove()</h3><ul><li>通过调用 ThreadLocalMap 的 remove() 方法完成移除操作</li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-java data-lang=java><span class=line><span class=cl><span class=kd>public</span> <span class=kt>void</span> <span class=nf>remove</span><span class=o>()</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>    <span class=n>ThreadLocalMap</span> <span class=n>m</span> <span class=o>=</span> <span class=n>getMap</span><span class=o>(</span><span class=n>Thread</span><span class=o>.</span><span class=na>currentThread</span><span class=o>());</span>
+</span></span><span class=line><span class=cl>    <span class=k>if</span> <span class=o>(</span><span class=n>m</span> <span class=o>!=</span> <span class=kc>null</span><span class=o>)</span>
+</span></span><span class=line><span class=cl>        <span class=n>m</span><span class=o>.</span><span class=na>remove</span><span class=o>(</span><span class=k>this</span><span class=o>);</span>
+</span></span><span class=line><span class=cl><span class=o>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1>// ---
+</span></span></span><span class=line><span class=cl><span class=c1>// ThreadLocalMap remove()
+</span></span></span><span class=line><span class=cl><span class=c1></span><span class=kd>private</span> <span class=kt>void</span> <span class=nf>remove</span><span class=o>(</span><span class=n>ThreadLocal</span><span class=o>&lt;?&gt;</span> <span class=n>key</span><span class=o>)</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>    <span class=n>Entry</span><span class=o>[]</span> <span class=n>tab</span> <span class=o>=</span> <span class=n>table</span><span class=o>;</span>
+</span></span><span class=line><span class=cl>    <span class=kt>int</span> <span class=n>len</span> <span class=o>=</span> <span class=n>tab</span><span class=o>.</span><span class=na>length</span><span class=o>;</span>
+</span></span><span class=line><span class=cl>    <span class=kt>int</span> <span class=n>i</span> <span class=o>=</span> <span class=n>key</span><span class=o>.</span><span class=na>threadLocalHashCode</span> <span class=o>&amp;</span> <span class=o>(</span><span class=n>len</span><span class=o>-</span><span class=n>1</span><span class=o>);</span>
+</span></span><span class=line><span class=cl>    <span class=k>for</span> <span class=o>(</span><span class=n>Entry</span> <span class=n>e</span> <span class=o>=</span> <span class=n>tab</span><span class=o>[</span><span class=n>i</span><span class=o>];</span>
+</span></span><span class=line><span class=cl>            <span class=n>e</span> <span class=o>!=</span> <span class=kc>null</span><span class=o>;</span>
+</span></span><span class=line><span class=cl>            <span class=n>e</span> <span class=o>=</span> <span class=n>tab</span><span class=o>[</span><span class=n>i</span> <span class=o>=</span> <span class=n>nextIndex</span><span class=o>(</span><span class=n>i</span><span class=o>,</span> <span class=n>len</span><span class=o>)])</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>        <span class=k>if</span> <span class=o>(</span><span class=n>e</span><span class=o>.</span><span class=na>get</span><span class=o>()</span> <span class=o>==</span> <span class=n>key</span><span class=o>)</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>            <span class=n>e</span><span class=o>.</span><span class=na>clear</span><span class=o>();</span>
+</span></span><span class=line><span class=cl>            <span class=n>expungeStaleEntry</span><span class=o>(</span><span class=n>i</span><span class=o>);</span>
+</span></span><span class=line><span class=cl>            <span class=k>return</span><span class=o>;</span>
+</span></span><span class=line><span class=cl>        <span class=o>}</span>
+</span></span><span class=line><span class=cl>    <span class=o>}</span>
+</span></span><span class=line><span class=cl><span class=o>}</span>
+</span></span></code></pre></td></tr></table></div></div><h2 id=内存泄露>内存泄露</h2><p>指程序申请内存后，一直无法释放已经申请的内存。</p><p>ThreadLocalMap 使用 ThreadLocal 的弱引用作为 key，如果一个 ThreadLocal 不存在外部的强引用时，下次 GC 时，该 key 就会被回收，但是 value 还存在着强引用，如果没有手动地 remove() 或者线程一直没有结束（例如使用线程池），value 就会一直存在，导致内存泄漏。</p><p><img src=/blog/p/thread/threadlocal/threadlocal.png width=691 height=425 srcset="/blog/p/thread/threadlocal/threadlocal_hu332fd7c00cd887225a3bcbd94cc1cc52_26526_480x0_resize_box_3.png 480w, /blog/p/thread/threadlocal/threadlocal_hu332fd7c00cd887225a3bcbd94cc1cc52_26526_1024x0_resize_box_3.png 1024w" loading=lazy alt=threadlocal class=gallery-image data-flex-grow=162 data-flex-basis=390px></p><p>解决办法：</p><ul><li><p>每次使用完后进行 remove()</p></li><li><p>使用 set()、get() 时（部分），扩容 rehash() 时（全量），会判断对 key=null 的进行清理</p></li><li><p>可以将 ThreadLocal 设置为 staic final</p></li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-java data-lang=java><span class=line><span class=cl><span class=kd>private</span> <span class=kt>void</span> <span class=nf>rehash</span><span class=o>()</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>    <span class=c1>// 进行全量清理
+</span></span></span><span class=line><span class=cl><span class=c1></span>    <span class=n>expungeStaleEntries</span><span class=o>();</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=k>if</span> <span class=o>(</span><span class=n>size</span> <span class=o>&gt;=</span> <span class=n>threshold</span> <span class=o>-</span> <span class=n>threshold</span> <span class=o>/</span> <span class=n>4</span><span class=o>)</span>
+</span></span><span class=line><span class=cl>        <span class=n>resize</span><span class=o>();</span>
+</span></span><span class=line><span class=cl><span class=o>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=kd>private</span> <span class=kt>void</span> <span class=nf>expungeStaleEntries</span><span class=o>()</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>  <span class=n>Entry</span><span class=o>[]</span> <span class=n>tab</span> <span class=o>=</span> <span class=n>table</span><span class=o>;</span>
+</span></span><span class=line><span class=cl>  <span class=kt>int</span> <span class=n>len</span> <span class=o>=</span> <span class=n>tab</span><span class=o>.</span><span class=na>length</span><span class=o>;</span>
+</span></span><span class=line><span class=cl>  <span class=k>for</span> <span class=o>(</span><span class=kt>int</span> <span class=n>j</span> <span class=o>=</span> <span class=n>0</span><span class=o>;</span> <span class=n>j</span> <span class=o>&lt;</span> <span class=n>len</span><span class=o>;</span> <span class=n>j</span><span class=o>++)</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>    <span class=n>Entry</span> <span class=n>e</span> <span class=o>=</span> <span class=n>tab</span><span class=o>[</span><span class=n>j</span><span class=o>];</span>
+</span></span><span class=line><span class=cl>    <span class=k>if</span> <span class=o>(</span><span class=n>e</span> <span class=o>!=</span> <span class=kc>null</span> <span class=o>&amp;&amp;</span> <span class=n>e</span><span class=o>.</span><span class=na>get</span><span class=o>()</span> <span class=o>==</span> <span class=kc>null</span><span class=o>)</span>
+</span></span><span class=line><span class=cl>      <span class=n>expungeStaleEntry</span><span class=o>(</span><span class=n>j</span><span class=o>);</span>
+</span></span><span class=line><span class=cl>  <span class=o>}</span>
+</span></span><span class=line><span class=cl><span class=o>}</span>
+</span></span></code></pre></td></tr></table></div></div><h2 id=应用场景>应用场景</h2><ul><li><p>线程资源持有，代替参数显示传递</p></li><li><p>全局存储信息，在需要的地方直接获取</p></li><li><p>解决线程安全问题，达到线程隔离</p></li></ul><h2 id=参考>参考</h2><ul><li>🔗 <a class=link href=https://www.cnblogs.com/crazymakercircle/p/14491965.html#autoid-h2-2-0-0 target=_blank rel=noopener>https://www.cnblogs.com/crazymakercircle/p/14491965.html#autoid-h2-2-0-0</a></li></ul></section><footer class=article-footer><section class=article-tags><a href=/blog/tags/java/>Java</a>
+<a href=/blog/tags/%E5%B9%B6%E5%8F%91/>并发</a></section><section class=article-copyright><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-copyright" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><path d="M14.5 9a3.5 4 0 100 6"/></svg><span>Licensed under CC BY-NC-SA 4.0</span></section></footer></article><aside class=related-contents--wrapper><h2 class=section-title>相关文章</h2><div class=related-contents><div class="flex article-list--tile"><article class=has-image><a href=/blog/p/thread/cyclicbarrier/><div class=article-image><img src=/blog/imgs/14.jpeg loading=lazy data-key=/thread/cyclicbarrier data-hash=/blog/imgs/14.jpeg></div><div class=article-details><h2 class=article-title>Java 并发 - CyclicBarrier 实现原理</h2></div></a></article><article class=has-image><a href=/blog/p/thread/countdownlatch/><div class=article-image><img src=/blog/imgs/6.jpeg loading=lazy data-key=/thread/countdownlatch data-hash=/blog/imgs/6.jpeg></div><div class=article-details><h2 class=article-title>Java 并发 - CountDownLatch 实现原理</h2></div></a></article><article class=has-image><a href=/blog/p/thread/collection/><div class=article-image><img src=/blog/imgs/16.jpeg loading=lazy data-key=/thread/collection data-hash=/blog/imgs/16.jpeg></div><div class=article-details><h2 class=article-title>Java 并发 - 并发安全的容器</h2></div></a></article><article class=has-image><a href=/blog/p/thread/aqs/><div class=article-image><img src=/blog/imgs/6.jpeg loading=lazy data-key=/thread/aqs data-hash=/blog/imgs/6.jpeg></div><div class=article-details><h2 class=article-title>Java 并发 - AQS</h2></div></a></article><article class=has-image><a href=/blog/p/thread/singleton/><div class=article-image><img src=/blog/imgs/8.jpeg loading=lazy data-key=/thread/singleton data-hash=/blog/imgs/8.jpeg></div><div class=article-details><h2 class=article-title>线程安全的单例模式</h2></div></a></article></div></div></aside><footer class=site-footer><section class=copyright>&copy;
+2022 一层</section><section class=powerby><b><a href=http://beian.miit.gov.cn/ target=_blank rel="nofollow noopener">赣ICP备19004365号-3</a></b><br>Built with <a href=https://gohugo.io/ target=_blank rel=noopener>Hugo</a> & <b><a href=https://github.com/CaiJimmy/hugo-theme-stack target=_blank rel=noopener data-version=%s>Stack</a></b> by <a href=https://jimmycai.com target=_blank rel=noopener>Jimmy</a><br></section></footer><div class=pswp tabindex=-1 role=dialog aria-hidden=true><div class=pswp__bg></div><div class=pswp__scroll-wrap><div class=pswp__container><div class=pswp__item></div><div class=pswp__item></div><div class=pswp__item></div></div><div class="pswp__ui pswp__ui--hidden"><div class=pswp__top-bar><div class=pswp__counter></div><button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+<button class="pswp__button pswp__button--share" title=Share></button>
+<button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+<button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button><div class=pswp__preloader><div class=pswp__preloader__icn><div class=pswp__preloader__cut><div class=pswp__preloader__donut></div></div></div></div></div><div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap"><div class=pswp__share-tooltip></div></div><button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)"></button>
+<button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)"></button><div class=pswp__caption><div class=pswp__caption__center></div></div></div></div></div><script src=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo=" crossorigin=anonymous defer></script><script src=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU=" crossorigin=anonymous defer></script><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.css integrity="sha256-c0uckgykQ9v5k+IqViZOZKc47Jn7KQil4/MP3ySA3F8=" crossorigin=anonymous><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.css integrity="sha256-SBLU4vv6CA6lHsZ1XyTdhyjJxCjPif/TRkjnsyGAGnE=" crossorigin=anonymous></main><aside class="sidebar right-sidebar sticky"><section class="widget archives"><div class=widget-icon><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><line x1="5" y1="9" x2="19" y2="9"/><line x1="5" y1="15" x2="19" y2="15"/><line x1="11" y1="4" x2="7" y2="20"/><line x1="17" y1="4" x2="13" y2="20"/></svg></div><h2 class="widget-title section-title">目录</h2><div class=widget--toc><nav id=TableOfContents><ol><li><a href=#javalangthreadlocal>java.lang.ThreadLocal</a></li><li><a href=#原理>原理</a><ol><li><a href=#set>set()</a></li><li><a href=#get>get()</a></li><li><a href=#remove>remove()</a></li></ol></li><li><a href=#内存泄露>内存泄露</a></li><li><a href=#应用场景>应用场景</a></li><li><a href=#参考>参考</a></li></ol></nav></div></section></aside></div><script src=https://cdn.jsdelivr.net/npm/node-vibrant@3.1.5/dist/vibrant.min.js integrity="sha256-5NovOZc4iwiAWTYIFiIM7DxKUXKWvpVEuMEPLzcm5/g=" crossorigin=anonymous></script><script type=text/javascript src=/blog/ts/main.js defer></script>
+<script>(function(){const e=document.createElement("link");e.href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap",e.type="text/css",e.rel="stylesheet",document.head.appendChild(e)})()</script></body></html>
