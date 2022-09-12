@@ -34,6 +34,7 @@ data-flex-grow="171"
 data-flex-basis="410px"
 >&lt;/p>
 &lt;h2 id="流程">流程&lt;/h2>
+&lt;p>腾讯云中还有专门托管静态页面的服务 Webify，类似于 Github 中的静态页面服务，费用相较来说挺低的，这里打算把博客迁移过去。&lt;/p>
 &lt;p>在部署模板里面，只有一些前端框架，没有 Hugo，所以这里利用 Github Action 编译成静态页面后，推送到其他分支/仓库，再托管这些静态代码。&lt;/p>
 &lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/hugo-in-webify/3.png"
 width="327"
