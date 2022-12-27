@@ -73,9 +73,9 @@
 </span></span></span><span class=line><span class=cl><span class=c1></span>        <span class=nd>@Override</span>
 </span></span><span class=line><span class=cl>        <span class=kd>public</span> <span class=kt>void</span> <span class=nf>run</span><span class=o>()</span> <span class=o>{</span>
 </span></span><span class=line><span class=cl>            <span class=n>System</span><span class=o>.</span><span class=na>out</span><span class=o>.</span><span class=na>println</span><span class=o>(</span><span class=s>&#34;🏃‍♂️ 开始寻找&#34;</span> <span class=o>+</span> <span class=n>id</span> <span class=o>+</span> <span class=s>&#34;号龙珠&#34;</span><span class=o>);</span>
-</span></span><span class=line><span class=cl>            <span class=kt>int</span> <span class=n>seconds</span> <span class=o>=</span> <span class=n>ThreadLocalRandom</span><span class=o>.</span><span class=na>current</span><span class=o>().</span><span class=na>nextInt</span><span class=o>(</span><span class=n>20</span><span class=o>);</span>
+</span></span><span class=line><span class=cl>            <span class=kt>int</span> <span class=n>seconds</span> <span class=o>=</span> <span class=n>ThreadLocalRandom</span><span class=o>.</span><span class=na>current</span><span class=o>().</span><span class=na>nextInt</span><span class=o>(</span><span class=mi>20</span><span class=o>);</span>
 </span></span><span class=line><span class=cl>            <span class=k>try</span> <span class=o>{</span>
-</span></span><span class=line><span class=cl>                <span class=n>Thread</span><span class=o>.</span><span class=na>sleep</span><span class=o>(</span><span class=n>seconds</span> <span class=o>*</span> <span class=n>1000</span><span class=o>);</span>
+</span></span><span class=line><span class=cl>                <span class=n>Thread</span><span class=o>.</span><span class=na>sleep</span><span class=o>(</span><span class=n>seconds</span> <span class=o>*</span> <span class=mi>1000</span><span class=o>);</span>
 </span></span><span class=line><span class=cl>            <span class=o>}</span> <span class=k>catch</span> <span class=o>(</span><span class=n>InterruptedException</span> <span class=n>e</span><span class=o>)</span> <span class=o>{</span>
 </span></span><span class=line><span class=cl>                <span class=n>e</span><span class=o>.</span><span class=na>printStackTrace</span><span class=o>();</span>
 </span></span><span class=line><span class=cl>            <span class=o>}</span>
@@ -89,7 +89,7 @@
 </span></span><span class=line><span class=cl>    <span class=c1>// **主线程**
 </span></span></span><span class=line><span class=cl><span class=c1></span>    <span class=c1>// 等子线程都执行完毕后，找到所有龙珠，召唤神龙
 </span></span></span><span class=line><span class=cl><span class=c1></span>    <span class=kd>public</span> <span class=kd>static</span> <span class=kt>void</span> <span class=nf>main</span><span class=o>(</span><span class=n>String</span><span class=o>[]</span> <span class=n>args</span><span class=o>)</span> <span class=o>{</span>
-</span></span><span class=line><span class=cl>        <span class=n>List</span><span class=o>&lt;</span><span class=n>Integer</span><span class=o>&gt;</span> <span class=n>idList</span> <span class=o>=</span> <span class=n>Arrays</span><span class=o>.</span><span class=na>asList</span><span class=o>(</span><span class=n>1</span><span class=o>,</span> <span class=n>2</span><span class=o>,</span> <span class=n>3</span><span class=o>,</span> <span class=n>4</span><span class=o>,</span> <span class=n>5</span><span class=o>,</span> <span class=n>6</span><span class=o>,</span> <span class=n>7</span><span class=o>);</span>
+</span></span><span class=line><span class=cl>        <span class=n>List</span><span class=o>&lt;</span><span class=n>Integer</span><span class=o>&gt;</span> <span class=n>idList</span> <span class=o>=</span> <span class=n>Arrays</span><span class=o>.</span><span class=na>asList</span><span class=o>(</span><span class=mi>1</span><span class=o>,</span> <span class=mi>2</span><span class=o>,</span> <span class=mi>3</span><span class=o>,</span> <span class=mi>4</span><span class=o>,</span> <span class=mi>5</span><span class=o>,</span> <span class=mi>6</span><span class=o>,</span> <span class=mi>7</span><span class=o>);</span>
 </span></span><span class=line><span class=cl>        
 </span></span><span class=line><span class=cl>        <span class=c1>// state 初始化为任务的个数
 </span></span></span><span class=line><span class=cl><span class=c1></span>        <span class=n>CountDownLatch</span> <span class=n>latch</span> <span class=o>=</span> <span class=k>new</span> <span class=n>CountDownLatch</span><span class=o>(</span><span class=n>idList</span><span class=o>.</span><span class=na>size</span><span class=o>());</span>
@@ -145,7 +145,7 @@
 </span><span class=lnt>36
 </span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-java data-lang=java><span class=line><span class=cl><span class=kd>public</span> <span class=kd>class</span> <span class=nc>Demo</span> <span class=o>{</span>
 </span></span><span class=line><span class=cl>
-</span></span><span class=line><span class=cl>    <span class=kd>private</span> <span class=kd>static</span> <span class=kt>int</span> <span class=n>count</span> <span class=o>=</span> <span class=n>5</span><span class=o>;</span>
+</span></span><span class=line><span class=cl>    <span class=kd>private</span> <span class=kd>static</span> <span class=kt>int</span> <span class=n>count</span> <span class=o>=</span> <span class=mi>5</span><span class=o>;</span>
 </span></span><span class=line><span class=cl>    <span class=c1>// CyclicBarrier 可以设置子线程全部到达 barrier，执行的任务
 </span></span></span><span class=line><span class=cl><span class=c1></span>    <span class=kd>private</span> <span class=kd>static</span> <span class=n>CyclicBarrier</span> <span class=n>barrier</span> <span class=o>=</span> <span class=k>new</span> <span class=n>CyclicBarrier</span><span class=o>(</span><span class=n>count</span><span class=o>,</span> <span class=o>()</span> <span class=o>-&gt;</span> <span class=o>{</span>
 </span></span><span class=line><span class=cl>        <span class=n>System</span><span class=o>.</span><span class=na>out</span><span class=o>.</span><span class=na>println</span><span class=o>(</span><span class=s>&#34;👌 人员到齐！准备爬山！&#34;</span><span class=o>);</span>
@@ -153,11 +153,11 @@
 </span></span><span class=line><span class=cl>
 </span></span><span class=line><span class=cl>    <span class=kd>public</span> <span class=kd>static</span> <span class=kt>void</span> <span class=nf>main</span><span class=o>(</span><span class=n>String</span><span class=o>[]</span> <span class=n>args</span><span class=o>)</span> <span class=o>{</span>
 </span></span><span class=line><span class=cl>        <span class=c1>// 子线程，模拟 5 个同学相约爬山
-</span></span></span><span class=line><span class=cl><span class=c1></span>        <span class=k>for</span> <span class=o>(</span><span class=kt>int</span> <span class=n>i</span> <span class=o>=</span> <span class=n>1</span><span class=o>;</span> <span class=n>i</span> <span class=o>&lt;=</span> <span class=n>5</span><span class=o>;</span> <span class=n>i</span><span class=o>++)</span> <span class=o>{</span>
+</span></span></span><span class=line><span class=cl><span class=c1></span>        <span class=k>for</span> <span class=o>(</span><span class=kt>int</span> <span class=n>i</span> <span class=o>=</span> <span class=mi>1</span><span class=o>;</span> <span class=n>i</span> <span class=o>&lt;=</span> <span class=mi>5</span><span class=o>;</span> <span class=n>i</span><span class=o>++)</span> <span class=o>{</span>
 </span></span><span class=line><span class=cl>            <span class=kd>final</span> <span class=n>String</span> <span class=n>name</span> <span class=o>=</span> <span class=n>i</span> <span class=o>+</span> <span class=s>&#34;同学&#34;</span><span class=o>;</span>
 </span></span><span class=line><span class=cl>            <span class=k>new</span> <span class=n>Thread</span><span class=o>(()</span> <span class=o>-&gt;</span> <span class=o>{</span>
 </span></span><span class=line><span class=cl>                <span class=n>System</span><span class=o>.</span><span class=na>out</span><span class=o>.</span><span class=na>println</span><span class=o>(</span><span class=s>&#34;👋 &#34;</span> <span class=o>+</span> <span class=n>name</span> <span class=o>+</span> <span class=s>&#34;准备出发去集合点了。&#34;</span><span class=o>);</span>
-</span></span><span class=line><span class=cl>                <span class=kt>int</span> <span class=n>time</span> <span class=o>=</span> <span class=n>ThreadLocalRandom</span><span class=o>.</span><span class=na>current</span><span class=o>().</span><span class=na>nextInt</span><span class=o>(</span><span class=n>10</span><span class=o>);</span>
+</span></span><span class=line><span class=cl>                <span class=kt>int</span> <span class=n>time</span> <span class=o>=</span> <span class=n>ThreadLocalRandom</span><span class=o>.</span><span class=na>current</span><span class=o>().</span><span class=na>nextInt</span><span class=o>(</span><span class=mi>10</span><span class=o>);</span>
 </span></span><span class=line><span class=cl>                <span class=k>try</span> <span class=o>{</span>
 </span></span><span class=line><span class=cl>                    <span class=n>TimeUnit</span><span class=o>.</span><span class=na>SECONDS</span><span class=o>.</span><span class=na>sleep</span><span class=o>(</span><span class=n>time</span><span class=o>);</span>
 </span></span><span class=line><span class=cl>                <span class=o>}</span> <span class=k>catch</span> <span class=o>(</span><span class=n>InterruptedException</span> <span class=n>e</span><span class=o>)</span> <span class=o>{</span>
@@ -186,10 +186,10 @@
 </span><span class=lnt>4
 </span><span class=lnt>5
 </span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-java data-lang=java><span class=line><span class=cl><span class=c1>// CyclicBarrier 的计数
-</span></span></span><span class=line><span class=cl><span class=c1></span><span class=n>count</span> <span class=o>=</span> <span class=n>5</span>
+</span></span></span><span class=line><span class=cl><span class=c1></span><span class=n>count</span> <span class=o>=</span> <span class=mi>5</span>
 </span></span><span class=line><span class=cl>
 </span></span><span class=line><span class=cl><span class=c1>// 子线程的数量
-</span></span></span><span class=line><span class=cl><span class=c1></span><span class=n>i</span> <span class=o>=</span> <span class=n>10</span>
+</span></span></span><span class=line><span class=cl><span class=c1></span><span class=n>i</span> <span class=o>=</span> <span class=mi>10</span>
 </span></span></code></pre></td></tr></table></div></div><p>将子线程的数量设置为 <code>10</code>，循环屏障设置为 <code>5</code>，将会得到如下结果：每有 <code>5</code> 个，线程到达“屏障”点，就会释放一次。</p><p><img src=/blog/p/thread/aqs/cyclicbarrier-result-2.png width=585 height=811 srcset="/blog/p/thread/aqs/cyclicbarrier-result-2_hu2373c7ae3a7710cd05edc6f1f466fc13_156183_480x0_resize_box_3.png 480w, /blog/p/thread/aqs/cyclicbarrier-result-2_hu2373c7ae3a7710cd05edc6f1f466fc13_156183_1024x0_resize_box_3.png 1024w" loading=lazy alt="cyclicbarrier result" class=gallery-image data-flex-grow=72 data-flex-basis=173px></p><h3 id=semaphore>Semaphore</h3><p>通过使用 <code>Semaphore</code>，我们可以决定某个资源同一时间能够被访问的最大线程数，它相当于对某个资源的访问进行了流量控制。</p><p>是一个可以被 n 个线程占用的排它锁，可以在最开始设定 <code>Semaphore</code> 许可证数量，每个线程都可以获得 1 个或多个许可证，当许可证耗尽或不足以供其他线程获取时，其他线程将被阻塞。</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
 </span><span class=lnt> 2
 </span><span class=lnt> 3
@@ -215,9 +215,9 @@
 </span><span class=lnt>23
 </span><span class=lnt>24
 </span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-java data-lang=java><span class=line><span class=cl><span class=kd>public</span> <span class=kd>static</span> <span class=kt>void</span> <span class=nf>main</span><span class=o>(</span><span class=n>String</span><span class=o>[]</span> <span class=n>args</span><span class=o>)</span> <span class=o>{</span>
-</span></span><span class=line><span class=cl>    <span class=n>Semaphore</span> <span class=n>semaphore</span> <span class=o>=</span> <span class=k>new</span> <span class=n>Semaphore</span><span class=o>(</span><span class=n>2</span><span class=o>);</span>  <span class=c1>// 有三个许可，假设每个线程只获取一个许可时，最多两个线程可访问资源
+</span></span><span class=line><span class=cl>    <span class=n>Semaphore</span> <span class=n>semaphore</span> <span class=o>=</span> <span class=k>new</span> <span class=n>Semaphore</span><span class=o>(</span><span class=mi>2</span><span class=o>);</span>  <span class=c1>// 有三个许可，假设每个线程只获取一个许可时，最多两个线程可访问资源
 </span></span></span><span class=line><span class=cl><span class=c1></span>
-</span></span><span class=line><span class=cl>    <span class=k>for</span> <span class=o>(</span><span class=kt>int</span> <span class=n>i</span> <span class=o>=</span> <span class=n>0</span><span class=o>;</span> <span class=n>i</span> <span class=o>&lt;</span> <span class=n>3</span><span class=o>;</span> <span class=n>i</span><span class=o>++)</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>    <span class=k>for</span> <span class=o>(</span><span class=kt>int</span> <span class=n>i</span> <span class=o>=</span> <span class=mi>0</span><span class=o>;</span> <span class=n>i</span> <span class=o>&lt;</span> <span class=mi>3</span><span class=o>;</span> <span class=n>i</span><span class=o>++)</span> <span class=o>{</span>
 </span></span><span class=line><span class=cl>        <span class=k>new</span> <span class=n>Thread</span><span class=o>(()</span> <span class=o>-&gt;</span> <span class=o>{</span>
 </span></span><span class=line><span class=cl>            <span class=k>try</span> <span class=o>{</span>
 </span></span><span class=line><span class=cl>                <span class=k>try</span> <span class=o>{</span>
@@ -228,7 +228,7 @@
 </span></span><span class=line><span class=cl>                
 </span></span><span class=line><span class=cl>                <span class=k>try</span> <span class=o>{</span>
 </span></span><span class=line><span class=cl>                    <span class=n>System</span><span class=o>.</span><span class=na>out</span><span class=o>.</span><span class=na>println</span><span class=o>(</span><span class=s>&#34;申请许可证成功&#34;</span><span class=o>);</span>
-</span></span><span class=line><span class=cl>                    <span class=n>TimeUnit</span><span class=o>.</span><span class=na>SECONDS</span><span class=o>.</span><span class=na>sleep</span><span class=o>(</span><span class=n>5</span><span class=o>);</span>  <span class=c1>// 模拟任务耗时 
+</span></span><span class=line><span class=cl>                    <span class=n>TimeUnit</span><span class=o>.</span><span class=na>SECONDS</span><span class=o>.</span><span class=na>sleep</span><span class=o>(</span><span class=mi>5</span><span class=o>);</span>  <span class=c1>// 模拟任务耗时 
 </span></span></span><span class=line><span class=cl><span class=c1></span>                <span class=o>}</span> <span class=k>finally</span> <span class=o>{</span>
 </span></span><span class=line><span class=cl>                    <span class=n>semaphore</span><span class=o>.</span><span class=na>release</span><span class=o>();</span>
 </span></span><span class=line><span class=cl>                <span class=o>}</span>
@@ -358,10 +358,10 @@
 </span></span><span class=line><span class=cl>    <span class=n>thread</span><span class=o>.</span><span class=na>start</span><span class=o>();</span>
 </span></span><span class=line><span class=cl>
 </span></span><span class=line><span class=cl>    <span class=k>try</span> <span class=o>{</span>
-</span></span><span class=line><span class=cl>        <span class=n>Thread</span><span class=o>.</span><span class=na>sleep</span><span class=o>(</span><span class=n>1000</span><span class=o>);</span>
+</span></span><span class=line><span class=cl>        <span class=n>Thread</span><span class=o>.</span><span class=na>sleep</span><span class=o>(</span><span class=mi>1000</span><span class=o>);</span>
 </span></span><span class=line><span class=cl>        <span class=n>System</span><span class=o>.</span><span class=na>out</span><span class=o>.</span><span class=na>println</span><span class=o>(</span><span class=s>&#34;主线程打断 thread&#34;</span><span class=o>);</span>
 </span></span><span class=line><span class=cl>        <span class=n>thread</span><span class=o>.</span><span class=na>interrupt</span><span class=o>();</span>
-</span></span><span class=line><span class=cl>        <span class=n>Thread</span><span class=o>.</span><span class=na>sleep</span><span class=o>(</span><span class=n>1000</span><span class=o>);</span>
+</span></span><span class=line><span class=cl>        <span class=n>Thread</span><span class=o>.</span><span class=na>sleep</span><span class=o>(</span><span class=mi>1000</span><span class=o>);</span>
 </span></span><span class=line><span class=cl>    <span class=o>}</span> <span class=n>finlaly</span> <span class=o>{</span>
 </span></span><span class=line><span class=cl>        <span class=n>lock</span><span class=o>.</span><span class=na>unlock</span><span class=o>();</span>
 </span></span><span class=line><span class=cl>    <span class=o>}</span>
@@ -384,7 +384,7 @@
 </span><span class=lnt>16
 </span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-java data-lang=java><span class=line><span class=cl><span class=n>Thread</span> <span class=n>thread</span> <span class=o>=</span> <span class=k>new</span> <span class=n>Thread</span><span class=o>(()</span> <span class=o>-&gt;</span> <span class=o>{</span>
 </span></span><span class=line><span class=cl>    <span class=k>try</span> <span class=o>{</span>
-</span></span><span class=line><span class=cl>        <span class=k>if</span> <span class=o>(!</span><span class=n>lock</span><span class=o>.</span><span class=na>tryLock</span><span class=o>(</span><span class=n>2</span><span class=o>,</span> <span class=n>TimeUnit</span><span class=o>.</span><span class=na>SECONDS</span><span class=o>))</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>        <span class=k>if</span> <span class=o>(!</span><span class=n>lock</span><span class=o>.</span><span class=na>tryLock</span><span class=o>(</span><span class=mi>2</span><span class=o>,</span> <span class=n>TimeUnit</span><span class=o>.</span><span class=na>SECONDS</span><span class=o>))</span> <span class=o>{</span>
 </span></span><span class=line><span class=cl>            <span class=n>System</span><span class=o>.</span><span class=na>out</span><span class=o>.</span><span class=na>println</span><span class=o>(</span><span class=s>&#34;等待 2s 后，成功获取了锁&#34;</span><span class=o>);</span>
 </span></span><span class=line><span class=cl>            <span class=k>return</span><span class=o>;</span>
 </span></span><span class=line><span class=cl>        <span class=o>}</span> 
@@ -484,7 +484,7 @@
 </span></span><span class=line><span class=cl>    <span class=kd>static</span> <span class=n>Condition</span> <span class=n>conditionC</span> <span class=o>=</span> <span class=n>lock</span><span class=o>.</span><span class=na>newCondition</span><span class=o>();</span>
 </span></span><span class=line><span class=cl>
 </span></span><span class=line><span class=cl>    <span class=c1>// 0-&gt;print A  1-&gt;print B  2-&gt;print C
-</span></span></span><span class=line><span class=cl><span class=c1></span>    <span class=kd>static</span> <span class=kt>int</span> <span class=n>commonState</span> <span class=o>=</span> <span class=n>0</span><span class=o>;</span>
+</span></span></span><span class=line><span class=cl><span class=c1></span>    <span class=kd>static</span> <span class=kt>int</span> <span class=n>commonState</span> <span class=o>=</span> <span class=mi>0</span><span class=o>;</span>
 </span></span><span class=line><span class=cl>
 </span></span><span class=line><span class=cl>    <span class=kd>static</span> <span class=kd>class</span> <span class=nc>MyTread</span> <span class=kd>implements</span> <span class=n>Runnable</span> <span class=o>{</span>
 </span></span><span class=line><span class=cl>        <span class=kd>private</span> <span class=kt>int</span> <span class=n>state</span><span class=o>;</span>
@@ -494,31 +494,31 @@
 </span></span><span class=line><span class=cl>
 </span></span><span class=line><span class=cl>        <span class=nd>@Override</span>
 </span></span><span class=line><span class=cl>        <span class=kd>public</span> <span class=kt>void</span> <span class=nf>run</span><span class=o>()</span> <span class=o>{</span>
-</span></span><span class=line><span class=cl>            <span class=k>for</span> <span class=o>(</span><span class=kt>int</span> <span class=n>i</span> <span class=o>=</span> <span class=n>0</span><span class=o>;</span> <span class=n>i</span> <span class=o>&lt;</span> <span class=n>10</span><span class=o>;</span> <span class=n>i</span><span class=o>++)</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>            <span class=k>for</span> <span class=o>(</span><span class=kt>int</span> <span class=n>i</span> <span class=o>=</span> <span class=mi>0</span><span class=o>;</span> <span class=n>i</span> <span class=o>&lt;</span> <span class=mi>10</span><span class=o>;</span> <span class=n>i</span><span class=o>++)</span> <span class=o>{</span>
 </span></span><span class=line><span class=cl>                <span class=n>lock</span><span class=o>.</span><span class=na>lock</span><span class=o>();</span>
 </span></span><span class=line><span class=cl>                <span class=k>try</span> <span class=o>{</span>
-</span></span><span class=line><span class=cl>                    <span class=k>if</span> <span class=o>(</span><span class=n>state</span> <span class=o>==</span> <span class=n>0</span><span class=o>)</span> <span class=o>{</span>
-</span></span><span class=line><span class=cl>                        <span class=k>while</span> <span class=o>(</span><span class=n>commonState</span> <span class=o>!=</span> <span class=n>0</span><span class=o>)</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>                    <span class=k>if</span> <span class=o>(</span><span class=n>state</span> <span class=o>==</span> <span class=mi>0</span><span class=o>)</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>                        <span class=k>while</span> <span class=o>(</span><span class=n>commonState</span> <span class=o>!=</span> <span class=mi>0</span><span class=o>)</span> <span class=o>{</span>
 </span></span><span class=line><span class=cl>                            <span class=n>conditionA</span><span class=o>.</span><span class=na>await</span><span class=o>();</span>
 </span></span><span class=line><span class=cl>                        <span class=o>}</span>
 </span></span><span class=line><span class=cl>                        <span class=n>System</span><span class=o>.</span><span class=na>out</span><span class=o>.</span><span class=na>println</span><span class=o>(</span><span class=s>&#34;A&#34;</span><span class=o>);</span>
-</span></span><span class=line><span class=cl>                        <span class=n>commonState</span> <span class=o>=</span> <span class=n>1</span><span class=o>;</span>
+</span></span><span class=line><span class=cl>                        <span class=n>commonState</span> <span class=o>=</span> <span class=mi>1</span><span class=o>;</span>
 </span></span><span class=line><span class=cl>                        <span class=n>conditionB</span><span class=o>.</span><span class=na>singnal</span><span class=o>();</span>
 </span></span><span class=line><span class=cl>                    <span class=o>}</span>
-</span></span><span class=line><span class=cl>                    <span class=k>if</span> <span class=o>(</span><span class=n>state</span> <span class=o>==</span> <span class=n>1</span><span class=o>)</span> <span class=o>{</span>
-</span></span><span class=line><span class=cl>                        <span class=k>while</span> <span class=o>(</span><span class=n>commonState</span> <span class=o>!=</span> <span class=n>1</span><span class=o>)</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>                    <span class=k>if</span> <span class=o>(</span><span class=n>state</span> <span class=o>==</span> <span class=mi>1</span><span class=o>)</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>                        <span class=k>while</span> <span class=o>(</span><span class=n>commonState</span> <span class=o>!=</span> <span class=mi>1</span><span class=o>)</span> <span class=o>{</span>
 </span></span><span class=line><span class=cl>                            <span class=n>conditionB</span><span class=o>.</span><span class=na>await</span><span class=o>();</span>
 </span></span><span class=line><span class=cl>                        <span class=o>}</span>
 </span></span><span class=line><span class=cl>                        <span class=n>System</span><span class=o>.</span><span class=na>out</span><span class=o>.</span><span class=na>println</span><span class=o>(</span><span class=s>&#34;B&#34;</span><span class=o>);</span>
-</span></span><span class=line><span class=cl>                        <span class=n>commonState</span> <span class=o>=</span> <span class=n>2</span><span class=o>;</span>
+</span></span><span class=line><span class=cl>                        <span class=n>commonState</span> <span class=o>=</span> <span class=mi>2</span><span class=o>;</span>
 </span></span><span class=line><span class=cl>                        <span class=n>conditionC</span><span class=o>.</span><span class=na>singnal</span><span class=o>();</span>
 </span></span><span class=line><span class=cl>                    <span class=o>}</span>
-</span></span><span class=line><span class=cl>                    <span class=k>if</span> <span class=o>(</span><span class=n>state</span> <span class=o>==</span> <span class=n>2</span><span class=o>)</span> <span class=o>{</span>
-</span></span><span class=line><span class=cl>                        <span class=k>while</span> <span class=o>(</span><span class=n>commonState</span> <span class=o>!=</span> <span class=n>2</span><span class=o>)</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>                    <span class=k>if</span> <span class=o>(</span><span class=n>state</span> <span class=o>==</span> <span class=mi>2</span><span class=o>)</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>                        <span class=k>while</span> <span class=o>(</span><span class=n>commonState</span> <span class=o>!=</span> <span class=mi>2</span><span class=o>)</span> <span class=o>{</span>
 </span></span><span class=line><span class=cl>                            <span class=n>conditoinC</span><span class=o>.</span><span class=na>await</span><span class=o>();</span>
 </span></span><span class=line><span class=cl>                        <span class=o>}</span>
 </span></span><span class=line><span class=cl>                        <span class=n>System</span><span class=o>.</span><span class=na>out</span><span class=o>.</span><span class=na>println</span><span class=o>(</span><span class=s>&#34;C&#34;</span><span class=o>);</span>
-</span></span><span class=line><span class=cl>                        <span class=n>commonState</span> <span class=o>=</span> <span class=n>0</span><span class=o>;</span>
+</span></span><span class=line><span class=cl>                        <span class=n>commonState</span> <span class=o>=</span> <span class=mi>0</span><span class=o>;</span>
 </span></span><span class=line><span class=cl>                        <span class=n>conditionA</span><span class=o>.</span><span class=na>singnal</span><span class=o>();</span>
 </span></span><span class=line><span class=cl>                    <span class=o>}</span>
 </span></span><span class=line><span class=cl>                <span class=o>}</span> <span class=k>catch</span> <span class=o>(</span><span class=n>Exception</span> <span class=n>e</span><span class=o>)</span> <span class=o>{</span>
@@ -531,9 +531,9 @@
 </span></span><span class=line><span class=cl>    <span class=o>}</span>
 </span></span><span class=line><span class=cl>
 </span></span><span class=line><span class=cl>    <span class=kd>public</span> <span class=kd>static</span> <span class=kt>void</span> <span class=nf>main</span><span class=o>(</span><span class=n>String</span><span class=o>[]</span> <span class=n>args</span><span class=o>)</span> <span class=o>{</span>
-</span></span><span class=line><span class=cl>        <span class=k>new</span> <span class=n>Thread</span><span class=o>(</span><span class=k>new</span> <span class=n>MyThread</span><span class=o>(</span><span class=n>0</span><span class=o>)).</span><span class=na>start</span><span class=o>();</span>
-</span></span><span class=line><span class=cl>        <span class=k>new</span> <span class=n>Thread</span><span class=o>(</span><span class=k>new</span> <span class=n>MyThread</span><span class=o>(</span><span class=n>1</span><span class=o>)).</span><span class=na>start</span><span class=o>();</span>
-</span></span><span class=line><span class=cl>        <span class=k>new</span> <span class=n>Thread</span><span class=o>(</span><span class=k>new</span> <span class=n>MyThread</span><span class=o>(</span><span class=n>2</span><span class=o>)).</span><span class=na>start</span><span class=o>();</span>
+</span></span><span class=line><span class=cl>        <span class=k>new</span> <span class=n>Thread</span><span class=o>(</span><span class=k>new</span> <span class=n>MyThread</span><span class=o>(</span><span class=mi>0</span><span class=o>)).</span><span class=na>start</span><span class=o>();</span>
+</span></span><span class=line><span class=cl>        <span class=k>new</span> <span class=n>Thread</span><span class=o>(</span><span class=k>new</span> <span class=n>MyThread</span><span class=o>(</span><span class=mi>1</span><span class=o>)).</span><span class=na>start</span><span class=o>();</span>
+</span></span><span class=line><span class=cl>        <span class=k>new</span> <span class=n>Thread</span><span class=o>(</span><span class=k>new</span> <span class=n>MyThread</span><span class=o>(</span><span class=mi>2</span><span class=o>)).</span><span class=na>start</span><span class=o>();</span>
 </span></span><span class=line><span class=cl>    <span class=o>}</span>
 </span></span><span class=line><span class=cl><span class=o>}</span>
 </span></span></code></pre></td></tr></table></div></div><h3 id=reentrantreadwritelock>ReentrantReadWriteLock</h3><h2 id=参考>参考</h2><ul><li><a class=link href=https://tech.meituan.com/2018/11/15/java-lock.html target=_blank rel=noopener>https://tech.meituan.com/2018/11/15/java-lock.html</a></li></ul></section><footer class=article-footer><section class=article-tags><a href=/blog/tags/java/>Java</a>

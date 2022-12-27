@@ -68,7 +68,7 @@
 </span></span><span class=line><span class=cl>
 </span></span><span class=line><span class=cl>        <span class=c1>// 获取分布式锁
 </span></span></span><span class=line><span class=cl><span class=c1></span>        <span class=n>Boolean</span> <span class=n>lock</span> <span class=o>=</span> <span class=n>redisTemplate</span><span class=o>.</span><span class=na>execute</span><span class=o>((</span><span class=n>RedisCallback</span><span class=o>&lt;</span><span class=n>Boolean</span><span class=o>&gt;)</span> <span class=n>redisConnection</span> <span class=o>-&gt;</span> <span class=o>{</span>
-</span></span><span class=line><span class=cl>            <span class=n>Expiration</span> <span class=n>expiration</span> <span class=o>=</span> <span class=n>Expiration</span><span class=o>.</span><span class=na>seconds</span><span class=o>(</span><span class=n>30</span><span class=o>);</span>
+</span></span><span class=line><span class=cl>            <span class=n>Expiration</span> <span class=n>expiration</span> <span class=o>=</span> <span class=n>Expiration</span><span class=o>.</span><span class=na>seconds</span><span class=o>(</span><span class=mi>30</span><span class=o>);</span>
 </span></span><span class=line><span class=cl>            <span class=c1>// NX
 </span></span></span><span class=line><span class=cl><span class=c1></span>            <span class=n>RedisStringCommands</span><span class=o>.</span><span class=na>SetOption</span> <span class=n>setOption</span> <span class=o>=</span> <span class=n>RedisStringCommands</span><span class=o>.</span><span class=na>SetOption</span><span class=o>.</span><span class=na>ifAbsent</span><span class=o>();</span>
 </span></span><span class=line><span class=cl>            <span class=c1>// 需要使用 redisTemplate 中的序列化器
@@ -81,7 +81,7 @@
 </span></span><span class=line><span class=cl>        <span class=k>if</span> <span class=o>(</span><span class=n>lock</span><span class=o>)</span> <span class=o>{</span>  <span class=c1>// 获取到了锁
 </span></span></span><span class=line><span class=cl><span class=c1></span>            <span class=n>log</span><span class=o>.</span><span class=na>info</span><span class=o>(</span><span class=s>&#34;获取到了锁&#34;</span><span class=o>);</span>
 </span></span><span class=line><span class=cl>            <span class=k>try</span> <span class=o>{</span>
-</span></span><span class=line><span class=cl>                <span class=n>TimeUnit</span><span class=o>.</span><span class=na>SECONDS</span><span class=o>.</span><span class=na>sleep</span><span class=o>(</span><span class=n>15</span><span class=o>);</span>  <span class=c1>// 模拟业务处理
+</span></span><span class=line><span class=cl>                <span class=n>TimeUnit</span><span class=o>.</span><span class=na>SECONDS</span><span class=o>.</span><span class=na>sleep</span><span class=o>(</span><span class=mi>15</span><span class=o>);</span>  <span class=c1>// 模拟业务处理
 </span></span></span><span class=line><span class=cl><span class=c1></span>            <span class=o>}</span> <span class=k>catch</span> <span class=o>(</span><span class=n>InterruptedException</span> <span class=n>e</span><span class=o>)</span> <span class=o>{</span>
 </span></span><span class=line><span class=cl>                <span class=n>e</span><span class=o>.</span><span class=na>printStackTrace</span><span class=o>();</span>
 </span></span><span class=line><span class=cl>            <span class=o>}</span> <span class=k>finally</span> <span class=o>{</span>
@@ -256,10 +256,10 @@
 </span></span><span class=line><span class=cl>
 </span></span><span class=line><span class=cl>        <span class=n>RLock</span> <span class=n>lock</span> <span class=o>=</span> <span class=n>redissonClient</span><span class=o>.</span><span class=na>getLock</span><span class=o>(</span><span class=n>key</span><span class=o>);</span>
 </span></span><span class=line><span class=cl>        <span class=c1>// 锁超时时间，如果未获得锁，会阻塞等待获取到锁（-1 表示没有超时时间）
-</span></span></span><span class=line><span class=cl><span class=c1></span>        <span class=n>lock</span><span class=o>.</span><span class=na>lock</span><span class=o>(</span><span class=n>30</span><span class=o>,</span> <span class=n>TimeUnit</span><span class=o>.</span><span class=na>SECONDS</span><span class=o>);</span>
+</span></span></span><span class=line><span class=cl><span class=c1></span>        <span class=n>lock</span><span class=o>.</span><span class=na>lock</span><span class=o>(</span><span class=mi>30</span><span class=o>,</span> <span class=n>TimeUnit</span><span class=o>.</span><span class=na>SECONDS</span><span class=o>);</span>
 </span></span><span class=line><span class=cl>        <span class=n>log</span><span class=o>.</span><span class=na>info</span><span class=o>(</span><span class=s>&#34;获取锁&#34;</span><span class=o>);</span>
 </span></span><span class=line><span class=cl>        <span class=k>try</span> <span class=o>{</span>
-</span></span><span class=line><span class=cl>            <span class=n>TimeUnit</span><span class=o>.</span><span class=na>SECONDS</span><span class=o>.</span><span class=na>sleep</span><span class=o>(</span><span class=n>10</span><span class=o>);</span>
+</span></span><span class=line><span class=cl>            <span class=n>TimeUnit</span><span class=o>.</span><span class=na>SECONDS</span><span class=o>.</span><span class=na>sleep</span><span class=o>(</span><span class=mi>10</span><span class=o>);</span>
 </span></span><span class=line><span class=cl>        <span class=o>}</span> <span class=k>catch</span> <span class=o>(</span><span class=n>InterruptedException</span> <span class=n>e</span><span class=o>)</span> <span class=o>{</span>
 </span></span><span class=line><span class=cl>            <span class=n>e</span><span class=o>.</span><span class=na>printStackTrace</span><span class=o>();</span>
 </span></span><span class=line><span class=cl>        <span class=o>}</span> <span class=k>finally</span> <span class=o>{</span>

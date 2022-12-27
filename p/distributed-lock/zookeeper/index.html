@@ -105,7 +105,7 @@
 </span></span></span><span class=line><span class=cl><span class=cm>     * try-catch-with-resource
 </span></span></span><span class=line><span class=cl><span class=cm>     */</span>
 </span></span><span class=line><span class=cl>    <span class=kd>public</span> <span class=kt>void</span> <span class=nf>clode</span><span class=o>()</span> <span class=kd>throws</span> <span class=n>Exception</span> <span class=o>{</span>
-</span></span><span class=line><span class=cl>        <span class=n>zooKeeper</span><span class=o>.</span><span class=na>delete</span><span class=o>(</span><span class=n>znode</span><span class=o>,</span> <span class=o>-</span><span class=n>1</span><span class=o>);</span>
+</span></span><span class=line><span class=cl>        <span class=n>zooKeeper</span><span class=o>.</span><span class=na>delete</span><span class=o>(</span><span class=n>znode</span><span class=o>,</span> <span class=o>-</span><span class=mi>1</span><span class=o>);</span>
 </span></span><span class=line><span class=cl>        <span class=n>zooKeeper</span><span class=o>.</span><span class=na>close</span><span class=o>();</span>
 </span></span><span class=line><span class=cl>        <span class=n>log</span><span class=o>.</span><span class=na>info</span><span class=o>(</span><span class=s>&#34;释放锁&#34;</span><span class=o>);</span>
 </span></span><span class=line><span class=cl>    <span class=o>}</span>
@@ -154,7 +154,7 @@
 </span></span><span class=line><span class=cl>            <span class=n>Collections</span><span class=o>.</span><span class=na>sort</span><span class=o>(</span><span class=n>childrenNodes</span><span class=o>);</span>
 </span></span><span class=line><span class=cl>
 </span></span><span class=line><span class=cl>            <span class=c1>// 如果列表中的第一个是当前创建的节点，直接获取锁
-</span></span></span><span class=line><span class=cl><span class=c1></span>            <span class=n>String</span> <span class=n>firstNode</span> <span class=o>=</span> <span class=n>childrenNodes</span><span class=o>.</span><span class=na>get</span><span class=o>(</span><span class=n>0</span><span class=o>);</span>
+</span></span></span><span class=line><span class=cl><span class=c1></span>            <span class=n>String</span> <span class=n>firstNode</span> <span class=o>=</span> <span class=n>childrenNodes</span><span class=o>.</span><span class=na>get</span><span class=o>(</span><span class=mi>0</span><span class=o>);</span>
 </span></span><span class=line><span class=cl>            <span class=k>if</span> <span class=o>(</span><span class=n>znode</span><span class=o>.</span><span class=na>endsWith</span><span class=o>(</span><span class=n>firstNode</span><span class=o>))</span> <span class=o>{</span>
 </span></span><span class=line><span class=cl>                <span class=k>return</span> <span class=kc>true</span><span class=o>;</span>
 </span></span><span class=line><span class=cl>            <span class=o>}</span>
@@ -217,11 +217,11 @@
 </span></span><span class=line><span class=cl>    <span class=nd>@GetMapping</span><span class=o>(</span><span class=s>&#34;/zkLock&#34;</span><span class=o>)</span>
 </span></span><span class=line><span class=cl>    <span class=kd>public</span> <span class=n>String</span> <span class=nf>zkLock</span><span class=o>()</span> <span class=o>{</span>
 </span></span><span class=line><span class=cl>        <span class=n>log</span><span class=o>.</span><span class=na>info</span><span class=o>(</span><span class=s>&#34;进入方法&#34;</span><span class=o>);</span>
-</span></span><span class=line><span class=cl>        <span class=k>try</span> <span class=o>(</span><span class=n>ZkLock</span> <span class=n>zklock</span> <span class=o>=</span> <span class=k>new</span> <span class=n>ZkLock</span><span class=o>(</span><span class=s>&#34;127.0.0.1:2181&#34;</span><span class=o>,</span> <span class=n>10000</span><span class=o>))</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>        <span class=k>try</span> <span class=o>(</span><span class=n>ZkLock</span> <span class=n>zklock</span> <span class=o>=</span> <span class=k>new</span> <span class=n>ZkLock</span><span class=o>(</span><span class=s>&#34;127.0.0.1:2181&#34;</span><span class=o>,</span> <span class=mi>10000</span><span class=o>))</span> <span class=o>{</span>
 </span></span><span class=line><span class=cl>            <span class=k>if</span> <span class=o>(</span><span class=n>zkLock</span><span class=o>.</span><span class=na>getLock</span><span class=o>(</span><span class=s>&#34;order&#34;</span><span class=o>))</span> <span class=o>{</span>
 </span></span><span class=line><span class=cl>                <span class=n>log</span><span class=o>.</span><span class=na>info</span><span class=o>(</span><span class=s>&#34;获取了锁&#34;</span><span class=o>);</span>
 </span></span><span class=line><span class=cl>                <span class=k>try</span> <span class=o>{</span>
-</span></span><span class=line><span class=cl>                    <span class=n>TimeUtil</span><span class=o>.</span><span class=na>SECONDS</span><span class=o>.</span><span class=na>sleep</span><span class=o>(</span><span class=n>10</span><span class=o>);</span>  <span class=c1>// 模拟业务
+</span></span><span class=line><span class=cl>                    <span class=n>TimeUtil</span><span class=o>.</span><span class=na>SECONDS</span><span class=o>.</span><span class=na>sleep</span><span class=o>(</span><span class=mi>10</span><span class=o>);</span>  <span class=c1>// 模拟业务
 </span></span></span><span class=line><span class=cl><span class=c1></span>                <span class=o>}</span> <span class=k>catch</span> <span class=o>(</span><span class=n>InterruptedException</span> <span class=n>e</span><span class=o>)</span> <span class=o>{</span>
 </span></span><span class=line><span class=cl>                    <span class=n>e</span><span class=o>.</span><span class=na>printStackTrace</span><span class=o>();</span>
 </span></span><span class=line><span class=cl>                <span class=o>}</span>
@@ -275,7 +275,7 @@
 </span></span><span class=line><span class=cl>    <span class=nd>@Test</span>
 </span></span><span class=line><span class=cl>    <span class=kd>public</span> <span class=kt>void</span> <span class=nf>test</span><span class=o>()</span> <span class=o>{</span>
 </span></span><span class=line><span class=cl>        <span class=n>String</span> <span class=n>zookeeperConnectionString</span> <span class=o>=</span> <span class=s>&#34;127.0.0.1:2181&#34;</span><span class=o>;</span>
-</span></span><span class=line><span class=cl>        <span class=n>RetryPolicy</span> <span class=n>retryPolicy</span> <span class=o>=</span> <span class=k>new</span> <span class=n>ExponentialBackoffRetry</span><span class=o>(</span><span class=n>1000</span><span class=o>,</span> <span class=n>3</span><span class=o>);</span>
+</span></span><span class=line><span class=cl>        <span class=n>RetryPolicy</span> <span class=n>retryPolicy</span> <span class=o>=</span> <span class=k>new</span> <span class=n>ExponentialBackoffRetry</span><span class=o>(</span><span class=mi>1000</span><span class=o>,</span> <span class=mi>3</span><span class=o>);</span>
 </span></span><span class=line><span class=cl>        <span class=n>CuratorFramework</span> <span class=n>client</span> <span class=o>=</span> <span class=n>CuratorFrameworkFactory</span><span class=o>.</span><span class=na>newClient</span><span class=o>(</span><span class=n>zookeeperConnectionString</span><span class=o>,</span> <span class=n>retryPolicy</span><span class=o>);</span>
 </span></span><span class=line><span class=cl>        <span class=n>client</span><span class=o>.</span><span class=na>start</span><span class=o>();</span>
 </span></span><span class=line><span class=cl>
@@ -284,7 +284,7 @@
 </span></span><span class=line><span class=cl>        <span class=k>try</span> <span class=o>{</span>
 </span></span><span class=line><span class=cl>            <span class=c1>// 获取互斥锁，阻塞直到可用，或给定时间到期
 </span></span></span><span class=line><span class=cl><span class=c1></span>            <span class=c1>// 同一个线程调用 acquire() 可重入
-</span></span></span><span class=line><span class=cl><span class=c1></span>            <span class=k>if</span> <span class=o>(</span><span class=n>lock</span><span class=o>.</span><span class=na>acquire</span><span class=o>(</span><span class=n>30</span><span class=o>,</span> <span class=n>TimeUnit</span><span class=o>.</span><span class=na>SECONDS</span><span class=o>))</span> <span class=o>{</span>
+</span></span></span><span class=line><span class=cl><span class=c1></span>            <span class=k>if</span> <span class=o>(</span><span class=n>lock</span><span class=o>.</span><span class=na>acquire</span><span class=o>(</span><span class=mi>30</span><span class=o>,</span> <span class=n>TimeUnit</span><span class=o>.</span><span class=na>SECONDS</span><span class=o>))</span> <span class=o>{</span>
 </span></span><span class=line><span class=cl>                <span class=k>try</span> <span class=o>{</span>
 </span></span><span class=line><span class=cl>                    <span class=n>log</span><span class=o>.</span><span class=na>info</span><span class=o>(</span><span class=s>&#34;获取锁&#34;</span><span class=o>);</span>
 </span></span><span class=line><span class=cl>                <span class=o>}</span> <span class=k>finally</span> <span class=o>{</span>

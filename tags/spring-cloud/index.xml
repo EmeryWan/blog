@@ -451,7 +451,7 @@ data-flex-basis="390px"
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nd">@Override&lt;/span>
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kt">int&lt;/span> &lt;span class="nf">filterOrder&lt;/span>&lt;span class="o">()&lt;/span> &lt;span class="o">{&lt;/span>
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c1">// 定义filter的顺序，数字越小表示顺序越高，越先执行
-&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span> &lt;span class="k">return&lt;/span> &lt;span class="n">0&lt;/span>&lt;span class="o">;&lt;/span>
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span> &lt;span class="k">return&lt;/span> &lt;span class="mi">0&lt;/span>&lt;span class="o">;&lt;/span>
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="o">}&lt;/span>
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nd">@Override&lt;/span>
@@ -524,7 +524,7 @@ data-flex-basis="333px"
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nd">@Component&lt;/span>
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="kd">public&lt;/span> &lt;span class="kd">class&lt;/span> &lt;span class="nc">RateLimiterFilter&lt;/span> &lt;span class="kd">extends&lt;/span> &lt;span class="n">ZuulFilter&lt;/span> &lt;span class="o">{&lt;/span>
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c1">// 直接使用 guava 中的 RateLimiter 实现
-&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span> &lt;span class="kd">private&lt;/span> &lt;span class="kd">static&lt;/span> &lt;span class="kd">final&lt;/span> &lt;span class="n">RateLimiter&lt;/span> &lt;span class="n">RATE_LIMITER&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">RateLimiter&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">create&lt;/span>&lt;span class="o">(&lt;/span>&lt;span class="n">100&lt;/span>&lt;span class="o">);&lt;/span>
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span> &lt;span class="kd">private&lt;/span> &lt;span class="kd">static&lt;/span> &lt;span class="kd">final&lt;/span> &lt;span class="n">RateLimiter&lt;/span> &lt;span class="n">RATE_LIMITER&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">RateLimiter&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">create&lt;/span>&lt;span class="o">(&lt;/span>&lt;span class="mi">100&lt;/span>&lt;span class="o">);&lt;/span>
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nd">@Override&lt;/span>
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kd">public&lt;/span> &lt;span class="n">String&lt;/span> &lt;span class="nf">filterType&lt;/span>&lt;span class="o">()&lt;/span> &lt;span class="o">{&lt;/span>
@@ -534,7 +534,7 @@ data-flex-basis="333px"
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nd">@Override&lt;/span>
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kd">public&lt;/span> &lt;span class="kt">int&lt;/span> &lt;span class="nf">filterOrder&lt;/span>&lt;span class="o">()&lt;/span> &lt;span class="o">{&lt;/span>
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c1">// 限流是最高优先级，所以比最高优先级 -3 还要小
-&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span> &lt;span class="k">return&lt;/span> &lt;span class="n">FilterConstants&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">SERVLET_DETECTION_FILTER_ORDER&lt;/span> &lt;span class="o">-&lt;/span> &lt;span class="n">1&lt;/span>&lt;span class="o">;&lt;/span>
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span> &lt;span class="k">return&lt;/span> &lt;span class="n">FilterConstants&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">SERVLET_DETECTION_FILTER_ORDER&lt;/span> &lt;span class="o">-&lt;/span> &lt;span class="mi">1&lt;/span>&lt;span class="o">;&lt;/span>
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="o">}&lt;/span>
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nd">@Override&lt;/span>
@@ -607,7 +607,7 @@ data-flex-basis="333px"
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nd">@Override&lt;/span>
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kd">public&lt;/span> &lt;span class="kt">int&lt;/span> &lt;span class="nf">filterOrder&lt;/span>&lt;span class="o">()&lt;/span> &lt;span class="o">{&lt;/span>
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c1">// 越小越靠前，放在 PRE_DECORATION_FILTER_ORDER 之前
-&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span> &lt;span class="k">return&lt;/span> &lt;span class="n">PRE_DECORATION_FILTER_ORDER&lt;/span> &lt;span class="o">-&lt;/span> &lt;span class="n">1&lt;/span>&lt;span class="o">;&lt;/span>
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span> &lt;span class="k">return&lt;/span> &lt;span class="n">PRE_DECORATION_FILTER_ORDER&lt;/span> &lt;span class="o">-&lt;/span> &lt;span class="mi">1&lt;/span>&lt;span class="o">;&lt;/span>
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="o">}&lt;/span>
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nd">@Override&lt;/span>
@@ -670,7 +670,7 @@ data-flex-basis="333px"
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">config&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">setAllowedOrigins&lt;/span>&lt;span class="o">(&lt;/span>&lt;span class="n">Collections&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">singletonList&lt;/span>&lt;span class="o">(&lt;/span>&lt;span class="s">&amp;#34;*&amp;#34;&lt;/span>&lt;span class="o">));&lt;/span>
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">config&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">setAllowedHeaders&lt;/span>&lt;span class="o">(&lt;/span>&lt;span class="n">Collections&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">singletonList&lt;/span>&lt;span class="o">(&lt;/span>&lt;span class="s">&amp;#34;*&amp;#34;&lt;/span>&lt;span class="o">))&lt;/span>&lt;span class="err">；&lt;/span>
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">config&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">setAllowedMethods&lt;/span>&lt;span class="o">(&lt;/span>&lt;span class="n">Collections&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">singletonList&lt;/span>&lt;span class="o">(&lt;/span>&lt;span class="s">&amp;#34;*&amp;#34;&lt;/span>&lt;span class="o">));&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">config&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">setMaxAge&lt;/span>&lt;span class="o">(&lt;/span>&lt;span class="n">300L&lt;/span>&lt;span class="o">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">config&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">setMaxAge&lt;/span>&lt;span class="o">(&lt;/span>&lt;span class="mi">300L&lt;/span>&lt;span class="o">);&lt;/span>
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">source&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">registerCorsConfiguration&lt;/span>&lt;span class="o">(&lt;/span>&lt;span class="s">&amp;#34;/**&amp;#34;&lt;/span>&lt;span class="o">,&lt;/span> &lt;span class="n">config&lt;/span>&lt;span class="o">);&lt;/span>
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">return&lt;/span> &lt;span class="k">new&lt;/span> &lt;span class="n">CorsFilter&lt;/span>&lt;span class="o">(&lt;/span>&lt;span class="n">source&lt;/span>&lt;span class="o">);&lt;/span>
