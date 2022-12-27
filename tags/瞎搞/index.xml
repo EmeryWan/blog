@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>瞎搞 on 一层</title><link>https://blog.letout.cn/tags/%E7%9E%8E%E6%90%9E/</link><description>Recent content in 瞎搞 on 一层</description><generator>Hugo -- gohugo.io</generator><language>zh-cn</language><lastBuildDate>Sat, 12 Nov 2022 21:14:45 +0800</lastBuildDate><atom:link href="https://blog.letout.cn/tags/%E7%9E%8E%E6%90%9E/index.xml" rel="self" type="application/rss+xml"/><item><title>罗技鼠标维修记</title><link>https://blog.letout.cn/p/fix-logi-mouse/</link><pubDate>Sat, 12 Nov 2022 21:14:45 +0800</pubDate><guid>https://blog.letout.cn/p/fix-logi-mouse/</guid><description>&lt;img src="https://blog.letout.cn/p/fix-logi-mouse/05.png" alt="Featured image of post 罗技鼠标维修记" />&lt;h2 id="前言">前言&lt;/h2>
+&lt;p>之前鼠按键一直不灵，经常需要按很多下，换了电池之后还是这样，网上一搜，竟然是这鼠标的通病。看到很多教怎么换鼠标微动的，就打算自己试试了。&lt;/p>
+&lt;h2 id="工具准备">工具准备&lt;/h2>
+&lt;p>淘宝随便买焊接工具一套：&lt;/p>
+&lt;p>&lt;img src="https://blog.letout.cn/p/fix-logi-mouse/06.png"
+width="740"
+height="927"
+srcset="https://blog.letout.cn/p/fix-logi-mouse/06_hu112ba3385e7e0151f22fcae72c4b4ae4_291824_480x0_resize_box_3.png 480w, https://blog.letout.cn/p/fix-logi-mouse/06_hu112ba3385e7e0151f22fcae72c4b4ae4_291824_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+class="gallery-image"
+data-flex-grow="79"
+data-flex-basis="191px"
+>&lt;/p>
+&lt;p>相同的鼠标微动：这个不要买错了，我这个是黄的那个，如果是新手推荐多买几个，不小心弄坏了还可有备用。&lt;/p>
+&lt;p>&lt;img src="https://blog.letout.cn/p/fix-logi-mouse/07.png"
+width="747"
+height="666"
+srcset="https://blog.letout.cn/p/fix-logi-mouse/07_hu230206bcd028f2628d907e1698990dc3_223298_480x0_resize_box_3.png 480w, https://blog.letout.cn/p/fix-logi-mouse/07_hu230206bcd028f2628d907e1698990dc3_223298_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+class="gallery-image"
+data-flex-grow="112"
+data-flex-basis="269px"
+>&lt;/p>
+&lt;h3 id="推荐">推荐&lt;/h3>
+&lt;p>助焊剂可选的话，安利买的是焊油而不是松香，感觉松下这东西不适合新手用，很不方便感觉。&lt;/p>
+&lt;p>&lt;img src="https://blog.letout.cn/p/fix-logi-mouse/02.png"
+width="1219"
+height="661"
+srcset="https://blog.letout.cn/p/fix-logi-mouse/02_hu75550ba33c3ffe7db7aa5f7ae7029655_945321_480x0_resize_box_3.png 480w, https://blog.letout.cn/p/fix-logi-mouse/02_hu75550ba33c3ffe7db7aa5f7ae7029655_945321_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+class="gallery-image"
+data-flex-grow="184"
+data-flex-basis="442px"
+>&lt;/p>
+&lt;h2 id="过程">过程&lt;/h2>
+&lt;p>拆开还是很简单的，只要把两颗看得见的螺丝卸掉，就可以把外壳给开了。&lt;/p>
+&lt;p>&lt;img src="https://blog.letout.cn/p/fix-logi-mouse/01.png"
+width="766"
+height="893"
+srcset="https://blog.letout.cn/p/fix-logi-mouse/01_hu53453d44ceb54b6652dae9a441b1db5e_780198_480x0_resize_box_3.png 480w, https://blog.letout.cn/p/fix-logi-mouse/01_hu53453d44ceb54b6652dae9a441b1db5e_780198_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+class="gallery-image"
+data-flex-grow="85"
+data-flex-basis="205px"
+>&lt;/p>
+&lt;p>只要把这两个地方的焊锡熔化，就可以换微动啦。&lt;/p>
+&lt;p>&lt;img src="https://blog.letout.cn/p/fix-logi-mouse/03.png"
+width="1261"
+height="873"
+srcset="https://blog.letout.cn/p/fix-logi-mouse/03_huaca2ffe580913d2e122e0dd5797f45d4_1319425_480x0_resize_box_3.png 480w, https://blog.letout.cn/p/fix-logi-mouse/03_huaca2ffe580913d2e122e0dd5797f45d4_1319425_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+class="gallery-image"
+data-flex-grow="144"
+data-flex-basis="346px"
+>&lt;/p>
+&lt;p>工厂里面都是使用的高温焊锡，直接用电烙铁是不能把上面的焊锡给直接融化的，根据看网上的教程，先加上一点助焊剂（重要！），&lt;strong>再往上加焊一点自己焊锡&lt;/strong>，就可以融化上面的高温锡了（感觉有点像相似相溶）。&lt;/p>
+&lt;p>这时候就需要等锡球是液体的时候，用吸锡枪把液体的锡球给吸掉。我的吸锡枪不知道被什么压碎了，用吸锡带放到电烙铁上拖一遍也是可以的，很简单，随便在网上找一个电脑维修视频看看就会了，吸的很干净！&lt;/p>
+&lt;h2 id="结果">结果&lt;/h2>
+&lt;p>最后换起来还是很方便的，把新的插进去，再用电烙铁焊上去两点锡，就固定的很好了。&lt;/p>
+&lt;p>看起来有点脏，没有洗版水洗主板，其实没有影响，不洗也不会影响电气性能。&lt;/p>
+&lt;p>&lt;img src="https://blog.letout.cn/p/fix-logi-mouse/04.png"
+width="1212"
+height="800"
+srcset="https://blog.letout.cn/p/fix-logi-mouse/04_hud083438dbea24b69dfd6acee6b76afad_1328794_480x0_resize_box_3.png 480w, https://blog.letout.cn/p/fix-logi-mouse/04_hud083438dbea24b69dfd6acee6b76afad_1328794_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+class="gallery-image"
+data-flex-grow="151"
+data-flex-basis="363px"
+>&lt;/p>
+&lt;p>最后就是这个烙铁，竟然用一次就变得这么脏了。&lt;/p>
+&lt;p>&lt;img src="https://blog.letout.cn/p/fix-logi-mouse/05.png"
+width="1546"
+height="910"
+srcset="https://blog.letout.cn/p/fix-logi-mouse/05_hu6e2e43df522d586c0a61d755538e45f9_1576731_480x0_resize_box_3.png 480w, https://blog.letout.cn/p/fix-logi-mouse/05_hu6e2e43df522d586c0a61d755538e45f9_1576731_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+class="gallery-image"
+data-flex-grow="169"
+data-flex-basis="407px"
+>&lt;/p></description></item></channel></rss>

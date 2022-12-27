@@ -135,7 +135,7 @@ Spring Cloud Zuul 是一个基于JVM路由和服务端的负载均衡器，提�
 </span></span><span class=line><span class=cl>    <span class=nd>@Override</span>
 </span></span><span class=line><span class=cl>    <span class=kt>int</span> <span class=nf>filterOrder</span><span class=o>()</span> <span class=o>{</span>
 </span></span><span class=line><span class=cl>        <span class=c1>// 定义filter的顺序，数字越小表示顺序越高，越先执行
-</span></span></span><span class=line><span class=cl><span class=c1></span>        <span class=k>return</span> <span class=n>0</span><span class=o>;</span>
+</span></span></span><span class=line><span class=cl><span class=c1></span>        <span class=k>return</span> <span class=mi>0</span><span class=o>;</span>
 </span></span><span class=line><span class=cl>    <span class=o>}</span>
 </span></span><span class=line><span class=cl>
 </span></span><span class=line><span class=cl>    <span class=nd>@Override</span>
@@ -188,7 +188,7 @@ Spring Cloud Zuul 是一个基于JVM路由和服务端的负载均衡器，提�
 </span></span><span class=line><span class=cl><span class=nd>@Component</span>
 </span></span><span class=line><span class=cl><span class=kd>public</span> <span class=kd>class</span> <span class=nc>RateLimiterFilter</span> <span class=kd>extends</span> <span class=n>ZuulFilter</span> <span class=o>{</span>
 </span></span><span class=line><span class=cl>    <span class=c1>// 直接使用 guava 中的 RateLimiter 实现
-</span></span></span><span class=line><span class=cl><span class=c1></span>    <span class=kd>private</span> <span class=kd>static</span> <span class=kd>final</span> <span class=n>RateLimiter</span> <span class=n>RATE_LIMITER</span> <span class=o>=</span> <span class=n>RateLimiter</span><span class=o>.</span><span class=na>create</span><span class=o>(</span><span class=n>100</span><span class=o>);</span>
+</span></span></span><span class=line><span class=cl><span class=c1></span>    <span class=kd>private</span> <span class=kd>static</span> <span class=kd>final</span> <span class=n>RateLimiter</span> <span class=n>RATE_LIMITER</span> <span class=o>=</span> <span class=n>RateLimiter</span><span class=o>.</span><span class=na>create</span><span class=o>(</span><span class=mi>100</span><span class=o>);</span>
 </span></span><span class=line><span class=cl>
 </span></span><span class=line><span class=cl>    <span class=nd>@Override</span>
 </span></span><span class=line><span class=cl>    <span class=kd>public</span> <span class=n>String</span> <span class=nf>filterType</span><span class=o>()</span> <span class=o>{</span>
@@ -198,7 +198,7 @@ Spring Cloud Zuul 是一个基于JVM路由和服务端的负载均衡器，提�
 </span></span><span class=line><span class=cl>    <span class=nd>@Override</span>
 </span></span><span class=line><span class=cl>    <span class=kd>public</span> <span class=kt>int</span> <span class=nf>filterOrder</span><span class=o>()</span> <span class=o>{</span>
 </span></span><span class=line><span class=cl>        <span class=c1>// 限流是最高优先级，所以比最高优先级 -3 还要小
-</span></span></span><span class=line><span class=cl><span class=c1></span>        <span class=k>return</span> <span class=n>FilterConstants</span><span class=o>.</span><span class=na>SERVLET_DETECTION_FILTER_ORDER</span> <span class=o>-</span> <span class=n>1</span><span class=o>;</span>
+</span></span></span><span class=line><span class=cl><span class=c1></span>        <span class=k>return</span> <span class=n>FilterConstants</span><span class=o>.</span><span class=na>SERVLET_DETECTION_FILTER_ORDER</span> <span class=o>-</span> <span class=mi>1</span><span class=o>;</span>
 </span></span><span class=line><span class=cl>    <span class=o>}</span>
 </span></span><span class=line><span class=cl>
 </span></span><span class=line><span class=cl>    <span class=nd>@Override</span>
@@ -263,7 +263,7 @@ Spring Cloud Zuul 是一个基于JVM路由和服务端的负载均衡器，提�
 </span></span><span class=line><span class=cl>    <span class=nd>@Override</span>
 </span></span><span class=line><span class=cl>    <span class=kd>public</span> <span class=kt>int</span> <span class=nf>filterOrder</span><span class=o>()</span> <span class=o>{</span>
 </span></span><span class=line><span class=cl>        <span class=c1>// 越小越靠前，放在 PRE_DECORATION_FILTER_ORDER 之前
-</span></span></span><span class=line><span class=cl><span class=c1></span>        <span class=k>return</span> <span class=n>PRE_DECORATION_FILTER_ORDER</span> <span class=o>-</span> <span class=n>1</span><span class=o>;</span>
+</span></span></span><span class=line><span class=cl><span class=c1></span>        <span class=k>return</span> <span class=n>PRE_DECORATION_FILTER_ORDER</span> <span class=o>-</span> <span class=mi>1</span><span class=o>;</span>
 </span></span><span class=line><span class=cl>    <span class=o>}</span>
 </span></span><span class=line><span class=cl>
 </span></span><span class=line><span class=cl>    <span class=nd>@Override</span>
@@ -318,7 +318,7 @@ Spring Cloud Zuul 是一个基于JVM路由和服务端的负载均衡器，提�
 </span></span><span class=line><span class=cl>        <span class=n>config</span><span class=o>.</span><span class=na>setAllowedOrigins</span><span class=o>(</span><span class=n>Collections</span><span class=o>.</span><span class=na>singletonList</span><span class=o>(</span><span class=s>&#34;*&#34;</span><span class=o>));</span>
 </span></span><span class=line><span class=cl>        <span class=n>config</span><span class=o>.</span><span class=na>setAllowedHeaders</span><span class=o>(</span><span class=n>Collections</span><span class=o>.</span><span class=na>singletonList</span><span class=o>(</span><span class=s>&#34;*&#34;</span><span class=o>))</span><span class=err>；</span>
 </span></span><span class=line><span class=cl>        <span class=n>config</span><span class=o>.</span><span class=na>setAllowedMethods</span><span class=o>(</span><span class=n>Collections</span><span class=o>.</span><span class=na>singletonList</span><span class=o>(</span><span class=s>&#34;*&#34;</span><span class=o>));</span>
-</span></span><span class=line><span class=cl>        <span class=n>config</span><span class=o>.</span><span class=na>setMaxAge</span><span class=o>(</span><span class=n>300L</span><span class=o>);</span>
+</span></span><span class=line><span class=cl>        <span class=n>config</span><span class=o>.</span><span class=na>setMaxAge</span><span class=o>(</span><span class=mi>300L</span><span class=o>);</span>
 </span></span><span class=line><span class=cl>
 </span></span><span class=line><span class=cl>        <span class=n>source</span><span class=o>.</span><span class=na>registerCorsConfiguration</span><span class=o>(</span><span class=s>&#34;/**&#34;</span><span class=o>,</span> <span class=n>config</span><span class=o>);</span>
 </span></span><span class=line><span class=cl>        <span class=k>return</span> <span class=k>new</span> <span class=n>CorsFilter</span><span class=o>(</span><span class=n>source</span><span class=o>);</span>
