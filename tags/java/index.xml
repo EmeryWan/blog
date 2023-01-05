@@ -1,4 +1,208 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Java on 一层</title><link>https://blog.letout.cn/tags/java/</link><description>Recent content in Java on 一层</description><generator>Hugo -- gohugo.io</generator><language>zh-cn</language><lastBuildDate>Fri, 02 Sep 2022 16:02:02 +0800</lastBuildDate><atom:link href="https://blog.letout.cn/tags/java/index.xml" rel="self" type="application/rss+xml"/><item><title>ThreadLocal</title><link>https://blog.letout.cn/p/thread/threadlocal/</link><pubDate>Fri, 02 Sep 2022 16:02:02 +0800</pubDate><guid>https://blog.letout.cn/p/thread/threadlocal/</guid><description>&lt;img src="https://blog.letout.cn/imgs/19.jpeg" alt="Featured image of post ThreadLocal" />&lt;h2 id="javalangthreadlocal">java.lang.ThreadLocal&lt;/h2>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>java on 一层</title><link>https://blog.letout.cn/tags/java/</link><description>Recent content in java on 一层</description><generator>Hugo -- gohugo.io</generator><language>zh-cn</language><lastBuildDate>Thu, 05 Jan 2023 20:02:02 +0800</lastBuildDate><atom:link href="https://blog.letout.cn/tags/java/index.xml" rel="self" type="application/rss+xml"/><item><title>代理模式</title><link>https://blog.letout.cn/p/design-pattern/proxy/</link><pubDate>Thu, 05 Jan 2023 20:02:02 +0800</pubDate><guid>https://blog.letout.cn/p/design-pattern/proxy/</guid><description>&lt;img src="https://blog.letout.cn/p/design-pattern/proxy/proxy.png" alt="Featured image of post 代理模式" />&lt;h2 id="-介绍">📖 介绍&lt;/h2>
+&lt;p>代理模式是一种&lt;strong>结构型模式&lt;/strong>。&lt;/p>
+&lt;p>代理模式是为了方便访问某些资源，使对象类更加易用。为其他对象提供一种代理控制这个对象的访问。&lt;/p>
+&lt;p>常见的场景：&lt;/p>
+&lt;ul>
+&lt;li>
+&lt;p>🔖 买火车票不一定要去火车站，也可以去代售点。&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>🔖 Windows 中的快捷方式，Linux 中的软链接。&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>🔖 Spring AOP。&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>🔖 常见的 ORM 框架，只要定义相关的接口，而不需要写实现类，就可以对 XML 或注解中的 SQL 语句进行增删改查操作。&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>🔖 一些中间件如 RPC 框架，在拿到 jar 包中对接口的描述后，中间件会字服务启动时，生成对应的代理类。当调用接口时，实际上是通过代理类发出的 Socket 信息。&lt;/p>
+&lt;/li>
+&lt;/ul>
+&lt;h2 id="-实现方式">🎈 实现方式&lt;/h2>
+&lt;p>&lt;img src="https://blog.letout.cn/p/design-pattern/proxy/structure.png"
+width="1319"
+height="630"
+srcset="https://blog.letout.cn/p/design-pattern/proxy/structure_hu34461378bd86a4cce257496a3fe5af00_116540_480x0_resize_box_3.png 480w, https://blog.letout.cn/p/design-pattern/proxy/structure_hu34461378bd86a4cce257496a3fe5af00_116540_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+class="gallery-image"
+data-flex-grow="209"
+data-flex-basis="502px"
+>&lt;/p>
+&lt;ul>
+&lt;li>
+&lt;p>🎗️ 方法（1）：抽取接口，代理对象和服务对象实现同一个接口。&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>🎗️ 方法（2）：并不是所有情况都能抽取接口（如代码改动很大、不能修改服务类），可以将代理类作为服务类的子类，让代理类继承服务类的所有接口。&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>🎗️ 创建代理类，代理类中必须包含一个服务类的成员变量，负责服务类的整个生命周期。（可通过构造函数传入，或在内部创建）&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>🎗️ 根据需求实现代理方法。大部分情况下，代理方法会调用服务对象的同名方法。&lt;/p>
+&lt;/li>
+&lt;/ul>
+&lt;p>🚦 可考虑设计选项：&lt;/p>
+&lt;ul>
+&lt;li>
+&lt;p>构建一个方法，用于客户端判断获得的是代理对象，还是实际服务对象。&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>代理对象中服务对象可以考虑延迟初始化。&lt;/p>
+&lt;/li>
+&lt;/ul>
+&lt;h2 id="-java-中的动态代理">☕ Java 中的动态代理&lt;/h2>
+&lt;p>在 Java 标准库中，提供了动态代理功能，允许在运行期动态创建一个接口的实例。其实就是 JVM 在运行期间，动态创建 class 字节码并加载的过程。&lt;/p>
+&lt;p>动态代理通过 &lt;code>Proxy&lt;/code> 创建代理对象，然后将接口方法“代理”给 &lt;code>InvocationHandler&lt;/code>。&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-java" data-lang="java">&lt;span class="line">&lt;span class="cl">&lt;span class="kd">public&lt;/span> &lt;span class="kd">interface&lt;/span> &lt;span class="nc">InvocationHandler&lt;/span> &lt;span class="o">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kd">public&lt;/span> &lt;span class="n">Object&lt;/span> &lt;span class="nf">invoke&lt;/span>&lt;span class="o">(&lt;/span>&lt;span class="n">Object&lt;/span> &lt;span class="n">proxy&lt;/span>&lt;span class="o">,&lt;/span> &lt;span class="n">Method&lt;/span> &lt;span class="n">method&lt;/span>&lt;span class="o">,&lt;/span> &lt;span class="n">Object&lt;/span>&lt;span class="o">[]&lt;/span> &lt;span class="n">args&lt;/span>&lt;span class="o">)&lt;/span> &lt;span class="kd">throws&lt;/span> &lt;span class="n">Throwable&lt;/span>&lt;span class="o">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">}&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-java" data-lang="java">&lt;span class="line">&lt;span class="cl">&lt;span class="c1">// Proxy
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span>&lt;span class="kd">public&lt;/span> &lt;span class="kd">static&lt;/span> &lt;span class="n">Object&lt;/span> &lt;span class="nf">newProxyInstance&lt;/span>&lt;span class="o">(&lt;/span>&lt;span class="n">ClassLoader&lt;/span> &lt;span class="n">loader&lt;/span>&lt;span class="o">,&lt;/span> &lt;span class="n">Class&lt;/span>&lt;span class="o">&amp;lt;?&amp;gt;[]&lt;/span> &lt;span class="n">interfaces&lt;/span>&lt;span class="o">,&lt;/span> &lt;span class="n">InvocationHandler&lt;/span> &lt;span class="n">h&lt;/span>&lt;span class="o">)&lt;/span> &lt;span class="kd">throws&lt;/span> &lt;span class="n">IllegalArgumentException&lt;/span> &lt;span class="o">{&lt;/span> &lt;span class="o">}&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>在运行期间创建一个 &lt;code>interface&lt;/code> 实例的步骤：&lt;/p>
+&lt;ul>
+&lt;li>
+&lt;p>定义一个 &lt;code>InvocationHandler&lt;/code> 实例，负责实现接口的方法调用&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>通过 &lt;code>Proxy.newProxyInstance()&lt;/code> 创建 &lt;code>interface&lt;/code> 实例&lt;/p>
+&lt;ul>
+&lt;li>&lt;code>ClassLoader loader&lt;/code> 类加载器（如当前类的类加载器：&lt;code>CurrentProxy.class.getClassLoader()&lt;/code>）&lt;/li>
+&lt;li>&lt;code>Class&amp;lt;?&amp;gt;[] interfaces&lt;/code> 需要实现的接口的数组（代理的对象是实现了哪个接口）&lt;/li>
+&lt;li>&lt;code>InvocationHandler h&lt;/code> 用来处理接口方法调用的 &lt;code>InvocationHandler&lt;/code> 实例（生成的代理对象中的代理方法，需要做什么）&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>
+&lt;p>返回一个 &lt;code>Object&lt;/code>，可强制转型为接口。&lt;/p>
+&lt;/li>
+&lt;/ul>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;span class="lnt">11
+&lt;/span>&lt;span class="lnt">12
+&lt;/span>&lt;span class="lnt">13
+&lt;/span>&lt;span class="lnt">14
+&lt;/span>&lt;span class="lnt">15
+&lt;/span>&lt;span class="lnt">16
+&lt;/span>&lt;span class="lnt">17
+&lt;/span>&lt;span class="lnt">18
+&lt;/span>&lt;span class="lnt">19
+&lt;/span>&lt;span class="lnt">20
+&lt;/span>&lt;span class="lnt">21
+&lt;/span>&lt;span class="lnt">22
+&lt;/span>&lt;span class="lnt">23
+&lt;/span>&lt;span class="lnt">24
+&lt;/span>&lt;span class="lnt">25
+&lt;/span>&lt;span class="lnt">26
+&lt;/span>&lt;span class="lnt">27
+&lt;/span>&lt;span class="lnt">28
+&lt;/span>&lt;span class="lnt">29
+&lt;/span>&lt;span class="lnt">30
+&lt;/span>&lt;span class="lnt">31
+&lt;/span>&lt;span class="lnt">32
+&lt;/span>&lt;span class="lnt">33
+&lt;/span>&lt;span class="lnt">34
+&lt;/span>&lt;span class="lnt">35
+&lt;/span>&lt;span class="lnt">36
+&lt;/span>&lt;span class="lnt">37
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-java" data-lang="java">&lt;span class="line">&lt;span class="cl">&lt;span class="c1">// 模拟经纪人代理歌手的场景
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span>&lt;span class="kd">interface&lt;/span> &lt;span class="nc">Star&lt;/span> &lt;span class="o">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c1">// ...
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span>&lt;span class="o">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="kd">class&lt;/span> &lt;span class="nc">class&lt;/span> &lt;span class="n">Eason&lt;/span> &lt;span class="kd">implements&lt;/span> &lt;span class="n">Star&lt;/span> &lt;span class="o">{&lt;/span> &lt;span class="c1">// 需要被代理的类
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span> &lt;span class="c1">// ...
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span>&lt;span class="o">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="kd">public&lt;/span> &lt;span class="kd">class&lt;/span> &lt;span class="nc">ProxyDemo&lt;/span> &lt;span class="o">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kd">public&lt;/span> &lt;span class="kd">static&lt;/span> &lt;span class="n">Star&lt;/span> &lt;span class="nf">createProxy&lt;/span>&lt;span class="o">(&lt;/span>&lt;span class="n">Star&lt;/span> &lt;span class="n">star&lt;/span>&lt;span class="o">)&lt;/span> &lt;span class="o">{&lt;/span> &lt;span class="c1">// 创建代理对象
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span> &lt;span class="n">Star&lt;/span> &lt;span class="n">starProxy&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="o">(&lt;/span>&lt;span class="n">Star&lt;/span>&lt;span class="o">)&lt;/span> &lt;span class="n">Proxy&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">newProxyInstance&lt;/span>&lt;span class="o">(&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">ProxyDemo&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">class&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">getClassLoader&lt;/span>&lt;span class="o">(),&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">new&lt;/span> &lt;span class="n">Class&lt;/span>&lt;span class="o">[]{&lt;/span>&lt;span class="n">Star&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">class&lt;/span>&lt;span class="o">},&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">new&lt;/span> &lt;span class="n">InvocationHandler&lt;/span>&lt;span class="o">()&lt;/span> &lt;span class="o">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nd">@Override&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kd">public&lt;/span> &lt;span class="n">Object&lt;/span> &lt;span class="nf">invoke&lt;/span>&lt;span class="o">(&lt;/span>&lt;span class="n">Object&lt;/span> &lt;span class="n">proxy&lt;/span>&lt;span class="o">,&lt;/span> &lt;span class="n">Method&lt;/span> &lt;span class="n">method&lt;/span>&lt;span class="o">,&lt;/span> &lt;span class="n">Object&lt;/span>&lt;span class="o">[]&lt;/span> &lt;span class="n">args&lt;/span>&lt;span class="o">)&lt;/span> &lt;span class="kd">throws&lt;/span> &lt;span class="n">Throwable&lt;/span> &lt;span class="o">{&lt;/span> &lt;span class="c1">// 代理方法需要做的事情
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span> &lt;span class="c1">// 排除 Object 中的通用方法，不进行代理
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span> &lt;span class="k">if&lt;/span> &lt;span class="o">(&lt;/span>&lt;span class="n">Object&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">class&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">equals&lt;/span>&lt;span class="o">(&lt;/span>&lt;span class="n">method&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">getDeclaringClass&lt;/span>&lt;span class="o">()))&lt;/span> &lt;span class="o">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">return&lt;/span> &lt;span class="n">method&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">invoke&lt;/span>&lt;span class="o">(&lt;/span>&lt;span class="k">this&lt;/span>&lt;span class="o">,&lt;/span> &lt;span class="n">args&lt;/span>&lt;span class="o">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="o">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">String&lt;/span> &lt;span class="n">methodName&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">method&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">getName&lt;/span>&lt;span class="o">();&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">if&lt;/span> &lt;span class="o">(&lt;/span>&lt;span class="n">methodName&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">equals&lt;/span>&lt;span class="o">(&lt;/span>&lt;span class="s">&amp;#34;sing&amp;#34;&lt;/span>&lt;span class="o">))&lt;/span> &lt;span class="o">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c1">// do ...
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span> &lt;span class="k">return&lt;/span> &lt;span class="n">method&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">invoke&lt;/span>&lt;span class="o">(&lt;/span>&lt;span class="n">star&lt;/span>&lt;span class="o">,&lt;/span> &lt;span class="n">args&lt;/span>&lt;span class="o">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="o">}&lt;/span> &lt;span class="k">else&lt;/span> &lt;span class="k">if&lt;/span> &lt;span class="o">(&lt;/span>&lt;span class="n">methodName&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">equals&lt;/span>&lt;span class="o">(&lt;/span>&lt;span class="s">&amp;#34;dance&amp;#34;&lt;/span>&lt;span class="o">))&lt;/span> &lt;span class="o">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c1">// ...
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span> &lt;span class="o">}&lt;/span> &lt;span class="k">else&lt;/span> &lt;span class="o">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c1">// ...
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span> &lt;span class="o">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">return&lt;/span> &lt;span class="kc">null&lt;/span>&lt;span class="o">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="o">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="o">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="o">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">return&lt;/span> &lt;span class="n">starProxy&lt;/span>&lt;span class="o">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="o">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">}&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;h2 id="-适合场景">🎲 适合场景&lt;/h2>
+&lt;ul>
+&lt;li>
+&lt;p>🎨 延迟初始化。将对象的初始化延迟到真正有需要的时候。&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>🎨 访问控制。代理可仅在客户端凭据满足要求时将请求传递给服务对象。&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>🎨 本地执行远程服务 （远程代理）。适用于服务对象位于远程服务器上的情形。代理通过网络传递客户端请求，负责处理所有与网络相关的复杂细节。&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>🎨 记录日志请求（日志记录代理）。如需要保存对于服务对象的请求历史记录时。&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>🎨 缓存请求结果（缓存代理）。 如可对重复请求所需的相同结果进行缓存。&lt;/p>
+&lt;/li>
+&lt;/ul>
+&lt;h2 id="-参考">🔗 参考&lt;/h2>
+&lt;ul>
+&lt;li>&lt;a class="link" href="https://refactoringguru.cn/design-patterns/proxy" target="_blank" rel="noopener"
+>https://refactoringguru.cn/design-patterns/proxy&lt;/a>&lt;/li>
+&lt;li>&lt;a class="link" href="https://bugstack.cn/md/develop/design-pattern/2020-06-16-%E9%87%8D%E5%AD%A6%20Java%20%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E3%80%8A%E5%AE%9E%E6%88%98%E4%BB%A3%E7%90%86%E6%A8%A1%E5%BC%8F%E3%80%8B.html" target="_blank" rel="noopener"
+>https://bugstack.cn/md/develop/design-pattern/2020-06-16-%E9%87%8D%E5%AD%A6%20Java%20%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E3%80%8A%E5%AE%9E%E6%88%98%E4%BB%A3%E7%90%86%E6%A8%A1%E5%BC%8F%E3%80%8B.html&lt;/a>&lt;/li>
+&lt;li>&lt;a class="link" href="https://www.runoob.com/design-pattern/proxy-pattern.html" target="_blank" rel="noopener"
+>https://www.runoob.com/design-pattern/proxy-pattern.html&lt;/a>&lt;/li>
+&lt;li>&lt;a class="link" href="https://www.liaoxuefeng.com/wiki/1252599548343744/1264804593397984" target="_blank" rel="noopener"
+>https://www.liaoxuefeng.com/wiki/1252599548343744/1264804593397984&lt;/a>&lt;/li>
+&lt;/ul></description></item><item><title>ThreadLocal</title><link>https://blog.letout.cn/p/thread/threadlocal/</link><pubDate>Fri, 02 Sep 2022 16:02:02 +0800</pubDate><guid>https://blog.letout.cn/p/thread/threadlocal/</guid><description>&lt;img src="https://blog.letout.cn/imgs/19.jpeg" alt="Featured image of post ThreadLocal" />&lt;h2 id="javalangthreadlocal">java.lang.ThreadLocal&lt;/h2>
 &lt;p>ThreadLocal 是一个创建线程局部变量的类。&lt;/p>
 &lt;p>通常创建的共享变量是可以被任一个线程访问并修改的，存在线程安全问题。使用 ThreadLocal 创建的变量只有当前线程才可访问，其他线程无法修改和访问。&lt;/p>
 &lt;div class="highlight">&lt;div class="chroma">
@@ -430,7 +634,7 @@ data-flex-basis="131px"
 &lt;/li>
 &lt;/ul>
 &lt;h2 id="-本地方法栈">🎋 本地方法栈&lt;/h2>
-&lt;p>本地方法栈是虚拟为执行 Native 方法服务。&lt;/p>
+&lt;p>本地方法栈用于虚拟机执行 Native 方法，具体与虚拟机栈类似。&lt;/p>
 &lt;h2 id="-方法区">🎍 方法区&lt;/h2>
 &lt;p>方法区是 Java 虚拟机的抽象概念。实现方式在不同虚拟机中可能不同。&lt;/p>
 &lt;ul>
@@ -478,13 +682,14 @@ data-flex-basis="268px"
 &lt;/ul>
 &lt;p>类变量（static）&lt;/p>
 &lt;h2 id="-堆">🎍 堆&lt;/h2>
-&lt;p>用来存放和管理对象实例，几乎所有的对象实例都在这里分配（逃逸分析，栈上分配）。&lt;/p>
+&lt;p>用来存放和管理对象实例，几乎所有的对象实例都在这里分配。
+（存在逃逸分析，栈上分配，有些对象不会在堆中）&lt;/p>
 &lt;p>Java 堆是垃圾回收的主要区域，因此也被称为 GC 堆。&lt;/p>
 &lt;ul>
 &lt;li>
 &lt;p>JDK 8 之前，堆被分为&lt;/p>
 &lt;ul>
-&lt;li>新生代（Eden、Survivor1、Survivor2）&lt;/li>
+&lt;li>新生代（Eden、Survivor0、Survivor1）&lt;/li>
 &lt;li>老年代&lt;/li>
 &lt;li>永久代&lt;/li>
 &lt;/ul>
@@ -604,15 +809,15 @@ data-flex-basis="472px"
 &lt;p>收集整个堆和方法区。&lt;code>Full GC&lt;/code>&lt;/p>
 &lt;ul>
 &lt;li>晋升到老年代的对象大于老年代的剩余空间&lt;/li>
-&lt;li>Minor GC 后，新生代存活对象超过了老年代的空间（分配担保）&lt;/li>
+&lt;li>Minor GC 后，新生代存活对象超过了老年代的空间（分配担保机制）&lt;/li>
 &lt;li>手动 System.gc()&lt;/li>
-&lt;li>(Java8之前) 永久代空间不足&lt;/li>
+&lt;li>（Java 8 之前）永久代空间不足&lt;/li>
 &lt;/ul>
 &lt;h2 id="-垃圾收集器">🌴 垃圾收集器&lt;/h2>
 &lt;h3 id="-serial--serial-old">🪵 Serial / Serial Old&lt;/h3>
-&lt;p>“单线程”的垃圾收集器，在进行垃圾收集时，必须暂停其他所有工作线程&lt;code>stop the world&lt;/code>，直到收集介绍。&lt;/p>
+&lt;p>“单线程”的垃圾收集器，在进行垃圾收集时，必须暂停其他所有工作线程&lt;code>stop the world&lt;/code>，直到收集结束。&lt;/p>
 &lt;ul>
-&lt;li>新生代采用标记-复制算法，老年代采用标记-整理算法&lt;/li>
+&lt;li>新生代采用 标记-复制 算法，老年代采用 标记-整理 算法。&lt;/li>
 &lt;/ul>
 &lt;p>&lt;img src="https://blog.letout.cn/p/java/jvm/garbage-collection/serial.png"
 width="953"
@@ -629,7 +834,7 @@ data-flex-basis="1094px"
 &lt;li>依旧是现在 HotSpot 虚拟机运行在客户端模式下的默认新生代垃圾回收方式&lt;/li>
 &lt;/ul>
 &lt;h3 id="-parnew">🪵 ParNew&lt;/h3>
-&lt;p>Serial 的多线程版本，可以使用多条线程进行垃圾回收（新生代）。&lt;/p>
+&lt;p>Serial 的多线程版本，可以使用多条线程进行垃圾回收。（新生代）&lt;/p>
 &lt;ul>
 &lt;li>采用标记复制算法&lt;/li>
 &lt;/ul>
@@ -645,7 +850,7 @@ data-flex-basis="1140px"
 >&lt;/p>
 &lt;h3 id="-parallel-scavenge--parallel-old">🪵 Parallel Scavenge / Parallel Old&lt;/h3>
 &lt;ul>
-&lt;li>基于 标记-复制 算法实现的新生代垃圾收集器，能够并行收集的多线程收集器，目标是达到一个可控制的“吞吐量”&lt;/li>
+&lt;li>基于 标记-复制 算法实现的新生代垃圾收集器，能够并行收集的多线程收集器，目标是达到一个可控制的“吞吐量”。&lt;/li>
 &lt;li>基于 标记-整理 算法实现的老年代多线程收集器。&lt;/li>
 &lt;/ul>
 &lt;p>&lt;img src="https://blog.letout.cn/p/java/jvm/garbage-collection/parallel.png"
@@ -668,7 +873,7 @@ data-flex-basis="1126px"
 &lt;/ul>
 &lt;h3 id="-cms">🪵 CMS&lt;/h3>
 &lt;p>&lt;code>Concurrent Mark Swap&lt;/code> 获取最短停顿时间的收集器。&lt;/p>
-&lt;p>是 HotSpot 虚拟机第一款真正意义上的垃圾收集器，实现了用户线程和垃圾回收线程同时工作。基于 标记-清除 算法的 &lt;strong>老年代&lt;/strong> 收集器。&lt;/p>
+&lt;p>是 HotSpot 虚拟机第一款真正意义上的并发垃圾收集器，实现了用户线程和垃圾回收线程同时工作。基于 标记-清除 算法的 &lt;strong>老年代&lt;/strong> 收集器。&lt;/p>
 &lt;p>&lt;img src="https://blog.letout.cn/p/java/jvm/garbage-collection/CMS.png"
 width="1121"
 height="230"
@@ -700,7 +905,7 @@ data-flex-basis="1169px"
 &lt;ul>
 &lt;li>对 CPU 资源敏感&lt;/li>
 &lt;li>无法处理浮动垃圾：运行过程中，有一些垃圾在当次无法处理，需要等待下次垃圾回收&lt;/li>
-&lt;li>会产生内存碎片，连续空间减少，导致 Full GC&lt;/li>
+&lt;li>会产生内存碎片，导致连续空间减少，导致 Full GC&lt;/li>
 &lt;/ul>
 &lt;h3 id="-g1">🪵 G1&lt;/h3>
 &lt;p>G1 开创了收集器面向局部收集的设计思路和基于 Region 的内存布局形式。&lt;/p>
@@ -715,7 +920,7 @@ data-flex-grow="133"
 data-flex-basis="320px"
 >&lt;/p>
 &lt;p>将 Java 堆分为 2048 个大小相同的独立 Region，每个 Region 的大小依据堆空间的大小而定，在 JVM 生命周期中不会改变。&lt;/p>
-&lt;p>每个 Region 都可以更新需要，作为新生代的 Eden 区，Survivor 区，或者是老年代；新生代和老年代在内存中不是连续的空间，收集器会根据区域的不同采取不同的策略。&lt;/p>
+&lt;p>每个 Region 都可以更具需要，作为新生代的 Eden 区，Survivor 区，或者是老年代；新生代和老年代在内存中不是连续的空间，收集器会根据区域的不同采取不同的策略。&lt;/p>
 &lt;p>&lt;img src="https://blog.letout.cn/p/java/jvm/garbage-collection/g1.png"
 width="941"
 height="209"
@@ -743,7 +948,7 @@ data-flex-basis="1080px"
 &lt;ul>
 &lt;li>🐾 筛选回收&lt;/li>
 &lt;/ul>
-&lt;p>对各个 Region 的回收价值和成本进行排序，选择会后价值最大的区域进行回收。&lt;/p>
+&lt;p>对各个 Region 的回收价值和成本进行排序，会选择价值最大的区域进行回收。&lt;/p>
 &lt;p>将回收的 Region 中的存活对象，复制到空的 Region 中，再清理掉整个旧的 Region 区域。&lt;/p>
 &lt;p>涉及对象的移动，必须暂停用户线程，有多条垃圾收集器并发执行。但是只回收一部分Region，时间是用户可控制的。&lt;/p>
 &lt;!-- raw HTML omitted -->
@@ -795,13 +1000,13 @@ data-flex-basis="590px"
 >&lt;/p>
 &lt;h2 id="原子性可见性有序性">原子性、可见性、有序性&lt;/h2>
 &lt;p>Java 内存模型是围绕着在并发过程中如何处理原子性、可见性和有序性三个特征来建立的。&lt;/p>
-&lt;h3 id="原子性">原子性&lt;/h3>
-&lt;p>一次或多次操作，要么全部执行且不受到任何干扰，要么全不执行。&lt;/p>
+&lt;h3 id="-原子性">🐥 原子性&lt;/h3>
+&lt;p>一次或多次操作，要么全部执行且不受到任何干扰，要么全都不执行。&lt;/p>
 &lt;ul>
-&lt;li>利用锁，任一时刻只有一个线程访问代码块。&lt;code>synchronized&lt;/code> &lt;code>Lock&lt;/code>&lt;/li>
-&lt;li>利用 &lt;code>CAS&lt;/code> 原子类 保证原子操作&lt;/li>
+&lt;li>利用锁，可以让任一时刻只有一个线程访问代码块。&lt;code>synchronized&lt;/code> &lt;code>Lock&lt;/code>&lt;/li>
+&lt;li>利用 &lt;code>CAS&lt;/code> 原子类，保证原子操作。&lt;/li>
 &lt;/ul>
-&lt;h3 id="可见性">可见性&lt;/h3>
+&lt;h3 id="-可见性">🐤 可见性&lt;/h3>
 &lt;p>一个线程修改了共享变量的值，其他线程能够立即得知这个修改。&lt;/p>
 &lt;ul>
 &lt;li>&lt;code>volatile&lt;/code>&lt;/li>
@@ -814,7 +1019,7 @@ data-flex-basis="590px"
 &lt;ul>
 &lt;li>&lt;code>final&lt;/code>&lt;/li>
 &lt;/ul>
-&lt;h3 id="有序性">有序性&lt;/h3>
+&lt;h3 id="-有序性">🐣 有序性&lt;/h3>
 &lt;p>指令重排问题，代码的执行顺序不一定。&lt;/p>
 &lt;ul>
 &lt;li>&lt;code>volatile&lt;/code>&lt;/li>
@@ -828,20 +1033,20 @@ data-flex-basis="590px"
 &lt;p>Java 虚拟机提供的轻量级内存同步机制。&lt;/p>
 &lt;p>作用：&lt;/p>
 &lt;ul>
-&lt;li>保障了此变量对所有线程的可见性&lt;/li>
+&lt;li>✔️ 保障了此变量对所有线程的可见性&lt;/li>
 &lt;/ul>
 &lt;p>volatile 的写操作，都会刷新到主内存中，并使其他线程中的 volatile 变量失效；volatile 的读操作，都会从主存中读取。&lt;/p>
 &lt;ul>
-&lt;li>禁止指令重排优化（有序性）&lt;/li>
+&lt;li>✔️ 禁止指令重排优化（有序性）&lt;/li>
 &lt;/ul>
 &lt;p>防止写操作之前的代码，重排到写操作之后；防止读操作之后的代码，重排到读操作之前。&lt;/p>
 &lt;ul>
 &lt;li>❗️无法保障原子性&lt;/li>
 &lt;/ul>
-&lt;p>一条字节码在执行时，需要运行多条指令才能实现。&lt;/p>
-&lt;p>实现方式：内存屏障&lt;/p>
+&lt;p>一条字节码在执行时，是需要运行多条指令才能实现。&lt;/p>
+&lt;p>实现方式：内存屏障。重排序时，不能把后面的指令重排序到内存屏障之前的位置。&lt;/p>
 &lt;p>保证：之前的指令一定全部执行，之后的指令一定都没有执行，并且前面语句的结果对后面的语句可见。&lt;/p>
-&lt;h2 id="happens-before">happens-before&lt;/h2>
+&lt;h2 id="happens-before-原则">happens-before 原则&lt;/h2>
 &lt;p>对于两个操作 A 和 B，这两个操作可以在不同的线程中执行。如果 A happens-before B（A 优先于 B 执行），那么可以保证，当 A 操作完后，A 的操作对于 B 操作是可见的。&lt;/p>
 &lt;p>指令重排提高了并发性能，但是 Java 虚拟机会对指令重排做一些规则限制，并不能让所有的指令都随意改变执行位置。&lt;/p>
 &lt;p>Java 内存模型天然的先行发生关系：&lt;/p>
@@ -877,13 +1082,17 @@ class="gallery-image"
 data-flex-grow="267"
 data-flex-basis="642px"
 >&lt;/p>
-&lt;h3 id="bootstrapclassloader">BootstrapClassLoader&lt;/h3>
-&lt;p>启动类加载器&lt;/p>
-&lt;p>最顶层的加载类，由 C++ 实现，负责加载 &lt;code>%JAVA_HOME%/lib&lt;/code> 目录下的 jar 包和类或者被 &lt;code>-Xbootclasspath&lt;/code> 参数指定的路径中的所有类。&lt;/p>
-&lt;h3 id="extensionclassloader">ExtensionClassLoader&lt;/h3>
-&lt;p>扩展类加载器。Java 系统类库的扩展机制。&lt;/p>
-&lt;p>负责加载 &lt;code>%JRE_HOME%/lib/ext&lt;/code> 目录下的 jar 包和类，或被 &lt;code>java.ext.dirs&lt;/code> 系统变量所指定的路径下的 jar 包。&lt;/p>
-&lt;h3 id="applicationclassloader">ApplicationClassLoader&lt;/h3>
+&lt;h3 id="-bootstrapclassloader">🙈 BootstrapClassLoader&lt;/h3>
+&lt;p>启动类加载器，最顶层的加载类，由 C/C++ 实现。&lt;/p>
+&lt;p>负责加载：&lt;/p>
+&lt;ul>
+&lt;li>&lt;code>%JAVA_HOME%/lib&lt;/code> 目录下的 jar 包和类&lt;/li>
+&lt;li>被 &lt;code>-Xbootclasspath&lt;/code> 参数指定的路径中的所有类。&lt;/li>
+&lt;/ul>
+&lt;h3 id="-extensionclassloader">🙉 ExtensionClassLoader&lt;/h3>
+&lt;p>扩展类加载器。&lt;/p>
+&lt;p>是一种 Java 系统类库的扩展机制。负责加载 &lt;code>%JRE_HOME%/lib/ext&lt;/code> 目录下的 jar 包和类，或被 &lt;code>java.ext.dirs&lt;/code> 系统变量所指定的路径下的 jar 包。&lt;/p>
+&lt;h3 id="-applicationclassloader">🙊 ApplicationClassLoader&lt;/h3>
 &lt;p>面向用户的加载器，负责加载当前应用 &lt;code>classpath&lt;/code> 下的所有 jar 包和类。&lt;/p>
 &lt;h2 id="双亲委派模型">双亲委派模型&lt;/h2>
 &lt;p>&lt;img src="https://blog.letout.cn/p/java/jvm/classloader/classloader.png"
@@ -993,7 +1202,7 @@ data-flex-basis="705px"
 &lt;h2 id="类加载过程">类加载过程&lt;/h2>
 &lt;p>类加载主要有三步：&lt;code>加载 - 链接 - 初始化&lt;/code>。&lt;/p>
 &lt;h3 id="-加载">🥎 加载&lt;/h3>
-&lt;p>加载是一个读取 Class 文件，将其转化为某种静态数据结构存储在方法区内，并在堆中生成一个便于调用的 java.lang.Class 类型的对象的过程。&lt;/p>
+&lt;p>加载是一个读取 Class 文件，将其转化为某种静态数据结构存储在方法区内，并在堆中生成一个便于调用的 &lt;code>java.lang.Class&lt;/code> 类型的对象的过程。&lt;/p>
 &lt;p>&lt;img src="https://blog.letout.cn/p/java/jvm/class-loading/loading.png"
 width="707"
 height="335"
@@ -1007,13 +1216,13 @@ data-flex-basis="506px"
 &lt;p>分为三步进行：&lt;/p>
 &lt;ul>
 &lt;li>
-&lt;p>获取定义类的二进制字节流（不限制从哪里获取，文件、网络、即时生成）&lt;/p>
+&lt;p>获取定义类的二进制字节流（不限制从哪里获取，可以从文件、网络、即时生成）&lt;/p>
 &lt;/li>
 &lt;li>
 &lt;p>将字节流代表的静态存储结构，转换成方法区中运行时数据结构&lt;/p>
 &lt;/li>
 &lt;li>
-&lt;p>在堆中生成一个代表该类的 java.lang.Class 对象，作为方法区这个类的各种数据访问入口&lt;/p>
+&lt;p>在堆中生成一个代表该类的 &lt;code>java.lang.Class&lt;/code> 对象，作为方法区这个类的各种数据访问入口&lt;/p>
 &lt;/li>
 &lt;/ul>
 &lt;h3 id="-链接">🥎 链接&lt;/h3>
@@ -1079,13 +1288,13 @@ class="gallery-image"
 data-flex-grow="44"
 data-flex-basis="105px"
 >&lt;/p>
-&lt;p>当一个类被编译成 Class 之后，假设这个类称为 &lt;code>A&lt;/code>，并且在 &lt;code>A&lt;/code> 中引用了类 &lt;code>B&lt;/code>。&lt;/p>
+&lt;p>当一个类被编译成 Class 之后，假设这个类称为 &lt;code>A&lt;/code>，并且在类 &lt;code>A&lt;/code> 中引用了类 &lt;code>B&lt;/code>。&lt;/p>
 &lt;ul>
 &lt;li>
-&lt;p>在编译阶段，&lt;code>A&lt;/code> 无法确定 &lt;code>B&lt;/code> 是否被编译（现在 &lt;code>B&lt;/code> 一定未加载），此时 &lt;code>A&lt;/code> 无法知道 &lt;code>B&lt;/code> 的实际地址，所有在 &lt;code>A.Class&lt;/code> 中，会使用一个&lt;code>字符串&lt;/code>代表 &lt;code>B&lt;/code>。这个字符串被称为&lt;strong>符号引用&lt;/strong>。&lt;/p>
+&lt;p>在编译阶段，&lt;code>A&lt;/code> 无法确定 &lt;code>B&lt;/code> 是否被编译（现在 &lt;code>B&lt;/code> 一定未加载），此时 &lt;code>A&lt;/code> 无法知道 &lt;code>B&lt;/code> 的实际地址，所有在 &lt;code>A.Class&lt;/code> 中，会使用一个&lt;code>字符串&lt;/code>代表 &lt;code>B&lt;/code>，这个字符串被称为&lt;strong>符号引用&lt;/strong>。&lt;/p>
 &lt;/li>
 &lt;li>
-&lt;p>在运行阶段，&lt;code>A&lt;/code> 发生了加载，在解析时，发现其中的 &lt;code>B&lt;/code> 还未被加载，就会触发类 &lt;code>B&lt;/code> 的加载，将 &lt;code>B&lt;/code> 加载到虚拟机中。此时，&lt;code>A&lt;/code> 中的符号引用会被替换为 &lt;code>B&lt;/code> 中的实际地址（直接引用）。&lt;/p>
+&lt;p>在运行阶段，&lt;code>A&lt;/code> 发生了加载，在解析时，发现其中的 &lt;code>B&lt;/code> 还未被加载，就会触发类 &lt;code>B&lt;/code> 的加载，将 &lt;code>B&lt;/code> 加载到虚拟机中。此时，&lt;code>A&lt;/code> 中的符号引用会被替换为 &lt;code>B&lt;/code> 中的实际地址（也就是直接引用）。&lt;/p>
 &lt;/li>
 &lt;/ul>
 &lt;p>&lt;img src="https://blog.letout.cn/p/java/jvm/class-loading/resolve.png"
@@ -1099,15 +1308,17 @@ data-flex-grow="171"
 data-flex-basis="411px"
 >&lt;/p>
 &lt;ul>
-&lt;li>静态解析&lt;/li>
-&lt;/ul>
+&lt;li>
+&lt;p>静态解析&lt;/p>
 &lt;p>类 &lt;code>B&lt;/code> 是具体的实现类，解析的对象十分明确，即会进行静态解析。&lt;/p>
-&lt;ul>
-&lt;li>动态解析&lt;/li>
-&lt;/ul>
+&lt;/li>
+&lt;li>
+&lt;p>动态解析&lt;/p>
 &lt;p>Java 通过后期绑定的方式实现多态，通过动态解析实现。&lt;/p>
 &lt;p>如果类 &lt;code>B&lt;/code> 是抽象类或者接口，有具体的实现类 &lt;code>C&lt;/code>、&lt;code>D&lt;/code>，当前具体的实现方式并不明确，无法确定使用哪个具体实现。&lt;/p>
 &lt;p>直到运行过程中发生了调用，虚拟机调用栈中会得到具体类的信息，再进行解析，就有明确的直接引用代替符号引用。&lt;/p>
+&lt;/li>
+&lt;/ul>
 &lt;h3 id="-初始化">🥎 初始化&lt;/h3>
 &lt;p>虚拟机真正开始执行类中编写的代码，完成一些主动的资源初始化动作。&lt;/p>
 &lt;p>&lt;strong>执行的是类层面的初始化。&lt;/strong> 只有显式调用 new 才会执行构造函数的初始化。&lt;/p>
@@ -1122,14 +1333,13 @@ data-flex-grow="137"
 data-flex-basis="329px"
 >&lt;/p>
 &lt;ul>
-&lt;li>成员变量的直接赋值&lt;/li>
-&lt;li>静态变量的赋值&lt;/li>
-&lt;li>静态代码块&lt;/li>
+&lt;li>类变量（静态变量）的赋值 &lt;code>static&lt;/code>&lt;/li>
+&lt;li>静态代码块 &lt;code>static { }&lt;/code>&lt;/li>
 &lt;/ul>
-&lt;h2 id="判断无用类">判断无用类&lt;/h2>
+&lt;h2 id="如何判断无用类">如何判断无用类&lt;/h2>
 &lt;ul>
 &lt;li>该类的所有实例对象全部被 GC，在堆中不存在该类的任何实例对象&lt;/li>
-&lt;li>该类对应的 java.lang.Class 对象，在任何地方都没有被引用&lt;/li>
+&lt;li>该类对应的 &lt;code>java.lang.Class&lt;/code> 对象，在任何地方都没有被引用&lt;/li>
 &lt;li>该类的类加载器已经被回收&lt;/li>
 &lt;/ul>
 &lt;p>满足以上三个条件，说明该类可以被回收，但是与对象不同，无用类不一定会被回收。&lt;/p>
