@@ -1,4 +1,1121 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Redis on 一层</title><link>https://blog.letout.cn/tags/redis/</link><description>Recent content in Redis on 一层</description><generator>Hugo -- gohugo.io</generator><language>zh-cn</language><lastBuildDate>Wed, 11 May 2022 12:14:45 +0800</lastBuildDate><atom:link href="https://blog.letout.cn/tags/redis/index.xml" rel="self" type="application/rss+xml"/><item><title>使用 Redis 实现分布式锁</title><link>https://blog.letout.cn/p/distributed-lock/redis/</link><pubDate>Wed, 11 May 2022 12:14:45 +0800</pubDate><guid>https://blog.letout.cn/p/distributed-lock/redis/</guid><description>&lt;img src="https://blog.letout.cn/imgs/1.jpeg" alt="Featured image of post 使用 Redis 实现分布式锁" />&lt;h2 id="redis-nx-实现">Redis NX 实现&lt;/h2>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Redis on 一层</title><link>https://blog.letout.cn/tags/redis/</link><description>Recent content in Redis on 一层</description><generator>Hugo -- gohugo.io</generator><language>zh-cn</language><lastBuildDate>Wed, 11 Jan 2023 01:52:45 +0800</lastBuildDate><atom:link href="https://blog.letout.cn/tags/redis/index.xml" rel="self" type="application/rss+xml"/><item><title>Redis 缓存问题</title><link>https://blog.letout.cn/p/redis/cache-problem/</link><pubDate>Wed, 11 Jan 2023 01:52:45 +0800</pubDate><guid>https://blog.letout.cn/p/redis/cache-problem/</guid><description>&lt;img src="https://blog.letout.cn/p/redis/cache-problem/cache.png" alt="Featured image of post Redis 缓存问题" />&lt;h2 id="-缓存雪崩">🌨️ 缓存雪崩&lt;/h2>
+&lt;p>为了保证缓存中数据与数据库中的数据的一致性，通常 Redis 中数据会设置过期时间。如果（1）缓存层在同一时间有大量数据失效，或者 （2）Redis 由于某些情况宕机，导致所有请求全部到达数据库，导致请求全部访问数据库，造成数据库宕机。&lt;/p>
+&lt;p>&lt;img src="https://blog.letout.cn/p/redis/cache-problem/1.png"
+width="1080"
+height="660"
+srcset="https://blog.letout.cn/p/redis/cache-problem/1_huab116a381b3e5ca6aaa694e3ae424f2c_109299_480x0_resize_box_3.png 480w, https://blog.letout.cn/p/redis/cache-problem/1_huab116a381b3e5ca6aaa694e3ae424f2c_109299_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+class="gallery-image"
+data-flex-grow="163"
+data-flex-basis="392px"
+>&lt;/p>
+&lt;p>💡 解决办法：&lt;/p>
+&lt;ul>
+&lt;li>
+&lt;p>🧩 给数据随机设置过期时间&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>🧩 &lt;a class="link" href="https://www.letout.cn/p/distributed-lock/redis/" target="_blank" rel="noopener"
+>互斥锁&lt;/a>，只有一个请求会到数据库上，并会重建缓存&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>🧩 双 Key 策略，有不同的 Key，但有不同的 Value&lt;/p>
+&lt;ul>
+&lt;li>主 Key：设置过期时间&lt;/li>
+&lt;li>备 Key：不设置过期时间&lt;/li>
+&lt;li>当 主 Key 过期后，大量请求到达时直接返回 备 Key，并通知后台线程，重建主 Key&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>
+&lt;p>🧩 后台更新缓存，设置 Key 永不过期（内存不够时可能被内存淘汰策略淘汰）&lt;/p>
+&lt;ul>
+&lt;li>后台线程定时更新 或 定时检测是否失效进行重建&lt;/li>
+&lt;li>业务上发现被淘汰，通过消息队列通知重建&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;h2 id="-缓存击穿">⚡ 缓存击穿&lt;/h2>
+&lt;p>缓存中某个热点 Key 数据过期了，此时有大量请求访问该数据，导致这些请求全部都落到了数据库上，导致数据库宕机。&lt;/p>
+&lt;p>&lt;img src="https://blog.letout.cn/p/redis/cache-problem/2.png"
+width="707"
+height="836"
+srcset="https://blog.letout.cn/p/redis/cache-problem/2_hu4d851393f6ce96ed0f1e6e1059c88231_81241_480x0_resize_box_3.png 480w, https://blog.letout.cn/p/redis/cache-problem/2_hu4d851393f6ce96ed0f1e6e1059c88231_81241_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+class="gallery-image"
+data-flex-grow="84"
+data-flex-basis="202px"
+>&lt;/p>
+&lt;p>💡 解决办法：&lt;/p>
+&lt;ul>
+&lt;li>
+&lt;p>🧩 &lt;a class="link" href="https://www.letout.cn/p/distributed-lock/redis/" target="_blank" rel="noopener"
+>互斥锁&lt;/a>，只有一个请求会到数据库上，并重建缓存&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>🧩 热点数据永不过期（内存不够时可能被内存淘汰策略淘汰），后台线程更新缓存&lt;/p>
+&lt;/li>
+&lt;/ul>
+&lt;h2 id="-缓存穿透">🌪️ 缓存穿透&lt;/h2>
+&lt;p>请求的数据既不存在于缓存中，也不存在于数据库中，有大量这样的请求，不会命中缓存，直接访问数据库，导致数据库压力非常大。&lt;/p>
+&lt;p>可能是由于（1）业务误操作 或 （2）黑客的故意攻击&lt;/p>
+&lt;p>&lt;img src="https://blog.letout.cn/p/redis/cache-problem/3.png"
+width="576"
+height="836"
+srcset="https://blog.letout.cn/p/redis/cache-problem/3_hua47220c88eca814bf161e3c4ed6c3627_76648_480x0_resize_box_3.png 480w, https://blog.letout.cn/p/redis/cache-problem/3_hua47220c88eca814bf161e3c4ed6c3627_76648_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+class="gallery-image"
+data-flex-grow="68"
+data-flex-basis="165px"
+>&lt;/p>
+&lt;p>💡 解决办法：&lt;/p>
+&lt;ul>
+&lt;li>
+&lt;p>🧩 缓冲默认值，后续的请求直接返回该默认值&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>🧩 布隆过滤器，当布隆过滤器返回 0 时，说明数据一定不在数据库中&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>🧩 非法请求限制，在业务层判断查询条件，如果时恶意请求直接拒绝&lt;/p>
+&lt;/li>
+&lt;/ul>
+&lt;h2 id="-热点-key-重建">🔥 热点 Key 重建&lt;/h2>
+&lt;p>当热点缓存失效的瞬间，后端会有大量请求，在重建缓存时，会造成后端负载过大，导致应用崩溃。&lt;/p>
+&lt;ul>
+&lt;li>
+&lt;p>💡 使用互斥锁&lt;/p>
+&lt;ul>
+&lt;li>只允许一个线程重建缓存，其他线程等待重建缓存的线程执行完，才能从缓存获取数据&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>
+&lt;p>💡 Key 永不过期&lt;/p>
+&lt;ul>
+&lt;li>利用后台线程去单独构建缓存&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;h2 id="-缓存一致性">🎏 缓存一致性&lt;/h2>
+&lt;h3 id="更新">更新&lt;/h3>
+&lt;h4 id="-先更新数据库再更新缓存">❌ 先更新数据库，再更新缓存&lt;/h4>
+&lt;p>&lt;img src="https://blog.letout.cn/p/redis/cache-problem/11.png"
+width="893"
+height="618"
+srcset="https://blog.letout.cn/p/redis/cache-problem/11_hu0a23dc2cab9bf3c3bb634fe5cae7e5fa_53493_480x0_resize_box_3.png 480w, https://blog.letout.cn/p/redis/cache-problem/11_hu0a23dc2cab9bf3c3bb634fe5cae7e5fa_53493_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+class="gallery-image"
+data-flex-grow="144"
+data-flex-basis="346px"
+>&lt;/p>
+&lt;h4 id="-先更新缓存再更新数据库">❌ 先更新缓存，再更新数据库&lt;/h4>
+&lt;p>&lt;img src="https://blog.letout.cn/p/redis/cache-problem/12.png"
+width="903"
+height="498"
+srcset="https://blog.letout.cn/p/redis/cache-problem/12_hub4cf2089e272e09419483674cc55ccc3_51215_480x0_resize_box_3.png 480w, https://blog.letout.cn/p/redis/cache-problem/12_hub4cf2089e272e09419483674cc55ccc3_51215_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+class="gallery-image"
+data-flex-grow="181"
+data-flex-basis="435px"
+>&lt;/p>
+&lt;h3 id="删除">删除&lt;/h3>
+&lt;h4 id="-先删除缓存再更新数据库">❓ 先删除缓存，再更新数据库&lt;/h4>
+&lt;p>&lt;img src="https://blog.letout.cn/p/redis/cache-problem/13.png"
+width="903"
+height="618"
+srcset="https://blog.letout.cn/p/redis/cache-problem/13_hu6883dd3e3299a5dfe5e375db77067d03_50514_480x0_resize_box_3.png 480w, https://blog.letout.cn/p/redis/cache-problem/13_hu6883dd3e3299a5dfe5e375db77067d03_50514_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+class="gallery-image"
+data-flex-grow="146"
+data-flex-basis="350px"
+>&lt;/p>
+&lt;p>可以考虑延迟双删。在更新完数据库后，延迟一段时间再删除一次缓存。&lt;/p>
+&lt;h4 id="-先更新数据库再删除缓存">⭕ 先更新数据库，再删除缓存&lt;/h4>
+&lt;p>在实际中，出现的概率非常低。缓存的写入要远远快于数据库的写入。&lt;/p>
+&lt;p>&lt;img src="https://blog.letout.cn/p/redis/cache-problem/14.png"
+width="1080"
+height="660"
+srcset="https://blog.letout.cn/p/redis/cache-problem/14_huab116a381b3e5ca6aaa694e3ae424f2c_109299_480x0_resize_box_3.png 480w, https://blog.letout.cn/p/redis/cache-problem/14_huab116a381b3e5ca6aaa694e3ae424f2c_109299_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+class="gallery-image"
+data-flex-grow="163"
+data-flex-basis="392px"
+>&lt;/p>
+&lt;h3 id="异步">异步&lt;/h3>
+&lt;p>通过 更新 + 删除，是两个不同的操作，不具备原子性，可能会导致不一致的问题。&lt;/p>
+&lt;ul>
+&lt;li>中间件&lt;/li>
+&lt;/ul>
+&lt;p>通过中间价（如 Canal ）订阅数据库的 binlog，当更新完数据库时，通过中间件去删除缓存。&lt;/p>
+&lt;h2 id="-参考">📕 参考&lt;/h2>
+&lt;ul>
+&lt;li>&lt;a class="link" href="https://xiaolincoding.com/redis/" target="_blank" rel="noopener"
+>https://xiaolincoding.com/redis/&lt;/a>&lt;/li>
+&lt;li>Redis 开发与运维&lt;/li>
+&lt;/ul></description></item><item><title>Redis 持久化</title><link>https://blog.letout.cn/p/redis/persistence/</link><pubDate>Fri, 06 Jan 2023 22:07:45 +0800</pubDate><guid>https://blog.letout.cn/p/redis/persistence/</guid><description>&lt;img src="https://blog.letout.cn/p/redis/persistence/cow.png" alt="Featured image of post Redis 持久化" />&lt;h2 id="保障数据不丢失">保障数据不丢失&lt;/h2>
+&lt;p>Redis 的读写操作都是在内存中，为了保证内存中的数据不会丢失，Redis 实现了数据持久化的机制，把数据存储到磁盘，这样在 Redis 重启就能够从磁盘中恢复原有的数据。&lt;/p>
+&lt;ul>
+&lt;li>RDB 快照&lt;/li>
+&lt;li>AOF 日志&lt;/li>
+&lt;li>混合持久化（4.0+）&lt;/li>
+&lt;/ul>
+&lt;h2 id="-rdb-快照">📷 RDB 快照&lt;/h2>
+&lt;p>RDB 快照就是记录某一个瞬间的内存数据，记录的是实际数据。（全量备份）&lt;/p>
+&lt;p>快照，就是记录某一个瞬间东西，比如当我们给风景拍照时，那一个瞬间的画面和信息就记录到了一张照片。&lt;/p>
+&lt;h3 id="触发条件">触发条件&lt;/h3>
+&lt;h4 id="手动触发">手动触发&lt;/h4>
+&lt;ul>
+&lt;li>save&lt;/li>
+&lt;li>bgsave&lt;/li>
+&lt;/ul>
+&lt;h4 id="被动触发">被动触发&lt;/h4>
+&lt;ul>
+&lt;li>根据配置文件选项每隔一段时间触发一次 bgsave&lt;/li>
+&lt;/ul>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-fallback" data-lang="fallback">&lt;span class="line">&lt;span class="cl"># 300 秒之内，对数据库至少执行了 10 次操作
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">save 300 10
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;ul>
+&lt;li>
+&lt;p>从节点执行全量复制操作，主节点会自动执行 bgsave 文件发送给从节点&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>默认情况下，执行 shutdown 命令，没有开启 AOF 持久化功能会自动执行 bgsave&lt;/p>
+&lt;/li>
+&lt;/ul>
+&lt;h3 id="实现方式">实现方式&lt;/h3>
+&lt;p>执行 bgsave 命令的时候，会通过 fork() 创建子进程，此时子进程和父进程是共享同一片内存数据，bgsave 子进程会把该副本数据写入 RDB 文件。&lt;/p>
+&lt;p>在这个过程中，Redis 依然可以继续处理操作命令，如果父进程执行写操作，关键的技术就在于写时复制技术（Copy-On-Write, COW），被修改的数据会复制一份副本。（RDB 快照保存的是原本的内存数据）&lt;/p>
+&lt;p>&lt;img src="https://blog.letout.cn/p/redis/persistence/cow.png"
+width="969"
+height="707"
+srcset="https://blog.letout.cn/p/redis/persistence/cow_huef7edcdd3c38f136e9d4b420711ff934_42621_480x0_resize_box_3.png 480w, https://blog.letout.cn/p/redis/persistence/cow_huef7edcdd3c38f136e9d4b420711ff934_42621_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+class="gallery-image"
+data-flex-grow="137"
+data-flex-basis="328px"
+>&lt;/p>
+&lt;h2 id="-aof-日志">📃 AOF 日志&lt;/h2>
+&lt;p>Redis 在执行完一条命令后，会把该命令以追加的方式写入到文件中（会先写到缓冲区，选择合适的刷盘时间才会到磁盘中）。&lt;/p>
+&lt;p>当 Redis 重启时，会读取 AOF 日志的内容，然后逐一执行进行数据恢复。&lt;/p>
+&lt;h3 id="后写日志">后写日志&lt;/h3>
+&lt;p>Reids 是先执行写操作命令后，才将该命令记录到 AOF 日志里。&lt;/p>
+&lt;ul>
+&lt;li>优点
+&lt;ul>
+&lt;li>避免额外的检查命令的开销&lt;/li>
+&lt;li>写日志的操作不会阻塞当前命令的执行&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>缺点
+&lt;ul>
+&lt;li>数据可能会丢失。在没有写到内存中时，发生宕机，有丢失数据的风险&lt;/li>
+&lt;li>可能阻塞后续的操作。执行命令和写 AOF 日志都是在主线程中执行，当把日志写入到磁盘时，会阻塞后续的操作&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;h3 id="写回策略">写回策略&lt;/h3>
+&lt;p>Redis 执行完写操作命令后，会将命令追加到 server.aof_buf 缓冲区，什么时候写回到磁盘，由配置决定。&lt;/p>
+&lt;p>Redis.conf 可配置参数 &lt;code>appendfsync&lt;/code>。&lt;/p>
+&lt;ul>
+&lt;li>
+&lt;p>Always&lt;/p>
+&lt;ul>
+&lt;li>每次都写回&lt;/li>
+&lt;li>可靠性高，最大程度会保证数据不丢失&lt;/li>
+&lt;li>每个命令都要写回硬盘，性能开销大&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>
+&lt;p>Everysec&lt;/p>
+&lt;ul>
+&lt;li>每秒写回&lt;/li>
+&lt;li>宕机时会丢失 1s 内的数据&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>
+&lt;p>No&lt;/p>
+&lt;ul>
+&lt;li>由操作系统决定写回时机&lt;/li>
+&lt;li>宕机时可能会丢失很多数据&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;h3 id="aof-重写">AOF 重写&lt;/h3>
+&lt;p>AOF 日志是一个文件，随着执行的写操作命令越来越多，文件的大小会越来越大。 如果当 AOF 日志文件过大就会带来性能问题，比如重启 Redis 后，需要读 AOF 文件的内容以恢复数据，如果文件过大，整个恢复的过程就会很慢。&lt;/p>
+&lt;p>为了避免 AOF 文件越写越大，提供了 AOF 重写机制，当 AOF 文件的大小超过所设定的阈值后，Redis 就会启用 AOF 重写机制，来压缩 AOF 文件。&lt;/p>
+&lt;p>AOF 重写时，会读取数据库中所有的键值对，然后将每一个键值对用一条写命令记录到 新的 AOF 文件中，等到全部记录完之后，就将新的文件替换掉旧的问题。&lt;/p>
+&lt;h4 id="实现方式-1">实现方式&lt;/h4>
+&lt;p>通过 fork 后台子进程完成。使用 COW 技术，共享物理内存。&lt;/p>
+&lt;p>在重写期间，依旧可以执行命令，写命令会同时保存在（1）AOF 缓存区 和 （2）AOF 重写缓存区。&lt;/p>
+&lt;p>&lt;img src="https://blog.letout.cn/p/redis/persistence/aof.png"
+width="940"
+height="1014"
+srcset="https://blog.letout.cn/p/redis/persistence/aof_huf07c02c53918ac63e75c29803edc1708_212356_480x0_resize_box_3.png 480w, https://blog.letout.cn/p/redis/persistence/aof_huf07c02c53918ac63e75c29803edc1708_212356_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+class="gallery-image"
+data-flex-grow="92"
+data-flex-basis="222px"
+>&lt;/p>
+&lt;p>执行完成之后，将 AOF 重写缓存区的内容追加到文件中，并替换旧的文件。&lt;/p>
+&lt;h2 id="-混合持久化">🗃️ 混合持久化&lt;/h2>
+&lt;p>混合持久化工作在 AOF 日志重写过程。&lt;/p>
+&lt;p>当开启了混合持久化时，在 AOF 重写日志时，&lt;/p>
+&lt;ul>
+&lt;li>fork 出来的重写子进程会先将与主线程共享的内存数据以 RDB 方式写入到 AOF 文件，&lt;/li>
+&lt;li>主线程处理的操作命令会被记录在重写缓冲区里，重写缓冲区里的增量命令会以 AOF 方式写入到 AOF 文件，&lt;/li>
+&lt;li>写入完成后通知主进程将新的含有 RDB 格式和 AOF 格式的 AOF 文件替换旧的的 AOF 文件。&lt;/li>
+&lt;/ul>
+&lt;p>&lt;img src="https://blog.letout.cn/p/redis/persistence/mix.jpg"
+width="325"
+height="356"
+srcset="https://blog.letout.cn/p/redis/persistence/mix_huce3a57336b77bba5760b97f3c77136cb_10330_480x0_resize_q75_box.jpg 480w, https://blog.letout.cn/p/redis/persistence/mix_huce3a57336b77bba5760b97f3c77136cb_10330_1024x0_resize_q75_box.jpg 1024w"
+loading="lazy"
+class="gallery-image"
+data-flex-grow="91"
+data-flex-basis="219px"
+>&lt;/p>
+&lt;p>使用了混合持久化，AOF 文件的前半部分是 RDB 格式的全量数据，后半部分是 AOF 格式的增量数据。&lt;/p></description></item><item><title>Redis 数据结构</title><link>https://blog.letout.cn/p/redis/data-struct/</link><pubDate>Wed, 01 Jun 2022 01:52:45 +0800</pubDate><guid>https://blog.letout.cn/p/redis/data-struct/</guid><description>&lt;img src="https://blog.letout.cn/p/redis/data-struct/redis.jpg" alt="Featured image of post Redis 数据结构" />&lt;p>Redis 提供了丰富的数据类型，常见的有五种：&lt;/p>
+&lt;ul>
+&lt;li>String 字符串&lt;/li>
+&lt;li>List 列表&lt;/li>
+&lt;li>Hash 哈希&lt;/li>
+&lt;li>Set 集合&lt;/li>
+&lt;li>Zset 有序集合&lt;/li>
+&lt;/ul>
+&lt;p>随着 Redis 版本的更新，后面又支持了四种数据类型：&lt;/p>
+&lt;ul>
+&lt;li>BitMap (2.2)&lt;/li>
+&lt;li>HyperLogLog (2.8)&lt;/li>
+&lt;li>GEO (3.2)&lt;/li>
+&lt;li>Stream (5.0)&lt;/li>
+&lt;/ul>
+&lt;p>&lt;a class="link" href="https://try.redis.io/" target="_blank" rel="noopener"
+>在线 Redis 体验 → https://try.redis.io/&lt;/a>&lt;/p>
+&lt;h2 id="-string">🦮 String&lt;/h2>
+&lt;p>String 是最基本的 &lt;code>key-value&lt;/code> 结构。&lt;code>key&lt;/code> 是唯一标识（可以是字符串、数字），&lt;code>value&lt;/code> 是具体的值（最长可以容纳 521M）。&lt;/p>
+&lt;p>&lt;img src="https://blog.letout.cn/p/redis/data-struct/string.webp"
+width="1698"
+height="724"
+srcset="https://blog.letout.cn/p/redis/data-struct/string_hu6be3934e7d6496236c063d8dd99c676c_31658_480x0_resize_q75_h2_box_2.webp 480w, https://blog.letout.cn/p/redis/data-struct/string_hu6be3934e7d6496236c063d8dd99c676c_31658_1024x0_resize_q75_h2_box_2.webp 1024w"
+loading="lazy"
+class="gallery-image"
+data-flex-grow="234"
+data-flex-basis="562px"
+>&lt;/p>
+&lt;h3 id="-常用命令">🎗️ 常用命令&lt;/h3>
+&lt;ul>
+&lt;li>🧩 基本操作&lt;/li>
+&lt;/ul>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;span class="lnt">11
+&lt;/span>&lt;span class="lnt">12
+&lt;/span>&lt;span class="lnt">13
+&lt;/span>&lt;span class="lnt">14
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-sh" data-lang="sh">&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># 设置&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nb">set&lt;/span> name emery
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># 获取&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">get name
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># 判断 key 是否存在&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">exists name
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># 获取字符串的长度&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">strlen name
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># 删除&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">del name
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;ul>
+&lt;li>🧩 批量设置&lt;/li>
+&lt;/ul>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;span class="lnt">4
+&lt;/span>&lt;span class="lnt">5
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-sh" data-lang="sh">&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># 批量设置 k-v&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">mset key1 value1 key2 value2
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># 批量获取 k-v&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">mget key1 key2
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;ul>
+&lt;li>🧩 计数器（value 为整数）&lt;/li>
+&lt;/ul>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;span class="lnt">11
+&lt;/span>&lt;span class="lnt">12
+&lt;/span>&lt;span class="lnt">13
+&lt;/span>&lt;span class="lnt">14
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-sh" data-lang="sh">&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># 设置&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nb">set&lt;/span> num &lt;span class="m">0&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># +1&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">incr num
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># +10&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">incrby num &lt;span class="m">10&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># -1&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">decr num
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># -10&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">decrby num &lt;span class="m">10&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;ul>
+&lt;li>🧩 过期（默认为永不过期）&lt;/li>
+&lt;/ul>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;span class="lnt">11
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-sh" data-lang="sh">&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># 添加并设置过期时间 ex-&amp;gt;秒 px-&amp;gt;毫秒&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nb">set&lt;/span> name emery ex &lt;span class="m">60&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># 对已存在的 key 设置过期&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">expire name &lt;span class="m">60&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># 查看过期时间&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">ttl name
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># 移除过期时间（无过期时间 ttl 返回 -1）&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">persist name
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;ul>
+&lt;li>🧩 存在与不存在&lt;/li>
+&lt;/ul>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;span class="lnt">4
+&lt;/span>&lt;span class="lnt">5
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-sh" data-lang="sh">&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># key 不存在才成功&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nb">set&lt;/span> name emery nx
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># key 存在才成功&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nb">set&lt;/span> name emery xx
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;h3 id="-实现方式">🎡 实现方式&lt;/h3>
+&lt;p>String 的底层实现是自定义的 SDS（简单动态字符串）。&lt;/p>
+&lt;p>相比于 C 语言的字符串：&lt;/p>
+&lt;ul>
+&lt;li>SDS 不仅可以保存文本，还可以保存二进制数据（如图片、音频、视频等）。&lt;/li>
+&lt;/ul>
+&lt;p>SDS 的 API 都会一处理二进制的方式处理保存在 &lt;code>buf[]&lt;/code> 数组中的数据。&lt;/p>
+&lt;ul>
+&lt;li>SDS 获取字符串长度的时间复杂度是 O(1)。&lt;/li>
+&lt;/ul>
+&lt;p>C 语言的字符串不会记录自身长度，获取需要遍历，时间复杂度为 O(n)。SDS 结构中记录了长度。&lt;/p>
+&lt;ul>
+&lt;li>SDS 的 API 是安全的，拼接字符串不会导致缓冲区溢出。&lt;/li>
+&lt;/ul>
+&lt;p>SDS 在拼接前会检查空间是否满足要求，不够的话会自动扩容。&lt;/p>
+&lt;h3 id="-使用场景">🧵 使用场景&lt;/h3>
+&lt;ul>
+&lt;li>
+&lt;p>📐 缓存对象&lt;/p>
+&lt;ul>
+&lt;li>直接缓存 JSON。 &lt;code>SET user:1 '{&amp;quot;name&amp;quot;:&amp;quot;emery&amp;quot;, &amp;quot;age&amp;quot;:18}'&lt;/code>&lt;/li>
+&lt;li>分离为 user:id 作为 key，用 mset 存储。 &lt;code>MSET user:1:name emery user:1:age 18 user:2:name lin user:2:age 20&lt;/code>&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>
+&lt;p>📐 常规计数&lt;/p>
+&lt;/li>
+&lt;/ul>
+&lt;p>Redis 处理命令是单线程的，所以执行命令的过程是原子的。可以对访问访问次数、点赞、转发、库存数量进行统计。&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;span class="lnt">4
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-sh" data-lang="sh">&lt;span class="line">&lt;span class="cl">&lt;span class="nb">set&lt;/span> aritcle:readcount:1001 &lt;span class="m">0&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># 原子操作&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">incr aritcle:readcount:1001
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;ul>
+&lt;li>📐 &lt;a class="link" href="https://www.letout.cn/p/distributed-lock/redis/" target="_blank" rel="noopener"
+>分布式锁&lt;/a>&lt;/li>
+&lt;/ul>
+&lt;p>&lt;code>NX&lt;/code> 参数可以实现在 key 存在的时候，才插入数据，可以用来实现分布式锁。&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;span class="lnt">4
+&lt;/span>&lt;span class="lnt">5
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-sh" data-lang="sh">&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># lock_key 分布式锁的 key&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># unique_value 客户端生成的唯一标识&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># NX 在 lock_key 不存在时，才进行操作&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># PX 毫秒 10000ms -&amp;gt; 10s&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nb">set&lt;/span> lock_key unique_value NX PX &lt;span class="m">10000&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;ul>
+&lt;li>📐 共享 session 信息&lt;/li>
+&lt;/ul>
+&lt;p>Session 保存在服务端，通常用于保存用户的会话状态（登录）。&lt;/p>
+&lt;p>在分布式系统中，用户多次请求不一定都在同一台服务器中，我们可以借助 Redis 对 Session 信息进行统一的存储和管理，服务器都去同一个 Redis 获取相关的 Session 信息，这样就解决了分布式系统下 Session 存储的问题。&lt;/p>
+&lt;p>&lt;img src="https://blog.letout.cn/p/redis/data-struct/session.webp"
+width="473"
+height="412"
+srcset="https://blog.letout.cn/p/redis/data-struct/session_hua9fef675509e88be48c6a316850a3976_17592_480x0_resize_q75_h2_box_2.webp 480w, https://blog.letout.cn/p/redis/data-struct/session_hua9fef675509e88be48c6a316850a3976_17592_1024x0_resize_q75_h2_box_2.webp 1024w"
+loading="lazy"
+class="gallery-image"
+data-flex-grow="114"
+data-flex-basis="275px"
+>&lt;/p>
+&lt;h2 id="-list">🐅 List&lt;/h2>
+&lt;p>List 是简单的字符串列表，按照插入顺序排序，可以从头部或尾部向 List 中添加元素。最大长度为 &lt;code>2^32 - 1&lt;/code>。&lt;/p>
+&lt;h3 id="-常用命令-1">🎗️ 常用命令&lt;/h3>
+&lt;p>&lt;img src="https://blog.letout.cn/p/redis/data-struct/list.webp"
+width="1936"
+height="684"
+srcset="https://blog.letout.cn/p/redis/data-struct/list_huc892bbfdf91688e9656244dd3482dcd2_21712_480x0_resize_q75_h2_box_2.webp 480w, https://blog.letout.cn/p/redis/data-struct/list_huc892bbfdf91688e9656244dd3482dcd2_21712_1024x0_resize_q75_h2_box_2.webp 1024w"
+loading="lazy"
+class="gallery-image"
+data-flex-grow="283"
+data-flex-basis="679px"
+>&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;span class="lnt">11
+&lt;/span>&lt;span class="lnt">12
+&lt;/span>&lt;span class="lnt">13
+&lt;/span>&lt;span class="lnt">14
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-sh" data-lang="sh">&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># 插入&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">lpush key value
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">rpush key value
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># 移除&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">lpop key
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">rpop key
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># 返回指定区间内的元素（从 0 开始）&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">lrange key start end
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># 弹出一个元素，并阻塞 timeout 秒（当 timeout=0 就一直阻塞）&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">blpop key timeout
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">brpop key timeout
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;h3 id="-实现方式-1">🎡 实现方式&lt;/h3>
+&lt;p>Redis List 底层由（1）压缩列表 或 （2）双向链表 实现。&lt;/p>
+&lt;ul>
+&lt;li>
+&lt;p>压缩列表：&lt;/p>
+&lt;ul>
+&lt;li>如果列表的元素个数小于 512 个（默认值，可由 list-max-ziplist-entries 配置），&lt;/li>
+&lt;li>列表每个元素的值都小于 64 字节（默认值，可由 list-max-ziplist-value 配置），&lt;/li>
+&lt;li>Redis 会使用压缩列表作为 List 类型的底层数据结构。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>
+&lt;p>双向列表：不满足压缩列表的条件底层就会使用双向列表。&lt;/p>
+&lt;/li>
+&lt;/ul>
+&lt;blockquote>
+&lt;p>压缩列表&lt;/p>
+&lt;p>是 Reids 为了节约内存而开发的，由连续内存块组成的顺序型数据结构，有点类型于数组。&lt;/p>
+&lt;p>在表头有三个字段：
+（1）zlbytes：压缩列表占用的内存字节数；
+（2）zltail：列表尾的偏移量（尾部距离首部有多少个字节）；
+（3）zllen：压缩列表包含的节点数量；&lt;/p>
+&lt;p>在表尾有一个字段：
+（4）zlend：列表结束的标志（固定值 0xFF -&amp;gt; 255）；&lt;/p>
+&lt;p>查找定位第一个和最后一个元素的时间复杂度为：O(1)
+查找其他元素，只能逐个查找，O(n)，所以压缩列表不适合保存过多的元素。&lt;/p>
+&lt;p>在 Redis中，List、Hash、Zset 对象，在元素数量较少，元素值不大时，会使用压缩列表作为底层数据结构。&lt;/p>
+&lt;/blockquote>
+&lt;h3 id="-使用场景-1">🧵 使用场景&lt;/h3>
+&lt;ul>
+&lt;li>📐 消息队列&lt;/li>
+&lt;/ul>
+&lt;p>&lt;img src="https://blog.letout.cn/p/redis/data-struct/list-mq.webp"
+width="1642"
+height="374"
+srcset="https://blog.letout.cn/p/redis/data-struct/list-mq_hu84909a50c09ec905badb1edece873c1a_26948_480x0_resize_q75_h2_box_2.webp 480w, https://blog.letout.cn/p/redis/data-struct/list-mq_hu84909a50c09ec905badb1edece873c1a_26948_1024x0_resize_q75_h2_box_2.webp 1024w"
+loading="lazy"
+class="gallery-image"
+data-flex-grow="439"
+data-flex-basis="1053px"
+>&lt;/p>
+&lt;h2 id="-hash">🦛 Hash&lt;/h2>
+&lt;p>Hash 是一个键值对的集合 &lt;code>key-value&lt;/code>，特别适合存储对象。&lt;/p>
+&lt;p>&lt;img src="https://blog.letout.cn/p/redis/data-struct/hash.webp"
+width="1240"
+height="888"
+srcset="https://blog.letout.cn/p/redis/data-struct/hash_hu502a0c0c4b1bff1d1b5a1b9e04992920_41732_480x0_resize_q75_h2_box_2.webp 480w, https://blog.letout.cn/p/redis/data-struct/hash_hu502a0c0c4b1bff1d1b5a1b9e04992920_41732_1024x0_resize_q75_h2_box_2.webp 1024w"
+loading="lazy"
+class="gallery-image"
+data-flex-grow="139"
+data-flex-basis="335px"
+>&lt;/p>
+&lt;h3 id="-常用命令-2">🎗️ 常用命令&lt;/h3>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;span class="lnt">11
+&lt;/span>&lt;span class="lnt">12
+&lt;/span>&lt;span class="lnt">13
+&lt;/span>&lt;span class="lnt">14
+&lt;/span>&lt;span class="lnt">15
+&lt;/span>&lt;span class="lnt">16
+&lt;/span>&lt;span class="lnt">17
+&lt;/span>&lt;span class="lnt">18
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-sh" data-lang="sh">&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># 存储一个 key=people 的哈希表 &lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">hset people name &lt;span class="s2">&amp;#34;Emery&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># 获取哈希表中的值&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">hget people name
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># 存储多个键值对&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">hmset people name &lt;span class="s2">&amp;#34;Emery&amp;#34;&lt;/span> age &lt;span class="m">18&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># 批量获取键值对&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">hmget people name age
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># 删除一个哈希表&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">hdel people
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># 获得哈希表中key-value对的数量&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">hlen people
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># 获取哈希表中所有的 key&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">hgetall people
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;h3 id="-实现方式-2">🎡 实现方式&lt;/h3>
+&lt;p>Hash 类型的底层数据结构由 （1）压缩列表 或 （2）哈希表 实现。&lt;/p>
+&lt;ul>
+&lt;li>
+&lt;p>压缩列表&lt;/p>
+&lt;ul>
+&lt;li>元素小于 512 个&lt;/li>
+&lt;li>所有的值小于 64 字节&lt;/li>
+&lt;li>使用压缩列表&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>
+&lt;p>哈希表&lt;/p>
+&lt;ul>
+&lt;li>不满足以上条件使用 hash 表&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;h3 id="-使用场景-2">🧵 使用场景&lt;/h3>
+&lt;ul>
+&lt;li>📐 缓存对象&lt;/li>
+&lt;/ul>
+&lt;p>&lt;img src="https://blog.letout.cn/p/redis/data-struct/hash-object.webp"
+width="1192"
+height="840"
+srcset="https://blog.letout.cn/p/redis/data-struct/hash-object_huacd74159ecd6ae063f912243dd43d93b_31326_480x0_resize_q75_h2_box_2.webp 480w, https://blog.letout.cn/p/redis/data-struct/hash-object_huacd74159ecd6ae063f912243dd43d93b_31326_1024x0_resize_q75_h2_box_2.webp 1024w"
+loading="lazy"
+class="gallery-image"
+data-flex-grow="141"
+data-flex-basis="340px"
+>&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;span class="lnt">4
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-sh" data-lang="sh">&lt;span class="line">&lt;span class="cl">hmset uid:10001 name Tom age &lt;span class="m">15&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">hmset uid:10002 name Jerry age &lt;span class="m">13&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">hmget uid:10001
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>使用 String 类型缓存 JSON 也是缓存对象的一种凡是，如果对象中某些属性频繁变化，可以考虑使用 Hash。&lt;/p>
+&lt;ul>
+&lt;li>🛒 购物车
+&lt;ul>
+&lt;li>😃 用户 id -&amp;gt; key&lt;/li>
+&lt;li>🏪 商品 id -&amp;gt; field&lt;/li>
+&lt;li>🔢 商品数量 -&amp;gt; value&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;span class="lnt">11
+&lt;/span>&lt;span class="lnt">12
+&lt;/span>&lt;span class="lnt">13
+&lt;/span>&lt;span class="lnt">14
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-sh" data-lang="sh">&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># 添加商品 cart:{用户id} {商品id} 1&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">hset cart:10001 &lt;span class="m">22223&lt;/span> &lt;span class="m">1&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># 添加数量&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">hincrby cart:10001 &lt;span class="m">22223&lt;/span> &lt;span class="m">1&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># 获得商品数量&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">hget cart:10001 &lt;span class="m">22223&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># 删除商品&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">hdel cart:10001 &lt;span class="m">22223&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># 获取购物车所有商品&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">hgetall cart:10001
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>在实际业务中，Redis 中只存储了商品的 id 信息，在回显商品的具体信息时，再拿商品 id 查询一次数据库，获取完整的商品信息。&lt;/p>
+&lt;h2 id="-set">🐑 Set&lt;/h2>
+&lt;p>Set 是一个无序并唯一的集合（存储顺序不会按照插入的先后顺序进行存储）。&lt;/p>
+&lt;p>集合中最多可以存储 &lt;code>2^32 - 1&lt;/code> 个元素，除增删改查外，还支持多个集合的交集、并集和差集。&lt;/p>
+&lt;p>&lt;img src="https://blog.letout.cn/p/redis/data-struct/set.webp"
+width="1268"
+height="654"
+srcset="https://blog.letout.cn/p/redis/data-struct/set_hu834a88f1bdb5e75fecc5121b1cadeb66_29462_480x0_resize_q75_h2_box_2.webp 480w, https://blog.letout.cn/p/redis/data-struct/set_hu834a88f1bdb5e75fecc5121b1cadeb66_29462_1024x0_resize_q75_h2_box_2.webp 1024w"
+loading="lazy"
+class="gallery-image"
+data-flex-grow="193"
+data-flex-basis="465px"
+>&lt;/p>
+&lt;p>List 与 Set 的区别：&lt;/p>
+&lt;ul>
+&lt;li>List 可以存储重复元素，Set 不可以&lt;/li>
+&lt;li>List 按照元素添加的顺序存储元素，Set 存储元素是无序的&lt;/li>
+&lt;/ul>
+&lt;h3 id="-常用命令-3">🎗️ 常用命令&lt;/h3>
+&lt;ul>
+&lt;li>🧩 常用操作&lt;/li>
+&lt;/ul>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;span class="lnt">11
+&lt;/span>&lt;span class="lnt">12
+&lt;/span>&lt;span class="lnt">13
+&lt;/span>&lt;span class="lnt">14
+&lt;/span>&lt;span class="lnt">15
+&lt;/span>&lt;span class="lnt">16
+&lt;/span>&lt;span class="lnt">17
+&lt;/span>&lt;span class="lnt">18
+&lt;/span>&lt;span class="lnt">19
+&lt;/span>&lt;span class="lnt">20
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-sh" data-lang="sh">&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># 添加元素（已存在则忽略）&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">sadd key value1 &lt;span class="o">[&lt;/span>value2 ...&lt;span class="o">]&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># 删除元素&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">srem key value1 &lt;span class="o">[&lt;/span>value2 ...&lt;span class="o">]&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># 获取所有的元素&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">smembers key
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># 获取集合中的元素个数&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">scard key
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># 判断是否存在&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">sismember key value
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># 从集合中随机选取 count 个元素，不从中删除&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">srandmember key &lt;span class="o">[&lt;/span>count&lt;span class="o">]&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># 从集合中随机选取 count 个元素，并删除&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">spop key &lt;span class="o">[&lt;/span>count&lt;span class="o">]&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;ul>
+&lt;li>🧩 运算操作&lt;/li>
+&lt;/ul>
+&lt;p>⚠ Set 的交并差集运算的复杂度较高，在数据量较大时，如果直接执行计算，会导致 Redis 实例阻塞。
+在实际中，推荐获取数据后，在客户端去完成计算。&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;span class="lnt">11
+&lt;/span>&lt;span class="lnt">12
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-sh" data-lang="sh">&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># 交集&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">sinter key1 &lt;span class="o">[&lt;/span>key2 ...&lt;span class="o">]&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># 交集并存储&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">sinterstore destination key1 &lt;span class="o">[&lt;/span>key2 ...&lt;span class="o">]&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># 并集&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">sunion key1 &lt;span class="o">[&lt;/span>key2 ...&lt;span class="o">]&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">sunionstore destination key1 &lt;span class="o">[&lt;/span>key2 ...&lt;span class="o">]&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># 差集&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">sdiff key1 &lt;span class="o">[&lt;/span>key2 ...&lt;span class="o">]&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">sdiffstore destination key1 &lt;span class="o">[&lt;/span>key2 ...&lt;span class="o">]&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;h3 id="-实现方式-3">🎡 实现方式&lt;/h3>
+&lt;p>Set 类型的底层数据结构由 （1）哈希表 或 （2）整数集合实现。&lt;/p>
+&lt;ul>
+&lt;li>
+&lt;p>整数集合&lt;/p>
+&lt;ul>
+&lt;li>元素个数少于 512 个，底层采用整数集合作为数据结构&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>
+&lt;p>哈希表&lt;/p>
+&lt;ul>
+&lt;li>不满足以上条件，使用哈希表作为底层数据结构&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;h3 id="-使用场景-3">🧵 使用场景&lt;/h3>
+&lt;p>Set 主要是无续，不可重复，可求交并差的特性。&lt;/p>
+&lt;ul>
+&lt;li>📐 点赞&lt;/li>
+&lt;/ul>
+&lt;p>Set 类型可以保证用户只能点一个赞。&lt;/p>
+&lt;ul>
+&lt;li>key -&amp;gt; 文章 id&lt;/li>
+&lt;li>value -&amp;gt; 用户 id&lt;/li>
+&lt;/ul>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;span class="lnt">11
+&lt;/span>&lt;span class="lnt">12
+&lt;/span>&lt;span class="lnt">13
+&lt;/span>&lt;span class="lnt">14
+&lt;/span>&lt;span class="lnt">15
+&lt;/span>&lt;span class="lnt">16
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-sh" data-lang="sh">&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># 文章 1 被 id 为 1、2、3 的用户点赞&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">sadd article:1 uid:1
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">sadd article:1 uid:2
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">sadd article:1 uid:3
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># 取消点赞&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">srem article:1 uid:1
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># 获取 文章 1 的点赞用户 id&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">smembers article:1
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># 获取 文章 1 的点赞数量&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">scard article:1
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># 判断 用户 1 是否对文章 1 进行了点赞&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">sismember article:1 uid:1
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;ul>
+&lt;li>📐 共同关注&lt;/li>
+&lt;/ul>
+&lt;p>Set 支持交集运算，可以用来计算共同关注的好友，公众号等。&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;span class="lnt">11
+&lt;/span>&lt;span class="lnt">12
+&lt;/span>&lt;span class="lnt">13
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-sh" data-lang="sh">&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># id 为 1、2 的用户关注的公众号&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">sadd uid:1 &lt;span class="m">5&lt;/span> &lt;span class="m">6&lt;/span> &lt;span class="m">7&lt;/span> &lt;span class="m">8&lt;/span> &lt;span class="m">9&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">sadd uid:2 &lt;span class="m">7&lt;/span> &lt;span class="m">8&lt;/span> &lt;span class="m">9&lt;/span> &lt;span class="m">10&lt;/span> &lt;span class="m">11&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># 获取共同关注&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">sinter uid:1 uid:2
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># 给 uid:2 推荐 uid:1 关注的公众号&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">sdiff uid:1 uid:2
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># 验证某个公众号是否被同时关注&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">sismember uid:1 &lt;span class="m">5&lt;/span> &lt;span class="c1"># -&amp;gt; 1 关注&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">sismember uid:2 &lt;span class="m">5&lt;/span> &lt;span class="c1"># -&amp;gt; 0 未关注&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;ul>
+&lt;li>📐 抽奖活动&lt;/li>
+&lt;/ul>
+&lt;p>key-&amp;gt;活动名，value-&amp;gt;用户名，存储某活动中中奖的用户名 ，Set 类型因为有去重功能，可以保证同一个用户不会中奖两次。&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;span class="lnt">4
+&lt;/span>&lt;span class="lnt">5
+&lt;/span>&lt;span class="lnt">6
+&lt;/span>&lt;span class="lnt">7
+&lt;/span>&lt;span class="lnt">8
+&lt;/span>&lt;span class="lnt">9
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-sh" data-lang="sh">&lt;span class="line">&lt;span class="cl">sadd lucky Tom Jerry John Sean Marry Lindy Sary Mark
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># 抽取 1 个一等奖：&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">srangememeber lucky &lt;span class="m">1&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># 抽取 2 个二等奖：&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">srangememeber lucky &lt;span class="m">2&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># 不允许重复获奖&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">spop lucky &lt;span class="m">1&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;h2 id="-zset">🦥 Zset&lt;/h2>
+&lt;p>Zset（有序集合，从小到大） 相比于 Set 类型多了一个排序分值 socre。&lt;/p>
+&lt;p>对于有序集合 ZSet 来说，每个存储的元素由两个值组成，一个是有序集合的元素值，一个是排序值。&lt;/p>
+&lt;p>Zset 中元素不能重复，分数值可以重复，并且可以排序。&lt;/p>
+&lt;p>&lt;img src="https://blog.letout.cn/p/redis/data-struct/zset.webp"
+width="1226"
+height="616"
+srcset="https://blog.letout.cn/p/redis/data-struct/zset_hudfba1ba2f4862e7afd7997bee0d59f08_21828_480x0_resize_q75_h2_box_2.webp 480w, https://blog.letout.cn/p/redis/data-struct/zset_hudfba1ba2f4862e7afd7997bee0d59f08_21828_1024x0_resize_q75_h2_box_2.webp 1024w"
+loading="lazy"
+class="gallery-image"
+data-flex-grow="199"
+data-flex-basis="477px"
+>&lt;/p>
+&lt;h3 id="-常用命令-4">🎗️ 常用命令&lt;/h3>
+&lt;ul>
+&lt;li>🧩 常用操作&lt;/li>
+&lt;/ul>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;span class="lnt">11
+&lt;/span>&lt;span class="lnt">12
+&lt;/span>&lt;span class="lnt">13
+&lt;/span>&lt;span class="lnt">14
+&lt;/span>&lt;span class="lnt">15
+&lt;/span>&lt;span class="lnt">16
+&lt;/span>&lt;span class="lnt">17
+&lt;/span>&lt;span class="lnt">18
+&lt;/span>&lt;span class="lnt">19
+&lt;/span>&lt;span class="lnt">20
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-sh" data-lang="sh">&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># 向有序集合中加入带分值的元素&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">zadd key socre number &lt;span class="o">[[&lt;/span>score number&lt;span class="o">]&lt;/span> ...&lt;span class="o">]&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># 从有序集合中删除元素&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">zrem key number &lt;span class="o">[&lt;/span>number ...&lt;span class="o">]&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># 返回有序集合中元素的分数&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">zscore key number
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># 返回有序集合中元素的个数&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">zcard key
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># 为有序集合中 member 的分值加上 increment&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">zincrby key increment member
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># 正序获取有序集合中 start-&amp;gt;end 的下表元素&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">zrange key start end &lt;span class="o">[&lt;/span>withscores&lt;span class="o">]&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># 倒序获取有序集合中 start-&amp;gt;end 的下标元素&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">zrevrange key start end &lt;span class="o">[&lt;/span>withscores&lt;span class="o">]&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;h3 id="-实现方式-4">🎡 实现方式&lt;/h3>
+&lt;p>有序集合 Zset 底层使用 （1）压缩列表 或 （2）跳表 作为数据结构。&lt;/p>
+&lt;ul>
+&lt;li>
+&lt;p>压缩列表：有序集合中元素小于 128 个，并且每个元素的值小于 64 字节时，使用压缩列表作为底层数据结构。&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>跳表：不满足上述条件，使用调表。&lt;/p>
+&lt;/li>
+&lt;/ul>
+&lt;h3 id="-使用场景-4">🧵 使用场景&lt;/h3>
+&lt;ul>
+&lt;li>📐 排行榜&lt;/li>
+&lt;/ul>
+&lt;p>例如游戏积分排行榜，视频播放排名，电商系统中商品的销量排名。&lt;/p>
+&lt;p>key-&amp;gt;排行榜的类型；member-&amp;gt;需排行的内容（如文章id）；score-&amp;gt;点击数、点赞数等&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;span class="lnt">11
+&lt;/span>&lt;span class="lnt">12
+&lt;/span>&lt;span class="lnt">13
+&lt;/span>&lt;span class="lnt">14
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-sh" data-lang="sh">&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># emery 发的id=1的文章获得了 200 个赞&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">zadd user:emery:ranking &lt;span class="m">200&lt;/span> arcticle:1
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># 给文章 1 点赞&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">zincrby user:emery:ranking &lt;span class="m">1&lt;/span> article:1
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># 查看某篇文章的点赞数&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">zscore user:emery:ranking article:1
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># 查看点赞数最多的 3 篇文章&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">zrevrange user:emery:ranking &lt;span class="m">0&lt;/span> &lt;span class="m">2&lt;/span> withscores
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># 获取 100 赞到 200 赞的文章&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">zrangebysocre user:emery:ranking &lt;span class="m">100&lt;/span> &lt;span class="m">200&lt;/span> withscores
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;ul>
+&lt;li>📐 延时队列&lt;/li>
+&lt;/ul>
+&lt;p>利用 score 存储延时执行的时间，使用 zrangebysocre 查询所有符合条件的待处理任务，再进行处理。&lt;/p>
+&lt;!-- raw HTML omitted -->
+&lt;!-- raw HTML omitted -->
+&lt;h2 id="-参考">🔗 参考&lt;/h2>
+&lt;ul>
+&lt;li>&lt;a class="link" href="https://xiaolincoding.com/redis/data_struct/command.html" target="_blank" rel="noopener"
+>https://xiaolincoding.com/redis/data_struct/command.html&lt;/a>&lt;/li>
+&lt;/ul></description></item><item><title>使用 Redis 实现分布式锁</title><link>https://blog.letout.cn/p/distributed-lock/redis/</link><pubDate>Wed, 11 May 2022 12:14:45 +0800</pubDate><guid>https://blog.letout.cn/p/distributed-lock/redis/</guid><description>&lt;img src="https://blog.letout.cn/imgs/1.jpeg" alt="Featured image of post 使用 Redis 实现分布式锁" />&lt;h2 id="redis-nx-实现">Redis NX 实现&lt;/h2>
 &lt;p>利用 NX 的&lt;strong>原子性&lt;/strong>，多个线程并发时，只有一个线程可以设置成功，设置成功即获取了锁。&lt;/p>
 &lt;p>&lt;strong>如果没有获取锁，不会阻塞当前方法，直接跳过任务。&lt;/strong>&lt;/p>
 &lt;h3 id="获取锁">获取锁&lt;/h3>

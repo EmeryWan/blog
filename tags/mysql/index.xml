@@ -1,4 +1,89 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>MySQL on 一层</title><link>https://blog.letout.cn/tags/mysql/</link><description>Recent content in MySQL on 一层</description><generator>Hugo -- gohugo.io</generator><language>zh-cn</language><lastBuildDate>Sun, 31 Jul 2022 13:02:02 +0800</lastBuildDate><atom:link href="https://blog.letout.cn/tags/mysql/index.xml" rel="self" type="application/rss+xml"/><item><title>InnoDB 存储引擎</title><link>https://blog.letout.cn/p/mysql/innodb/</link><pubDate>Sun, 31 Jul 2022 13:02:02 +0800</pubDate><guid>https://blog.letout.cn/p/mysql/innodb/</guid><description>&lt;img src="https://blog.letout.cn/imgs/23.jpeg" alt="Featured image of post InnoDB 存储引擎" />&lt;h2 id="事务">事务&lt;/h2>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>MySQL on 一层</title><link>https://blog.letout.cn/tags/mysql/</link><description>Recent content in MySQL on 一层</description><generator>Hugo -- gohugo.io</generator><language>zh-cn</language><lastBuildDate>Mon, 09 Jan 2023 18:02:02 +0800</lastBuildDate><atom:link href="https://blog.letout.cn/tags/mysql/index.xml" rel="self" type="application/rss+xml"/><item><title>InnoDB 的缓冲池 Buffer Pool</title><link>https://blog.letout.cn/p/mysql/innodb/buffer-pool/</link><pubDate>Mon, 09 Jan 2023 18:02:02 +0800</pubDate><guid>https://blog.letout.cn/p/mysql/innodb/buffer-pool/</guid><description>&lt;img src="https://blog.letout.cn/p/mysql/innodb/buffer-pool/cache-page.webp" alt="Featured image of post InnoDB 的缓冲池 Buffer Pool" />&lt;h2 id="-buffer-pool">🧊 Buffer Pool&lt;/h2>
+&lt;p>MySQL 的数据是存在于磁盘中的，为了提升性能，InnoDB 设计了一个缓存池 Buffer Pool。本质上是 InnoDB 向操作系统申请的一段连续内存空间，可以通过 &lt;code>innodb_buffer_pool_size&lt;/code> 来进行调整大小。&lt;/p>
+&lt;ul>
+&lt;li>
+&lt;p>当读取数据时，如果数据已经在 Buffer Pool 中，会直接返回；如果不在，就会将数据&lt;!-- raw HTML omitted -->完整的页信息&lt;!-- raw HTML omitted -->全部加载到内存中。&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>当修改数据时，会修改 Buffer Pool 中的缓存页（-&amp;gt; 变成脏页），在合适的时机，由后台线程写入到磁盘。&lt;/p>
+&lt;/li>
+&lt;/ul>
+&lt;h3 id="-结构">🧩 结构&lt;/h3>
+&lt;p>Buffer Pool 中的连续内存，会被分割成一个个的页，和 InnoDB 的表空间一样，都是 &lt;code>16KB&lt;/code>，称为缓存页。&lt;/p>
+&lt;p>&lt;img src="https://blog.letout.cn/p/mysql/innodb/buffer-pool/cache-page.webp"
+width="962"
+height="234"
+srcset="https://blog.letout.cn/p/mysql/innodb/buffer-pool/cache-page_hucd01fda075157d782d9171d9e071f31a_7000_480x0_resize_q75_h2_box_2.webp 480w, https://blog.letout.cn/p/mysql/innodb/buffer-pool/cache-page_hucd01fda075157d782d9171d9e071f31a_7000_1024x0_resize_q75_h2_box_2.webp 1024w"
+loading="lazy"
+class="gallery-image"
+data-flex-grow="411"
+data-flex-basis="986px"
+>&lt;/p>
+&lt;p>每一个缓存页都会由一个控制块进行管理（位于 Buffer Pool 的最前面），每个 缓存页 与 控制块 一一对应。&lt;/p>
+&lt;h2 id="-管理-buffer-pool-的链表">👷‍♂️ 管理 Buffer Pool 的链表&lt;/h2>
+&lt;p>InnoDB 使用了许多链表管理 Buffer Pool。&lt;/p>
+&lt;h3 id="-free-链表----管理空闲页">⛓️ Free 链表 &amp;ndash; 管理空闲页&lt;/h3>
+&lt;p>💡 缓存页：内存中未被使用的页。&lt;/p>
+&lt;p>为了能快速找到空闲的缓存页，使用 Free 空闲链表管理空闲页。&lt;/p>
+&lt;p>&lt;img src="https://blog.letout.cn/p/mysql/innodb/buffer-pool/free-list.webp"
+width="1217"
+height="597"
+srcset="https://blog.letout.cn/p/mysql/innodb/buffer-pool/free-list_hu2194ab0c933cdf7ef8a007d7c52bad5f_28012_480x0_resize_q75_h2_box_2.webp 480w, https://blog.letout.cn/p/mysql/innodb/buffer-pool/free-list_hu2194ab0c933cdf7ef8a007d7c52bad5f_28012_1024x0_resize_q75_h2_box_2.webp 1024w"
+loading="lazy"
+class="gallery-image"
+data-flex-grow="203"
+data-flex-basis="489px"
+>&lt;/p>
+&lt;p>Free 链表的节点是一个个空闲页所对应的控制块。&lt;/p>
+&lt;p>当需要从磁盘中加载一个页到 Buffer Pool 时，就从 Free 链表中找到一个空闲也，加载数据并更改控制块的信息，并从 Free 链表中移除。&lt;/p>
+&lt;h3 id="-flush-链表----管理脏页">⛓️ Flush 链表 &amp;ndash; 管理脏页&lt;/h3>
+&lt;p>💡 脏页（dirty page）：修改了缓存页中的数据，与磁盘中的页数据不一致，称为脏页。&lt;/p>
+&lt;p>被修改过的缓存页的控制块，会被作为节点加入到 Flush 链表。&lt;/p>
+&lt;p>Flush 链表的结构和 Free 链表差不多。后台线程在一定的时机，通过遍历 Flush 链表，将脏页写入内存。&lt;/p>
+&lt;h3 id="-lru-链表----管理脏页--干净页">⛓️ LRU 链表 &amp;ndash; 管理脏页 + 干净页&lt;/h3>
+&lt;p>💡 干净页（clean page）：加载了数据未作修改的缓存页。
+💡 脏页（dirty page）：加载了数据做了修改的缓存页。&lt;/p>
+&lt;p>Buffer Pool 的大小是有限的，innoDB 通过 （修改过的）LRU 算法，将频繁访问的数据停留在 Buufer Pool 中。&lt;/p>
+&lt;p>简单的 LRU 算法在 MySQL 中可能会导致：&lt;/p>
+&lt;ul>
+&lt;li>
+&lt;p>预读失效（通过将 LRU 链表划分为 young 区和 old 区，预读数据加载到 old 区域）
+MySQL 会将被加载页的临近页一同加载到内存（为了减少磁盘 IO），如果这些页没有被访问，这个预读相当于浪费了。&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>Buffer Pool 污染（加载到 old 区域的数据，停留时间超过阈值时，才有资格放到 young 区域）
+一个 SQL 扫描大量的数据（如索引失效时，进行全表扫描来判断条件，如果空间有限）可能会把内存中的所有页全部替换出去，导致热点数据全部失效，后续缓存全部没有命中，导致大量磁盘 IO。&lt;/p>
+&lt;/li>
+&lt;/ul>
+&lt;p>&lt;img src="https://blog.letout.cn/p/mysql/innodb/buffer-pool/lru-list.webp"
+width="842"
+height="212"
+srcset="https://blog.letout.cn/p/mysql/innodb/buffer-pool/lru-list_hub80bcb1068b40da49c3759e6a067b1e3_15066_480x0_resize_q75_h2_box_2.webp 480w, https://blog.letout.cn/p/mysql/innodb/buffer-pool/lru-list_hub80bcb1068b40da49c3759e6a067b1e3_15066_1024x0_resize_q75_h2_box_2.webp 1024w"
+loading="lazy"
+class="gallery-image"
+data-flex-grow="397"
+data-flex-basis="953px"
+>&lt;/p>
+&lt;p>InnoDB 的 LRU 链表被分为两个区域：（1）young 区域；（2）old 区域。&lt;/p>
+&lt;p>预读的页只会加载到 old 区域的头部，当该页真正被访问的时候，会被移动到 young 区的头部。&lt;/p>
+&lt;p>移动到 young 区域的条件除了被访问外，还需要判断停留在 old 区域的时间。（防止全表扫描时，被访问一次后就不在使用）。当访问的缓存页已经在 old 区域停留时间超过阈值 &lt;code>innodb_old_blocks_time=1000ms&lt;/code> 时，才会被插入到 young 区头部。&lt;/p>
+&lt;h2 id="-脏页刷盘">💿 脏页刷盘&lt;/h2>
+&lt;p>当修改数据时，修改的是 Buffer Pool 中的缓存页，然后将其设置为脏页并加入 Flush 链表，由后台线程刷新数据到磁盘。&lt;/p>
+&lt;p>以下情况会主动刷新数据到磁盘：&lt;/p>
+&lt;ul>
+&lt;li>
+&lt;p>🎗️ 当 redo log 日志写满时（WAL）&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>🎗️ Buffer Pool 空间不足时&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>🎗️ MySQL 认为空闲时&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>🎗️ MySQL 主动正常关闭前&lt;/p>
+&lt;/li>
+&lt;/ul></description></item><item><title>InnoDB 存储引擎</title><link>https://blog.letout.cn/p/mysql/innodb/</link><pubDate>Sun, 31 Jul 2022 13:02:02 +0800</pubDate><guid>https://blog.letout.cn/p/mysql/innodb/</guid><description>&lt;img src="https://blog.letout.cn/imgs/23.jpeg" alt="Featured image of post InnoDB 存储引擎" />&lt;h2 id="事务">事务&lt;/h2>
 &lt;p>事务是一组逻辑上的数据库操作，这些操作要么全部成功，要么全部失败。&lt;/p>
 &lt;h3 id="特性">特性&lt;/h3>
 &lt;ul>
@@ -80,7 +165,7 @@ data-flex-basis="366px"
 &lt;p>简单的不加锁 &lt;code>select&lt;/code> 就是快照读。读取的是快照版本，通过 MVCC 进行并发控制。&lt;/p>
 &lt;h2 id="一致性">一致性&lt;/h2>
 &lt;p>数据库通过原子性、隔离性、持久性来保证一致性。&lt;/p>
-&lt;p>C(一致性)是目的，A(原子性)、I(隔离性)、D(持久性)是是为了保证一致性，数据库提供的手段。&lt;/p></description></item><item><title>MySQL 存储引擎</title><link>https://blog.letout.cn/p/mysql/engine/</link><pubDate>Fri, 29 Jul 2022 19:02:02 +0800</pubDate><guid>https://blog.letout.cn/p/mysql/engine/</guid><description>&lt;img src="https://blog.letout.cn/imgs/22.jpeg" alt="Featured image of post MySQL 存储引擎" />&lt;h2 id="mysql-体系结构">MySQL 体系结构&lt;/h2>
+&lt;p>C(一致性)是目的，A(原子性)、I(隔离性)、D(持久性)是是为了保证一致性，数据库提供的手段。&lt;/p></description></item><item><title>MySQL 查询语句是怎么执行的</title><link>https://blog.letout.cn/p/mysql/how-execute/</link><pubDate>Sun, 31 Jul 2022 13:02:02 +0800</pubDate><guid>https://blog.letout.cn/p/mysql/how-execute/</guid><description/></item><item><title>MySQL 存储引擎</title><link>https://blog.letout.cn/p/mysql/engine/</link><pubDate>Fri, 29 Jul 2022 19:02:02 +0800</pubDate><guid>https://blog.letout.cn/p/mysql/engine/</guid><description>&lt;img src="https://blog.letout.cn/imgs/22.jpeg" alt="Featured image of post MySQL 存储引擎" />&lt;h2 id="mysql-体系结构">MySQL 体系结构&lt;/h2>
 &lt;p>&lt;img src="https://blog.letout.cn/p/mysql/engine/1.png"
 width="1176"
 height="639"
@@ -182,7 +267,7 @@ data-flex-basis="575px"
 &lt;p>文件：&lt;/p>
 &lt;ul>
 &lt;li>.sdi 存储表结构信息&lt;/li>
-&lt;/ul></description></item><item><title>SQL 优化</title><link>https://blog.letout.cn/p/mysql/sql-optimize/</link><pubDate>Fri, 01 Jul 2022 18:02:02 +0800</pubDate><guid>https://blog.letout.cn/p/mysql/sql-optimize/</guid><description>&lt;img src="https://blog.letout.cn/imgs/20.jpeg" alt="Featured image of post SQL 优化" />&lt;h2 id="-insert-优化">🦮 insert 优化&lt;/h2>
+&lt;/ul></description></item><item><title>SQL 语句优化</title><link>https://blog.letout.cn/p/mysql/sql-optimize/</link><pubDate>Fri, 01 Jul 2022 18:02:02 +0800</pubDate><guid>https://blog.letout.cn/p/mysql/sql-optimize/</guid><description>&lt;img src="https://blog.letout.cn/imgs/20.jpeg" alt="Featured image of post SQL 语句优化" />&lt;h2 id="-insert-优化">🦮 insert 优化&lt;/h2>
 &lt;p>一次性往数据库中插入多条数据，可从以下三方面优化：&lt;/p>
 &lt;ul>
 &lt;li>批量插入数据&lt;/li>
