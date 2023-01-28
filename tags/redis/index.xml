@@ -145,7 +145,8 @@ data-flex-basis="392px"
 &lt;ul>
 &lt;li>中间件&lt;/li>
 &lt;/ul>
-&lt;p>通过中间价（如 Canal ）订阅数据库的 binlog，当更新完数据库时，通过中间件去删除缓存。&lt;/p>
+&lt;p>通过中间价（如 &lt;a class="link" href="https://github.com/alibaba/canal" target="_blank" rel="noopener"
+>Canal -&amp;gt; https://github.com/alibaba/canal&lt;/a> ）订阅数据库的 binlog，当更新完数据库时，通过中间件去删除缓存。&lt;/p>
 &lt;h2 id="-参考">📕 参考&lt;/h2>
 &lt;ul>
 &lt;li>&lt;a class="link" href="https://xiaolincoding.com/redis/" target="_blank" rel="noopener"

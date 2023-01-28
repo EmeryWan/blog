@@ -1,4 +1,174 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>设计模式 on 一层</title><link>https://emerywan.github.io/blog/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/</link><description>Recent content in 设计模式 on 一层</description><generator>Hugo -- gohugo.io</generator><lastBuildDate>Thu, 05 Jan 2023 20:02:02 +0800</lastBuildDate><atom:link href="https://emerywan.github.io/blog/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/index.xml" rel="self" type="application/rss+xml"/><item><title>代理模式</title><link>https://emerywan.github.io/blog/p/design-pattern/proxy/</link><pubDate>Thu, 05 Jan 2023 20:02:02 +0800</pubDate><guid>https://emerywan.github.io/blog/p/design-pattern/proxy/</guid><description>&lt;img src="https://emerywan.github.io/blog/p/design-pattern/proxy/proxy.png" alt="Featured image of post 代理模式" />&lt;h2 id="-介绍">📖 介绍&lt;/h2>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>设计模式 on 一层</title><link>https://emerywan.github.io/blog/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/</link><description>Recent content in 设计模式 on 一层</description><generator>Hugo -- gohugo.io</generator><lastBuildDate>Sat, 28 Jan 2023 23:02:02 +0800</lastBuildDate><atom:link href="https://emerywan.github.io/blog/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/index.xml" rel="self" type="application/rss+xml"/><item><title>策略模式</title><link>https://emerywan.github.io/blog/p/design-pattern/strategy/</link><pubDate>Sat, 28 Jan 2023 23:02:02 +0800</pubDate><guid>https://emerywan.github.io/blog/p/design-pattern/strategy/</guid><description>&lt;img src="https://emerywan.github.io/blog/p/design-pattern/strategy/1.png" alt="Featured image of post 策略模式" />&lt;h2 id="-介绍">📖 介绍&lt;/h2>
+&lt;p>策略模式是一种&lt;strong>行为型模式&lt;/strong>。&lt;/p>
+&lt;p>策略模式指定义一系列算法，每种算法都封装到不同的类中，在运行时，可以灵活地替换这些的算法（替换执行的策略）。&lt;/p>
+&lt;p>📖 常见的场景：&lt;/p>
+&lt;ul>
+&lt;li>
+&lt;p>🔖 旅行的出游方式，选择骑自行车、坐汽车，每一种旅行方式都是一个策略。&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>🔖 电商系统中，下单时，可以选择多种则扣策略（满减，优惠券，积分）；支付时，可以选择多种支付方式（支付宝，微信，云闪付）。&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>🔖 用策略模式消除大量的 &lt;code>if-else&lt;/code>。&lt;/p>
+&lt;/li>
+&lt;/ul>
+&lt;h2 id="-实现方式">🎈 实现方式&lt;/h2>
+&lt;ul>
+&lt;li>
+&lt;p>🎗️ 策略接口：使用接口定义具体策略的通用接口，声明了一个上下文用于执行策略的方法。&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>🎗️ 具体策略：实现策略接口，实现具体的相关算法。&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>🎗️ 客户端调用时，会将使用具体的策略对象传递给上下文，根据策略，执行不同的算法。&lt;/p>
+&lt;/li>
+&lt;/ul>
+&lt;p>💡 重点：实现同一个接口，通过传入的策略，执行不同的算法。&lt;/p>
+&lt;h2 id="-实现">🛠️ 实现&lt;/h2>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;span class="lnt">11
+&lt;/span>&lt;span class="lnt">12
+&lt;/span>&lt;span class="lnt">13
+&lt;/span>&lt;span class="lnt">14
+&lt;/span>&lt;span class="lnt">15
+&lt;/span>&lt;span class="lnt">16
+&lt;/span>&lt;span class="lnt">17
+&lt;/span>&lt;span class="lnt">18
+&lt;/span>&lt;span class="lnt">19
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-java" data-lang="java">&lt;span class="line">&lt;span class="cl">&lt;span class="c1">// 策略接口
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span>&lt;span class="kd">public&lt;/span> &lt;span class="kd">interface&lt;/span> &lt;span class="nc">DiscountStrategy&lt;/span> &lt;span class="o">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c1">// 获取优惠金额
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span> &lt;span class="n">BigDecimal&lt;/span> &lt;span class="nf">getDiscount&lt;/span>&lt;span class="o">(&lt;/span>&lt;span class="n">BigDecimal&lt;/span> &lt;span class="n">total&lt;/span>&lt;span class="o">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">// 打折优惠
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span>&lt;span class="kd">public&lt;/span> &lt;span class="kd">class&lt;/span> &lt;span class="nc">UserDiscountStrategy&lt;/span> &lt;span class="kd">implements&lt;/span> &lt;span class="n">DiscountStrategy&lt;/span> &lt;span class="o">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kd">public&lt;/span> &lt;span class="n">BigDecimal&lt;/span> &lt;span class="nf">getDiscount&lt;/span>&lt;span class="o">(&lt;/span>&lt;span class="n">BigDecimal&lt;/span> &lt;span class="n">total&lt;/span>&lt;span class="o">)&lt;/span> &lt;span class="o">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">return&lt;/span> &lt;span class="n">total&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">multiply&lt;/span>&lt;span class="o">(&lt;/span>&lt;span class="k">new&lt;/span> &lt;span class="n">BigDecimal&lt;/span>&lt;span class="o">(&lt;/span>&lt;span class="s">&amp;#34;0.1&amp;#34;&lt;/span>&lt;span class="o">)).&lt;/span>&lt;span class="na">setScale&lt;/span>&lt;span class="o">(&lt;/span>&lt;span class="mi">2&lt;/span>&lt;span class="o">,&lt;/span> &lt;span class="n">RoundingMode&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">DOWN&lt;/span>&lt;span class="o">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="o">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">// 满减优惠
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span>&lt;span class="kd">public&lt;/span> &lt;span class="kd">class&lt;/span> &lt;span class="nc">OverDiscountStrategy&lt;/span> &lt;span class="kd">implements&lt;/span> &lt;span class="n">DiscountStrategy&lt;/span> &lt;span class="o">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kd">public&lt;/span> &lt;span class="n">BigDecimal&lt;/span> &lt;span class="nf">getDiscount&lt;/span>&lt;span class="o">(&lt;/span>&lt;span class="n">BigDecimal&lt;/span> &lt;span class="n">total&lt;/span>&lt;span class="o">)&lt;/span> &lt;span class="o">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">return&lt;/span> &lt;span class="n">total&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">compareTo&lt;/span>&lt;span class="o">(&lt;/span>&lt;span class="n">BigDecimal&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">valueOf&lt;/span>&lt;span class="o">(&lt;/span>&lt;span class="mi">100&lt;/span>&lt;span class="o">))&lt;/span> &lt;span class="o">&amp;gt;=&lt;/span> &lt;span class="mi">0&lt;/span> &lt;span class="o">?&lt;/span> &lt;span class="n">BigDecimal&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">valueOf&lt;/span>&lt;span class="o">(&lt;/span>&lt;span class="mi">20&lt;/span>&lt;span class="o">)&lt;/span> &lt;span class="o">:&lt;/span> &lt;span class="n">BigDecimal&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">ZERO&lt;/span>&lt;span class="o">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="o">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">}&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;span class="lnt">11
+&lt;/span>&lt;span class="lnt">12
+&lt;/span>&lt;span class="lnt">13
+&lt;/span>&lt;span class="lnt">14
+&lt;/span>&lt;span class="lnt">15
+&lt;/span>&lt;span class="lnt">16
+&lt;/span>&lt;span class="lnt">17
+&lt;/span>&lt;span class="lnt">18
+&lt;/span>&lt;span class="lnt">19
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-java" data-lang="java">&lt;span class="line">&lt;span class="cl">&lt;span class="c1">// 用于执行策略的上下文
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span>&lt;span class="kd">public&lt;/span> &lt;span class="kd">class&lt;/span> &lt;span class="nc">DiscountContext&lt;/span> &lt;span class="o">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c1">// 持有某种策略
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span> &lt;span class="kd">private&lt;/span> &lt;span class="n">DiscountStrategy&lt;/span> &lt;span class="n">strategy&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="k">new&lt;/span> &lt;span class="k">new&lt;/span> &lt;span class="n">UserDiscountStrategy&lt;/span>&lt;span class="o">();&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kd">public&lt;/span> &lt;span class="nf">DiscountContext&lt;/span>&lt;span class="o">(&lt;/span>&lt;span class="n">DiscountStrategy&lt;/span> &lt;span class="n">strategy&lt;/span>&lt;span class="o">)&lt;/span> &lt;span class="o">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">this&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">strategy&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">strategy&lt;/span>&lt;span class="o">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="o">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c1">// 用于更改策略方式
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span> &lt;span class="kd">public&lt;/span> &lt;span class="kt">void&lt;/span> &lt;span class="nf">setStrategy&lt;/span>&lt;span class="o">(&lt;/span>&lt;span class="n">DiscountStrategy&lt;/span> &lt;span class="n">strategy&lt;/span>&lt;span class="o">)&lt;/span> &lt;span class="o">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">this&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">strategy&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">strategy&lt;/span>&lt;span class="o">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="o">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c1">// 计算付款金额
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span> &lt;span class="kd">public&lt;/span> &lt;span class="n">BigDecimal&lt;/span> &lt;span class="nf">calculatePrice&lt;/span>&lt;span class="o">(&lt;/span>&lt;span class="n">BigDecimal&lt;/span> &lt;span class="n">total&lt;/span>&lt;span class="o">)&lt;/span> &lt;span class="o">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">return&lt;/span> &lt;span class="n">total&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">subtract&lt;/span>&lt;span class="o">(&lt;/span>&lt;span class="k">this&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">strategy&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">getDiscount&lt;/span>&lt;span class="o">(&lt;/span>&lt;span class="n">total&lt;/span>&lt;span class="o">)).&lt;/span>&lt;span class="na">setScale&lt;/span>&lt;span class="o">(&lt;/span>&lt;span class="mi">2&lt;/span>&lt;span class="o">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="o">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">}&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;span class="lnt">4
+&lt;/span>&lt;span class="lnt">5
+&lt;/span>&lt;span class="lnt">6
+&lt;/span>&lt;span class="lnt">7
+&lt;/span>&lt;span class="lnt">8
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-java" data-lang="java">&lt;span class="line">&lt;span class="cl">&lt;span class="c1">// 使用策略模式
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span>&lt;span class="n">DiscountContext&lt;/span> &lt;span class="n">context&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="k">new&lt;/span> &lt;span class="n">DiscountContext&lt;/span>&lt;span class="o">();&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="n">BigDecimal&lt;/span> &lt;span class="n">price&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">BigDecimal&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">valueOf&lt;/span>&lt;span class="o">(&lt;/span>&lt;span class="mi">100&lt;/span>&lt;span class="o">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">// 使用满减策略
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span>&lt;span class="n">context&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">setStrategy&lt;/span>&lt;span class="o">(&lt;/span>&lt;span class="k">new&lt;/span> &lt;span class="n">OverDiscountStrategy&lt;/span>&lt;span class="o">());&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="n">BigDecimal&lt;/span> &lt;span class="n">pay&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">context&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">calculatePrice&lt;/span>&lt;span class="o">(&lt;/span>&lt;span class="n">price&lt;/span>&lt;span class="o">);&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;h2 id="-java-中的策略模式">☕ Java 中的策略模式&lt;/h2>
+&lt;p>以排序为例，在 &lt;code>java.util.Arrays&lt;/code> 工具类中，有如下的方法：&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-java" data-lang="java">&lt;span class="line">&lt;span class="cl">&lt;span class="kd">public&lt;/span> &lt;span class="kd">static&lt;/span> &lt;span class="o">&amp;lt;&lt;/span>&lt;span class="n">T&lt;/span>&lt;span class="o">&amp;gt;&lt;/span> &lt;span class="kt">void&lt;/span> &lt;span class="nf">sort&lt;/span>&lt;span class="o">(&lt;/span>&lt;span class="n">T&lt;/span>&lt;span class="o">[]&lt;/span> &lt;span class="n">a&lt;/span>&lt;span class="o">,&lt;/span> &lt;span class="n">Comparator&lt;/span>&lt;span class="o">&amp;lt;?&lt;/span> &lt;span class="kd">super&lt;/span> &lt;span class="n">T&lt;/span>&lt;span class="o">&amp;gt;&lt;/span> &lt;span class="n">c&lt;/span>&lt;span class="o">)&lt;/span> &lt;span class="o">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c1">// ...
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span>&lt;span class="o">}&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>普通的 &lt;code>sort()&lt;/code> 默认从小到大进行排序，如果我们想要从大到小进行排序，就是要更改排序的 &lt;strong>策略&lt;/strong>，我们可以实现这个 &lt;code>Comparator&lt;/code> 的 &lt;code>int compare(T o1, T o2)&lt;/code> 方法，并传入 &lt;code>sort()&lt;/code> 中&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-java" data-lang="java">&lt;span class="line">&lt;span class="cl">&lt;span class="n">Arrays&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">sort&lt;/span>&lt;span class="o">(&lt;/span>&lt;span class="n">nums&lt;/span>&lt;span class="o">,&lt;/span> &lt;span class="o">(&lt;/span>&lt;span class="n">o1&lt;/span>&lt;span class="o">,&lt;/span> &lt;span class="n">o2&lt;/span>&lt;span class="o">)&lt;/span> &lt;span class="o">-&amp;gt;&lt;/span> &lt;span class="n">o2&lt;/span> &lt;span class="o">-&lt;/span> &lt;span class="n">o1&lt;/span>&lt;span class="o">);&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;h2 id="-参考">🔗 参考&lt;/h2>
+&lt;ul>
+&lt;li>&lt;a class="link" href="https://refactoringguru.cn/design-patterns/strategy" target="_blank" rel="noopener"
+>https://refactoringguru.cn/design-patterns/strategy&lt;/a>&lt;/li>
+&lt;li>&lt;a class="link" href="https://www.liaoxuefeng.com/wiki/1252599548343744/1281319606681634" target="_blank" rel="noopener"
+>https://www.liaoxuefeng.com/wiki/1252599548343744/1281319606681634&lt;/a>&lt;/li>
+&lt;li>&lt;a class="link" href="https://www.runoob.com/design-pattern/strategy-pattern.html" target="_blank" rel="noopener"
+>https://www.runoob.com/design-pattern/strategy-pattern.html&lt;/a>&lt;/li>
+&lt;/ul></description></item><item><title>代理模式</title><link>https://emerywan.github.io/blog/p/design-pattern/proxy/</link><pubDate>Thu, 05 Jan 2023 20:02:02 +0800</pubDate><guid>https://emerywan.github.io/blog/p/design-pattern/proxy/</guid><description>&lt;img src="https://emerywan.github.io/blog/p/design-pattern/proxy/proxy.png" alt="Featured image of post 代理模式" />&lt;h2 id="-介绍">📖 介绍&lt;/h2>
 &lt;p>代理模式是一种&lt;strong>结构型模式&lt;/strong>。&lt;/p>
 &lt;p>代理模式是为了方便访问某些资源，使对象类更加易用。为其他对象提供一种代理控制这个对象的访问。&lt;/p>
 &lt;p>常见的场景：&lt;/p>
@@ -206,7 +376,7 @@ data-flex-basis="502px"
 >https://www.runoob.com/design-pattern/proxy-pattern.html&lt;/a>&lt;/li>
 &lt;li>&lt;a class="link" href="https://www.liaoxuefeng.com/wiki/1252599548343744/1264804593397984" target="_blank" rel="noopener"
 >https://www.liaoxuefeng.com/wiki/1252599548343744/1264804593397984&lt;/a>&lt;/li>
-&lt;/ul></description></item><item><title>线程安全的单例模式</title><link>https://emerywan.github.io/blog/p/thread/singleton/</link><pubDate>Mon, 11 Apr 2022 18:02:02 +0800</pubDate><guid>https://emerywan.github.io/blog/p/thread/singleton/</guid><description>&lt;img src="https://emerywan.github.io/blog/imgs/8.jpeg" alt="Featured image of post 线程安全的单例模式" />&lt;p>单例模式所要实现的目标：保持一个类有且只有一个实例。&lt;/p>
+&lt;/ul></description></item><item><title>线程安全的单例模式</title><link>https://emerywan.github.io/blog/p/desgin-pattern/singleton/</link><pubDate>Mon, 11 Apr 2022 18:02:02 +0800</pubDate><guid>https://emerywan.github.io/blog/p/desgin-pattern/singleton/</guid><description>&lt;img src="https://emerywan.github.io/blog/imgs/8.jpeg" alt="Featured image of post 线程安全的单例模式" />&lt;p>单例模式所要实现的目标：保持一个类有且只有一个实例。&lt;/p>
 &lt;p>出于性能的考虑，不少单例模式都会采用延迟加载的方式。根据是否延迟创建对象，可以分为：&lt;/p>
 &lt;ul>
 &lt;li>
