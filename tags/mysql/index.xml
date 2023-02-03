@@ -74,7 +74,7 @@ data-flex-basis="986px"
 &lt;h2 id="-管理-buffer-pool-的链表">👷‍♂️ 管理 Buffer Pool 的链表&lt;/h2>
 &lt;p>InnoDB 使用了许多链表管理 Buffer Pool。&lt;/p>
 &lt;h3 id="-free-链表----管理空闲页">⛓️ Free 链表 &amp;ndash; 管理空闲页&lt;/h3>
-&lt;p>💡 缓存页：内存中未被使用的页。&lt;/p>
+&lt;p>💡 空闲页：Buffer Pool 内存中未被使用的页。&lt;/p>
 &lt;p>为了能快速找到空闲的缓存页，使用 Free 空闲链表管理空闲页。&lt;/p>
 &lt;p>&lt;img src="https://blog.letout.cn/p/mysql/innodb/buffer-pool/free-list.webp"
 width="1217"
@@ -86,24 +86,26 @@ data-flex-grow="203"
 data-flex-basis="489px"
 >&lt;/p>
 &lt;p>Free 链表的节点是一个个空闲页所对应的控制块。&lt;/p>
-&lt;p>当需要从磁盘中加载一个页到 Buffer Pool 时，就从 Free 链表中找到一个空闲也，加载数据并更改控制块的信息，并从 Free 链表中移除。&lt;/p>
+&lt;p>当需要从磁盘中加载一个页到 Buffer Pool 时，就从 Free 链表中找到一个空闲页，加载数据并更改控制块的信息，并从 Free 链表中移除。&lt;/p>
 &lt;h3 id="-flush-链表----管理脏页">⛓️ Flush 链表 &amp;ndash; 管理脏页&lt;/h3>
 &lt;p>💡 脏页（dirty page）：修改了缓存页中的数据，与磁盘中的页数据不一致，称为脏页。&lt;/p>
 &lt;p>被修改过的缓存页的控制块，会被作为节点加入到 Flush 链表。&lt;/p>
-&lt;p>Flush 链表的结构和 Free 链表差不多。后台线程在一定的时机，通过遍历 Flush 链表，将脏页写入内存。&lt;/p>
-&lt;h3 id="-lru-链表----管理脏页--干净页">⛓️ LRU 链表 &amp;ndash; 管理脏页 + 干净页&lt;/h3>
-&lt;p>💡 干净页（clean page）：加载了数据未作修改的缓存页。
-💡 脏页（dirty page）：加载了数据做了修改的缓存页。&lt;/p>
-&lt;p>Buffer Pool 的大小是有限的，innoDB 通过 （修改过的）LRU 算法，将频繁访问的数据停留在 Buufer Pool 中。&lt;/p>
+&lt;p>Flush 链表的结构和 Free 链表差不多。后台线程会在一定的时机，通过遍历 Flush 链表，将脏页写入磁盘。&lt;/p>
+&lt;h3 id="-lru-链表----管理脏页干净页">⛓️ LRU 链表 &amp;ndash; 管理脏页&amp;amp;干净页&lt;/h3>
+&lt;p>💡 干净页（clean page）：加载了数据未作修改的缓存页。&lt;/p>
+&lt;p>💡 脏页（dirty page）：加载了数据做了修改的缓存页。&lt;/p>
+&lt;p>Buffer Pool 的大小是有限的，innoDB 通过 （修改过的）LRU 算法，将频繁访问的数据停留在 Bufer Pool 中。&lt;/p>
 &lt;p>简单的 LRU 算法在 MySQL 中可能会导致：&lt;/p>
 &lt;ul>
 &lt;li>
-&lt;p>预读失效（通过将 LRU 链表划分为 young 区和 old 区，预读数据加载到 old 区域）
-MySQL 会将被加载页的临近页一同加载到内存（为了减少磁盘 IO），如果这些页没有被访问，这个预读相当于浪费了。&lt;/p>
+&lt;p>预读失效&lt;/p>
+&lt;p>MySQL 会将被加载页的临近页一同加载到内存（为了减少磁盘 IO），如果这些页没有被访问，这个预读相当于浪费了。&lt;/p>
+&lt;p>（通过将 LRU 链表划分为 young 区和 old 区，预读数据加载到 old 区域）&lt;/p>
 &lt;/li>
 &lt;li>
-&lt;p>Buffer Pool 污染（加载到 old 区域的数据，停留时间超过阈值时，才有资格放到 young 区域）
-一个 SQL 扫描大量的数据（如索引失效时，进行全表扫描来判断条件，如果空间有限）可能会把内存中的所有页全部替换出去，导致热点数据全部失效，后续缓存全部没有命中，导致大量磁盘 IO。&lt;/p>
+&lt;p>Buffer Pool 污染&lt;/p>
+&lt;p>一个 SQL 扫描大量的数据（如索引失效时，进行全表扫描来判断条件，空间有限）可能会把内存中的所有页全部替换出去，导致热点数据全部失效，后续缓存全部没有命中，导致大量磁盘 IO。&lt;/p>
+&lt;p>（加载到 old 区域的数据，停留时间超过阈值时，才有资格放到 young 区域）&lt;/p>
 &lt;/li>
 &lt;/ul>
 &lt;p>&lt;img src="https://blog.letout.cn/p/mysql/innodb/buffer-pool/lru-list.webp"
@@ -116,23 +118,23 @@ data-flex-grow="397"
 data-flex-basis="953px"
 >&lt;/p>
 &lt;p>InnoDB 的 LRU 链表被分为两个区域：（1）热数据 young 区域；（2）冷数据 old 区域。&lt;/p>
-&lt;p>预读的页只会加载到 old 区域的头部，当该页真正被访问的时候，会被移动到 young 区的头部。&lt;/p>
+&lt;p>预读的页只会加载到 old 区域的头部，当该页真正被访问的时候，才会被移动到 young 区的头部。&lt;/p>
 &lt;p>移动到 young 区域的条件除了被访问外，还需要判断停留在 old 区域的时间。（防止全表扫描时，被访问一次后就不在使用）。当访问的缓存页已经在 old 区域停留时间超过阈值 &lt;code>innodb_old_blocks_time=1000ms&lt;/code> 时，才会被插入到 young 区头部。&lt;/p>
 &lt;h2 id="-脏页刷盘">💿 脏页刷盘&lt;/h2>
 &lt;p>当修改数据时，修改的是 Buffer Pool 中的缓存页，然后将其设置为脏页并加入 Flush 链表，由后台线程刷新数据到磁盘。&lt;/p>
 &lt;p>以下情况会主动刷新数据到磁盘：&lt;/p>
 &lt;ul>
 &lt;li>
-&lt;p>🎗️ 当 redo log 日志写满时（WAL）&lt;/p>
+&lt;p>🎗️ 当 redo log 日志写满时&lt;/p>
 &lt;/li>
 &lt;li>
-&lt;p>🎗️ Buffer Pool 空间不足时&lt;/p>
+&lt;p>🎗️ 当 Buffer Pool 空间不足时&lt;/p>
 &lt;/li>
 &lt;li>
-&lt;p>🎗️ MySQL 认为空闲时&lt;/p>
+&lt;p>🎗️ 当 MySQL 认为空闲时&lt;/p>
 &lt;/li>
 &lt;li>
-&lt;p>🎗️ MySQL 主动正常关闭前&lt;/p>
+&lt;p>🎗️ 当 MySQL 主动正常关闭前&lt;/p>
 &lt;/li>
 &lt;/ul></description></item><item><title>InnoDB 存储引擎</title><link>https://blog.letout.cn/p/mysql/innodb/</link><pubDate>Sun, 31 Jul 2022 13:02:02 +0800</pubDate><guid>https://blog.letout.cn/p/mysql/innodb/</guid><description>&lt;img src="https://blog.letout.cn/imgs/23.jpeg" alt="Featured image of post InnoDB 存储引擎" />&lt;h2 id="事务">事务&lt;/h2>
 &lt;p>事务是一组逻辑上的数据库操作，这些操作要么全部成功，要么全部失败。&lt;/p>
@@ -503,7 +505,7 @@ alt="primary_index_4"
 class="gallery-image"
 data-flex-grow="154"
 data-flex-basis="371px"
->&lt;/p></description></item><item><title>MySQL 日志</title><link>https://blog.letout.cn/p/mysql/log/</link><pubDate>Thu, 30 Jun 2022 18:02:02 +0800</pubDate><guid>https://blog.letout.cn/p/mysql/log/</guid><description>&lt;img src="https://blog.letout.cn/imgs/19.jpeg" alt="Featured image of post MySQL 日志" />&lt;h2 id="日志">日志&lt;/h2>
+>&lt;/p></description></item><item><title>MySQL 日志</title><link>https://blog.letout.cn/p/mysql/log/</link><pubDate>Thu, 30 Jun 2022 18:02:02 +0800</pubDate><guid>https://blog.letout.cn/p/mysql/log/</guid><description>&lt;img src="https://blog.letout.cn/imgs/19.jpeg" alt="Featured image of post MySQL 日志" />&lt;h2 id="-server-层日志">🖥️ Server 层日志&lt;/h2>
 &lt;h3 id="错误日志">错误日志&lt;/h3>
 &lt;p>错误日志是 MySQL 中最重要的日志之一，它记录了当 mysqld 启动和停止时，以及服务器在运行过程中发生任何严重错误时的相关信息。&lt;/p>
 &lt;p>当数据库出现任何故障导致无法正常使用时，建议首先查看此日志。&lt;/p>
@@ -526,8 +528,8 @@ class="gallery-image"
 data-flex-grow="312"
 data-flex-basis="750px"
 >&lt;/p>
-&lt;h3 id="二进制日志归档日志">二进制日志（归档日志）&lt;/h3>
-&lt;p>二进制日志（BINLOG）记录了所有的 DDL（数据定义语言）语句和 DML（数据操纵语言）语句。&lt;/p>
+&lt;h3 id="-bin-log">🔢 bin log&lt;/h3>
+&lt;p>二进制日志（bin log）是记录了所有的数据库表结构变更（DDL）和表数据修改（DML）的日志。&lt;/p>
 &lt;p>作用：&lt;/p>
 &lt;ul>
 &lt;li>灾难时数据恢复&lt;/li>
@@ -735,7 +737,100 @@ data-flex-basis="848px"
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">log_queries_not_using_indexes= 1
 &lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
 &lt;/div>
-&lt;/div></description></item><item><title>MySQL 索引</title><link>https://blog.letout.cn/p/mysql/index/</link><pubDate>Thu, 30 Jun 2022 14:02:02 +0800</pubDate><guid>https://blog.letout.cn/p/mysql/index/</guid><description>&lt;img src="https://blog.letout.cn/imgs/15.jpeg" alt="Featured image of post MySQL 索引" />&lt;h2 id="索引">索引&lt;/h2>
+&lt;/div>&lt;h2 id="-inoodb-日志">💽 InooDB 日志&lt;/h2>
+&lt;h3 id="-redo-log-重做日志">🔃 redo log 重做日志&lt;/h3>
+&lt;p>redo log 是物理日志，记录了数据页做了什么修改。例如：对 XXX 表空间中的 YYY 数据页 ZZZ 偏移量的地方做了 AAA 更新。&lt;/p>
+&lt;p>redo log 记录了事务完成后的数据状态，当事务提交时，只要将 redo log 持久化到硬盘即可（顺序磁盘 IO），不需要将 Buffer Pool 中的脏页持久化到硬盘（随机磁盘 IO）。&lt;/p>
+&lt;p>保证了事务 ACID 特性中的持久性，当数据库发生故障时，可以利用 redo log 恢复数据。&lt;/p>
+&lt;h4 id="刷盘">刷盘&lt;/h4>
+&lt;p>产生的 redo log 不是直接写入磁盘的，会先写到 redo log buffer 中，后续持久化化到磁盘。&lt;/p>
+&lt;p>redo log buffer 默认大小为 &lt;code>innodb_log_Buffer_size = 16MB&lt;/code>，增加它的大小，可以让 MySQL 处理大事务不必写入到磁盘，进而提升 IO 性能。&lt;/p>
+&lt;p>redo log buffer 刷盘时机：&lt;/p>
+&lt;ul>
+&lt;li>
+&lt;p>InnoDB 的后台线程，每隔 1s，会将 redo log buffer 持久化到内存&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>redo log buffer 中记录的写入量大于 redo log buffer 内存空间的一半时&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>MySQL 正常关闭时&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>每次事务提交时，将 redo log buffer 中 redo log 持久化到磁盘 &lt;code>innodb_flush_log_at_trx_commit&lt;/code> 控制&lt;/p>
+&lt;/li>
+&lt;/ul>
+&lt;h4 id="redo-log-循环写">redo log 循环写&lt;/h4>
+&lt;p>redo log 是为了防止 Buffer Pool 中的脏页丢失而设计的。当随着服务的运行，Buffer Pool 中的脏页刷新到了磁盘中，redo log 中的记录就没有用了，可以擦除旧记录。&lt;/p>
+&lt;p>&lt;img src="https://blog.letout.cn/p/mysql/log/redo-log.webp"
+width="1362"
+height="906"
+srcset="https://blog.letout.cn/p/mysql/log/redo-log_hud436e5fcec2bf61353c634ad67370294_39572_480x0_resize_q75_h2_box_2.webp 480w, https://blog.letout.cn/p/mysql/log/redo-log_hud436e5fcec2bf61353c634ad67370294_39572_1024x0_resize_q75_h2_box_2.webp 1024w"
+loading="lazy"
+class="gallery-image"
+data-flex-grow="150"
+data-flex-basis="360px"
+>&lt;/p>
+&lt;h4 id="两阶段提交">两阶段提交&lt;/h4>
+&lt;p>redo log 和 bin log 持久化到硬盘，是两个独立的操作，可能会出现半成功的状态，导致两份日志之间的逻辑不一致。&lt;/p>
+&lt;p>为了避免这个问题，保证两个日志的一致性，使用了”两阶段提交“来解决。把单个事务的提交拆分成了两个阶段：&lt;/p>
+&lt;ul>
+&lt;li>
+&lt;p>Prepare 准备阶段&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>Commit 提交阶段&lt;/p>
+&lt;/li>
+&lt;/ul>
+&lt;p>将 redo log 写入拆成了两个步骤：prepare 和 commit，中间再穿插写入 bin log。
+当 bin log 成功持久化到磁盘，就被认为事务已经执行成功（即使 redo log 是 prepare 也没有关系）。&lt;/p>
+&lt;p>&lt;img src="https://blog.letout.cn/p/mysql/log/prepare-commit.png"
+width="887"
+height="859"
+srcset="https://blog.letout.cn/p/mysql/log/prepare-commit_hu761b281e24776a109dc5986da4421988_282489_480x0_resize_box_3.png 480w, https://blog.letout.cn/p/mysql/log/prepare-commit_hu761b281e24776a109dc5986da4421988_282489_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+class="gallery-image"
+data-flex-grow="103"
+data-flex-basis="247px"
+>&lt;/p>
+&lt;h3 id="-undo-log-回滚日志">🔙 undo log 回滚日志&lt;/h3>
+&lt;p>undo log 是一种用于撤销回滚的日志。InnoDB 层更新记录前，会将操作前的数据记录的 undo 中，当事务回滚时，利用 undo log 进行回滚。&lt;/p>
+&lt;p>undo log 主要用于：&lt;/p>
+&lt;ul>
+&lt;li>
+&lt;p>🎗️ 实现事务回滚，保障事务 ACID 中的原子性&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>🎗️ undo log 与 ReadView 配合，实现 MVCC&lt;/p>
+&lt;/li>
+&lt;/ul>
+&lt;p>在 InnoDB 存储引擎对记录进行修改时，会把回滚需要的信息全部记录到 undo 中，如果发生回滚，就会读取 undo log，然后执行与之相反的操作。&lt;/p>
+&lt;ul>
+&lt;li>插入数据，记录这条数据的主键，回滚时根据主键把该条记录删除&lt;/li>
+&lt;li>删除数据，记录这条数据的所有内容，回滚时将这些内容组成的记录插入表中&lt;/li>
+&lt;li>更新数据，记录这条数据更新列的旧值，回滚时将数据更新为旧值&lt;/li>
+&lt;/ul>
+&lt;h4 id="版本链">版本链&lt;/h4>
+&lt;p>一条记录的每次更新操作产生的 undo log 格式都会有：&lt;/p>
+&lt;ul>
+&lt;li>
+&lt;p>trx_id 事务 id&lt;/p>
+&lt;p>记录了该记录是由哪一个事务修改的。&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>roll_pointer 回滚指针&lt;/p>
+&lt;p>回滚指针可以将 undo log 串连成一个链表，这个链表称为版本链。&lt;/p>
+&lt;/li>
+&lt;/ul>
+&lt;p>&lt;img src="https://blog.letout.cn/p/mysql/log/version-link.webp"
+width="1140"
+height="591"
+srcset="https://blog.letout.cn/p/mysql/log/version-link_hu0442ac56d20b027197f4981105a2d120_16904_480x0_resize_q75_h2_box_2.webp 480w, https://blog.letout.cn/p/mysql/log/version-link_hu0442ac56d20b027197f4981105a2d120_16904_1024x0_resize_q75_h2_box_2.webp 1024w"
+loading="lazy"
+class="gallery-image"
+data-flex-grow="192"
+data-flex-basis="462px"
+>&lt;/p></description></item><item><title>MySQL 索引</title><link>https://blog.letout.cn/p/mysql/index/</link><pubDate>Thu, 30 Jun 2022 14:02:02 +0800</pubDate><guid>https://blog.letout.cn/p/mysql/index/</guid><description>&lt;img src="https://blog.letout.cn/imgs/15.jpeg" alt="Featured image of post MySQL 索引" />&lt;h2 id="索引">索引&lt;/h2>
 &lt;p>索引（index）是帮助 MySQL 高效获取数据的数据结构，提高查询效率。&lt;/p>
 &lt;ul>
 &lt;li>
@@ -1210,6 +1305,7 @@ data-flex-basis="1821px"
 &lt;/div>
 &lt;/div>&lt;p>如果无法避免，且有较高需求，可以考虑使用搜索引擎。&lt;/p>
 &lt;h3 id="-or-查询的部分字段没有索引">⚠️ or 查询的部分字段没有索引&lt;/h3>
+&lt;p>or 的含义是两个条件满足一个即可，所以只有一个条件列有索引是无用的。只要条件列中有一个不是索引列，就会进行全表扫描。&lt;/p>
 &lt;div class="highlight">&lt;div class="chroma">
 &lt;table class="lntable">&lt;tr>&lt;td class="lntd">
 &lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
@@ -1237,7 +1333,7 @@ data-flex-grow="652"
 data-flex-basis="1565px"
 >&lt;/p>
 &lt;p>解决：根据实际业务，添加相应的索引。&lt;/p>
-&lt;p>添加索引后，索引合并，避免了全表扫描。&lt;/p>
+&lt;p>添加索引后，避免了全表扫描。&lt;/p>
 &lt;p>&lt;img src="https://blog.letout.cn/p/mysql/index/index4.png"
 width="1129"
 height="139"

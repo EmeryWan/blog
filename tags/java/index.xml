@@ -744,9 +744,19 @@ data-flex-basis="390px"
 &lt;ul>
 &lt;li>🔗 &lt;a class="link" href="https://www.cnblogs.com/crazymakercircle/p/14491965.html#autoid-h2-2-0-0" target="_blank" rel="noopener"
 >https://www.cnblogs.com/crazymakercircle/p/14491965.html#autoid-h2-2-0-0&lt;/a>&lt;/li>
-&lt;/ul></description></item><item><title>JVM 内存区域</title><link>https://blog.letout.cn/p/java/jvm/memory-area/</link><pubDate>Mon, 08 Aug 2022 15:02:02 +0800</pubDate><guid>https://blog.letout.cn/p/java/jvm/memory-area/</guid><description>&lt;img src="https://blog.letout.cn/imgs/27.jpeg" alt="Featured image of post JVM 内存区域" />&lt;ul>
+&lt;/ul></description></item><item><title>JVM 内存区域</title><link>https://blog.letout.cn/p/java/jvm/memory-area/</link><pubDate>Mon, 08 Aug 2022 15:02:02 +0800</pubDate><guid>https://blog.letout.cn/p/java/jvm/memory-area/</guid><description>&lt;img src="https://blog.letout.cn/p/java/jvm/memory-area/area.png" alt="Featured image of post JVM 内存区域" />&lt;p>&lt;img src="https://blog.letout.cn/p/java/jvm/memory-area/area.png"
+width="1240"
+height="583"
+srcset="https://blog.letout.cn/p/java/jvm/memory-area/area_hu7d264de33d14753fd73bf351bb5dce63_911596_480x0_resize_box_3.png 480w, https://blog.letout.cn/p/java/jvm/memory-area/area_hu7d264de33d14753fd73bf351bb5dce63_911596_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+alt="area"
+class="gallery-image"
+data-flex-grow="212"
+data-flex-basis="510px"
+>&lt;/p>
+&lt;ul>
 &lt;li>
-&lt;p>线程隔离&lt;/p>
+&lt;p>🧐 线程隔离&lt;/p>
 &lt;ul>
 &lt;li>程序计数器&lt;/li>
 &lt;li>虚拟机栈&lt;/li>
@@ -754,56 +764,47 @@ data-flex-basis="390px"
 &lt;/ul>
 &lt;/li>
 &lt;li>
-&lt;p>线程共享&lt;/p>
+&lt;p>☺️ 线程共享&lt;/p>
 &lt;ul>
 &lt;li>方法区&lt;/li>
 &lt;li>堆&lt;/li>
 &lt;/ul>
 &lt;/li>
 &lt;/ul>
-&lt;p>&lt;img src="https://blog.letout.cn/p/java/jvm/memory-area/area.png"
-width="875"
-height="550"
-srcset="https://blog.letout.cn/p/java/jvm/memory-area/area_hu77c5f146be5bf31c819ffe7a07cc3500_205102_480x0_resize_box_3.png 480w, https://blog.letout.cn/p/java/jvm/memory-area/area_hu77c5f146be5bf31c819ffe7a07cc3500_205102_1024x0_resize_box_3.png 1024w"
-loading="lazy"
-alt="area"
-class="gallery-image"
-data-flex-grow="159"
-data-flex-basis="381px"
->&lt;/p>
 &lt;h2 id="-程序计数器">🎋 程序计数器&lt;/h2>
 &lt;p>当前线程执行字节码的行号指示器。&lt;/p>
 &lt;p>唯一一个不会出现 &lt;code>OutOfMemoryError&lt;/code> 的内存区域，随线程的创建而创建，随线程的结束而死亡。&lt;/p>
 &lt;h2 id="-虚拟机栈">🎋 虚拟机栈&lt;/h2>
 &lt;p>每一次方法的调用都会有一个对应的栈帧被压入栈中，每一个方法调用结束后，都会有一个栈帧被弹出。&lt;/p>
 &lt;p>&lt;img src="https://blog.letout.cn/p/java/jvm/memory-area/stack.png"
-width="302"
-height="551"
-srcset="https://blog.letout.cn/p/java/jvm/memory-area/stack_hu387fe9e9614436cd46058aff5c85565a_61440_480x0_resize_box_3.png 480w, https://blog.letout.cn/p/java/jvm/memory-area/stack_hu387fe9e9614436cd46058aff5c85565a_61440_1024x0_resize_box_3.png 1024w"
+width="1223"
+height="184"
+srcset="https://blog.letout.cn/p/java/jvm/memory-area/stack_huec65210ac7484aa7992e4fd9421e2f2b_282459_480x0_resize_box_3.png 480w, https://blog.letout.cn/p/java/jvm/memory-area/stack_huec65210ac7484aa7992e4fd9421e2f2b_282459_1024x0_resize_box_3.png 1024w"
 loading="lazy"
 alt="stack"
 class="gallery-image"
-data-flex-grow="54"
-data-flex-basis="131px"
+data-flex-grow="664"
+data-flex-basis="1595px"
 >&lt;/p>
 &lt;p>当线程请求栈的深度超过当前 Java 虚拟机最大深度时，会抛出 &lt;code>StackOverFlowError&lt;/code>。&lt;/p>
 &lt;ul>
-&lt;li>局部变量表&lt;/li>
-&lt;/ul>
+&lt;li>
+&lt;p>局部变量表&lt;/p>
 &lt;p>存放编译期可知的各种数据类型，对象引用地址。&lt;/p>
-&lt;ul>
-&lt;li>操作数栈&lt;/li>
-&lt;/ul>
+&lt;/li>
+&lt;li>
+&lt;p>操作数栈&lt;/p>
 &lt;p>方法执行过程中的计算结果，计算过程中产生的临时变量。&lt;/p>
-&lt;ul>
-&lt;li>动态链接&lt;/li>
-&lt;/ul>
+&lt;/li>
+&lt;li>
+&lt;p>动态链接&lt;/p>
 &lt;p>服务于一个方法需要调用其他方法的场景。&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>方法返回地址&lt;/p>
 &lt;ul>
-&lt;li>方法返回地址
-&lt;ul>
-&lt;li>正常返回&lt;/li>
-&lt;li>异常返回&lt;/li>
+&lt;li>正常返回（return）&lt;/li>
+&lt;li>异常返回（Exception）&lt;/li>
 &lt;/ul>
 &lt;/li>
 &lt;/ul>
@@ -812,52 +813,54 @@ data-flex-basis="131px"
 &lt;h2 id="-方法区">🎍 方法区&lt;/h2>
 &lt;p>方法区是 Java 虚拟机的抽象概念。实现方式在不同虚拟机中可能不同。&lt;/p>
 &lt;ul>
-&lt;li>
-&lt;p>JDK 8 之前，HotSpot 虚拟机使用永久带实现方法区&lt;/p>
-&lt;/li>
-&lt;li>
-&lt;p>JDK 8 及之后，使用元空间（直接内存）实现&lt;/p>
-&lt;/li>
+&lt;li>JDK 8 之前，HotSpot 虚拟机使用永久带实现方法区&lt;/li>
 &lt;/ul>
 &lt;p>&lt;img src="https://blog.letout.cn/p/java/jvm/memory-area/function-before.png"
-width="382"
-height="436"
-srcset="https://blog.letout.cn/p/java/jvm/memory-area/function-before_hu5ba856b5fa83b596c5da12a50d62fcb1_75748_480x0_resize_box_3.png 480w, https://blog.letout.cn/p/java/jvm/memory-area/function-before_hu5ba856b5fa83b596c5da12a50d62fcb1_75748_1024x0_resize_box_3.png 1024w"
+width="547"
+height="530"
+srcset="https://blog.letout.cn/p/java/jvm/memory-area/function-before_hucbc502332944514d4c1f41f29f96205d_115360_480x0_resize_box_3.png 480w, https://blog.letout.cn/p/java/jvm/memory-area/function-before_hucbc502332944514d4c1f41f29f96205d_115360_1024x0_resize_box_3.png 1024w"
 loading="lazy"
 alt="before"
 class="gallery-image"
-data-flex-grow="87"
-data-flex-basis="210px"
+data-flex-grow="103"
+data-flex-basis="247px"
 >&lt;/p>
+&lt;ul>
+&lt;li>
+&lt;p>JDK 8 及之后，使用元空间（直接内存）实现&lt;/p>
+&lt;p>字符串常量池与静态变量转移到了堆中。&lt;/p>
+&lt;/li>
+&lt;/ul>
 &lt;p>&lt;img src="https://blog.letout.cn/p/java/jvm/memory-area/function-after.png"
-width="484"
-height="433"
-srcset="https://blog.letout.cn/p/java/jvm/memory-area/function-after_hue0bd0747c11f9c8962eb0e412965ba30_84329_480x0_resize_box_3.png 480w, https://blog.letout.cn/p/java/jvm/memory-area/function-after_hue0bd0747c11f9c8962eb0e412965ba30_84329_1024x0_resize_box_3.png 1024w"
+width="695"
+height="524"
+srcset="https://blog.letout.cn/p/java/jvm/memory-area/function-after_hub8d0c407ad61dc44d980ad0db8ff77fa_132600_480x0_resize_box_3.png 480w, https://blog.letout.cn/p/java/jvm/memory-area/function-after_hub8d0c407ad61dc44d980ad0db8ff77fa_132600_1024x0_resize_box_3.png 1024w"
 loading="lazy"
 alt="after"
 class="gallery-image"
-data-flex-grow="111"
-data-flex-basis="268px"
+data-flex-grow="132"
+data-flex-basis="318px"
 >&lt;/p>
 &lt;ul>
-&lt;li>类的元信息&lt;/li>
-&lt;/ul>
+&lt;li>
+&lt;p>类的元信息&lt;/p>
 &lt;p>类名，访问修饰符，字段描述，方法描述等&lt;/p>
-&lt;ul>
-&lt;li>运行时常量池&lt;/li>
-&lt;/ul>
+&lt;/li>
+&lt;li>
+&lt;p>运行时常量池&lt;/p>
 &lt;p>存放编译后的各种字面量，符号引用，常量（final）池表等&lt;/p>
-&lt;ul>
-&lt;li>字符串常量池&lt;/li>
-&lt;/ul>
+&lt;/li>
+&lt;li>
+&lt;p>字符串常量池&lt;/p>
 &lt;p>JVM 为了减少字符串对内存的消耗，并提升性能，专门开辟的区域&lt;/p>
-&lt;ul>
-&lt;li>静态变量&lt;/li>
-&lt;/ul>
+&lt;/li>
+&lt;li>
+&lt;p>静态变量&lt;/p>
 &lt;p>类变量（static）&lt;/p>
+&lt;/li>
+&lt;/ul>
 &lt;h2 id="-堆">🎍 堆&lt;/h2>
-&lt;p>用来存放和管理对象实例，几乎所有的对象实例都在这里分配。
-（存在逃逸分析，栈上分配，有些对象不会在堆中）&lt;/p>
+&lt;p>用来存放和管理对象实例，几乎所有的对象实例都在这里分配。（存在逃逸分析，栈上分配，有些对象不一定在堆中）&lt;/p>
 &lt;p>Java 堆是垃圾回收的主要区域，因此也被称为 GC 堆。&lt;/p>
 &lt;ul>
 &lt;li>
@@ -865,14 +868,19 @@ data-flex-basis="268px"
 &lt;ul>
 &lt;li>新生代（Eden、Survivor0、Survivor1）&lt;/li>
 &lt;li>老年代&lt;/li>
-&lt;li>永久代&lt;/li>
+&lt;li>永久代（方法区也由永久代实现）&lt;/li>
 &lt;/ul>
 &lt;/li>
 &lt;li>
 &lt;p>JDK 8 之后，永久代被取消&lt;/p>
 &lt;/li>
 &lt;/ul>
-&lt;p>大部分情况下，对象首先会在 Eden 区进行分配；在一次垃圾回收后，如果对象还存活，会进入 S0 或 S1；当对象年龄增长到一定程度（默认 15），或累积的年龄超过了 Survivor 的一半，会晋升到老年代。&lt;/p></description></item><item><title>JVM 垃圾回收</title><link>https://blog.letout.cn/p/java/jvm/garbage-collection/</link><pubDate>Sun, 07 Aug 2022 12:02:02 +0800</pubDate><guid>https://blog.letout.cn/p/java/jvm/garbage-collection/</guid><description>&lt;img src="https://blog.letout.cn/imgs/26.jpeg" alt="Featured image of post JVM 垃圾回收" />&lt;h2 id="-对象存活判定">🌴 对象存活判定&lt;/h2>
+&lt;p>大部分情况下，对象首先会在新生代的 Eden 区进行分配；在一次垃圾回收后，如果对象还存活，会进入 S0 或 S1；当对象年龄增长到一定程度（默认 15），或累积的年龄超过了 Survivor 的一半，会晋升到老年代。&lt;/p>
+&lt;h2 id="参考">参考&lt;/h2>
+&lt;ul>
+&lt;li>图来源于网络。&lt;/li>
+&lt;li>深入理解 Java 虚拟机&lt;/li>
+&lt;/ul></description></item><item><title>JVM 垃圾回收</title><link>https://blog.letout.cn/p/java/jvm/garbage-collection/</link><pubDate>Sun, 07 Aug 2022 12:02:02 +0800</pubDate><guid>https://blog.letout.cn/p/java/jvm/garbage-collection/</guid><description>&lt;img src="https://blog.letout.cn/imgs/26.jpeg" alt="Featured image of post JVM 垃圾回收" />&lt;h2 id="-对象存活判定">🌴 对象存活判定&lt;/h2>
 &lt;h3 id="-引用计数法">🪨 引用计数法&lt;/h3>
 &lt;p>给每个对象添加一个引用计数器：&lt;/p>
 &lt;ul>
