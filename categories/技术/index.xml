@@ -220,7 +220,7 @@ data-flex-basis="320px"
 &lt;p>存储引擎负责数据的存储和提取。&lt;/p>
 &lt;p>MySQL 存储引擎的架构模式是插件式的，支持 InnoDB、MyISAM、Memory 等多个存储引擎。&lt;/p>
 &lt;p>可以根据需要选择合适的存储引擎。&lt;/p></description></item><item><title>Redis 缓存问题</title><link>https://emerywan.github.io/blog/p/redis/cache-problem/</link><pubDate>Wed, 11 Jan 2023 01:52:45 +0800</pubDate><guid>https://emerywan.github.io/blog/p/redis/cache-problem/</guid><description>&lt;img src="https://emerywan.github.io/blog/p/redis/cache-problem/cache.png" alt="Featured image of post Redis 缓存问题" />&lt;h2 id="-缓存雪崩">🌨️ 缓存雪崩&lt;/h2>
-&lt;p>为了保证缓存中数据与数据库中的数据的一致性，通常 Redis 中数据会设置过期时间。如果（1）缓存层在同一时间有大量数据失效，或者 （2）Redis 由于某些情况宕机，导致所有请求全部到达数据库，导致请求全部访问数据库，造成数据库宕机。&lt;/p>
+&lt;p>为了保证缓存中数据与数据库中的数据的一致性，通常 Redis 中数据会设置过期时间。如果（1）缓存层在同一时间有大量数据失效，或者 （2）Redis 由于某些情况宕机，导致所有请求全部访问数据库，造成数据库宕机。&lt;/p>
 &lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/redis/cache-problem/1.png"
 width="1080"
 height="660"
@@ -240,23 +240,23 @@ data-flex-basis="392px"
 >互斥锁&lt;/a>，只有一个请求会到数据库上，并会重建缓存&lt;/p>
 &lt;/li>
 &lt;li>
-&lt;p>🧩 双 Key 策略，有不同的 Key，但有不同的 Value&lt;/p>
+&lt;p>🧩 双 Key 策略，有不同的 Key，但有相同的 Value&lt;/p>
 &lt;ul>
 &lt;li>主 Key：设置过期时间&lt;/li>
 &lt;li>备 Key：不设置过期时间&lt;/li>
-&lt;li>当 主 Key 过期后，大量请求到达时直接返回 备 Key，并通知后台线程，重建主 Key&lt;/li>
+&lt;li>当主 Key 过期后，大量请求到达时直接返回备 Key，并通知后台线程，重建主 Key&lt;/li>
 &lt;/ul>
 &lt;/li>
 &lt;li>
-&lt;p>🧩 后台更新缓存，设置 Key 永不过期（内存不够时可能被内存淘汰策略淘汰）&lt;/p>
+&lt;p>🧩 设置 Key 永不过期，后台更新缓存（内存不够时可能被内存淘汰策略淘汰）&lt;/p>
 &lt;ul>
-&lt;li>后台线程定时更新 或 定时检测是否失效进行重建&lt;/li>
+&lt;li>后台线程定时更新 或 定时检测是否失效，进行重建&lt;/li>
 &lt;li>业务上发现被淘汰，通过消息队列通知重建&lt;/li>
 &lt;/ul>
 &lt;/li>
 &lt;/ul>
 &lt;h2 id="-缓存击穿">⚡ 缓存击穿&lt;/h2>
-&lt;p>缓存中某个热点 Key 数据过期了，此时有大量请求访问该数据，导致这些请求全部都落到了数据库上，导致数据库宕机。&lt;/p>
+&lt;p>缓存中某个热点 Key 数据过期了，此时有大量请求访问该数据，导这些请求全部都落到了数据库上，导致数据库宕机。&lt;/p>
 &lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/redis/cache-problem/2.png"
 width="707"
 height="836"
@@ -291,13 +291,13 @@ data-flex-basis="165px"
 &lt;p>💡 解决办法：&lt;/p>
 &lt;ul>
 &lt;li>
-&lt;p>🧩 缓冲默认值，后续的请求直接返回该默认值&lt;/p>
+&lt;p>🧩 缓存默认值，后续的请求直接返回该默认值&lt;/p>
 &lt;/li>
 &lt;li>
 &lt;p>🧩 布隆过滤器，当布隆过滤器返回 0 时，说明数据一定不在数据库中&lt;/p>
 &lt;/li>
 &lt;li>
-&lt;p>🧩 非法请求限制，在业务层判断查询条件，如果时恶意请求直接拒绝&lt;/p>
+&lt;p>🧩 非法请求限制，在业务层判断查询条件，如果是恶意请求直接拒绝&lt;/p>
 &lt;/li>
 &lt;/ul>
 &lt;h2 id="-热点-key-重建">🔥 热点 Key 重建&lt;/h2>
@@ -366,7 +366,7 @@ data-flex-basis="392px"
 &lt;ul>
 &lt;li>中间件&lt;/li>
 &lt;/ul>
-&lt;p>通过中间价（如 &lt;a class="link" href="https://github.com/alibaba/canal" target="_blank" rel="noopener"
+&lt;p>通过中间件（如 &lt;a class="link" href="https://github.com/alibaba/canal" target="_blank" rel="noopener"
 >Canal -&amp;gt; https://github.com/alibaba/canal&lt;/a> ）订阅数据库的 binlog，当更新完数据库时，通过中间件去删除缓存。&lt;/p>
 &lt;h2 id="-参考">📕 参考&lt;/h2>
 &lt;ul>
@@ -398,7 +398,7 @@ data-flex-basis="986px"
 &lt;h2 id="-管理-buffer-pool-的链表">👷‍♂️ 管理 Buffer Pool 的链表&lt;/h2>
 &lt;p>InnoDB 使用了许多链表管理 Buffer Pool。&lt;/p>
 &lt;h3 id="-free-链表----管理空闲页">⛓️ Free 链表 &amp;ndash; 管理空闲页&lt;/h3>
-&lt;p>💡 缓存页：内存中未被使用的页。&lt;/p>
+&lt;p>💡 空闲页：Buffer Pool 内存中未被使用的页。&lt;/p>
 &lt;p>为了能快速找到空闲的缓存页，使用 Free 空闲链表管理空闲页。&lt;/p>
 &lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/mysql/innodb/buffer-pool/free-list.webp"
 width="1217"
@@ -410,24 +410,26 @@ data-flex-grow="203"
 data-flex-basis="489px"
 >&lt;/p>
 &lt;p>Free 链表的节点是一个个空闲页所对应的控制块。&lt;/p>
-&lt;p>当需要从磁盘中加载一个页到 Buffer Pool 时，就从 Free 链表中找到一个空闲也，加载数据并更改控制块的信息，并从 Free 链表中移除。&lt;/p>
+&lt;p>当需要从磁盘中加载一个页到 Buffer Pool 时，就从 Free 链表中找到一个空闲页，加载数据并更改控制块的信息，并从 Free 链表中移除。&lt;/p>
 &lt;h3 id="-flush-链表----管理脏页">⛓️ Flush 链表 &amp;ndash; 管理脏页&lt;/h3>
 &lt;p>💡 脏页（dirty page）：修改了缓存页中的数据，与磁盘中的页数据不一致，称为脏页。&lt;/p>
 &lt;p>被修改过的缓存页的控制块，会被作为节点加入到 Flush 链表。&lt;/p>
-&lt;p>Flush 链表的结构和 Free 链表差不多。后台线程在一定的时机，通过遍历 Flush 链表，将脏页写入内存。&lt;/p>
-&lt;h3 id="-lru-链表----管理脏页--干净页">⛓️ LRU 链表 &amp;ndash; 管理脏页 + 干净页&lt;/h3>
-&lt;p>💡 干净页（clean page）：加载了数据未作修改的缓存页。
-💡 脏页（dirty page）：加载了数据做了修改的缓存页。&lt;/p>
-&lt;p>Buffer Pool 的大小是有限的，innoDB 通过 （修改过的）LRU 算法，将频繁访问的数据停留在 Buufer Pool 中。&lt;/p>
+&lt;p>Flush 链表的结构和 Free 链表差不多。后台线程会在一定的时机，通过遍历 Flush 链表，将脏页写入磁盘。&lt;/p>
+&lt;h3 id="-lru-链表----管理脏页干净页">⛓️ LRU 链表 &amp;ndash; 管理脏页&amp;amp;干净页&lt;/h3>
+&lt;p>💡 干净页（clean page）：加载了数据未作修改的缓存页。&lt;/p>
+&lt;p>💡 脏页（dirty page）：加载了数据做了修改的缓存页。&lt;/p>
+&lt;p>Buffer Pool 的大小是有限的，innoDB 通过 （修改过的）LRU 算法，将频繁访问的数据停留在 Bufer Pool 中。&lt;/p>
 &lt;p>简单的 LRU 算法在 MySQL 中可能会导致：&lt;/p>
 &lt;ul>
 &lt;li>
-&lt;p>预读失效（通过将 LRU 链表划分为 young 区和 old 区，预读数据加载到 old 区域）
-MySQL 会将被加载页的临近页一同加载到内存（为了减少磁盘 IO），如果这些页没有被访问，这个预读相当于浪费了。&lt;/p>
+&lt;p>预读失效&lt;/p>
+&lt;p>MySQL 会将被加载页的临近页一同加载到内存（为了减少磁盘 IO），如果这些页没有被访问，这个预读相当于浪费了。&lt;/p>
+&lt;p>（通过将 LRU 链表划分为 young 区和 old 区，预读数据加载到 old 区域）&lt;/p>
 &lt;/li>
 &lt;li>
-&lt;p>Buffer Pool 污染（加载到 old 区域的数据，停留时间超过阈值时，才有资格放到 young 区域）
-一个 SQL 扫描大量的数据（如索引失效时，进行全表扫描来判断条件，如果空间有限）可能会把内存中的所有页全部替换出去，导致热点数据全部失效，后续缓存全部没有命中，导致大量磁盘 IO。&lt;/p>
+&lt;p>Buffer Pool 污染&lt;/p>
+&lt;p>一个 SQL 扫描大量的数据（如索引失效时，进行全表扫描来判断条件，空间有限）可能会把内存中的所有页全部替换出去，导致热点数据全部失效，后续缓存全部没有命中，导致大量磁盘 IO。&lt;/p>
+&lt;p>（加载到 old 区域的数据，停留时间超过阈值时，才有资格放到 young 区域）&lt;/p>
 &lt;/li>
 &lt;/ul>
 &lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/mysql/innodb/buffer-pool/lru-list.webp"
@@ -440,23 +442,23 @@ data-flex-grow="397"
 data-flex-basis="953px"
 >&lt;/p>
 &lt;p>InnoDB 的 LRU 链表被分为两个区域：（1）热数据 young 区域；（2）冷数据 old 区域。&lt;/p>
-&lt;p>预读的页只会加载到 old 区域的头部，当该页真正被访问的时候，会被移动到 young 区的头部。&lt;/p>
+&lt;p>预读的页只会加载到 old 区域的头部，当该页真正被访问的时候，才会被移动到 young 区的头部。&lt;/p>
 &lt;p>移动到 young 区域的条件除了被访问外，还需要判断停留在 old 区域的时间。（防止全表扫描时，被访问一次后就不在使用）。当访问的缓存页已经在 old 区域停留时间超过阈值 &lt;code>innodb_old_blocks_time=1000ms&lt;/code> 时，才会被插入到 young 区头部。&lt;/p>
 &lt;h2 id="-脏页刷盘">💿 脏页刷盘&lt;/h2>
 &lt;p>当修改数据时，修改的是 Buffer Pool 中的缓存页，然后将其设置为脏页并加入 Flush 链表，由后台线程刷新数据到磁盘。&lt;/p>
 &lt;p>以下情况会主动刷新数据到磁盘：&lt;/p>
 &lt;ul>
 &lt;li>
-&lt;p>🎗️ 当 redo log 日志写满时（WAL）&lt;/p>
+&lt;p>🎗️ 当 redo log 日志写满时&lt;/p>
 &lt;/li>
 &lt;li>
-&lt;p>🎗️ Buffer Pool 空间不足时&lt;/p>
+&lt;p>🎗️ 当 Buffer Pool 空间不足时&lt;/p>
 &lt;/li>
 &lt;li>
-&lt;p>🎗️ MySQL 认为空闲时&lt;/p>
+&lt;p>🎗️ 当 MySQL 认为空闲时&lt;/p>
 &lt;/li>
 &lt;li>
-&lt;p>🎗️ MySQL 主动正常关闭前&lt;/p>
+&lt;p>🎗️ 当 MySQL 主动正常关闭前&lt;/p>
 &lt;/li>
 &lt;/ul></description></item><item><title>Redis 持久化</title><link>https://emerywan.github.io/blog/p/redis/persistence/</link><pubDate>Fri, 06 Jan 2023 22:07:45 +0800</pubDate><guid>https://emerywan.github.io/blog/p/redis/persistence/</guid><description>&lt;img src="https://emerywan.github.io/blog/p/redis/persistence/cow.png" alt="Featured image of post Redis 持久化" />&lt;h2 id="保障数据不丢失">保障数据不丢失&lt;/h2>
 &lt;p>Redis 的读写操作都是在内存中，为了保证内存中的数据不会丢失，Redis 实现了数据持久化的机制，把数据存储到磁盘，这样在 Redis 重启就能够从磁盘中恢复原有的数据。&lt;/p>
@@ -557,7 +559,7 @@ data-flex-basis="328px"
 &lt;h3 id="aof-重写">AOF 重写&lt;/h3>
 &lt;p>AOF 日志是一个文件，随着执行的写操作命令越来越多，文件的大小会越来越大。 如果当 AOF 日志文件过大就会带来性能问题，比如重启 Redis 后，需要读 AOF 文件的内容以恢复数据，如果文件过大，整个恢复的过程就会很慢。&lt;/p>
 &lt;p>为了避免 AOF 文件越写越大，提供了 AOF 重写机制，当 AOF 文件的大小超过所设定的阈值后，Redis 就会启用 AOF 重写机制，来压缩 AOF 文件。&lt;/p>
-&lt;p>AOF 重写时，会读取数据库中所有的键值对，然后将每一个键值对用一条写命令记录到 新的 AOF 文件中，等到全部记录完之后，就将新的文件替换掉旧的问题。&lt;/p>
+&lt;p>AOF 重写时，会读取数据库中所有的键值对，然后将每一个键值对用一条写命令记录到 新的 AOF 文件中，等到全部记录完之后，就将新的文件替换掉旧的文件。&lt;/p>
 &lt;h4 id="实现方式-1">实现方式&lt;/h4>
 &lt;p>通过 fork 后台子进程完成。使用 COW 技术，共享物理内存。&lt;/p>
 &lt;p>在重写期间，依旧可以执行命令，写命令会同时保存在（1）AOF 缓存区 和 （2）AOF 重写缓存区。&lt;/p>
@@ -1164,9 +1166,19 @@ data-flex-basis="390px"
 &lt;ul>
 &lt;li>🔗 &lt;a class="link" href="https://www.cnblogs.com/crazymakercircle/p/14491965.html#autoid-h2-2-0-0" target="_blank" rel="noopener"
 >https://www.cnblogs.com/crazymakercircle/p/14491965.html#autoid-h2-2-0-0&lt;/a>&lt;/li>
-&lt;/ul></description></item><item><title>JVM 内存区域</title><link>https://emerywan.github.io/blog/p/java/jvm/memory-area/</link><pubDate>Mon, 08 Aug 2022 15:02:02 +0800</pubDate><guid>https://emerywan.github.io/blog/p/java/jvm/memory-area/</guid><description>&lt;img src="https://emerywan.github.io/blog/imgs/27.jpeg" alt="Featured image of post JVM 内存区域" />&lt;ul>
+&lt;/ul></description></item><item><title>JVM 内存区域</title><link>https://emerywan.github.io/blog/p/java/jvm/memory-area/</link><pubDate>Mon, 08 Aug 2022 15:02:02 +0800</pubDate><guid>https://emerywan.github.io/blog/p/java/jvm/memory-area/</guid><description>&lt;img src="https://emerywan.github.io/blog/p/java/jvm/memory-area/area.png" alt="Featured image of post JVM 内存区域" />&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/java/jvm/memory-area/area.png"
+width="1240"
+height="583"
+srcset="https://emerywan.github.io/blog/blog/p/java/jvm/memory-area/area_hu7d264de33d14753fd73bf351bb5dce63_911596_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/java/jvm/memory-area/area_hu7d264de33d14753fd73bf351bb5dce63_911596_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+alt="area"
+class="gallery-image"
+data-flex-grow="212"
+data-flex-basis="510px"
+>&lt;/p>
+&lt;ul>
 &lt;li>
-&lt;p>线程隔离&lt;/p>
+&lt;p>🧐 线程隔离&lt;/p>
 &lt;ul>
 &lt;li>程序计数器&lt;/li>
 &lt;li>虚拟机栈&lt;/li>
@@ -1174,56 +1186,47 @@ data-flex-basis="390px"
 &lt;/ul>
 &lt;/li>
 &lt;li>
-&lt;p>线程共享&lt;/p>
+&lt;p>☺️ 线程共享&lt;/p>
 &lt;ul>
 &lt;li>方法区&lt;/li>
 &lt;li>堆&lt;/li>
 &lt;/ul>
 &lt;/li>
 &lt;/ul>
-&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/java/jvm/memory-area/area.png"
-width="875"
-height="550"
-srcset="https://emerywan.github.io/blog/blog/p/java/jvm/memory-area/area_hu77c5f146be5bf31c819ffe7a07cc3500_205102_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/java/jvm/memory-area/area_hu77c5f146be5bf31c819ffe7a07cc3500_205102_1024x0_resize_box_3.png 1024w"
-loading="lazy"
-alt="area"
-class="gallery-image"
-data-flex-grow="159"
-data-flex-basis="381px"
->&lt;/p>
 &lt;h2 id="-程序计数器">🎋 程序计数器&lt;/h2>
 &lt;p>当前线程执行字节码的行号指示器。&lt;/p>
 &lt;p>唯一一个不会出现 &lt;code>OutOfMemoryError&lt;/code> 的内存区域，随线程的创建而创建，随线程的结束而死亡。&lt;/p>
 &lt;h2 id="-虚拟机栈">🎋 虚拟机栈&lt;/h2>
 &lt;p>每一次方法的调用都会有一个对应的栈帧被压入栈中，每一个方法调用结束后，都会有一个栈帧被弹出。&lt;/p>
 &lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/java/jvm/memory-area/stack.png"
-width="302"
-height="551"
-srcset="https://emerywan.github.io/blog/blog/p/java/jvm/memory-area/stack_hu387fe9e9614436cd46058aff5c85565a_61440_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/java/jvm/memory-area/stack_hu387fe9e9614436cd46058aff5c85565a_61440_1024x0_resize_box_3.png 1024w"
+width="1223"
+height="184"
+srcset="https://emerywan.github.io/blog/blog/p/java/jvm/memory-area/stack_huec65210ac7484aa7992e4fd9421e2f2b_282459_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/java/jvm/memory-area/stack_huec65210ac7484aa7992e4fd9421e2f2b_282459_1024x0_resize_box_3.png 1024w"
 loading="lazy"
 alt="stack"
 class="gallery-image"
-data-flex-grow="54"
-data-flex-basis="131px"
+data-flex-grow="664"
+data-flex-basis="1595px"
 >&lt;/p>
 &lt;p>当线程请求栈的深度超过当前 Java 虚拟机最大深度时，会抛出 &lt;code>StackOverFlowError&lt;/code>。&lt;/p>
 &lt;ul>
-&lt;li>局部变量表&lt;/li>
-&lt;/ul>
+&lt;li>
+&lt;p>局部变量表&lt;/p>
 &lt;p>存放编译期可知的各种数据类型，对象引用地址。&lt;/p>
-&lt;ul>
-&lt;li>操作数栈&lt;/li>
-&lt;/ul>
+&lt;/li>
+&lt;li>
+&lt;p>操作数栈&lt;/p>
 &lt;p>方法执行过程中的计算结果，计算过程中产生的临时变量。&lt;/p>
-&lt;ul>
-&lt;li>动态链接&lt;/li>
-&lt;/ul>
+&lt;/li>
+&lt;li>
+&lt;p>动态链接&lt;/p>
 &lt;p>服务于一个方法需要调用其他方法的场景。&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>方法返回地址&lt;/p>
 &lt;ul>
-&lt;li>方法返回地址
-&lt;ul>
-&lt;li>正常返回&lt;/li>
-&lt;li>异常返回&lt;/li>
+&lt;li>正常返回（return）&lt;/li>
+&lt;li>异常返回（Exception）&lt;/li>
 &lt;/ul>
 &lt;/li>
 &lt;/ul>
@@ -1232,52 +1235,54 @@ data-flex-basis="131px"
 &lt;h2 id="-方法区">🎍 方法区&lt;/h2>
 &lt;p>方法区是 Java 虚拟机的抽象概念。实现方式在不同虚拟机中可能不同。&lt;/p>
 &lt;ul>
-&lt;li>
-&lt;p>JDK 8 之前，HotSpot 虚拟机使用永久带实现方法区&lt;/p>
-&lt;/li>
-&lt;li>
-&lt;p>JDK 8 及之后，使用元空间（直接内存）实现&lt;/p>
-&lt;/li>
+&lt;li>JDK 8 之前，HotSpot 虚拟机使用永久带实现方法区&lt;/li>
 &lt;/ul>
 &lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/java/jvm/memory-area/function-before.png"
-width="382"
-height="436"
-srcset="https://emerywan.github.io/blog/blog/p/java/jvm/memory-area/function-before_hu5ba856b5fa83b596c5da12a50d62fcb1_75748_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/java/jvm/memory-area/function-before_hu5ba856b5fa83b596c5da12a50d62fcb1_75748_1024x0_resize_box_3.png 1024w"
+width="547"
+height="530"
+srcset="https://emerywan.github.io/blog/blog/p/java/jvm/memory-area/function-before_hucbc502332944514d4c1f41f29f96205d_115360_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/java/jvm/memory-area/function-before_hucbc502332944514d4c1f41f29f96205d_115360_1024x0_resize_box_3.png 1024w"
 loading="lazy"
 alt="before"
 class="gallery-image"
-data-flex-grow="87"
-data-flex-basis="210px"
+data-flex-grow="103"
+data-flex-basis="247px"
 >&lt;/p>
+&lt;ul>
+&lt;li>
+&lt;p>JDK 8 及之后，使用元空间（直接内存）实现&lt;/p>
+&lt;p>字符串常量池与静态变量转移到了堆中。&lt;/p>
+&lt;/li>
+&lt;/ul>
 &lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/java/jvm/memory-area/function-after.png"
-width="484"
-height="433"
-srcset="https://emerywan.github.io/blog/blog/p/java/jvm/memory-area/function-after_hue0bd0747c11f9c8962eb0e412965ba30_84329_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/java/jvm/memory-area/function-after_hue0bd0747c11f9c8962eb0e412965ba30_84329_1024x0_resize_box_3.png 1024w"
+width="695"
+height="524"
+srcset="https://emerywan.github.io/blog/blog/p/java/jvm/memory-area/function-after_hub8d0c407ad61dc44d980ad0db8ff77fa_132600_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/java/jvm/memory-area/function-after_hub8d0c407ad61dc44d980ad0db8ff77fa_132600_1024x0_resize_box_3.png 1024w"
 loading="lazy"
 alt="after"
 class="gallery-image"
-data-flex-grow="111"
-data-flex-basis="268px"
+data-flex-grow="132"
+data-flex-basis="318px"
 >&lt;/p>
 &lt;ul>
-&lt;li>类的元信息&lt;/li>
-&lt;/ul>
+&lt;li>
+&lt;p>类的元信息&lt;/p>
 &lt;p>类名，访问修饰符，字段描述，方法描述等&lt;/p>
-&lt;ul>
-&lt;li>运行时常量池&lt;/li>
-&lt;/ul>
+&lt;/li>
+&lt;li>
+&lt;p>运行时常量池&lt;/p>
 &lt;p>存放编译后的各种字面量，符号引用，常量（final）池表等&lt;/p>
-&lt;ul>
-&lt;li>字符串常量池&lt;/li>
-&lt;/ul>
+&lt;/li>
+&lt;li>
+&lt;p>字符串常量池&lt;/p>
 &lt;p>JVM 为了减少字符串对内存的消耗，并提升性能，专门开辟的区域&lt;/p>
-&lt;ul>
-&lt;li>静态变量&lt;/li>
-&lt;/ul>
+&lt;/li>
+&lt;li>
+&lt;p>静态变量&lt;/p>
 &lt;p>类变量（static）&lt;/p>
+&lt;/li>
+&lt;/ul>
 &lt;h2 id="-堆">🎍 堆&lt;/h2>
-&lt;p>用来存放和管理对象实例，几乎所有的对象实例都在这里分配。
-（存在逃逸分析，栈上分配，有些对象不会在堆中）&lt;/p>
+&lt;p>用来存放和管理对象实例，几乎所有的对象实例都在这里分配。（存在逃逸分析，栈上分配，有些对象不一定在堆中）&lt;/p>
 &lt;p>Java 堆是垃圾回收的主要区域，因此也被称为 GC 堆。&lt;/p>
 &lt;ul>
 &lt;li>
@@ -1285,14 +1290,19 @@ data-flex-basis="268px"
 &lt;ul>
 &lt;li>新生代（Eden、Survivor0、Survivor1）&lt;/li>
 &lt;li>老年代&lt;/li>
-&lt;li>永久代&lt;/li>
+&lt;li>永久代（方法区也由永久代实现）&lt;/li>
 &lt;/ul>
 &lt;/li>
 &lt;li>
 &lt;p>JDK 8 之后，永久代被取消&lt;/p>
 &lt;/li>
 &lt;/ul>
-&lt;p>大部分情况下，对象首先会在 Eden 区进行分配；在一次垃圾回收后，如果对象还存活，会进入 S0 或 S1；当对象年龄增长到一定程度（默认 15），或累积的年龄超过了 Survivor 的一半，会晋升到老年代。&lt;/p></description></item><item><title>JVM 垃圾回收</title><link>https://emerywan.github.io/blog/p/java/jvm/garbage-collection/</link><pubDate>Sun, 07 Aug 2022 12:02:02 +0800</pubDate><guid>https://emerywan.github.io/blog/p/java/jvm/garbage-collection/</guid><description>&lt;img src="https://emerywan.github.io/blog/imgs/26.jpeg" alt="Featured image of post JVM 垃圾回收" />&lt;h2 id="-对象存活判定">🌴 对象存活判定&lt;/h2>
+&lt;p>大部分情况下，对象首先会在新生代的 Eden 区进行分配；在一次垃圾回收后，如果对象还存活，会进入 S0 或 S1；当对象年龄增长到一定程度（默认 15），或累积的年龄超过了 Survivor 的一半，会晋升到老年代。&lt;/p>
+&lt;h2 id="参考">参考&lt;/h2>
+&lt;ul>
+&lt;li>图来源于网络。&lt;/li>
+&lt;li>深入理解 Java 虚拟机&lt;/li>
+&lt;/ul></description></item><item><title>JVM 垃圾回收</title><link>https://emerywan.github.io/blog/p/java/jvm/garbage-collection/</link><pubDate>Sun, 07 Aug 2022 12:02:02 +0800</pubDate><guid>https://emerywan.github.io/blog/p/java/jvm/garbage-collection/</guid><description>&lt;img src="https://emerywan.github.io/blog/imgs/26.jpeg" alt="Featured image of post JVM 垃圾回收" />&lt;h2 id="-对象存活判定">🌴 对象存活判定&lt;/h2>
 &lt;h3 id="-引用计数法">🪨 引用计数法&lt;/h3>
 &lt;p>给每个对象添加一个引用计数器：&lt;/p>
 &lt;ul>
@@ -2319,7 +2329,7 @@ alt="primary_index_4"
 class="gallery-image"
 data-flex-grow="154"
 data-flex-basis="371px"
->&lt;/p></description></item><item><title>MySQL 日志</title><link>https://emerywan.github.io/blog/p/mysql/log/</link><pubDate>Thu, 30 Jun 2022 18:02:02 +0800</pubDate><guid>https://emerywan.github.io/blog/p/mysql/log/</guid><description>&lt;img src="https://emerywan.github.io/blog/imgs/19.jpeg" alt="Featured image of post MySQL 日志" />&lt;h2 id="日志">日志&lt;/h2>
+>&lt;/p></description></item><item><title>MySQL 日志</title><link>https://emerywan.github.io/blog/p/mysql/log/</link><pubDate>Thu, 30 Jun 2022 18:02:02 +0800</pubDate><guid>https://emerywan.github.io/blog/p/mysql/log/</guid><description>&lt;img src="https://emerywan.github.io/blog/imgs/19.jpeg" alt="Featured image of post MySQL 日志" />&lt;h2 id="-server-层日志">🖥️ Server 层日志&lt;/h2>
 &lt;h3 id="错误日志">错误日志&lt;/h3>
 &lt;p>错误日志是 MySQL 中最重要的日志之一，它记录了当 mysqld 启动和停止时，以及服务器在运行过程中发生任何严重错误时的相关信息。&lt;/p>
 &lt;p>当数据库出现任何故障导致无法正常使用时，建议首先查看此日志。&lt;/p>
@@ -2342,8 +2352,8 @@ class="gallery-image"
 data-flex-grow="312"
 data-flex-basis="750px"
 >&lt;/p>
-&lt;h3 id="二进制日志归档日志">二进制日志（归档日志）&lt;/h3>
-&lt;p>二进制日志（BINLOG）记录了所有的 DDL（数据定义语言）语句和 DML（数据操纵语言）语句。&lt;/p>
+&lt;h3 id="-bin-log">🔢 bin log&lt;/h3>
+&lt;p>二进制日志（bin log）是记录了所有的数据库表结构变更（DDL）和表数据修改（DML）的日志。&lt;/p>
 &lt;p>作用：&lt;/p>
 &lt;ul>
 &lt;li>灾难时数据恢复&lt;/li>
@@ -2551,7 +2561,100 @@ data-flex-basis="848px"
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">log_queries_not_using_indexes= 1
 &lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
 &lt;/div>
-&lt;/div></description></item><item><title>MySQL 索引</title><link>https://emerywan.github.io/blog/p/mysql/index/</link><pubDate>Thu, 30 Jun 2022 14:02:02 +0800</pubDate><guid>https://emerywan.github.io/blog/p/mysql/index/</guid><description>&lt;img src="https://emerywan.github.io/blog/imgs/15.jpeg" alt="Featured image of post MySQL 索引" />&lt;h2 id="索引">索引&lt;/h2>
+&lt;/div>&lt;h2 id="-inoodb-日志">💽 InooDB 日志&lt;/h2>
+&lt;h3 id="-redo-log-重做日志">🔃 redo log 重做日志&lt;/h3>
+&lt;p>redo log 是物理日志，记录了数据页做了什么修改。例如：对 XXX 表空间中的 YYY 数据页 ZZZ 偏移量的地方做了 AAA 更新。&lt;/p>
+&lt;p>redo log 记录了事务完成后的数据状态，当事务提交时，只要将 redo log 持久化到硬盘即可（顺序磁盘 IO），不需要将 Buffer Pool 中的脏页持久化到硬盘（随机磁盘 IO）。&lt;/p>
+&lt;p>保证了事务 ACID 特性中的持久性，当数据库发生故障时，可以利用 redo log 恢复数据。&lt;/p>
+&lt;h4 id="刷盘">刷盘&lt;/h4>
+&lt;p>产生的 redo log 不是直接写入磁盘的，会先写到 redo log buffer 中，后续持久化化到磁盘。&lt;/p>
+&lt;p>redo log buffer 默认大小为 &lt;code>innodb_log_Buffer_size = 16MB&lt;/code>，增加它的大小，可以让 MySQL 处理大事务不必写入到磁盘，进而提升 IO 性能。&lt;/p>
+&lt;p>redo log buffer 刷盘时机：&lt;/p>
+&lt;ul>
+&lt;li>
+&lt;p>InnoDB 的后台线程，每隔 1s，会将 redo log buffer 持久化到内存&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>redo log buffer 中记录的写入量大于 redo log buffer 内存空间的一半时&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>MySQL 正常关闭时&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>每次事务提交时，将 redo log buffer 中 redo log 持久化到磁盘 &lt;code>innodb_flush_log_at_trx_commit&lt;/code> 控制&lt;/p>
+&lt;/li>
+&lt;/ul>
+&lt;h4 id="redo-log-循环写">redo log 循环写&lt;/h4>
+&lt;p>redo log 是为了防止 Buffer Pool 中的脏页丢失而设计的。当随着服务的运行，Buffer Pool 中的脏页刷新到了磁盘中，redo log 中的记录就没有用了，可以擦除旧记录。&lt;/p>
+&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/mysql/log/redo-log.webp"
+width="1362"
+height="906"
+srcset="https://emerywan.github.io/blog/blog/p/mysql/log/redo-log_hud436e5fcec2bf61353c634ad67370294_39572_480x0_resize_q75_h2_box_2.webp 480w, https://emerywan.github.io/blog/blog/p/mysql/log/redo-log_hud436e5fcec2bf61353c634ad67370294_39572_1024x0_resize_q75_h2_box_2.webp 1024w"
+loading="lazy"
+class="gallery-image"
+data-flex-grow="150"
+data-flex-basis="360px"
+>&lt;/p>
+&lt;h4 id="两阶段提交">两阶段提交&lt;/h4>
+&lt;p>redo log 和 bin log 持久化到硬盘，是两个独立的操作，可能会出现半成功的状态，导致两份日志之间的逻辑不一致。&lt;/p>
+&lt;p>为了避免这个问题，保证两个日志的一致性，使用了”两阶段提交“来解决。把单个事务的提交拆分成了两个阶段：&lt;/p>
+&lt;ul>
+&lt;li>
+&lt;p>Prepare 准备阶段&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>Commit 提交阶段&lt;/p>
+&lt;/li>
+&lt;/ul>
+&lt;p>将 redo log 写入拆成了两个步骤：prepare 和 commit，中间再穿插写入 bin log。
+当 bin log 成功持久化到磁盘，就被认为事务已经执行成功（即使 redo log 是 prepare 也没有关系）。&lt;/p>
+&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/mysql/log/prepare-commit.png"
+width="887"
+height="859"
+srcset="https://emerywan.github.io/blog/blog/p/mysql/log/prepare-commit_hu761b281e24776a109dc5986da4421988_282489_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/mysql/log/prepare-commit_hu761b281e24776a109dc5986da4421988_282489_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+class="gallery-image"
+data-flex-grow="103"
+data-flex-basis="247px"
+>&lt;/p>
+&lt;h3 id="-undo-log-回滚日志">🔙 undo log 回滚日志&lt;/h3>
+&lt;p>undo log 是一种用于撤销回滚的日志。InnoDB 层更新记录前，会将操作前的数据记录的 undo 中，当事务回滚时，利用 undo log 进行回滚。&lt;/p>
+&lt;p>undo log 主要用于：&lt;/p>
+&lt;ul>
+&lt;li>
+&lt;p>🎗️ 实现事务回滚，保障事务 ACID 中的原子性&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>🎗️ undo log 与 ReadView 配合，实现 MVCC&lt;/p>
+&lt;/li>
+&lt;/ul>
+&lt;p>在 InnoDB 存储引擎对记录进行修改时，会把回滚需要的信息全部记录到 undo 中，如果发生回滚，就会读取 undo log，然后执行与之相反的操作。&lt;/p>
+&lt;ul>
+&lt;li>插入数据，记录这条数据的主键，回滚时根据主键把该条记录删除&lt;/li>
+&lt;li>删除数据，记录这条数据的所有内容，回滚时将这些内容组成的记录插入表中&lt;/li>
+&lt;li>更新数据，记录这条数据更新列的旧值，回滚时将数据更新为旧值&lt;/li>
+&lt;/ul>
+&lt;h4 id="版本链">版本链&lt;/h4>
+&lt;p>一条记录的每次更新操作产生的 undo log 格式都会有：&lt;/p>
+&lt;ul>
+&lt;li>
+&lt;p>trx_id 事务 id&lt;/p>
+&lt;p>记录了该记录是由哪一个事务修改的。&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>roll_pointer 回滚指针&lt;/p>
+&lt;p>回滚指针可以将 undo log 串连成一个链表，这个链表称为版本链。&lt;/p>
+&lt;/li>
+&lt;/ul>
+&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/mysql/log/version-link.webp"
+width="1140"
+height="591"
+srcset="https://emerywan.github.io/blog/blog/p/mysql/log/version-link_hu0442ac56d20b027197f4981105a2d120_16904_480x0_resize_q75_h2_box_2.webp 480w, https://emerywan.github.io/blog/blog/p/mysql/log/version-link_hu0442ac56d20b027197f4981105a2d120_16904_1024x0_resize_q75_h2_box_2.webp 1024w"
+loading="lazy"
+class="gallery-image"
+data-flex-grow="192"
+data-flex-basis="462px"
+>&lt;/p></description></item><item><title>MySQL 索引</title><link>https://emerywan.github.io/blog/p/mysql/index/</link><pubDate>Thu, 30 Jun 2022 14:02:02 +0800</pubDate><guid>https://emerywan.github.io/blog/p/mysql/index/</guid><description>&lt;img src="https://emerywan.github.io/blog/imgs/15.jpeg" alt="Featured image of post MySQL 索引" />&lt;h2 id="索引">索引&lt;/h2>
 &lt;p>索引（index）是帮助 MySQL 高效获取数据的数据结构，提高查询效率。&lt;/p>
 &lt;ul>
 &lt;li>
@@ -3026,6 +3129,7 @@ data-flex-basis="1821px"
 &lt;/div>
 &lt;/div>&lt;p>如果无法避免，且有较高需求，可以考虑使用搜索引擎。&lt;/p>
 &lt;h3 id="-or-查询的部分字段没有索引">⚠️ or 查询的部分字段没有索引&lt;/h3>
+&lt;p>or 的含义是两个条件满足一个即可，所以只有一个条件列有索引是无用的。只要条件列中有一个不是索引列，就会进行全表扫描。&lt;/p>
 &lt;div class="highlight">&lt;div class="chroma">
 &lt;table class="lntable">&lt;tr>&lt;td class="lntd">
 &lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
@@ -3053,7 +3157,7 @@ data-flex-grow="652"
 data-flex-basis="1565px"
 >&lt;/p>
 &lt;p>解决：根据实际业务，添加相应的索引。&lt;/p>
-&lt;p>添加索引后，索引合并，避免了全表扫描。&lt;/p>
+&lt;p>添加索引后，避免了全表扫描。&lt;/p>
 &lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/mysql/index/index4.png"
 width="1129"
 height="139"
