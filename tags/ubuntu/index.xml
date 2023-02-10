@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Ubuntu on 一层</title><link>https://blog.letout.cn/tags/ubuntu/</link><description>Recent content in Ubuntu on 一层</description><generator>Hugo -- gohugo.io</generator><language>zh-cn</language><lastBuildDate>Mon, 02 May 2022 02:02:02 +0800</lastBuildDate><atom:link href="https://blog.letout.cn/tags/ubuntu/index.xml" rel="self" type="application/rss+xml"/><item><title>Ubuntu 安装软件推荐方式</title><link>https://blog.letout.cn/p/ubuntu-software-install/</link><pubDate>Mon, 02 May 2022 02:02:02 +0800</pubDate><guid>https://blog.letout.cn/p/ubuntu-software-install/</guid><description>&lt;img src="https://blog.letout.cn/imgs/4.jpeg" alt="Featured image of post Ubuntu 安装软件推荐方式" />&lt;h2 id="说明">说明&lt;/h2>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Ubuntu on 一层</title><link>https://blog.letout.cn/tags/ubuntu/</link><description>Recent content in Ubuntu on 一层</description><generator>Hugo -- gohugo.io</generator><language>zh-cn</language><lastBuildDate>Mon, 02 May 2022 02:02:02 +0800</lastBuildDate><atom:link href="https://blog.letout.cn/tags/ubuntu/index.xml" rel="self" type="application/rss+xml"/><item><title>在 Ubuntu 优雅地安装 zip 应用 🤔</title><link>https://blog.letout.cn/p/ubuntu-software-install/</link><pubDate>Mon, 02 May 2022 02:02:02 +0800</pubDate><guid>https://blog.letout.cn/p/ubuntu-software-install/</guid><description>&lt;img src="https://blog.letout.cn/imgs/4.jpeg" alt="Featured image of post 在 Ubuntu 优雅地安装 zip 应用 🤔" />&lt;h2 id="说明">说明&lt;/h2>
 &lt;p>Ubuntu 有些第三方软件只提供二进制执行文件（压缩包或 AppImage），而不是安装包或者 apt 源，这时候需要我们去自己解压文件，放在自定义目录，并进行配置。&lt;/p>
 &lt;p>平常使用桌面环境的话，这样安装后，更新还是有点麻烦的，一更新就要修改很多地方。&lt;/p>
 &lt;p>这里介绍我平常的配置方式，每次更新后，只需要修改软链接即可，感觉还是挺方便的。&lt;/p>
@@ -39,7 +39,9 @@
 &lt;pre tabindex="0" class="chroma">&lt;code class="language-sh" data-lang="sh">&lt;span class="line">&lt;span class="cl">ln -s ./Clash&lt;span class="se">\ &lt;/span>&lt;span class="k">for&lt;/span>&lt;span class="se">\ &lt;/span>Windows-0.19.12-x64-linux/cfw ./clash
 &lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
 &lt;/div>
-&lt;/div>&lt;p>通过这种方式，每次启动应用都使用这个软链接进行操作，当需要升级应用时，只需要创建新的软链接，指向新的启动文件。最后的效果如下：&lt;/p>
+&lt;/div>&lt;p>通过这种方式，每次启动应用都使用这个软链接进行操作，当需要升级应用时，只需要创建新的软链接，指向新的启动文件。&lt;/p>
+&lt;p>不需要每次升级版本，都改其他地方，而且可以通过文件夹命名很清楚地知道当前使用地版本号。👍&lt;/p>
+&lt;p>最后的效果如下：&lt;/p>
 &lt;div class="highlight">&lt;div class="chroma">
 &lt;table class="lntable">&lt;tr>&lt;td class="lntd">
 &lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1

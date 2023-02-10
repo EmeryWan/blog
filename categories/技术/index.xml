@@ -2042,109 +2042,7 @@ data-flex-basis="366px"
 &lt;p>简单的不加锁 &lt;code>select&lt;/code> 就是快照读。读取的是快照版本，通过 MVCC 进行并发控制。&lt;/p>
 &lt;h2 id="一致性">一致性&lt;/h2>
 &lt;p>数据库通过原子性、隔离性、持久性来保证一致性。&lt;/p>
-&lt;p>C(一致性)是目的，A(原子性)、I(隔离性)、D(持久性)是是为了保证一致性，数据库提供的手段。&lt;/p></description></item><item><title>MySQL 存储引擎</title><link>https://blog.letout.cn/p/mysql/engine/</link><pubDate>Fri, 29 Jul 2022 19:02:02 +0800</pubDate><guid>https://blog.letout.cn/p/mysql/engine/</guid><description>&lt;img src="https://blog.letout.cn/imgs/22.jpeg" alt="Featured image of post MySQL 存储引擎" />&lt;h2 id="mysql-体系结构">MySQL 体系结构&lt;/h2>
-&lt;p>&lt;img src="https://blog.letout.cn/p/mysql/engine/1.png"
-width="1176"
-height="639"
-srcset="https://blog.letout.cn/p/mysql/engine/1_hu5b4a85ab8f594ef5edc02d326d256cb0_206182_480x0_resize_box_3.png 480w, https://blog.letout.cn/p/mysql/engine/1_hu5b4a85ab8f594ef5edc02d326d256cb0_206182_1024x0_resize_box_3.png 1024w"
-loading="lazy"
-alt="1"
-class="gallery-image"
-data-flex-grow="184"
-data-flex-basis="441px"
->&lt;/p>
-&lt;h3 id="连接层">连接层&lt;/h3>
-&lt;p>主要完成一些类似于连接处理、授权认证、及相关的安全方案。&lt;/p>
-&lt;p>为通过认证安全接入的客户端提供线程，服务器也会为安全接入的每个客户端验证它所具有的操作权限。&lt;/p>
-&lt;h3 id="服务层">服务层&lt;/h3>
-&lt;p>主要完成大多数的核心服务功能，如SQL接口，并完成缓存的查询，SQL的分析和优化，部分内置函数的执行。&lt;/p>
-&lt;p>所有跨存储引擎的功能也在这一层实现，如 过程、函数等。在该层，服务器会解析查询并创建相应的内部解析树，并对其完成相应的优化如确定表的查询的顺序，是否利用索引等，最后生成相应的执行操作。&lt;/p>
-&lt;p>如果是select语句，服务器还会查询内部的缓存，如果缓存空间足够大，这样在解决大量读操作的环境中能够很好的提升系统的性能。&lt;/p>
-&lt;h3 id="引擎层">引擎层&lt;/h3>
-&lt;p>真正的负责了MySQL中数据的存储和提取，服务器通过API和存储引擎进行通信。不同的存储引擎具有不同的功能，这样我们可以根据自己的需要，来选取合适的存储引擎。数据库中的索引是在存储引擎层实现的。&lt;/p>
-&lt;h3 id="存储层">存储层&lt;/h3>
-&lt;p>数据存储层， 主要是将数据（如: redolog、undolog、数据、索引、二进制日志、错误日志、查询日志、慢查询日志等）存储在文件系统之上，并完成与存储引擎的交互。&lt;/p>
-&lt;h2 id="存储引擎">存储引擎&lt;/h2>
-&lt;p>存储引擎就是存储数据，建立索引，更新、查询数据等技术的具体实现方式。&lt;/p>
-&lt;p>存储引擎是基于表的，而不是基于库的，所以存储引擎可以被称为表类型，可在创建表的时候，指定选择的存储引擎。&lt;/p>
-&lt;ul>
-&lt;li>当前数据库支持的存储引擎&lt;/li>
-&lt;/ul>
-&lt;div class="highlight">&lt;div class="chroma">
-&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
-&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
-&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
-&lt;td class="lntd">
-&lt;pre tabindex="0" class="chroma">&lt;code class="language-sql" data-lang="sql">&lt;span class="line">&lt;span class="cl">&lt;span class="k">show&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">engines&lt;/span>&lt;span class="p">;&lt;/span>&lt;span class="w">
-&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
-&lt;/div>
-&lt;/div>&lt;h2 id="innodb">InnoDB&lt;/h2>
-&lt;p>InnoDB 是 MySQL 5.5 之后默认的 MySQL 存储引擎。&lt;/p>
-&lt;p>特点：&lt;/p>
-&lt;ul>
-&lt;li>DML 操作遵循 ACID 模型，支持事务&lt;/li>
-&lt;li>支持行级锁，提高并发访问性能&lt;/li>
-&lt;li>支持外键约束，保证数据的完整性和正确性&lt;/li>
-&lt;/ul>
-&lt;p>InnoDB 的逻辑存储结构：&lt;/p>
-&lt;p>&lt;img src="https://blog.letout.cn/p/mysql/engine/innodb.png"
-width="1207"
-height="503"
-srcset="https://blog.letout.cn/p/mysql/engine/innodb_hu255dad38c999e36f2d3fd079c10a9f22_82479_480x0_resize_box_3.png 480w, https://blog.letout.cn/p/mysql/engine/innodb_hu255dad38c999e36f2d3fd079c10a9f22_82479_1024x0_resize_box_3.png 1024w"
-loading="lazy"
-alt="innodb"
-class="gallery-image"
-data-flex-grow="239"
-data-flex-basis="575px"
->&lt;/p>
-&lt;ul>
-&lt;li>表空间&lt;/li>
-&lt;/ul>
-&lt;p>InnoDB 存储引擎逻辑结构的最高层，idb 文件就是表空间文件。在表空间中可以包含多个 Segment 段。&lt;/p>
-&lt;ul>
-&lt;li>段&lt;/li>
-&lt;/ul>
-&lt;p>表空间是由各个段组成的，常见的段有数据段、索引段、回滚段等。InnoDB 对于段的管理，都是引擎自身完成，不需要人为控制，一个段中包含多个区。&lt;/p>
-&lt;ul>
-&lt;li>区（1M）&lt;/li>
-&lt;/ul>
-&lt;p>区是表空间的单元结构，每个区的大小为 1M。默认情况下，InnoDB 存储引擎页的大小为 16K，即一个区中一共有 64 个连续的页。&lt;/p>
-&lt;ul>
-&lt;li>页（16K）&lt;/li>
-&lt;/ul>
-&lt;p>页是组成区的最小单元，也是 InnoDB 存储引擎磁盘管理的最小单元，每个页默认为 16K。为了保证页的连续性，InnoDB 存储引擎每次从磁盘申请 4-5 个区。&lt;/p>
-&lt;ul>
-&lt;li>行&lt;/li>
-&lt;/ul>
-&lt;p>InnoDB 存储引擎是面向行的，也就是说数据是按行进行存放的，在每一行中，除了定义表时指定的字段外，还包括隐藏字段。&lt;/p>
-&lt;h2 id="myisam">MyISAM&lt;/h2>
-&lt;p>MyISAM 是 MySQL 早期的默认存储引擎。&lt;/p>
-&lt;p>特点：&lt;/p>
-&lt;ul>
-&lt;li>不支持事务，不支持外键&lt;/li>
-&lt;li>支持表锁，不支持行锁&lt;/li>
-&lt;li>适合 select&lt;/li>
-&lt;/ul>
-&lt;p>存储文件：&lt;/p>
-&lt;ul>
-&lt;li>.sdi
-存储表结构信息&lt;/li>
-&lt;li>.MYD
-存储数据&lt;/li>
-&lt;li>.MYI
-存储索引&lt;/li>
-&lt;/ul>
-&lt;h2 id="memory">Memory&lt;/h2>
-&lt;p>Memory 引擎的表数据是存放在内存中的，由于受到硬件、断电等问题的影响，只能将这些表作为临时表或缓存使用。&lt;/p>
-&lt;p>特点：&lt;/p>
-&lt;ul>
-&lt;li>内存存放数据，宕机后数据会丢失&lt;/li>
-&lt;li>hash 索引（默认）&lt;/li>
-&lt;/ul>
-&lt;p>文件：&lt;/p>
-&lt;ul>
-&lt;li>.sdi 存储表结构信息&lt;/li>
-&lt;/ul></description></item><item><title>SQL 语句优化</title><link>https://blog.letout.cn/p/mysql/sql-optimize/</link><pubDate>Fri, 01 Jul 2022 18:02:02 +0800</pubDate><guid>https://blog.letout.cn/p/mysql/sql-optimize/</guid><description>&lt;img src="https://blog.letout.cn/imgs/20.jpeg" alt="Featured image of post SQL 语句优化" />&lt;h2 id="-insert-优化">🦮 insert 优化&lt;/h2>
+&lt;p>C(一致性)是目的，A(原子性)、I(隔离性)、D(持久性)是是为了保证一致性，数据库提供的手段。&lt;/p></description></item><item><title>SQL 语句优化</title><link>https://blog.letout.cn/p/mysql/sql-optimize/</link><pubDate>Fri, 01 Jul 2022 18:02:02 +0800</pubDate><guid>https://blog.letout.cn/p/mysql/sql-optimize/</guid><description>&lt;img src="https://blog.letout.cn/imgs/20.jpeg" alt="Featured image of post SQL 语句优化" />&lt;h2 id="-insert-优化">🦮 insert 优化&lt;/h2>
 &lt;p>一次性往数据库中插入多条数据，可从以下三方面优化：&lt;/p>
 &lt;ul>
 &lt;li>批量插入数据&lt;/li>
@@ -2329,7 +2227,7 @@ alt="primary_index_4"
 class="gallery-image"
 data-flex-grow="154"
 data-flex-basis="371px"
->&lt;/p></description></item><item><title>MySQL 日志</title><link>https://blog.letout.cn/p/mysql/log/</link><pubDate>Thu, 30 Jun 2022 18:02:02 +0800</pubDate><guid>https://blog.letout.cn/p/mysql/log/</guid><description>&lt;img src="https://blog.letout.cn/imgs/19.jpeg" alt="Featured image of post MySQL 日志" />&lt;h2 id="-server-层日志">🖥️ Server 层日志&lt;/h2>
+>&lt;/p></description></item><item><title>MySQL 中的日志</title><link>https://blog.letout.cn/p/mysql/log/</link><pubDate>Thu, 30 Jun 2022 18:02:02 +0800</pubDate><guid>https://blog.letout.cn/p/mysql/log/</guid><description>&lt;img src="https://blog.letout.cn/imgs/19.jpeg" alt="Featured image of post MySQL 中的日志" />&lt;h2 id="-server-层日志">🖥️ Server 层日志&lt;/h2>
 &lt;h3 id="错误日志">错误日志&lt;/h3>
 &lt;p>错误日志是 MySQL 中最重要的日志之一，它记录了当 mysqld 启动和停止时，以及服务器在运行过程中发生任何严重错误时的相关信息。&lt;/p>
 &lt;p>当数据库出现任何故障导致无法正常使用时，建议首先查看此日志。&lt;/p>
@@ -4020,7 +3918,7 @@ data-flex-basis="305px"
 &lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
 &lt;/div>
 &lt;/div>&lt;!-- raw HTML omitted -->
-&lt;!-- raw HTML omitted --></description></item><item><title>Redis 数据结构</title><link>https://blog.letout.cn/p/redis/data-struct/</link><pubDate>Wed, 01 Jun 2022 01:52:45 +0800</pubDate><guid>https://blog.letout.cn/p/redis/data-struct/</guid><description>&lt;img src="https://blog.letout.cn/p/redis/data-struct/redis.jpg" alt="Featured image of post Redis 数据结构" />&lt;p>Redis 提供了丰富的数据类型，常见的有五种：&lt;/p>
+&lt;!-- raw HTML omitted --></description></item><item><title>Redis 常见数据结构</title><link>https://blog.letout.cn/p/redis/data-struct/</link><pubDate>Wed, 01 Jun 2022 01:52:45 +0800</pubDate><guid>https://blog.letout.cn/p/redis/data-struct/</guid><description>&lt;img src="https://blog.letout.cn/p/redis/data-struct/redis.jpg" alt="Featured image of post Redis 常见数据结构" />&lt;p>Redis 提供了丰富的数据类型，常见的有五种：&lt;/p>
 &lt;ul>
 &lt;li>String 字符串&lt;/li>
 &lt;li>List 列表&lt;/li>

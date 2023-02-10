@@ -282,7 +282,7 @@ class="gallery-image"
 data-flex-grow="91"
 data-flex-basis="219px"
 >&lt;/p>
-&lt;p>使用了混合持久化，AOF 文件的前半部分是 RDB 格式的全量数据，后半部分是 AOF 格式的增量数据。&lt;/p></description></item><item><title>Redis 数据结构</title><link>https://blog.letout.cn/p/redis/data-struct/</link><pubDate>Wed, 01 Jun 2022 01:52:45 +0800</pubDate><guid>https://blog.letout.cn/p/redis/data-struct/</guid><description>&lt;img src="https://blog.letout.cn/p/redis/data-struct/redis.jpg" alt="Featured image of post Redis 数据结构" />&lt;p>Redis 提供了丰富的数据类型，常见的有五种：&lt;/p>
+&lt;p>使用了混合持久化，AOF 文件的前半部分是 RDB 格式的全量数据，后半部分是 AOF 格式的增量数据。&lt;/p></description></item><item><title>Redis 常见数据结构</title><link>https://blog.letout.cn/p/redis/data-struct/</link><pubDate>Wed, 01 Jun 2022 01:52:45 +0800</pubDate><guid>https://blog.letout.cn/p/redis/data-struct/</guid><description>&lt;img src="https://blog.letout.cn/p/redis/data-struct/redis.jpg" alt="Featured image of post Redis 常见数据结构" />&lt;p>Redis 提供了丰富的数据类型，常见的有五种：&lt;/p>
 &lt;ul>
 &lt;li>String 字符串&lt;/li>
 &lt;li>List 列表&lt;/li>
