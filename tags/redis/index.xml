@@ -1,4 +1,241 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Redis on 一层</title><link>https://emerywan.github.io/blog/tags/redis/</link><description>Recent content in Redis on 一层</description><generator>Hugo -- gohugo.io</generator><lastBuildDate>Wed, 11 Jan 2023 01:52:45 +0800</lastBuildDate><atom:link href="https://emerywan.github.io/blog/tags/redis/index.xml" rel="self" type="application/rss+xml"/><item><title>Redis 缓存问题</title><link>https://emerywan.github.io/blog/p/redis/cache-problem/</link><pubDate>Wed, 11 Jan 2023 01:52:45 +0800</pubDate><guid>https://emerywan.github.io/blog/p/redis/cache-problem/</guid><description>&lt;img src="https://emerywan.github.io/blog/p/redis/cache-problem/cache.png" alt="Featured image of post Redis 缓存问题" />&lt;h2 id="-缓存雪崩">🌨️ 缓存雪崩&lt;/h2>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Redis on 一层</title><link>https://emerywan.github.io/blog/tags/redis/</link><description>Recent content in Redis on 一层</description><generator>Hugo -- gohugo.io</generator><lastBuildDate>Wed, 01 Mar 2023 18:52:45 +0800</lastBuildDate><atom:link href="https://emerywan.github.io/blog/tags/redis/index.xml" rel="self" type="application/rss+xml"/><item><title>Redis 复制</title><link>https://emerywan.github.io/blog/p/redis/replication/</link><pubDate>Wed, 01 Mar 2023 18:52:45 +0800</pubDate><guid>https://emerywan.github.io/blog/p/redis/replication/</guid><description>&lt;img src="https://emerywan.github.io/blog/p/redis/replication/replication.png" alt="Featured image of post Redis 复制" />&lt;h2 id="建立复制">建立复制&lt;/h2>
+&lt;p>参与复制的 Redis 实例划分为：&lt;/p>
+&lt;ul>
+&lt;li>主节点 &lt;code>master&lt;/code>&lt;/li>
+&lt;li>从节点 &lt;code>slave&lt;/code>&lt;/li>
+&lt;/ul>
+&lt;p>一个主节点可以有多个从节点，数据的复制是单向的 &lt;code>master -&amp;gt; slave&lt;/code>。&lt;/p>
+&lt;p>通过主从复制，可以实现「读写分离」，主服务器负责「写」操作，从服务器负责「读」操作。&lt;/p>
+&lt;p>同时，从节点也可以作为主节点的备份。&lt;/p>
+&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/redis/replication/read-write.png"
+width="902"
+height="422"
+srcset="https://emerywan.github.io/blog/blog/p/redis/replication/read-write_huc9c3964624999041f81d0c7b2328e956_42565_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/redis/replication/read-write_huc9c3964624999041f81d0c7b2328e956_42565_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+class="gallery-image"
+data-flex-grow="213"
+data-flex-basis="512px"
+>&lt;/p>
+&lt;p>在从服务器中，使用 &lt;code>slaveof&lt;/code> / &lt;code>replicaof&lt;/code> 命令/配置，建立主从服务关系，从节点只会保存主节点的信息，其余的复制流程在节点内部异步进行。&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;span class="lnt">4
+&lt;/span>&lt;span class="lnt">5
+&lt;/span>&lt;span class="lnt">6
+&lt;/span>&lt;span class="lnt">7
+&lt;/span>&lt;span class="lnt">8
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-sh" data-lang="sh">&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># 配置文件中设置&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">slaveof &lt;span class="o">{&lt;/span>masterHost&lt;span class="o">}&lt;/span> &lt;span class="o">{&lt;/span>masterPort&lt;span class="o">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># 启动从服务时&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">redis-server --slaveof &lt;span class="o">{&lt;/span>masterHost&lt;span class="o">}&lt;/span> &lt;span class="o">{&lt;/span>masterPort&lt;span class="o">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># 从服务中使用命令&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">slaveof &lt;span class="o">{&lt;/span>masterHost&lt;span class="o">}&lt;/span> &lt;span class="o">{&lt;/span>masterPort&lt;span class="o">}&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;h3 id="同步原理">同步原理&lt;/h3>
+&lt;p>Redis 使用 &lt;code>psync&lt;/code> 完成主从数据的同步。&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-sh" data-lang="sh">&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># runID 保存的主服务器的 id&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># offset 偏移量，第一次同步为 -1&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">psync &lt;span class="o">{&lt;/span>runID&lt;span class="o">}&lt;/span> &lt;span class="o">{&lt;/span>offset&lt;span class="o">}&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;ul>
+&lt;li>
+&lt;p>👣 主服务器会执行 &lt;code>bgsave&lt;/code> 命令来生成 RDB 文件，然后把文件发送给从服务器。&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>👣 从服务器收到 RDB 文件后，会先「清空当前的数据」，然后载入 RDB 文件。&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>👣 主服务器依然可以正常处理命令（fork子进程，COW），在复制期间为了保障数据的一致性，写命令会被同时记录在 「复制客户缓冲区」&lt;code>replication buffer&lt;/code> 中，从服务器加载完 RDB 后，会运行缓存区中记录的命令，保障数据一致性。&lt;/p>
+&lt;/li>
+&lt;/ul>
+&lt;h3 id="部分复制">部分复制&lt;/h3>
+&lt;ul>
+&lt;li>
+&lt;p>📃 复制偏移量 offset&lt;/p>
+&lt;p>参与主从的节点都会维护自身的复制偏移量，处理完「写命令」后，都会累计命令的字节长度。&lt;/p>
+&lt;p>从节点会没秒中上报自身的复制偏移量。&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>♒ 复制积压缓冲区&lt;/p>
+&lt;p>replication backlog buffer&lt;/p>
+&lt;p>本质上一个先进先出的定长队列（默认两个，2 * 1M），与 MySQL redolog 一样是循环写入，新数据会覆盖旧数据。
+主节点响应写命令时，再发送命令到从节点时，同时会将数据写入复制积压缓冲区，用于部分复制命令丢失是的数据补救。&lt;/p>
+&lt;/li>
+&lt;/ul>
+&lt;p>主从服务器在完成第一次全量复制之后，会通过长连接进行命令传播。&lt;/p>
+&lt;p>网络是不稳定的，从服务器可能会有短暂的断开，当重新建立连接之后，可以根据情况使用增量复制来同步数据。&lt;/p>
+&lt;p>增量复制同样采用了 &lt;code>psync&lt;/code> 来同步，通过 offset 来告知主服务器当前的数据的偏移情况。&lt;/p>
+&lt;p>当从服务器的偏移量在复制积压缓冲区中找到，会进行部分复制；当偏移数据过大，已被覆盖无法找到时，会退化为全量复制。&lt;/p>
+&lt;h3 id="-保持连接">💓 保持连接&lt;/h3>
+&lt;p>主从节点间有心跳检测机制：&lt;/p>
+&lt;ul>
+&lt;li>
+&lt;p>主节点每 10s 向从节点发送 &lt;code>ping&lt;/code> 命令，判断从节点的连接状态&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>从节点每 1s 上报自身 offset 情况&lt;/p>
+&lt;ul>
+&lt;li>实时监控从节点网络状态，延迟性&lt;/li>
+&lt;li>判断数据是否丢失&lt;/li>
+&lt;li>保障从节点的连接数量&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;h2 id="-读写分离问题">📚 读写分离问题&lt;/h2>
+&lt;h3 id="-数据延迟">🎰 数据延迟&lt;/h3>
+&lt;p>Redis 由于异步复制的特性，延迟是无法避免的，取决于当前的网络情况和命令阻塞情况。&lt;/p>
+&lt;p>适合于业务场景对延迟不敏感的场景。根据具体业务场景而定，可以考虑使用 Redis 集群做水平扩展的方案。&lt;/p>
+&lt;h3 id="-过期数据">🗑️ 过期数据&lt;/h3>
+&lt;p>在 Redis 中，有（1）定期删除；（2）惰性删除；两种删除方案。&lt;/p>
+&lt;p>在从服务器中，不会检查是否过期，主服务器中找到过期数据，会同步一条 &lt;code>DEL&lt;/code> 命令到从服务器中，删除过期数据。&lt;/p>
+&lt;ul>
+&lt;li>
+&lt;p>在 Redis 3.2-，会直接返回过期数据，不会进行检查&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>在 Redis 3.2+，在返回数据前，会检查过期时间，解决了从服务器读取到过期数据的问题&lt;/p>
+&lt;/li>
+&lt;/ul>
+&lt;h3 id="-节点故障">🌀 节点故障&lt;/h3>
+&lt;p>当主节点宕机后，从节点是无法自动升级为主节点的，需要人工干预。&lt;/p>
+&lt;p>考虑使用 Redis 哨兵模式或集群方案。&lt;/p>
+&lt;h2 id="-相关优化">👍 相关优化&lt;/h2>
+&lt;ul>
+&lt;li>
+&lt;p>避免全量复制&lt;/p>
+&lt;p>主从复制的全量复制是一个非常消耗资源的操作，除了第一次复制的全量复制，需要尽量避免全量复制。&lt;/p>
+&lt;p>复制积压缓存区不足，会导致复制退化为全量复制，在运维时，可以根据实际情况增加缓冲区的容量。&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>避免复制风暴&lt;/p>
+&lt;p>如果一个主节点上挂载了多个从节点，如果同时与多个从节点进行全量同步时，会向多个从节点发送RDB文件（Redis 做了优化可共享一个 RDB），导致网络带宽的严重消耗，造成延迟问题。&lt;/p>
+&lt;p>建议使用链状/树状结构，从节点挂载到从节点上。&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>单机复制风暴&lt;/p>
+&lt;p>由于 Redis 的瓶颈不在 CPU 上，通常会在一台服务器上部署多个实例。为了避免物理机问题导致的故障，导致恢复后大量从节点向一台机器进行复制操作，应该把主节点分散到多台机器上。&lt;/p>
+&lt;/li>
+&lt;/ul>
+&lt;h2 id="-哨兵机制">🎺 哨兵机制&lt;/h2>
+&lt;p>😓 Redis 在主从模式下，一旦主节点故障，需要人工干预将从节点提升为主节点，同时需要在客户端配置新的主节点地址。&lt;/p>
+&lt;p>为了达到高可用，提供了哨兵模式 &lt;code>Redis Sentinel&lt;/code> 解决这个问题，达到高可用。能够自动完成故障发现和故障转移。&lt;/p>
+&lt;p>在哨兵模式下，相比于复制模式，只是多了 Sentinel 节点，主从模式下的 Redis 节点没有任何特殊处理。
+其中，Sentinel 节点本质上是特殊的 Redis 节点，只是不会存储数据，只支持部分命令。&lt;/p>
+&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/redis/replication/sentinel.png"
+width="545"
+height="732"
+srcset="https://emerywan.github.io/blog/blog/p/redis/replication/sentinel_hu9ca24b6840f6afec965ea3fe9eb87fe5_297258_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/redis/replication/sentinel_hu9ca24b6840f6afec965ea3fe9eb87fe5_297258_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+class="gallery-image"
+data-flex-grow="74"
+data-flex-basis="178px"
+>&lt;/p>
+&lt;ul>
+&lt;li>
+&lt;p>🔍 监控&lt;/p>
+&lt;p>Sentinel 节点会定期检查 Redis 数据节点，其余 Sentinel 节点是否可达。&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>📧 通知&lt;/p>
+&lt;p>Sentinel 节点会将故障转移的结果通知给应用方。&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>📇 主节点故障转移&lt;/p>
+&lt;p>可以实现故障时，将从节点晋升为主节点，并维护正确的主从关系。&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>📑 配置提供者&lt;/p>
+&lt;p>在哨兵结构中，客户端初始化连接的是哨兵集群，从中获取主节点的信息。&lt;/p>
+&lt;/li>
+&lt;/ul>
+&lt;h3 id="三个定时任务">三个定时任务&lt;/h3>
+&lt;p>Redis Sentinel 通过三个定时任务对各个节点发现和监控：&lt;/p>
+&lt;ul>
+&lt;li>
+&lt;p>每隔 10s，每个 Sentinel 节点会向主节点和从节点发送 info 命令获取最新的拓扑结构&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>每隔 2s，每个 Sentinel 节点会向 Redis 数据节点的 __sentinel__:hello 频道上发送该 Sentinel 节点对于主节点的判断，以及当前 Sentinel 节点的信息&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>每隔 1s，每个 Sentinel 会向其他 Sentinel 节点、主节点、从节点发送 ping 命令判断是否可达&lt;/p>
+&lt;/li>
+&lt;/ul>
+&lt;h3 id="主观下线和客观下线">主观下线和客观下线&lt;/h3>
+&lt;h4 id="主观下线">主观下线&lt;/h4>
+&lt;p>”一家之言“&lt;/p>
+&lt;p>Sentinel 每 1s 会向其他所有节点发送 &lt;code>ping&lt;/code> 进行💓心跳检测，当节点超过时间没有回复，就会对该节点做失败判定。只有这一个节点的判定称为「主观下线」。&lt;/p>
+&lt;h4 id="客观下线">客观下线&lt;/h4>
+&lt;p>当主观下线的为主节点时，当前 Sentinel 节点会询问其他哨兵对该主节点的判断，当多数哨兵都对主节点的下线做了同意判定，超过配置中的 quorum 个数，就被标记为 「客观下线」。&lt;/p>
+&lt;h3 id="sentinel-领导选举">Sentinel 领导选举&lt;/h3>
+&lt;p>当确定客观下线之后，需要进行故障转移工作。实际上故障转移工作只需要一个 Sentinel 节点来完成即可，所以需要先做一个领导者选举的工作。&lt;/p>
+&lt;p>Redis 使用 &lt;a class="link" href="https://raft.github.io/" target="_blank" rel="noopener"
+>Raft&lt;/a> 算法实现领导的选举。&lt;/p>
+&lt;p>每个在线的 Redis Sentinel 都有资格成为领导者，在一个哨兵确定主节点客观下线时，会向其他的节点发送 &lt;code>sentinel is-master-down-by-addr&lt;/code> 命令，
+要求将自己设置为领导者。&lt;/p>
+&lt;p>收到命令的节点，如果没有同意过其他节点的请求，就会同意该请求，否则拒绝。每个哨兵节点只有一票。&lt;/p>
+&lt;p>当一个哨兵拿到 quorum 个票数时，就成为了领导者，否则进行下一次投票。&lt;/p>
+&lt;h3 id="故障转移">故障转移&lt;/h3>
+&lt;ul>
+&lt;li>
+&lt;p>👣 选取新的主节点&lt;/p>
+&lt;ul>
+&lt;li>
+&lt;p>🧩 过滤“不健康”节点（主观下线、掉线）&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>🧩 选择优先级最高的节点，否则继续下一条规则&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>🧩 选取offset最大的节点，否则下一条规则&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>🧩 选取 runId 最小的节点&lt;/p>
+&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>
+&lt;p>👣 从节点提升为主节点&lt;/p>
+&lt;p>从节点执行 &lt;code>slaveof no one&lt;/code> 成为主节点。&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>👣 哨兵领导者向其他从节点发送命名，更换主节点信息&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>👣 将下线的主节点更新为从节点，并保持监控，当再次上线时，作为从节点复制新的主节点信息&lt;/p>
+&lt;/li>
+&lt;/ul>
+&lt;h3 id="注意事项">注意事项&lt;/h3>
+&lt;ul>
+&lt;li>Sentinel 节点应该部署在多台物理机上&lt;/li>
+&lt;/ul>
+&lt;p>Redis 的瓶颈不在 CPU，通过一台物理机会部署多个 Redis 实例，如果哨兵全部都在一台物理机上，如果出现物理故障，所有的实例都会收到影响&lt;/p>
+&lt;ul>
+&lt;li>至少三个 Sentinel 节点，且为奇数节点&lt;/li>
+&lt;/ul>
+&lt;p>哨兵领导者选举时，至少需要获取「一半+1」个投票。奇数节点可以在满足条件的基础上节省一个节点。&lt;/p>
+&lt;h2 id="参考">参考&lt;/h2>
+&lt;ul>
+&lt;li>&lt;a class="link" href="https://segmentfault.com/a/1190000039766545" target="_blank" rel="noopener"
+>https://segmentfault.com/a/1190000039766545&lt;/a>&lt;/li>
+&lt;li>Redis 开发于运维&lt;/li>
+&lt;/ul></description></item><item><title>Redis 缓存问题</title><link>https://emerywan.github.io/blog/p/redis/cache-problem/</link><pubDate>Wed, 11 Jan 2023 01:52:45 +0800</pubDate><guid>https://emerywan.github.io/blog/p/redis/cache-problem/</guid><description>&lt;img src="https://emerywan.github.io/blog/p/redis/cache-problem/cache.png" alt="Featured image of post Redis 缓存问题" />&lt;h2 id="-缓存雪崩">🌨️ 缓存雪崩&lt;/h2>
 &lt;p>为了保证缓存中数据与数据库中的数据的一致性，通常 Redis 中数据会设置过期时间。如果（1）缓存层在同一时间有大量数据失效，或者 （2）Redis 由于某些情况宕机，导致所有请求全部访问数据库，造成数据库宕机。&lt;/p>
 &lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/redis/cache-problem/1.png"
 width="1080"
@@ -165,7 +402,7 @@ data-flex-basis="392px"
 &lt;h3 id="触发条件">触发条件&lt;/h3>
 &lt;h4 id="手动触发">手动触发&lt;/h4>
 &lt;ul>
-&lt;li>save&lt;/li>
+&lt;li>save（阻塞主线程）&lt;/li>
 &lt;li>bgsave&lt;/li>
 &lt;/ul>
 &lt;h4 id="被动触发">被动触发&lt;/h4>
@@ -191,8 +428,7 @@ data-flex-basis="392px"
 &lt;/li>
 &lt;/ul>
 &lt;h3 id="实现方式">实现方式&lt;/h3>
-&lt;p>执行 bgsave 命令的时候，会通过 fork() 创建子进程，此时子进程和父进程是共享同一片内存数据，bgsave 子进程会把该副本数据写入 RDB 文件。&lt;/p>
-&lt;p>在这个过程中，Redis 依然可以继续处理操作命令，如果父进程执行写操作，关键的技术就在于写时复制技术（Copy-On-Write, COW），被修改的数据会复制一份副本。（RDB 快照保存的是原本的内存数据）&lt;/p>
+&lt;p>执行 bgsave 命令的时候，会通过 fork() 创建子进程，复制父进程的页表，此时子进程和父进程共享同一片内存数据，bgsave 子进程会把该副本数据写入 RDB 文件。&lt;/p>
 &lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/redis/persistence/cow.png"
 width="969"
 height="707"
@@ -202,6 +438,7 @@ class="gallery-image"
 data-flex-grow="137"
 data-flex-basis="328px"
 >&lt;/p>
+&lt;p>在这个过程中，Redis 依然可以继续处理操作命令，如果父进程执行写操作，关键的技术就在于写时复制技术（Copy-On-Write, COW），被修改的数据会复制一份副本。（RDB 快照保存的是原本的内存数据）&lt;/p>
 &lt;h2 id="-aof-日志">📃 AOF 日志&lt;/h2>
 &lt;p>Redis 在执行完一条命令后，会把该命令以追加的方式写入到文件中（会先写到缓冲区，选择合适的刷盘时间才会到磁盘中）。&lt;/p>
 &lt;p>当 Redis 重启时，会读取 AOF 日志的内容，然后逐一执行进行数据恢复。&lt;/p>

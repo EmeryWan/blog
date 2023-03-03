@@ -1,0 +1,415 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>分布式 on 一层</title><link>https://emerywan.github.io/blog/tags/%E5%88%86%E5%B8%83%E5%BC%8F/</link><description>Recent content in 分布式 on 一层</description><generator>Hugo -- gohugo.io</generator><lastBuildDate>Wed, 01 Mar 2023 12:14:45 +0800</lastBuildDate><atom:link href="https://emerywan.github.io/blog/tags/%E5%88%86%E5%B8%83%E5%BC%8F/index.xml" rel="self" type="application/rss+xml"/><item><title>分布式事务</title><link>https://emerywan.github.io/blog/p/distributed/transaction/</link><pubDate>Wed, 01 Mar 2023 12:14:45 +0800</pubDate><guid>https://emerywan.github.io/blog/p/distributed/transaction/</guid><description>&lt;img src="https://emerywan.github.io/blog/p/distributed/transaction/cap.webp" alt="Featured image of post 分布式事务" />&lt;h2 id="事务">事务&lt;/h2>
+&lt;h3 id="数据库事务">数据库事务&lt;/h3>
+&lt;p>事务（单数据库的本地事务）是指一组操作，要么全部正确执行，要么全部不执行。事务通常会有 ACID 四大特性：&lt;/p>
+&lt;ul>
+&lt;li>&lt;code>A&lt;/code> 原子性&lt;/li>
+&lt;li>&lt;code>C&lt;/code> 一致性&lt;/li>
+&lt;li>&lt;code>I&lt;/code> 隔离性&lt;/li>
+&lt;li>&lt;code>D&lt;/code> 持久性&lt;/li>
+&lt;/ul>
+&lt;h3 id="分布式事务">分布式事务&lt;/h3>
+&lt;p>现在的大型业务系统通常都由若干个子系统构成，这些子系统各自拥有独立的数据库，一个业务流程需要由多个子系统共同完成。分布式事务就是需要保障这些操作要么全部成功，要么全部失败。&lt;/p>
+&lt;p>分布式事务就是要保障不同数据库数据的一致性。&lt;/p>
+&lt;p>例如在大型的电商系统中，下单时会：扣减库存，减优惠，生成订单id等多个步骤，通常订单服务与库存、优惠、订单id都是不同的服务。这些操作是否成功，依赖于多个系统的结果，可能涉及三个系统服务，三个数据库。所以需要在数据库与应用程序之间，通过“中间”方案，实现分布式事务的支持。&lt;/p>
+&lt;h2 id="一致性">一致性&lt;/h2>
+&lt;h3 id="强一致性">强一致性&lt;/h3>
+&lt;p>在任意时刻，所有节点的数据都是一样的，每一次读操作，都能获取到数据最近的一次写操作。&lt;/p>
+&lt;h3 id="弱一致性">弱一致性&lt;/h3>
+&lt;p>数据更新后，能够容忍后续的访问只能访问部分数据或全部访问不到。&lt;/p>
+&lt;h3 id="最终一致性">最终一致性&lt;/h3>
+&lt;p>不保证任意时刻任意节点上的同一份数据都是相同的，但是在一段时候之后，节点的数据最终会达到一致的状态。&lt;/p>
+&lt;h2 id="-cap">⚙️ CAP&lt;/h2>
+&lt;p>CAP 定理指一个分布式系统中，一致性 &lt;code>Consistency&lt;/code>，可用性 &lt;code>Availability&lt;/code>，分区容错性 &lt;code>Partition tolerance&lt;/code>，最多只能满足两项。&lt;/p>
+&lt;ul>
+&lt;li>
+&lt;p>&lt;code>C&lt;/code> 一致性&lt;/p>
+&lt;p>所有节点在同一时间的数据完全一致。（任意时间在任意节点访问到的都是最新的数据）&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;code>A&lt;/code> 可用性&lt;/p>
+&lt;p>服务在一定时间内，会返回一个明确的结果，服务一直可用。&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;code>P&lt;/code> 分区容错性&lt;/p>
+&lt;p>一个服务分布在不同的系统中，如果部分系统宕机，其他系统能偶继续提供服务。&lt;/p>
+&lt;/li>
+&lt;/ul>
+&lt;p>分区容错性时分布式系统的根本，如果分区容错性不能满足，那使用分布式式系统将失去意义。&lt;/p>
+&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/distributed/transaction/cap.webp"
+width="501"
+height="460"
+srcset="https://emerywan.github.io/blog/blog/p/distributed/transaction/cap_hu553ea908437f51f5f9df5986bc7065cb_18394_480x0_resize_q75_h2_box_2.webp 480w, https://emerywan.github.io/blog/blog/p/distributed/transaction/cap_hu553ea908437f51f5f9df5986bc7065cb_18394_1024x0_resize_q75_h2_box_2.webp 1024w"
+loading="lazy"
+class="gallery-image"
+data-flex-grow="108"
+data-flex-basis="261px"
+>&lt;/p>
+&lt;h3 id="cp">CP&lt;/h3>
+&lt;p>一致性 &amp;amp; 分区容忍性&lt;/p>
+&lt;p>优先保障数据的一致性。如涉及金钱交易的环节，保障数据不能出错。&lt;/p>
+&lt;h3 id="ap">AP&lt;/h3>
+&lt;p>可用性 &amp;amp; 分区容忍性&lt;/p>
+&lt;p>优先保障系统的可用。互联网中大多数场景都是保障系统可用，如在有大量请求时，一些服务可以先不提供（如注册用户，查询历史记录等）。&lt;/p>
+&lt;h2 id="-base">🫧 BASE&lt;/h2>
+&lt;p>BASE 理论是指：&lt;/p>
+&lt;ul>
+&lt;li>
+&lt;p>基本可用 &lt;code>Basically Available&lt;/code>&lt;/p>
+&lt;p>分布式系统出现故障的时候，允许损失部分可用性，保证核心可用。&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>软状态 &lt;code>Soft State&lt;/code>&lt;/p>
+&lt;p>允许系统存在中间状态，这个中间状态不会影响系统整体的可用性。&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>最终一致性 &lt;code>Eventual Consistency&lt;/code>&lt;/p>
+&lt;p>系统中所有的数据副本经过一定时间后，最终能够达到一致性的状态。&lt;/p>
+&lt;/li>
+&lt;/ul>
+&lt;p>BASE 理论本质上是对 CAP 理论的延伸，是对 AP 的补充。&lt;/p>
+&lt;p>对于业务系统来说，通常选择牺牲一致性来换取系统的可用性和分区容错性。但是不是完全放弃数据一致性，而是牺牲强一致性来换取弱一致性，采用合适的方式来保证最终一致性。&lt;/p>
+&lt;h2 id="分布式事务常见场景">分布式事务常见场景&lt;/h2>
+&lt;h3 id="银行转账">银行转账&lt;/h3>
+&lt;p>在银行转账中，扣余额和添加余额需要同时成功。扣减账户余额成功，增加账户余额失败；扣减账户余额失败，增加账户余额成功，都是不允许发生的。&lt;/p>
+&lt;h3 id="下订单和扣库存">下订单和扣库存&lt;/h3>
+&lt;p>下订单和扣库存需要保持一致，如果先下订单，扣库存失败，那么将会导致超卖；如果下订单没有成功，扣库存成功，那么会导致少卖。&lt;/p>
+&lt;h3 id="同步超时">同步超时&lt;/h3>
+&lt;p>服务化的系统间调用常常因为网络问题导致系统间调用超时，系统A同步调用系统B超时，系统A可以明确得到超时反馈，但是无法确定系统B是否已经完成了预定的功能或者没有完成预定的功能。于是，系统A就迷茫了，不知道应该继续做什么，如何反馈给使用方。&lt;/p>
+&lt;h2 id="一致性协议">一致性协议&lt;/h2>
+&lt;h3 id="-2pc">👣 2PC&lt;/h3>
+&lt;h4 id="两阶段提交">两阶段提交&lt;/h4>
+&lt;p>两阶段提交（2PC）把分布式事务分为两个过程：准备阶段 &lt;code>Prepare&lt;/code>，提交阶段 &lt;code>Commit&lt;/code> / 回滚阶段 &lt;code>Rollback&lt;/code>。&lt;/p>
+&lt;ul>
+&lt;li>
+&lt;p>第一阶段 &lt;code>prepare&lt;/code>&lt;/p>
+&lt;p>执行实际的业务操作，但不提交事务，锁定资源。&lt;/p>
+&lt;p>事务管理器（TM，Transaction Manager）向所有本地资源管理器（RM，Resource Manager）发起请求，询问是否是就绪 ready 状态，所有的参与者都将本地事务能否成功的信息反馈给协调者。&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>第二阶段 &lt;code>commit / rollback&lt;/code>&lt;/p>
+&lt;p>事务管理器根据所有本地资源管理器的反馈，通知所有本地资源管理器，步调一致地在所有分支上提交或回滚。&lt;/p>
+&lt;p>只要有一个 RM 失败，就会进行回滚操作；否则通知所有 RM 提交事务。提交事务后释放锁资源。&lt;/p>
+&lt;/li>
+&lt;/ul>
+&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/distributed/transaction/2pc.jpg"
+width="1000"
+height="762"
+srcset="https://emerywan.github.io/blog/blog/p/distributed/transaction/2pc_hu05f89294f333576b7a41e014b68a016a_38488_480x0_resize_q75_box.jpg 480w, https://emerywan.github.io/blog/blog/p/distributed/transaction/2pc_hu05f89294f333576b7a41e014b68a016a_38488_1024x0_resize_q75_box.jpg 1024w"
+loading="lazy"
+class="gallery-image"
+data-flex-grow="131"
+data-flex-basis="314px"
+>&lt;/p>
+&lt;p>事务管理器（TM）：负责协调和管理事务，控制着全局事务并管理事务的生命周期，并协调各个 RM。&lt;/p>
+&lt;p>资源管理器（RM）：事务的参与者，一般可以指一个数据库实例，通过资源管理器对数据库进行控制，即一个分支事务。&lt;/p>
+&lt;p>DTP 模型定义 TM 和 RM 之间的通讯接口规范叫做 XA（即数据库提供的 2PC 接口协议），基于数据库的 XA 协议来实现的 2PC 称为 XA 方案。&lt;/p>
+&lt;h4 id="seata-实现-2pc">Seata 实现 2PC&lt;/h4>
+&lt;p>&lt;a class="link" href="https://github.com/seata/seata" target="_blank" rel="noopener"
+>Seata&lt;/a> 是一款开源的分布式事务解决方案，致力于在微服务架构下提供高性能和简单易用的分布式事务服务。&lt;/p>
+&lt;p>📇 Seata 把一个分布式事务理解成一个「全局事务」和若干「分支事务」：&lt;/p>
+&lt;ul>
+&lt;li>
+&lt;p>全局事务：协调各个分支事务达成一致&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>分支事务：可以理解为一个关系数据库的本地事务&lt;/p>
+&lt;/li>
+&lt;/ul>
+&lt;p>🗃️ Seata 定义了三个组件处理分布式事务：&lt;/p>
+&lt;ul>
+&lt;li>
+&lt;p>TC（Transaction Corinator）事务协调器&lt;/p>
+&lt;p>独立的中间件。维护全局事务的运行状态：接收 TM 指令发起全局事务的提交与回滚；负责与 RM 通信协调各个分支事务的通知与回滚。&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>TM（Transaction Manager）事务管理器&lt;/p>
+&lt;p>jar包。嵌入应用程序中工作，负责开启一个全局事务，最终向 TC 发起全局提交或全局回滚。&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>RM（Resource Manager）资源管理器&lt;/p>
+&lt;p>控制分支事务。接收 TC 的指令，驱动本地事务的提交或回滚。&lt;/p>
+&lt;/li>
+&lt;/ul>
+&lt;p>📺 在架构方面，2PC 方案的 RM 实际上是在数据库层面，RM 本质上是数据库自身通过 XA 协议实现；seata 中 RM 以 jar 包的形式作为中间件层部署在应用程序一侧。&lt;/p>
+&lt;p>🗳️ 在两阶段提交方面，2PC 在第二阶段决议 commit / rollback，事务性资源锁要保持在第二阶段完成后释放；seata 在第一阶段就将事务提交，省去第二阶段持有锁的时间，提高整体效率。&lt;/p>
+&lt;h4 id="配置-seata-服务">配置 Seata 服务&lt;/h4>
+&lt;ul>
+&lt;li>启动 seata 中间件服务&lt;/li>
+&lt;li>配置服务注册中心&lt;/li>
+&lt;li>在应用配置 regsitry.conf、file.conf（在 seata 中拷贝）&lt;/li>
+&lt;li>使用 seata 服务，需要在双方数据库中创建 &lt;code>undo log&lt;/code> 表
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;span class="lnt">11
+&lt;/span>&lt;span class="lnt">12
+&lt;/span>&lt;span class="lnt">13
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-sql" data-lang="sql">&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="k">CREATE&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">TABLE&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">`&lt;/span>&lt;span class="n">undo_log&lt;/span>&lt;span class="o">`&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="o">`&lt;/span>&lt;span class="n">id&lt;/span>&lt;span class="o">`&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nb">bigint&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="mi">20&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">NOT&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">NULL&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">AUTO_INCREMENT&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="o">`&lt;/span>&lt;span class="n">branch_id&lt;/span>&lt;span class="o">`&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nb">bigint&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="mi">20&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">NOT&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">NULL&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="o">`&lt;/span>&lt;span class="n">xid&lt;/span>&lt;span class="o">`&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nb">varchar&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="mi">100&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">NOT&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">NULL&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="o">`&lt;/span>&lt;span class="n">context&lt;/span>&lt;span class="o">`&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nb">varchar&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="mi">128&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">NOT&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">NULL&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="o">`&lt;/span>&lt;span class="n">rollback_info&lt;/span>&lt;span class="o">`&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">longblob&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">NOT&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">NULL&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="o">`&lt;/span>&lt;span class="n">log_status&lt;/span>&lt;span class="o">`&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nb">int&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="mi">11&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">NOT&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">NULL&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="o">`&lt;/span>&lt;span class="n">log_created&lt;/span>&lt;span class="o">`&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">datetime&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">NOT&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">NULL&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="o">`&lt;/span>&lt;span class="n">log_modified&lt;/span>&lt;span class="o">`&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">datetime&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">NOT&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">NULL&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="o">`&lt;/span>&lt;span class="n">ext&lt;/span>&lt;span class="o">`&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nb">varchar&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="mi">100&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">DEFAULT&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">NULL&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="k">PRIMARY&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">KEY&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="o">`&lt;/span>&lt;span class="n">id&lt;/span>&lt;span class="o">`&lt;/span>&lt;span class="p">),&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="k">UNIQUE&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">KEY&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">`&lt;/span>&lt;span class="n">ux_undo_log&lt;/span>&lt;span class="o">`&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="o">`&lt;/span>&lt;span class="n">xid&lt;/span>&lt;span class="o">`&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="o">`&lt;/span>&lt;span class="n">branch_id&lt;/span>&lt;span class="o">`&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w"> &lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">ENGINE&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="n">InnoDB&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">AUTO_INCREMENT&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="mi">1&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">DEFAULT&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">CHARSET&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="n">utf8&lt;/span>&lt;span class="p">;&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;/li>
+&lt;/ul>
+&lt;h4 id="创建代理数据源">创建代理数据源&lt;/h4>
+&lt;p>每个 RM 通过 DataSourceProxy 使用代理连接。与 TC 进行通信交互、记录 undo_log 等。&lt;/p>
+&lt;p>第一阶段业务操作生成对于的 undo_log，将 undo_log 和业务数据放在一个本地事务提交（undo_log 记录了修改前的值，同时提交后释放锁资源）。&lt;/p>
+&lt;p>TM 开启全局事务，会将全局事务ID &lt;code>XID&lt;/code> 放在事务上下文中，并通过远程调用传入下游的各个分支事务。&lt;/p>
+&lt;p>第二阶段（1）事务提交，TC 通知各个分支完成事务，只需要删除对应的undo_log（第一阶段已经分支提交）；（2）事务回滚，通过 XID 和 Branch ID 找到对应的 undo_log 生成反向 SQL 执行即可。&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;span class="lnt">11
+&lt;/span>&lt;span class="lnt">12
+&lt;/span>&lt;span class="lnt">13
+&lt;/span>&lt;span class="lnt">14
+&lt;/span>&lt;span class="lnt">15
+&lt;/span>&lt;span class="lnt">16
+&lt;/span>&lt;span class="lnt">17
+&lt;/span>&lt;span class="lnt">18
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-java" data-lang="java">&lt;span class="line">&lt;span class="cl">&lt;span class="nd">@Configuration&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="kd">public&lt;/span> &lt;span class="kd">class&lt;/span> &lt;span class="nc">DatabaseConfiguration&lt;/span> &lt;span class="o">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nd">@Bean&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nd">@ConfigurationProperties&lt;/span>&lt;span class="o">(&lt;/span>&lt;span class="n">prefix&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="s">&amp;#34;spring.datasource.ds0&amp;#34;&lt;/span>&lt;span class="o">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kd">public&lt;/span> &lt;span class="n">DruidDataSource&lt;/span> &lt;span class="nf">ds0&lt;/span>&lt;span class="o">()&lt;/span> &lt;span class="o">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">DruidDataSource&lt;/span> &lt;span class="n">druidDataSource&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="k">new&lt;/span> &lt;span class="n">DruidDataSource&lt;/span>&lt;span class="o">();&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">return&lt;/span> &lt;span class="n">druidDataSource&lt;/span>&lt;span class="o">();&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="o">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nd">@Bean&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nd">@Primary&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kd">public&lt;/span> &lt;span class="n">DataSource&lt;/span> &lt;span class="nf">dataSource&lt;/span>&lt;span class="o">(&lt;/span>&lt;span class="n">DruidDataSource&lt;/span> &lt;span class="n">ds0&lt;/span>&lt;span class="o">)&lt;/span> &lt;span class="o">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">DataSourceProxy&lt;/span> &lt;span class="n">pds0&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="k">new&lt;/span> &lt;span class="n">DataSourceProxy&lt;/span>&lt;span class="o">(&lt;/span>&lt;span class="n">ds0&lt;/span>&lt;span class="o">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">return&lt;/span> &lt;span class="n">pds0&lt;/span>&lt;span class="o">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="o">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">}&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;h4 id="双方业务实现">双方业务实现&lt;/h4>
+&lt;p>&lt;code>@GlobalTransactional&lt;/code> 开启全局事务。&lt;code>GlobalTransactinalInterceptor&lt;/code> 会拦截 &lt;code>@GlobalTransactional&lt;/code> 注解的方法，生成全局事务ID&lt;code>XID&lt;/code>。&lt;/p>
+&lt;p>XID 会在整个分布式事务中传递，在远程调用时 spring-cloud-alibaba-seata 会拦截 Feign 调用将 XID 传递到下游服务。&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;span class="lnt">11
+&lt;/span>&lt;span class="lnt">12
+&lt;/span>&lt;span class="lnt">13
+&lt;/span>&lt;span class="lnt">14
+&lt;/span>&lt;span class="lnt">15
+&lt;/span>&lt;span class="lnt">16
+&lt;/span>&lt;span class="lnt">17
+&lt;/span>&lt;span class="lnt">18
+&lt;/span>&lt;span class="lnt">19
+&lt;/span>&lt;span class="lnt">20
+&lt;/span>&lt;span class="lnt">21
+&lt;/span>&lt;span class="lnt">22
+&lt;/span>&lt;span class="lnt">23
+&lt;/span>&lt;span class="lnt">24
+&lt;/span>&lt;span class="lnt">25
+&lt;/span>&lt;span class="lnt">26
+&lt;/span>&lt;span class="lnt">27
+&lt;/span>&lt;span class="lnt">28
+&lt;/span>&lt;span class="lnt">29
+&lt;/span>&lt;span class="lnt">30
+&lt;/span>&lt;span class="lnt">31
+&lt;/span>&lt;span class="lnt">32
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-java" data-lang="java">&lt;span class="line">&lt;span class="cl">&lt;span class="c1">//
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">// 转账方
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">//
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span>&lt;span class="nd">@Service&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nd">@Sl4j&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="kd">public&lt;/span> &lt;span class="kd">class&lt;/span> &lt;span class="nc">AccountServiceImpl&lt;/span> &lt;span class="kd">implements&lt;/span> &lt;span class="n">AccountInfoService&lt;/span> &lt;span class="o">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nd">@Autowired&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kd">private&lt;/span> &lt;span class="n">AccountInfoDao&lt;/span> &lt;span class="n">accountInfoDao&lt;/span>&lt;span class="o">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nd">@Autowired&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kd">private&lt;/span> &lt;span class="n">BankClient&lt;/span> &lt;span class="n">bankClinet&lt;/span>&lt;span class="o">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="cm">/**
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="cm"> * 转账业务
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="cm"> */&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nd">@Override&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nd">@Transactional&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nd">@GlobalTranactional&lt;/span> &lt;span class="c1">// 开启全局事务
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span> &lt;span class="kd">public&lt;/span> &lt;span class="kt">void&lt;/span> &lt;span class="nf">updateAccountBalance&lt;/span>&lt;span class="o">(&lt;/span>&lt;span class="n">String&lt;/span> &lt;span class="n">accountNo&lt;/span>&lt;span class="o">,&lt;/span> &lt;span class="n">BigDecimal&lt;/span> &lt;span class="n">amount&lt;/span>&lt;span class="o">)&lt;/span> &lt;span class="o">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c1">// 本账户扣款
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span> &lt;span class="n">accountInfoDao&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">updateAccountBalance&lt;/span>&lt;span class="o">(&lt;/span>&lt;span class="n">accountNo&lt;/span>&lt;span class="o">,&lt;/span> &lt;span class="o">-&lt;/span>&lt;span class="mi">1&lt;/span> &lt;span class="o">*&lt;/span> &lt;span class="n">amount&lt;/span>&lt;span class="o">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c1">// 目标账户增加余额
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span> &lt;span class="n">String&lt;/span> &lt;span class="n">remoteRes&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">bankClinet&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">transfer&lt;/span>&lt;span class="o">(&lt;/span>&lt;span class="n">amount&lt;/span>&lt;span class="o">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">if&lt;/span> &lt;span class="o">(&lt;/span>&lt;span class="s">&amp;#34;fallback&amp;#34;&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">remoteRes&lt;/span>&lt;span class="o">)&lt;/span> &lt;span class="o">{&lt;/span> &lt;span class="c1">// 远程失败
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span> &lt;span class="k">throw&lt;/span> &lt;span class="k">new&lt;/span> &lt;span class="n">RuntimeException&lt;/span>&lt;span class="o">(&lt;/span>&lt;span class="s">&amp;#34;...&amp;#34;&lt;/span>&lt;span class="o">);&lt;/span> &lt;span class="c1">// 抛出自定义异常回滚事务
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span> &lt;span class="o">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c1">// ...
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span> &lt;span class="o">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">}&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;span class="lnt">11
+&lt;/span>&lt;span class="lnt">12
+&lt;/span>&lt;span class="lnt">13
+&lt;/span>&lt;span class="lnt">14
+&lt;/span>&lt;span class="lnt">15
+&lt;/span>&lt;span class="lnt">16
+&lt;/span>&lt;span class="lnt">17
+&lt;/span>&lt;span class="lnt">18
+&lt;/span>&lt;span class="lnt">19
+&lt;/span>&lt;span class="lnt">20
+&lt;/span>&lt;span class="lnt">21
+&lt;/span>&lt;span class="lnt">22
+&lt;/span>&lt;span class="lnt">23
+&lt;/span>&lt;span class="lnt">24
+&lt;/span>&lt;span class="lnt">25
+&lt;/span>&lt;span class="lnt">26
+&lt;/span>&lt;span class="lnt">27
+&lt;/span>&lt;span class="lnt">28
+&lt;/span>&lt;span class="lnt">29
+&lt;/span>&lt;span class="lnt">30
+&lt;/span>&lt;span class="lnt">31
+&lt;/span>&lt;span class="lnt">32
+&lt;/span>&lt;span class="lnt">33
+&lt;/span>&lt;span class="lnt">34
+&lt;/span>&lt;span class="lnt">35
+&lt;/span>&lt;span class="lnt">36
+&lt;/span>&lt;span class="lnt">37
+&lt;/span>&lt;span class="lnt">38
+&lt;/span>&lt;span class="lnt">39
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-java" data-lang="java">&lt;span class="line">&lt;span class="cl">&lt;span class="c1">//
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">// 收款方
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">// 另一个服务
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">//
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span>&lt;span class="nd">@RestController&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="kd">public&lt;/span> &lt;span class="kd">class&lt;/span> &lt;span class="nc">BackController&lt;/span> &lt;span class="o">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nd">@Autowired&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kd">private&lt;/span> &lt;span class="n">AccountInfoService&lt;/span> &lt;span class="n">accountInfoService&lt;/span>&lt;span class="o">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c1">// 接收转账
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span> &lt;span class="nd">@GetMapping&lt;/span>&lt;span class="o">(&lt;/span>&lt;span class="s">&amp;#34;/transfer&amp;#34;&lt;/span>&lt;span class="o">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kd">public&lt;/span> &lt;span class="n">String&lt;/span> &lt;span class="nf">transfer&lt;/span>&lt;span class="o">(&lt;/span>&lt;span class="n">BigDecimal&lt;/span> &lt;span class="n">amount&lt;/span>&lt;span class="o">){&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">accountInfoService&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">updateAccountBalance&lt;/span>&lt;span class="o">(&lt;/span>&lt;span class="s">&amp;#34;2&amp;#34;&lt;/span>&lt;span class="o">,&lt;/span> &lt;span class="n">amount&lt;/span>&lt;span class="o">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">return&lt;/span> &lt;span class="s">&amp;#34;get:&amp;#34;&lt;/span> &lt;span class="o">+&lt;/span> &lt;span class="n">amount&lt;/span>&lt;span class="o">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="o">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">// ---
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nd">@Service&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nd">@Slf4j&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="kd">public&lt;/span> &lt;span class="kd">class&lt;/span> &lt;span class="nc">AccountInfoServiceImpl&lt;/span> &lt;span class="kd">implements&lt;/span> &lt;span class="n">AccountInfoService&lt;/span> &lt;span class="o">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nd">@Autowired&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kd">private&lt;/span> &lt;span class="n">AccountInfoDao&lt;/span> &lt;span class="n">accountInfoDao&lt;/span>&lt;span class="o">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c1">// 作为事务分支
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span> &lt;span class="c1">// 不需要开启全局事务
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span> &lt;span class="nd">@Override&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nd">@Transactional&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kd">public&lt;/span> &lt;span class="kt">void&lt;/span> &lt;span class="nf">updateAccountBalance&lt;/span>&lt;span class="o">(&lt;/span>&lt;span class="n">String&lt;/span> &lt;span class="n">accountNo&lt;/span>&lt;span class="o">,&lt;/span> &lt;span class="n">BigDecimal&lt;/span> &lt;span class="n">amount&lt;/span>&lt;span class="o">)&lt;/span> &lt;span class="o">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c1">// RootContext.getXID()
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span> &lt;span class="n">log&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">info&lt;/span>&lt;span class="o">(&lt;/span>&lt;span class="s">&amp;#34;XID：{}&amp;#34;&lt;/span>&lt;span class="o">,&lt;/span> &lt;span class="n">RootContext&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">getXID&lt;/span>&lt;span class="o">());&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c1">// 增加金额
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span> &lt;span class="n">accountInfoDao&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">updateAccountBalance&lt;/span>&lt;span class="o">(&lt;/span>&lt;span class="n">accountNo&lt;/span>&lt;span class="o">,&lt;/span> &lt;span class="n">amount&lt;/span>&lt;span class="o">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c1">// ...
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span> &lt;span class="o">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">}&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;h3 id="-tcc">🛍️ TCC&lt;/h3>
+&lt;p>TCC &lt;code>Try - Confirm - Cancel&lt;/code>&lt;/p>
+&lt;ul>
+&lt;li>
+&lt;p>Try 阶段&lt;/p>
+&lt;p>尝试执行。完成所有的业务检查，预留必须的业务资源。&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>Confirm 阶段&lt;/p>
+&lt;p>确认执行真正的业务。该阶段不会做任何业务检查，只使用 Try 阶段预留的业务资源。&lt;/p>
+&lt;p>在 TCC 中，通常认为 Try 阶段成功后，Confirm 一定会成功，如果 Confirm 阶段出错，需要进行重试。&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>Cancel 阶段&lt;/p>
+&lt;p>取消执行。释放 Try 阶段预留的业务资源。&lt;/p>
+&lt;p>在 TCC 中，认为 Cancel 一定会成功，如果失败，需要重试。&lt;/p>
+&lt;/li>
+&lt;/ul>
+&lt;p>在 Try 阶段，是对业务系统进行检查和资源预览，如订单和存储操作，需要检查库存剩余数量是否可用，并进行资源预留。&lt;/p>
+&lt;p>基于 TCC 实现分布式事务，会将原来只需要一个接口的实现逻辑拆分为 Try、Confirm、Cancel 三个接口，相对来说代码实现复杂度较高。&lt;/p>
+&lt;h2 id="分布式解决方案">分布式解决方案&lt;/h2>
+&lt;h3 id="本地消息表">本地消息表&lt;/h3>
+&lt;h3 id="可靠消息最终一致性">可靠消息最终一致性&lt;/h3>
+&lt;h3 id="最大努力通知">最大努力通知&lt;/h3>
+&lt;h2 id="参考">参考&lt;/h2>
+&lt;ul>
+&lt;li>&lt;a class="link" href="https://www.jianshu.com/p/1156151e20c8" target="_blank" rel="noopener"
+>https://www.jianshu.com/p/1156151e20c8&lt;/a>&lt;/li>
+&lt;li>&lt;a class="link" href="https://xiaomi-info.github.io/2020/01/02/distributed-transaction/" target="_blank" rel="noopener"
+>https://xiaomi-info.github.io/2020/01/02/distributed-transaction/&lt;/a>&lt;/li>
+&lt;li>&lt;a class="link" href="https://blog.csdn.net/u010425776/article/details/79516298" target="_blank" rel="noopener"
+>https://blog.csdn.net/u010425776/article/details/79516298&lt;/a>&lt;/li>
+&lt;li>&lt;a class="link" href="https://mp.weixin.qq.com/s/XknegP66mnYboiBx556Kzw" target="_blank" rel="noopener"
+>https://mp.weixin.qq.com/s/XknegP66mnYboiBx556Kzw&lt;/a>&lt;/li>
+&lt;li>&lt;a class="link" href="https://mp.weixin.qq.com/s/ujRRtdLOeKEHsHrtDRNXGA" target="_blank" rel="noopener"
+>https://mp.weixin.qq.com/s/ujRRtdLOeKEHsHrtDRNXGA&lt;/a>&lt;/li>
+&lt;/ul></description></item></channel></rss>
