@@ -226,7 +226,7 @@ data-flex-basis="356px"
 &lt;pre tabindex="0" class="chroma">&lt;code class="language-sh" data-lang="sh">&lt;span class="line">&lt;span class="cl">cat /usr/local/cuda-10.1/include/cudnn.h &lt;span class="p">|&lt;/span> grep CUDNN_MAJOR -A &lt;span class="m">2&lt;/span>
 &lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
 &lt;/div>
-&lt;/div></description></item><item><title>Ubuntu 耳机没有声音</title><link>https://blog.letout.cn/p/ubuntu-sound/</link><pubDate>Sat, 02 Jan 2021 02:02:02 +0800</pubDate><guid>https://blog.letout.cn/p/ubuntu-sound/</guid><description>&lt;img src="https://blog.letout.cn/imgs/5.jpeg" alt="Featured image of post Ubuntu 耳机没有声音" />&lt;h2 id="ubuntu-耳机没有声音">Ubuntu 耳机没有声音&lt;/h2>
+&lt;/div></description></item><item><title>解决 Ubuntu 笔记本耳机没有声音的问题</title><link>https://blog.letout.cn/p/ubuntu-sound/</link><pubDate>Sat, 02 Jan 2021 02:02:02 +0800</pubDate><guid>https://blog.letout.cn/p/ubuntu-sound/</guid><description>&lt;img src="https://blog.letout.cn/imgs/5.jpeg" alt="Featured image of post 解决 Ubuntu 笔记本耳机没有声音的问题" />&lt;h2 id="ubuntu-耳机没有声音">Ubuntu 耳机没有声音&lt;/h2>
 &lt;p>笔记本使用 Ubuntu 插有线耳机后，并没有反应，该外放还是外放。&lt;/p>
 &lt;p>感觉是适配问题，windows 下没有问题。找了一圈办法，只能通过软件手动切换了，效果还不错。&lt;/p>
 &lt;div class="highlight">&lt;div class="chroma">

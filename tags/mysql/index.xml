@@ -1,4 +1,67 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>MySQL on 一层</title><link>https://blog.letout.cn/tags/mysql/</link><description>Recent content in MySQL on 一层</description><generator>Hugo -- gohugo.io</generator><language>zh-cn</language><lastBuildDate>Wed, 11 Jan 2023 18:30:02 +0800</lastBuildDate><atom:link href="https://blog.letout.cn/tags/mysql/index.xml" rel="self" type="application/rss+xml"/><item><title>MySQL 语句是怎么执行的</title><link>https://blog.letout.cn/p/mysql/how-execute/</link><pubDate>Wed, 11 Jan 2023 18:30:02 +0800</pubDate><guid>https://blog.letout.cn/p/mysql/how-execute/</guid><description>&lt;img src="https://blog.letout.cn/p/mysql/how-execute/mysql.webp" alt="Featured image of post MySQL 语句是怎么执行的" />&lt;p>MySQL 可以分为：&lt;/p>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>MySQL on 一层</title><link>https://blog.letout.cn/tags/mysql/</link><description>Recent content in MySQL on 一层</description><generator>Hugo -- gohugo.io</generator><language>zh-cn</language><lastBuildDate>Thu, 02 Mar 2023 12:02:02 +0800</lastBuildDate><atom:link href="https://blog.letout.cn/tags/mysql/index.xml" rel="self" type="application/rss+xml"/><item><title>MySQL 复制</title><link>https://blog.letout.cn/p/mysql/master-slave-replication/</link><pubDate>Thu, 02 Mar 2023 12:02:02 +0800</pubDate><guid>https://blog.letout.cn/p/mysql/master-slave-replication/</guid><description>&lt;img src="https://blog.letout.cn/p/mysql/master-slave-replication/copy.png" alt="Featured image of post MySQL 复制" />&lt;h2 id="-主从复制">📑 主从复制&lt;/h2>
+&lt;p>主从复制指主服务器（master server）上，任何修改和数据结构变更的事件，都会被写入到日志文件 &lt;code>bin log&lt;/code> 中，从服务器（slave server）读取主服务器上的日志文件中的事件变更，并在本地重放执行。&lt;/p>
+&lt;p>通过主从复制，能够提高数据库的&lt;strong>读&lt;/strong>性能。主库复制写，从库复制读。&lt;/p>
+&lt;p>并不适合来扩展写操作。例如在一主多从的架构中，写操作要被执行多次，整个系统的性能取决于写入最慢的那个。&lt;/p>
+&lt;p>💡 常见用途：&lt;/p>
+&lt;ul>
+&lt;li>数据备份&lt;/li>
+&lt;li>数据分发&lt;/li>
+&lt;li>提高读性能&lt;/li>
+&lt;li>高可用和故障切换&lt;/li>
+&lt;/ul>
+&lt;h2 id="-复制原理">📖 复制原理&lt;/h2>
+&lt;ul>
+&lt;li>
+&lt;p>👣 主库中的数据变更会记录到 binlog 中，主库会创建一个 binlog dump thread，将 binlog 传输到从库&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>👣 从库创建 IO 线程，将主库传来的 binlog 写入到自己的 relay log 中继日志&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>👣 从库创建 SQL 线程，从 relay log 中读取数据，重放到数据库中&lt;/p>
+&lt;/li>
+&lt;/ul>
+&lt;p>&lt;img src="https://blog.letout.cn/p/mysql/master-slave-replication/copy.png"
+width="1080"
+height="603"
+srcset="https://blog.letout.cn/p/mysql/master-slave-replication/copy_hu2815b7bcceb4bc2e593bd903d3b2a777_501311_480x0_resize_box_3.png 480w, https://blog.letout.cn/p/mysql/master-slave-replication/copy_hu2815b7bcceb4bc2e593bd903d3b2a777_501311_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+class="gallery-image"
+data-flex-grow="179"
+data-flex-basis="429px"
+>&lt;/p>
+&lt;p>这里的 IO 线程 和 SQL 线程的工作是解耦的，可以独立运行。&lt;/p>
+&lt;h2 id="-复制格式">🎫 复制格式&lt;/h2>
+&lt;p>MySQL 有三种方式记录 binlog，同样在用于复制时，也对应有三种复制格式。&lt;/p>
+&lt;p>💡 如果需要安全的数据复制方法，推荐使用&lt;strong>基于行&lt;/strong>的格式复制，除非某些场景下明确需要临时使用基于语句的格式。&lt;/p>
+&lt;h3 id="基于语句-statement">基于语句 statement&lt;/h3>
+&lt;p>通过重新执行主服务器中执行过的 SQL 语句来完成复制的。&lt;/p>
+&lt;p>优点是简单紧凑，例如批量更新了 1000 条数据，也只需要一条语句，节约 IO。&lt;/p>
+&lt;p>缺点是在一些情况下，可能导致主从数据不一致（例如使用了 now() 这样的函数）。&lt;/p>
+&lt;h3 id="基于行-row">基于行 row&lt;/h3>
+&lt;p>基于行的日志中，记录了该行数据发生了什么变化。在执行时，进行解析，找到需要变更的记录进行操作。&lt;/p>
+&lt;p>优点是数据具有强确定性。&lt;/p>
+&lt;p>缺点是可能会导致日志中记录大量数据。比如在批量更新时，出现大量的行，但是语句可能只有一条。&lt;/p>
+&lt;h3 id="混合模式-mix">混合模式 mix&lt;/h3>
+&lt;p>“试图” 混合模式结合以上两种格式的优点。（可能会有不稳定的情况）&lt;/p>
+&lt;p>默认情况下使用基于语句的格式，在有需要时切换到基于行的格式。&lt;strong>在写入事件时，会有很多的判断条件&lt;/strong>。&lt;/p>
+&lt;!-- raw HTML omitted -->
+&lt;!-- raw HTML omitted -->
+&lt;h2 id="-复制模式">🎚️ 复制模式&lt;/h2>
+&lt;h3 id="异步模式">异步模式&lt;/h3>
+&lt;p>主库不会主动推送 binlog 给从库，执行完直接返回，不关心从库是否接收到数据，异步的方式进行主从复制。&lt;/p>
+&lt;h3 id="半同步模式">半同步模式&lt;/h3>
+&lt;p>主库执行的事务，等到至少一个从库将日志记录到了 relay log 中之后，再提交（不能保证从库执行）。&lt;/p>
+&lt;p>注意：在超时时间之内没有返回，会退化成异步模式。&lt;/p>
+&lt;h3 id="全同步模式">全同步模式&lt;/h3>
+&lt;p>主库执行的事务，等到所有的从库都执行完之后，才提交，返回成功信息给客户端。&lt;/p>
+&lt;h2 id="参考">参考&lt;/h2>
+&lt;ul>
+&lt;li>&lt;a class="link" href="https://ost.51cto.com/posts/11721" target="_blank" rel="noopener"
+>https://ost.51cto.com/posts/11721&lt;/a>&lt;/li>
+&lt;li>&lt;a class="link" href="https://mp.weixin.qq.com/s?__biz=MjM5ODYxMDA5OQ==&amp;amp;mid=2651961330&amp;amp;idx=1&amp;amp;sn=4bdbada3b26d4fc2fc505f7a0f2ad7c4" target="_blank" rel="noopener"
+>https://mp.weixin.qq.com/s?__biz=MjM5ODYxMDA5OQ==&amp;mid=2651961330&amp;idx=1&amp;sn=4bdbada3b26d4fc2fc505f7a0f2ad7c4&lt;/a>&lt;/li>
+&lt;/ul></description></item><item><title>MySQL 语句是怎么执行的</title><link>https://blog.letout.cn/p/mysql/how-execute/</link><pubDate>Wed, 11 Jan 2023 18:30:02 +0800</pubDate><guid>https://blog.letout.cn/p/mysql/how-execute/</guid><description>&lt;img src="https://blog.letout.cn/p/mysql/how-execute/mysql.webp" alt="Featured image of post MySQL 语句是怎么执行的" />&lt;p>MySQL 可以分为：&lt;/p>
 &lt;p>（1）Server 层：负责建立连接，分析和执行SQL&lt;/p>
 &lt;p>（2）存储引擎层：负责数据的存储和提取&lt;/p>
 &lt;p>&lt;img src="https://blog.letout.cn/p/mysql/how-execute/mysql.webp"
@@ -138,19 +201,18 @@ data-flex-basis="953px"
 &lt;/li>
 &lt;/ul></description></item><item><title>InnoDB 存储引擎</title><link>https://blog.letout.cn/p/mysql/innodb/</link><pubDate>Sun, 31 Jul 2022 13:02:02 +0800</pubDate><guid>https://blog.letout.cn/p/mysql/innodb/</guid><description>&lt;img src="https://blog.letout.cn/imgs/23.jpeg" alt="Featured image of post InnoDB 存储引擎" />&lt;h2 id="事务">事务&lt;/h2>
 &lt;p>事务是一组逻辑上的数据库操作，这些操作要么全部成功，要么全部失败。&lt;/p>
-&lt;h3 id="特性">特性&lt;/h3>
 &lt;ul>
 &lt;li>
-&lt;p>原子性：事务是不可分割的最小操作单元，要么全部成功，要么全部失败。&lt;/p>
+&lt;p>&lt;code>A&lt;/code> 原子性：事务是不可分割的最小操作单元，要么全部成功，要么全部失败。&lt;/p>
 &lt;/li>
 &lt;li>
-&lt;p>一致性：事务完成时，必须使所有的数据都保持一致状态。&lt;/p>
+&lt;p>&lt;code>C&lt;/code> 一致性：事务完成时，必须使所有的数据都保持一致状态。&lt;/p>
 &lt;/li>
 &lt;li>
-&lt;p>隔离性：数据库系统提供的隔离机制，保证事务在不受外部并发操作影响的独立环境下运行。&lt;/p>
+&lt;p>&lt;code>I&lt;/code> 隔离性：数据库系统提供的隔离机制，保证事务在不受外部并发操作影响的独立环境下运行。&lt;/p>
 &lt;/li>
 &lt;li>
-&lt;p>持久性：事务一旦提交或回滚，它对数据库中的数据的改变就是永久的。&lt;/p>
+&lt;p>&lt;code>D&lt;/code> 持久性：事务一旦提交或回滚，它对数据库中的数据的改变就是永久的。&lt;/p>
 &lt;/li>
 &lt;/ul>
 &lt;p>&lt;img src="https://blog.letout.cn/p/mysql/innodb/1.png"
@@ -163,6 +225,8 @@ class="gallery-image"
 data-flex-grow="260"
 data-flex-basis="626px"
 >&lt;/p>
+&lt;p>数据库通过原子性、隔离性、持久性来保证一致性。&lt;/p>
+&lt;p>C(一致性)是目的，A(原子性)、I(隔离性)、D(持久性)是是为了保证一致性，数据库提供的手段。&lt;/p>
 &lt;h2 id="redo-log">redo log&lt;/h2>
 &lt;p>重做日志，记录的是“某个数据页上做了什么修改”。属于物理日志。&lt;/p>
 &lt;p>&lt;img src="https://blog.letout.cn/p/mysql/innodb/redolog.png"
@@ -215,10 +279,7 @@ data-flex-basis="366px"
 &lt;p>读取的是记录的最新版本。&lt;/p>
 &lt;p>&lt;code>update&lt;/code> &lt;code>insert&lt;/code> &lt;code>delete&lt;/code> &lt;code>select ... for update&lt;/code> &lt;code>select ... lock in share mode&lt;/code> 都是进行当前读。&lt;/p>
 &lt;h3 id="快照读">快照读&lt;/h3>
-&lt;p>简单的不加锁 &lt;code>select&lt;/code> 就是快照读。读取的是快照版本，通过 MVCC 进行并发控制。&lt;/p>
-&lt;h2 id="一致性">一致性&lt;/h2>
-&lt;p>数据库通过原子性、隔离性、持久性来保证一致性。&lt;/p>
-&lt;p>C(一致性)是目的，A(原子性)、I(隔离性)、D(持久性)是是为了保证一致性，数据库提供的手段。&lt;/p></description></item><item><title>SQL 语句优化</title><link>https://blog.letout.cn/p/mysql/sql-optimize/</link><pubDate>Fri, 01 Jul 2022 18:02:02 +0800</pubDate><guid>https://blog.letout.cn/p/mysql/sql-optimize/</guid><description>&lt;img src="https://blog.letout.cn/imgs/20.jpeg" alt="Featured image of post SQL 语句优化" />&lt;h2 id="-insert-优化">🦮 insert 优化&lt;/h2>
+&lt;p>简单的不加锁 &lt;code>select&lt;/code> 就是快照读。读取的是快照版本，通过 MVCC 进行并发控制。&lt;/p></description></item><item><title>SQL 语句优化</title><link>https://blog.letout.cn/p/mysql/sql-optimize/</link><pubDate>Fri, 01 Jul 2022 18:02:02 +0800</pubDate><guid>https://blog.letout.cn/p/mysql/sql-optimize/</guid><description>&lt;img src="https://blog.letout.cn/imgs/20.jpeg" alt="Featured image of post SQL 语句优化" />&lt;h2 id="-insert-优化">🦮 insert 优化&lt;/h2>
 &lt;p>一次性往数据库中插入多条数据，可从以下三方面优化：&lt;/p>
 &lt;ul>
 &lt;li>批量插入数据&lt;/li>
