@@ -1353,7 +1353,7 @@ data-flex-basis="477px"
 &lt;ul>
 &lt;li>&lt;a class="link" href="https://xiaolincoding.com/redis/data_struct/command.html" target="_blank" rel="noopener"
 >https://xiaolincoding.com/redis/data_struct/command.html&lt;/a>&lt;/li>
-&lt;/ul></description></item><item><title>使用 Redis 实现分布式锁</title><link>https://blog.letout.cn/p/distributed-lock/redis/</link><pubDate>Wed, 11 May 2022 12:14:45 +0800</pubDate><guid>https://blog.letout.cn/p/distributed-lock/redis/</guid><description>&lt;img src="https://blog.letout.cn/imgs/1.jpeg" alt="Featured image of post 使用 Redis 实现分布式锁" />&lt;h2 id="redis-nx-实现">Redis NX 实现&lt;/h2>
+&lt;/ul></description></item><item><title>使用 Redis 实现分布式锁</title><link>https://blog.letout.cn/p/distributed/lock/redis/</link><pubDate>Wed, 11 May 2022 12:14:45 +0800</pubDate><guid>https://blog.letout.cn/p/distributed/lock/redis/</guid><description>&lt;img src="https://blog.letout.cn/imgs/1.jpeg" alt="Featured image of post 使用 Redis 实现分布式锁" />&lt;h2 id="redis-nx-实现">Redis NX 实现&lt;/h2>
 &lt;p>利用 NX 的&lt;strong>原子性&lt;/strong>，多个线程并发时，只有一个线程可以设置成功，设置成功即获取了锁。&lt;/p>
 &lt;p>&lt;strong>如果没有获取锁，不会阻塞当前方法，直接跳过任务。&lt;/strong>&lt;/p>
 &lt;h3 id="获取锁">获取锁&lt;/h3>

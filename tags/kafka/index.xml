@@ -1,0 +1,245 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Kafka on 一层</title><link>https://blog.letout.cn/tags/kafka/</link><description>Recent content in Kafka on 一层</description><generator>Hugo -- gohugo.io</generator><language>zh-cn</language><lastBuildDate>Sat, 04 Mar 2023 11:14:45 +0800</lastBuildDate><atom:link href="https://blog.letout.cn/tags/kafka/index.xml" rel="self" type="application/rss+xml"/><item><title>Kafka</title><link>https://blog.letout.cn/p/kafka/</link><pubDate>Sat, 04 Mar 2023 11:14:45 +0800</pubDate><guid>https://blog.letout.cn/p/kafka/</guid><description>&lt;img src="https://blog.letout.cn/p/kafka/kafka.webp" alt="Featured image of post Kafka" />&lt;blockquote>
+&lt;p>Apache Kafka is an open-source distributed event streaming platform.&lt;/p>
+&lt;p>Kafka 是一个开源的分布式事件流平台。&lt;/p>
+&lt;/blockquote>
+&lt;h2 id="-基本概念">📑 基本概念&lt;/h2>
+&lt;h3 id="生产者--消费者">生产者 &amp;amp; 消费者&lt;/h3>
+&lt;p>把消息放到队列里面的叫「生产者」；从队列中消费消息的叫「消费者」。&lt;/p>
+&lt;p>&lt;img src="https://blog.letout.cn/p/kafka/productor-consumer.png"
+width="1482"
+height="182"
+srcset="https://blog.letout.cn/p/kafka/productor-consumer_hu2c5c2f226caa4e26dde9bd9923036917_30803_480x0_resize_box_3.png 480w, https://blog.letout.cn/p/kafka/productor-consumer_hu2c5c2f226caa4e26dde9bd9923036917_30803_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+class="gallery-image"
+data-flex-grow="814"
+data-flex-basis="1954px"
+>&lt;/p>
+&lt;h3 id="topic">Topic&lt;/h3>
+&lt;p>Producer 将消息发送到特定的主题 &lt;code>Topic&lt;/code>，Consumer 通过订阅特定的主题 &lt;code>Topic&lt;/code> 来消费消息。&lt;/p>
+&lt;p>并非所有的消费者都想要全部的消息，消费者只对自己感兴趣的 Topic 进行订阅，从指定的 Topic 来获取消息。
+这个发送问题由 生产者 &lt;code>Product&lt;/code> 来解决，生产者在发送消息时，对消息进行逻辑上的分类，将消息发送到指定的 &lt;code>Topic&lt;/code>。（发布-订阅模型）&lt;/p>
+&lt;p>&lt;img src="https://blog.letout.cn/p/kafka/topic.png"
+width="1702"
+height="464"
+srcset="https://blog.letout.cn/p/kafka/topic_huc74fa2ac18b398764e9e6113e92396e7_102693_480x0_resize_box_3.png 480w, https://blog.letout.cn/p/kafka/topic_huc74fa2ac18b398764e9e6113e92396e7_102693_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+class="gallery-image"
+data-flex-grow="366"
+data-flex-basis="880px"
+>&lt;/p>
+&lt;h3 id="offset">offset&lt;/h3>
+&lt;p>多个消费者可能对同一个主题感兴趣，即多个消费者 &lt;code>Consumer&lt;/code> 订阅同一个主题 &lt;code>Topic&lt;/code>。&lt;/p>
+&lt;p>这个消费问题由 消费者 &lt;code>Consumer&lt;/code> 来解决。
+Kafka 将所有的消息进行持久化存储，让消费者各取所需，想取哪个消息，想什么时候取都行，只需要传递一个消息的 &lt;code>offset&lt;/code> 即可。&lt;/p>
+&lt;p>Kafka 将消息以消息日志的方式追加写在磁盘中（顺序磁盘 IO）。&lt;/p>
+&lt;p>&lt;code>offset&lt;/code> 表示了消费者的消费进度。每一条消息都会根据时间先后顺序有一个递增的序号，用 offset 来表示消费者的消费进度到哪了，每个消费者会都有自己的 offset。&lt;/p>
+&lt;p>每次消费消息的时候，都要提交这个 &lt;code>offset&lt;/code>，Kafka 可以选择「自动提交」或者「手动提交」。&lt;/p>
+&lt;p>&lt;img src="https://blog.letout.cn/p/kafka/offset.png"
+width="1702"
+height="882"
+srcset="https://blog.letout.cn/p/kafka/offset_hub631ed3146c750d7a1db077a25e92c8f_157136_480x0_resize_box_3.png 480w, https://blog.letout.cn/p/kafka/offset_hub631ed3146c750d7a1db077a25e92c8f_157136_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+class="gallery-image"
+data-flex-grow="192"
+data-flex-basis="463px"
+>&lt;/p>
+&lt;h3 id="partition">Partition&lt;/h3>
+&lt;p>&lt;code>Partition&lt;/code> 是 Kafka 「最基本的部署单元」。&lt;/p>
+&lt;p>对于海量数据，单机的存储容量和读写性能肯定有限，一种常见的存储方案就是「对数据进行分片存储」。&lt;/p>
+&lt;ul>
+&lt;li>
+&lt;p>例如在 MySQL 中，单表的数量达到几千万、上亿时，会进行分库、分表操作&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>例如在 Redis 中，当单个实例的数据量达到几十G引发性能瓶颈时，会进行分片集群&lt;/p>
+&lt;/li>
+&lt;/ul>
+&lt;p>在 Kafka 中，同样采取了水平拆分的方案，将拆分后的数据子集称为 &lt;code>Partition&lt;/code> 分区。各个分区的数据集合即为全量数据。&lt;/p>
+&lt;p>&lt;img src="https://blog.letout.cn/p/kafka/partition.png"
+width="1902"
+height="862"
+srcset="https://blog.letout.cn/p/kafka/partition_hu6f8e653e05b83b30cced1268a2afdec4_169756_480x0_resize_box_3.png 480w, https://blog.letout.cn/p/kafka/partition_hu6f8e653e05b83b30cced1268a2afdec4_169756_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+class="gallery-image"
+data-flex-grow="220"
+data-flex-basis="529px"
+>&lt;/p>
+&lt;p>分区路由可以简单地理解为一个 Hash 函数，生产者在发送消息时，可以自定义这个函数的规则决定发往的分区。将分区规则设计的合理，可以将消息均匀地分配到不同的分区上。&lt;/p>
+&lt;p>生产者 &lt;code>Productor&lt;/code> 发送一条消息，先通过 &lt;code>Topic&lt;/code> 对消息进行逻辑分类，在通过 &lt;code>Partition&lt;/code> 进一步做物理分片，最终多个 Partition 会均匀地分布在集群的每台机器上，从而很好地解决了存储扩展性问题。&lt;/p>
+&lt;h3 id="broker">Broker&lt;/h3>
+&lt;p>一台 Kafka 服务器被称为 &lt;code>Broker&lt;/code>，Kafka 集群由多台 Kafka 服务器组成。&lt;/p>
+&lt;p>Kafka 是「天然分布式」的。&lt;/p>
+&lt;p>一个 &lt;code>Topic&lt;/code> 会被分为多个 &lt;code>Partition&lt;/code>，这些 Partition 会分布在不同的 &lt;code>Broker&lt;/code> 中。&lt;/p>
+&lt;p>&lt;img src="https://blog.letout.cn/p/kafka/broker.png"
+width="2744"
+height="1204"
+srcset="https://blog.letout.cn/p/kafka/broker_huddafab0296be063dc2cfa60773db7d44_193217_480x0_resize_box_3.png 480w, https://blog.letout.cn/p/kafka/broker_huddafab0296be063dc2cfa60773db7d44_193217_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+class="gallery-image"
+data-flex-grow="227"
+data-flex-basis="546px"
+>&lt;/p>
+&lt;h3 id="leader--follower">leader &amp;amp; follower&lt;/h3>
+&lt;p>在 Kafka 集群中，每台机器都会存储一些 Partition，为了防止机器宕机时，这部分数据无法访问的问题（持久化保证数据不丢失）。
+需要 Kafka 具备故障转移能力，当某台机器宕机后，能够继续保证服务可用。&lt;/p>
+&lt;p>与 Reids Cluster 类似，Kafka 通过「Partition 多副本」的方式，解决了高可用问题。
+在 Kafka 集群中，每个 Partition 都有多个副本，保存了相同的信息。&lt;/p>
+&lt;p>副本之间是 「一主多从」的关系：&lt;/p>
+&lt;ul>
+&lt;li>&lt;code>leader&lt;/code> 副本负责读写数据&lt;/li>
+&lt;li>&lt;code>follower&lt;/code> 副本负责同步消息，只负责待命&lt;/li>
+&lt;/ul>
+&lt;p>当 leader 副本发送故障时，选举 follower 副本成为新的 leader 对外提供服务。&lt;/p>
+&lt;p>&lt;img src="https://blog.letout.cn/p/kafka/leader_follwer.png"
+width="1642"
+height="982"
+srcset="https://blog.letout.cn/p/kafka/leader_follwer_hud0b2c7f759aaa7a9577276a758bf8076_131159_480x0_resize_box_3.png 480w, https://blog.letout.cn/p/kafka/leader_follwer_hud0b2c7f759aaa7a9577276a758bf8076_131159_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+class="gallery-image"
+data-flex-grow="167"
+data-flex-basis="401px"
+>&lt;/p>
+&lt;h3 id="消费者组">消费者组&lt;/h3>
+&lt;p>Kafka 是个高并发的系统，消息的拉取同样是并行的，多个消费者去消费 Topic 消息。&lt;/p>
+&lt;p>Kafka 引入了消费者组的概念，每一个消费者都有一个对应的消费者组。组间进行广播消费，组内进行集群消费。同时限定：「每个 Partition 只能由消费者组中的一个消费者进行消费」。&lt;/p>
+&lt;p>&lt;img src="https://blog.letout.cn/p/kafka/consumer_group.png"
+width="1952"
+height="1378"
+srcset="https://blog.letout.cn/p/kafka/consumer_group_hu7674cf08adee570cc4acecde56b2e047_315635_480x0_resize_box_3.png 480w, https://blog.letout.cn/p/kafka/consumer_group_hu7674cf08adee570cc4acecde56b2e047_315635_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+class="gallery-image"
+data-flex-grow="141"
+data-flex-basis="339px"
+>&lt;/p>
+&lt;p>当需要加快消息的处理速度，（如消费者组B）只需要增加新的消费者即可，Kafka 会以 Patition 为单位重新做负载均衡。&lt;/p>
+&lt;p>一个消费者组可以消费 Topic 的全部数据，消费者组在逻辑上是相互独立的。&lt;/p>
+&lt;h2 id="-存储结构">🗳️ 存储结构&lt;/h2>
+&lt;p>Kafka 使用「日志文件 Logging」的方式来存储消息；使用「稀疏哈希索引」来加快查询。&lt;/p>
+&lt;ul>
+&lt;li>
+&lt;p>Kafka 存储的主要是消息流（文本、自定义格式），对于 Broker 来说，只需要关注消息的投递，无需关注内容本身&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>写入方面，数据量级非常大，都是按顺序写入（队列），且无需考虑更新&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>需求简单，只需要按照 offset 查询消息即可&lt;/p>
+&lt;/li>
+&lt;/ul>
+&lt;p>在为了满足其写入需求（量级大、不更新），采用 Append 追加日志的方式最理想，可以充分利用「磁盘顺序 IO」。&lt;/p>
+&lt;p>在查询时，只需要通过 offset 定位消息，在内存中维护了一个「从 offset 到日志文件的偏移量」的映射关系，每次
+查询时，先根据 offset 找到日志文件的偏移量，即可快速读取到日志消息。&lt;/p>
+&lt;p>为了避免哈希索引常驻内存消耗过多空间的问题，将消息划分为若干个块 block，每个索引需要定位 block 块中的第一条消息的 offset 即可（稀疏索引），
+然后在 block 中顺序查找。&lt;/p>
+&lt;p>&lt;img src="https://blog.letout.cn/p/kafka/hash.png"
+width="702"
+height="486"
+srcset="https://blog.letout.cn/p/kafka/hash_hu74f0171d0dcbf8a19203c6a91442ff0f_91411_480x0_resize_box_3.png 480w, https://blog.letout.cn/p/kafka/hash_hu74f0171d0dcbf8a19203c6a91442ff0f_91411_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+class="gallery-image"
+data-flex-grow="144"
+data-flex-basis="346px"
+>&lt;/p>
+&lt;h2 id="-kafka-的高性能">🔥 Kafka 的高性能&lt;/h2>
+&lt;p>&lt;img src="https://blog.letout.cn/p/kafka/performance.png"
+width="725"
+height="662"
+srcset="https://blog.letout.cn/p/kafka/performance_hu3423f3489c82f749f8bb253d443fb73a_35239_480x0_resize_box_3.png 480w, https://blog.letout.cn/p/kafka/performance_hu3423f3489c82f749f8bb253d443fb73a_35239_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+class="gallery-image"
+data-flex-grow="109"
+data-flex-basis="262px"
+>&lt;/p>
+&lt;h3 id="-生产消息">📑 生产消息&lt;/h3>
+&lt;p>Kafka 客户端与传统的数据库或消息中间件不同，在将消息发送给 Broker 之前，在 Client 端先完成大量的工作之后才发送消息，分摊 Broker 的计算压力。&lt;/p>
+&lt;ul>
+&lt;li>
+&lt;p>🫧 批量发送&lt;/p>
+&lt;p>Kafka 通过对多条消息按照分区进行分组，每次发送一个消息集合，从而减少网络传输的开销。&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>🫧 消息压缩&lt;/p>
+&lt;p>在批量发送的前提下，对消息进行压缩（数据量越大，压缩效果更好）。同时对多条消息进行压缩，能大幅减少数据量，
+同时减少网络、磁盘IO开销。消息持久化到 Broker 的磁盘时，依旧是压缩状态，最终是在 Consumer 端进行解压。&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>🫧 高效序列化&lt;/p>
+&lt;p>Kafka 的 Key 和 Value，都支持自定义类型，只需要提供相应的序列化和反序列化器即可。可以根据情况选取对应的序列化方式。&lt;/p>
+&lt;!-- raw HTML omitted -->
+&lt;/li>
+&lt;li>
+&lt;p>🫧 内存池复用&lt;/p>
+&lt;p>Kafka 提出了「内存池机制」，提高复用，减少频繁的创建和回收。（本质上与连接池、线程池一样）。&lt;/p>
+&lt;p>Productor 在创建时，会占用一块固定大小的内存区域，划分为若干个块（例如 16KB）。当需要创建一个新的发送 Batch 时，直接从内存中取出一个块，
+从中不断地写入消息（写满或到指定阈值时间时），将这个 Batch 发送给 Broker，之后内存块就会回到缓存池中继续复用。
+不会涉及 JVM 的内存回收，以应对 Kafka 的高并发场景。&lt;/p>
+&lt;/li>
+&lt;/ul>
+&lt;h3 id="-存储消息">📇 存储消息&lt;/h3>
+&lt;ul>
+&lt;li>
+&lt;p>🫧 IO 多路复用&lt;/p>
+&lt;p>使用 &lt;code>1&lt;/code> 个 &lt;code>Acceptor&lt;/code> 线程，处理新的连接；使用 &lt;code>N&lt;/code> 个 &lt;code>Processor&lt;/code> 线程，读取请求；使用 &lt;code>M&lt;/code> 个 &lt;code>Handler&lt;/code> 线程，处理业务逻辑。&lt;/p>
+&lt;p>与 Redis 相同，IO 多路复用允许内核中同时管理多个 scoket 连接，内核会一直监听这些连接，一旦有请求到达，就会通知处理线程，达到一个线程处理多个请求的效果。&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>🫧 磁盘顺序 IO&lt;/p>
+&lt;p>Kafka 采用日志文件的方式持久化日志，以 Append Only 的方式追加到文件末尾，顺序 IO 使写入速度非常快。&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>🫧 Page Cache&lt;/p>
+&lt;p>利用了操作系统本身的缓存技术，在读写磁盘文件时，其实操作的都是内存，由操作系统决定什么时候将 Page Cache 中的数据真正刷入磁盘。&lt;/p>
+&lt;p>Page Cache 缓存中保存的是最近可能被使用的磁盘数据，具有时间局部性（最近访问的数据可能再次访问）和 空间局部性（访问的数据的周边数据被访问的概率极高）。
+作为顺序写入的消息队列，如果生产和消费地特别快，利用 Broker Page Cache，甚至可以不经过磁盘完成操作。&lt;/p>
+&lt;!-- raw HTML omitted -->
+&lt;!-- raw HTML omitted -->
+&lt;/li>
+&lt;li>
+&lt;p>🫧 分区分段结构&lt;/p>
+&lt;p>Kafka 的 Topic 会被分区为多个 Partition，在多台 Broker 中，使用多个服务来接受消息。&lt;/p>
+&lt;p>同时每个分区 Partition 会被分为多个段 Segment 来管理，每个段内都是顺序写，避免分区过大，利于管理。&lt;/p>
+&lt;/li>
+&lt;/ul>
+&lt;h3 id="-消费消息">📮 消费消息&lt;/h3>
+&lt;ul>
+&lt;li>
+&lt;p>🫧 稀疏索引&lt;/p>
+&lt;p>Kafka 查询场景非常简单，按照 offset 查询消息即可。为了加快读操作，只需要在内存中维护一个 offset 到日志文件的偏移量的映射关系 &lt;code>Map&lt;/code> 即可。
+每次查找消息，先从哈希表中查到文件偏移量，再去读日志文件。&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>🫧 mmap&lt;/p>
+&lt;p>memory mapped files&lt;/p>
+&lt;p>采用 mmap 映射索引文件，加快索引的查找过程。将磁盘文件与内存虚拟地址做了映射，不需要操作磁盘IO，进程可以使用指针的方式操作这一块内存，系统会自动将脏页写入到对应的磁盘文件上。&lt;/p>
+&lt;!-- raw HTML omitted -->
+&lt;!-- raw HTML omitted -->
+&lt;!-- raw HTML omitted -->
+&lt;!-- raw HTML omitted -->
+&lt;!-- raw HTML omitted -->
+&lt;/li>
+&lt;li>
+&lt;p>🫧 零拷贝&lt;/p>
+&lt;p>采用了零拷贝，将数据从内存中的缓存区直接拷贝到网卡设备，无需经过应用程序，减少了数据的拷贝和内核态与用户态的切换。&lt;/p>
+&lt;!-- raw HTML omitted -->
+&lt;!-- raw HTML omitted -->
+&lt;/li>
+&lt;li>
+&lt;p>🫧 批量拉取&lt;/p>
+&lt;p>与发送消息对应，消费消息也是批量拉取的，每次拉取一个消息集合，减少网络的开销。&lt;/p>
+&lt;/li>
+&lt;/ul>
+&lt;h2 id="参考">参考&lt;/h2>
+&lt;ul>
+&lt;li>&lt;a class="link" href="https://mp.weixin.qq.com/s?__biz=MzU2MTM4NDAwMw==&amp;amp;mid=2247490102&amp;amp;idx=1&amp;amp;sn=68d55b3c5ac74038c76d6837b862a11c&amp;amp;chksm=fc78c51acb0f4c0cd5a1d6ceedb9948f82d48791ab789e9edfd6e83e34fbad1ace5749bee203&amp;amp;scene=21#wechat_redirect" target="_blank" rel="noopener"
+>https://mp.weixin.qq.com/s?__biz=MzU2MTM4NDAwMw==&amp;mid=2247490102&amp;idx=1&amp;sn=68d55b3c5ac74038c76d6837b862a11c&amp;chksm=fc78c51acb0f4c0cd5a1d6ceedb9948f82d48791ab789e9edfd6e83e34fbad1ace5749bee203&amp;scene=21#wechat_redirect&lt;/a>&lt;/li>
+&lt;li>&lt;a class="link" href="https://mp.weixin.qq.com/s?__biz=MzU2MTM4NDAwMw==&amp;amp;mid=2247490102&amp;amp;idx=1&amp;amp;sn=68d55b3c5ac74038c76d6837b862a11c&amp;amp;chksm=fc78c51acb0f4c0cd5a1d6ceedb9948f82d48791ab789e9edfd6e83e34fbad1ace5749bee203&amp;amp;cur_album_id=1763234202604388353&amp;amp;scene=189#wechat_redirect" target="_blank" rel="noopener"
+>https://mp.weixin.qq.com/s?__biz=MzU2MTM4NDAwMw==&amp;mid=2247490102&amp;idx=1&amp;sn=68d55b3c5ac74038c76d6837b862a11c&amp;chksm=fc78c51acb0f4c0cd5a1d6ceedb9948f82d48791ab789e9edfd6e83e34fbad1ace5749bee203&amp;cur_album_id=1763234202604388353&amp;scene=189#wechat_redirect&lt;/a>&lt;/li>
+&lt;li>&lt;a class="link" href="https://mp.weixin.qq.com/s?__biz=MzU2MTM4NDAwMw==&amp;amp;mid=2247491055&amp;amp;idx=1&amp;amp;sn=14bc485f91ec2629cc9e8bf7a36ad8f4&amp;amp;chksm=fc78c2c3cb0f4bd566d5ca2534805839420ad3dc67210bc8f2b7ef05283785b02b8ddef640a8&amp;amp;cur_album_id=1763234202604388353&amp;amp;scene=189#wechat_redirect" target="_blank" rel="noopener"
+>https://mp.weixin.qq.com/s?__biz=MzU2MTM4NDAwMw==&amp;mid=2247491055&amp;idx=1&amp;sn=14bc485f91ec2629cc9e8bf7a36ad8f4&amp;chksm=fc78c2c3cb0f4bd566d5ca2534805839420ad3dc67210bc8f2b7ef05283785b02b8ddef640a8&amp;cur_album_id=1763234202604388353&amp;scene=189#wechat_redirect&lt;/a>&lt;/li>
+&lt;li>&lt;a class="link" href="https://mp.weixin.qq.com/s?__biz=MzU2MTM4NDAwMw==&amp;amp;mid=2247491168&amp;amp;idx=1&amp;amp;sn=bd37f96692b3f7cecdaf3172abdb7a8c&amp;amp;chksm=fc78c14ccb0f485a451f70c7ffbf5b05d0f500dfef6321703e7cdebdc0de902d9d77a547d469&amp;amp;cur_album_id=1763234202604388353&amp;amp;scene=189#wechat_redirect" target="_blank" rel="noopener"
+>https://mp.weixin.qq.com/s?__biz=MzU2MTM4NDAwMw==&amp;mid=2247491168&amp;idx=1&amp;sn=bd37f96692b3f7cecdaf3172abdb7a8c&amp;chksm=fc78c14ccb0f485a451f70c7ffbf5b05d0f500dfef6321703e7cdebdc0de902d9d77a547d469&amp;cur_album_id=1763234202604388353&amp;scene=189#wechat_redirect&lt;/a>&lt;/li>
+&lt;li>&lt;a class="link" href="https://mp.weixin.qq.com/s?__biz=MzU2MTM4NDAwMw==&amp;amp;mid=2247491507&amp;amp;idx=1&amp;amp;sn=f1bec356c94cd0101809dc11dcf27ba2&amp;amp;chksm=fc78c09fcb0f49898f6cc9b80499aeb871a80f95ab4fbe12c32567cab6a3521a6c33b61dd807&amp;amp;cur_album_id=1763234202604388353&amp;amp;scene=189#wechat_redirect" target="_blank" rel="noopener"
+>https://mp.weixin.qq.com/s?__biz=MzU2MTM4NDAwMw==&amp;mid=2247491507&amp;idx=1&amp;sn=f1bec356c94cd0101809dc11dcf27ba2&amp;chksm=fc78c09fcb0f49898f6cc9b80499aeb871a80f95ab4fbe12c32567cab6a3521a6c33b61dd807&amp;cur_album_id=1763234202604388353&amp;scene=189#wechat_redirect&lt;/a>&lt;/li>
+&lt;li>&lt;a class="link" href="https://mp.weixin.qq.com/s?__biz=MzU2MTM4NDAwMw==&amp;amp;mid=2247491763&amp;amp;idx=1&amp;amp;sn=cc60a6ba13e5cf4384e623819c621e0d&amp;amp;chksm=fc7b3f9fcb0cb6897be67103d91854831b71909c0d12385fb52b2f1d011fca5d1844b3892019&amp;amp;cur_album_id=1763234202604388353&amp;amp;scene=190#rd" target="_blank" rel="noopener"
+>https://mp.weixin.qq.com/s?__biz=MzU2MTM4NDAwMw==&amp;mid=2247491763&amp;idx=1&amp;sn=cc60a6ba13e5cf4384e623819c621e0d&amp;chksm=fc7b3f9fcb0cb6897be67103d91854831b71909c0d12385fb52b2f1d011fca5d1844b3892019&amp;cur_album_id=1763234202604388353&amp;scene=190#rd&lt;/a>&lt;/li>
+&lt;/ul></description></item></channel></rss>

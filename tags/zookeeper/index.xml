@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>ZooKeeper on 一层</title><link>https://blog.letout.cn/tags/zookeeper/</link><description>Recent content in ZooKeeper on 一层</description><generator>Hugo -- gohugo.io</generator><language>zh-cn</language><lastBuildDate>Wed, 11 May 2022 21:14:45 +0800</lastBuildDate><atom:link href="https://blog.letout.cn/tags/zookeeper/index.xml" rel="self" type="application/rss+xml"/><item><title>使用 ZooKeeper 实现分布式锁</title><link>https://blog.letout.cn/p/distributed-lock/zookeeper/</link><pubDate>Wed, 11 May 2022 21:14:45 +0800</pubDate><guid>https://blog.letout.cn/p/distributed-lock/zookeeper/</guid><description>&lt;img src="https://blog.letout.cn/imgs/2.jpeg" alt="Featured image of post 使用 ZooKeeper 实现分布式锁" />&lt;h2 id="使用-zookeeper-实现">使用 ZooKeeper 实现&lt;/h2>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>ZooKeeper on 一层</title><link>https://blog.letout.cn/tags/zookeeper/</link><description>Recent content in ZooKeeper on 一层</description><generator>Hugo -- gohugo.io</generator><language>zh-cn</language><lastBuildDate>Wed, 11 May 2022 21:14:45 +0800</lastBuildDate><atom:link href="https://blog.letout.cn/tags/zookeeper/index.xml" rel="self" type="application/rss+xml"/><item><title>使用 ZooKeeper 实现分布式锁</title><link>https://blog.letout.cn/p/distributed/lock/zookeeper/</link><pubDate>Wed, 11 May 2022 21:14:45 +0800</pubDate><guid>https://blog.letout.cn/p/distributed/lock/zookeeper/</guid><description>&lt;img src="https://blog.letout.cn/imgs/2.jpeg" alt="Featured image of post 使用 ZooKeeper 实现分布式锁" />&lt;h2 id="使用-zookeeper-实现">使用 ZooKeeper 实现&lt;/h2>
 &lt;h3 id="原理">原理&lt;/h3>
 &lt;ul>
 &lt;li>
@@ -8,10 +8,10 @@
 &lt;p>瞬时节点（黄色）：不可再有子节点，会话结束后瞬时节点会自动消失&lt;/p>
 &lt;/li>
 &lt;/ul>
-&lt;p>&lt;img src="https://blog.letout.cn/p/distributed-lock/zookeeper/node.png"
+&lt;p>&lt;img src="https://blog.letout.cn/p/distributed/lock/zookeeper/node.png"
 width="542"
 height="618"
-srcset="https://blog.letout.cn/p/distributed-lock/zookeeper/node_hubb94f897927986ed284f5e5898a8688d_78967_480x0_resize_box_3.png 480w, https://blog.letout.cn/p/distributed-lock/zookeeper/node_hubb94f897927986ed284f5e5898a8688d_78967_1024x0_resize_box_3.png 1024w"
+srcset="https://blog.letout.cn/p/distributed/lock/zookeeper/node_hubb94f897927986ed284f5e5898a8688d_78967_480x0_resize_box_3.png 480w, https://blog.letout.cn/p/distributed/lock/zookeeper/node_hubb94f897927986ed284f5e5898a8688d_78967_1024x0_resize_box_3.png 1024w"
 loading="lazy"
 alt="node"
 class="gallery-image"
@@ -29,10 +29,10 @@ data-flex-basis="210px"
 &lt;p>创建节点时，已经确定了线程的执行顺序&lt;/p>
 &lt;/li>
 &lt;/ul>
-&lt;p>&lt;img src="https://blog.letout.cn/p/distributed-lock/zookeeper/thread.png"
+&lt;p>&lt;img src="https://blog.letout.cn/p/distributed/lock/zookeeper/thread.png"
 width="485"
 height="297"
-srcset="https://blog.letout.cn/p/distributed-lock/zookeeper/thread_hu0d11f519269d68572311b436f0d9b410_73659_480x0_resize_box_3.png 480w, https://blog.letout.cn/p/distributed-lock/zookeeper/thread_hu0d11f519269d68572311b436f0d9b410_73659_1024x0_resize_box_3.png 1024w"
+srcset="https://blog.letout.cn/p/distributed/lock/zookeeper/thread_hu0d11f519269d68572311b436f0d9b410_73659_480x0_resize_box_3.png 480w, https://blog.letout.cn/p/distributed/lock/zookeeper/thread_hu0d11f519269d68572311b436f0d9b410_73659_1024x0_resize_box_3.png 1024w"
 loading="lazy"
 alt="thread"
 class="gallery-image"
@@ -288,10 +288,10 @@ data-flex-basis="391px"
 &lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
 &lt;/div>
 &lt;/div>&lt;h2 id="curator">Curator&lt;/h2>
-&lt;p>&lt;img src="https://blog.letout.cn/p/distributed-lock/zookeeper/curator.png"
+&lt;p>&lt;img src="https://blog.letout.cn/p/distributed/lock/zookeeper/curator.png"
 width="537"
 height="87"
-srcset="https://blog.letout.cn/p/distributed-lock/zookeeper/curator_hu690a82169c4c3fdc258308de88a2c62f_35331_480x0_resize_box_3.png 480w, https://blog.letout.cn/p/distributed-lock/zookeeper/curator_hu690a82169c4c3fdc258308de88a2c62f_35331_1024x0_resize_box_3.png 1024w"
+srcset="https://blog.letout.cn/p/distributed/lock/zookeeper/curator_hu690a82169c4c3fdc258308de88a2c62f_35331_480x0_resize_box_3.png 480w, https://blog.letout.cn/p/distributed/lock/zookeeper/curator_hu690a82169c4c3fdc258308de88a2c62f_35331_1024x0_resize_box_3.png 1024w"
 loading="lazy"
 alt="curator"
 class="gallery-image"
