@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>事务 on 一层</title><link>https://emerywan.github.io/blog/tags/%E4%BA%8B%E5%8A%A1/</link><description>Recent content in 事务 on 一层</description><generator>Hugo -- gohugo.io</generator><lastBuildDate>Wed, 01 Mar 2023 12:14:45 +0800</lastBuildDate><atom:link href="https://emerywan.github.io/blog/tags/%E4%BA%8B%E5%8A%A1/index.xml" rel="self" type="application/rss+xml"/><item><title>分布式事务</title><link>https://emerywan.github.io/blog/p/distributed/transaction/</link><pubDate>Wed, 01 Mar 2023 12:14:45 +0800</pubDate><guid>https://emerywan.github.io/blog/p/distributed/transaction/</guid><description>&lt;img src="https://emerywan.github.io/blog/p/distributed/transaction/cap.webp" alt="Featured image of post 分布式事务" />&lt;h2 id="事务">事务&lt;/h2>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>事务 on 一层</title><link>https://emerywan.github.io/blog/tags/%E4%BA%8B%E5%8A%A1/</link><description>Recent content in 事务 on 一层</description><generator>Hugo -- gohugo.io</generator><lastBuildDate>Wed, 01 Mar 2023 12:14:45 +0800</lastBuildDate><atom:link href="https://emerywan.github.io/blog/tags/%E4%BA%8B%E5%8A%A1/index.xml" rel="self" type="application/rss+xml"/><item><title>分布式事务（Doing）</title><link>https://emerywan.github.io/blog/p/distributed/transaction/</link><pubDate>Wed, 01 Mar 2023 12:14:45 +0800</pubDate><guid>https://emerywan.github.io/blog/p/distributed/transaction/</guid><description>&lt;img src="https://emerywan.github.io/blog/p/distributed/transaction/cap.webp" alt="Featured image of post 分布式事务（Doing）" />&lt;h2 id="事务">事务&lt;/h2>
 &lt;h3 id="数据库事务">数据库事务&lt;/h3>
 &lt;p>事务（单数据库的本地事务）是指一组操作，要么全部正确执行，要么全部不执行。事务通常会有 ACID 四大特性：&lt;/p>
 &lt;ul>
@@ -47,9 +47,13 @@ data-flex-basis="261px"
 &lt;h3 id="cp">CP&lt;/h3>
 &lt;p>一致性 &amp;amp; 分区容忍性&lt;/p>
 &lt;p>优先保障数据的一致性。如涉及金钱交易的环节，保障数据不能出错。&lt;/p>
+&lt;!-- raw HTML omitted -->
+&lt;!-- raw HTML omitted -->
 &lt;h3 id="ap">AP&lt;/h3>
 &lt;p>可用性 &amp;amp; 分区容忍性&lt;/p>
 &lt;p>优先保障系统的可用。互联网中大多数场景都是保障系统可用，如在有大量请求时，一些服务可以先不提供（如注册用户，查询历史记录等）。&lt;/p>
+&lt;!-- raw HTML omitted -->
+&lt;!-- raw HTML omitted -->
 &lt;h2 id="-base">🫧 BASE&lt;/h2>
 &lt;p>BASE 理论是指：&lt;/p>
 &lt;ul>

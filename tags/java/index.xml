@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Java on 一层</title><link>https://emerywan.github.io/blog/tags/java/</link><description>Recent content in Java on 一层</description><generator>Hugo -- gohugo.io</generator><lastBuildDate>Fri, 03 Mar 2023 12:02:02 +0800</lastBuildDate><atom:link href="https://emerywan.github.io/blog/tags/java/index.xml" rel="self" type="application/rss+xml"/><item><title>观察者模式</title><link>https://emerywan.github.io/blog/p/design-pattern/observer/</link><pubDate>Fri, 03 Mar 2023 12:02:02 +0800</pubDate><guid>https://emerywan.github.io/blog/p/design-pattern/observer/</guid><description>&lt;img src="https://emerywan.github.io/blog/p/design-pattern/observer/observer.png" alt="Featured image of post 观察者模式" />&lt;p>观察者模式是一种&lt;strong>行为型模式&lt;/strong>。&lt;/p>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Java on 一层</title><link>https://emerywan.github.io/blog/tags/java/</link><description>Recent content in Java on 一层</description><generator>Hugo -- gohugo.io</generator><lastBuildDate>Mon, 06 Mar 2023 12:02:02 +0800</lastBuildDate><atom:link href="https://emerywan.github.io/blog/tags/java/index.xml" rel="self" type="application/rss+xml"/><item><title>观察者模式</title><link>https://emerywan.github.io/blog/p/design-pattern/observer/</link><pubDate>Mon, 06 Mar 2023 12:02:02 +0800</pubDate><guid>https://emerywan.github.io/blog/p/design-pattern/observer/</guid><description>&lt;img src="https://emerywan.github.io/blog/p/design-pattern/observer/observer.png" alt="Featured image of post 观察者模式" />&lt;p>观察者模式是一种&lt;strong>行为型模式&lt;/strong>。&lt;/p>
 &lt;p>观察者模式定义对象间的一对多的依赖关系，当一个对象的状态发生改变时，其他所有依赖的对象都会得到通知，并自动更新。&lt;/p>
 &lt;p>观察者模式又称为「发布-订阅模式」&lt;code>Publish-Subscribe&lt;/code>，是一种通知机制，让发送通知的一方（被观察者）和接收通知的一方（观察者）彼此分离，互不影响。&lt;/p>
 &lt;h2 id="-实现方式">🎈 实现方式&lt;/h2>
@@ -1972,7 +1972,7 @@ data-flex-basis="329px"
 &lt;li>
 &lt;p>深入理解 Java 虚拟机&lt;/p>
 &lt;/li>
-&lt;/ul></description></item><item><title>使用 ZooKeeper 实现分布式锁</title><link>https://emerywan.github.io/blog/p/distributed-lock/zookeeper/</link><pubDate>Wed, 11 May 2022 21:14:45 +0800</pubDate><guid>https://emerywan.github.io/blog/p/distributed-lock/zookeeper/</guid><description>&lt;img src="https://emerywan.github.io/blog/imgs/2.jpeg" alt="Featured image of post 使用 ZooKeeper 实现分布式锁" />&lt;h2 id="使用-zookeeper-实现">使用 ZooKeeper 实现&lt;/h2>
+&lt;/ul></description></item><item><title>使用 ZooKeeper 实现分布式锁</title><link>https://emerywan.github.io/blog/p/distributed/lock/zookeeper/</link><pubDate>Wed, 11 May 2022 21:14:45 +0800</pubDate><guid>https://emerywan.github.io/blog/p/distributed/lock/zookeeper/</guid><description>&lt;img src="https://emerywan.github.io/blog/imgs/2.jpeg" alt="Featured image of post 使用 ZooKeeper 实现分布式锁" />&lt;h2 id="使用-zookeeper-实现">使用 ZooKeeper 实现&lt;/h2>
 &lt;h3 id="原理">原理&lt;/h3>
 &lt;ul>
 &lt;li>
@@ -1982,10 +1982,10 @@ data-flex-basis="329px"
 &lt;p>瞬时节点（黄色）：不可再有子节点，会话结束后瞬时节点会自动消失&lt;/p>
 &lt;/li>
 &lt;/ul>
-&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/distributed-lock/zookeeper/node.png"
+&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/distributed/lock/zookeeper/node.png"
 width="542"
 height="618"
-srcset="https://emerywan.github.io/blog/blog/p/distributed-lock/zookeeper/node_hubb94f897927986ed284f5e5898a8688d_78967_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/distributed-lock/zookeeper/node_hubb94f897927986ed284f5e5898a8688d_78967_1024x0_resize_box_3.png 1024w"
+srcset="https://emerywan.github.io/blog/blog/p/distributed/lock/zookeeper/node_hubb94f897927986ed284f5e5898a8688d_78967_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/distributed/lock/zookeeper/node_hubb94f897927986ed284f5e5898a8688d_78967_1024x0_resize_box_3.png 1024w"
 loading="lazy"
 alt="node"
 class="gallery-image"
@@ -2003,10 +2003,10 @@ data-flex-basis="210px"
 &lt;p>创建节点时，已经确定了线程的执行顺序&lt;/p>
 &lt;/li>
 &lt;/ul>
-&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/distributed-lock/zookeeper/thread.png"
+&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/distributed/lock/zookeeper/thread.png"
 width="485"
 height="297"
-srcset="https://emerywan.github.io/blog/blog/p/distributed-lock/zookeeper/thread_hu0d11f519269d68572311b436f0d9b410_73659_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/distributed-lock/zookeeper/thread_hu0d11f519269d68572311b436f0d9b410_73659_1024x0_resize_box_3.png 1024w"
+srcset="https://emerywan.github.io/blog/blog/p/distributed/lock/zookeeper/thread_hu0d11f519269d68572311b436f0d9b410_73659_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/distributed/lock/zookeeper/thread_hu0d11f519269d68572311b436f0d9b410_73659_1024x0_resize_box_3.png 1024w"
 loading="lazy"
 alt="thread"
 class="gallery-image"
@@ -2262,10 +2262,10 @@ data-flex-basis="391px"
 &lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
 &lt;/div>
 &lt;/div>&lt;h2 id="curator">Curator&lt;/h2>
-&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/distributed-lock/zookeeper/curator.png"
+&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/distributed/lock/zookeeper/curator.png"
 width="537"
 height="87"
-srcset="https://emerywan.github.io/blog/blog/p/distributed-lock/zookeeper/curator_hu690a82169c4c3fdc258308de88a2c62f_35331_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/distributed-lock/zookeeper/curator_hu690a82169c4c3fdc258308de88a2c62f_35331_1024x0_resize_box_3.png 1024w"
+srcset="https://emerywan.github.io/blog/blog/p/distributed/lock/zookeeper/curator_hu690a82169c4c3fdc258308de88a2c62f_35331_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/distributed/lock/zookeeper/curator_hu690a82169c4c3fdc258308de88a2c62f_35331_1024x0_resize_box_3.png 1024w"
 loading="lazy"
 alt="curator"
 class="gallery-image"
@@ -2350,7 +2350,7 @@ data-flex-basis="1481px"
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">}&lt;/span>
 &lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
 &lt;/div>
-&lt;/div></description></item><item><title>使用 Redis 实现分布式锁</title><link>https://emerywan.github.io/blog/p/distributed-lock/redis/</link><pubDate>Wed, 11 May 2022 12:14:45 +0800</pubDate><guid>https://emerywan.github.io/blog/p/distributed-lock/redis/</guid><description>&lt;img src="https://emerywan.github.io/blog/imgs/1.jpeg" alt="Featured image of post 使用 Redis 实现分布式锁" />&lt;h2 id="redis-nx-实现">Redis NX 实现&lt;/h2>
+&lt;/div></description></item><item><title>使用 Redis 实现分布式锁</title><link>https://emerywan.github.io/blog/p/distributed/lock/redis/</link><pubDate>Wed, 11 May 2022 12:14:45 +0800</pubDate><guid>https://emerywan.github.io/blog/p/distributed/lock/redis/</guid><description>&lt;img src="https://emerywan.github.io/blog/imgs/1.jpeg" alt="Featured image of post 使用 Redis 实现分布式锁" />&lt;h2 id="redis-nx-实现">Redis NX 实现&lt;/h2>
 &lt;p>利用 NX 的&lt;strong>原子性&lt;/strong>，多个线程并发时，只有一个线程可以设置成功，设置成功即获取了锁。&lt;/p>
 &lt;p>&lt;strong>如果没有获取锁，不会阻塞当前方法，直接跳过任务。&lt;/strong>&lt;/p>
 &lt;h3 id="获取锁">获取锁&lt;/h3>
