@@ -2033,7 +2033,7 @@ data-flex-basis="480px"
 &lt;ul>
 &lt;li>&lt;a class="link" href="https://tech.meituan.com/2018/11/15/java-lock.html" target="_blank" rel="noopener"
 >https://tech.meituan.com/2018/11/15/java-lock.html&lt;/a>&lt;/li>
-&lt;/ul></description></item><item><title>线程安全的单例模式</title><link>https://emerywan.github.io/blog/p/desgin-pattern/singleton/</link><pubDate>Mon, 11 Apr 2022 18:02:02 +0800</pubDate><guid>https://emerywan.github.io/blog/p/desgin-pattern/singleton/</guid><description>&lt;img src="https://emerywan.github.io/blog/imgs/8.jpeg" alt="Featured image of post 线程安全的单例模式" />&lt;p>单例模式所要实现的目标：保持一个类有且只有一个实例。&lt;/p>
+&lt;/ul></description></item><item><title>单例模式</title><link>https://emerywan.github.io/blog/p/desgin-pattern/singleton/</link><pubDate>Mon, 11 Apr 2022 18:02:02 +0800</pubDate><guid>https://emerywan.github.io/blog/p/desgin-pattern/singleton/</guid><description>&lt;img src="https://emerywan.github.io/blog/imgs/8.jpeg" alt="Featured image of post 单例模式" />&lt;p>单例模式所要实现的目标：保持一个类有且只有一个实例。&lt;/p>
 &lt;p>出于性能的考虑，不少单例模式都会采用延迟加载的方式。根据是否延迟创建对象，可以分为：&lt;/p>
 &lt;ul>
 &lt;li>

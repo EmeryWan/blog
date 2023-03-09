@@ -2992,7 +2992,7 @@ data-flex-basis="473px"
 &lt;ul>
 &lt;li>将内存分为两块，每次只使用其中的一块&lt;/li>
 &lt;li>当一块内存使用完后，将存活的对象复制到另外一块去&lt;/li>
-&lt;li>将以使用的空间一次性清除掉&lt;/li>
+&lt;li>将已经使用的空间一次性清除掉&lt;/li>
 &lt;/ul>
 &lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/java/jvm/garbage-collection/copy.png"
 width="955"
@@ -3033,17 +3033,19 @@ data-flex-basis="472px"
 &lt;h3 id="-部分收集">🪨 部分收集&lt;/h3>
 &lt;p>收集堆部分区域。&lt;code>Partial GC&lt;/code>&lt;/p>
 &lt;ul>
-&lt;li>新生代收集 &lt;code>Minor GC / Young GC&lt;/code>&lt;/li>
-&lt;/ul>
+&lt;li>
+&lt;p>新生代收集 &lt;code>Minor GC / Young GC&lt;/code>&lt;/p>
 &lt;p>目标只是新生代的垃圾收集。&lt;/p>
-&lt;ul>
-&lt;li>老年代收集 &lt;code>Major GC / Old GC&lt;/code>&lt;/li>
-&lt;/ul>
+&lt;/li>
+&lt;li>
+&lt;p>老年代收集 &lt;code>Major GC / Old GC&lt;/code>&lt;/p>
 &lt;p>目标只是老年代的垃圾收集，目前只有 CMS 收集器会有单独收集老年代的行为。&lt;/p>
-&lt;ul>
-&lt;li>混合收集 &lt;code>Mixed GC&lt;/code>&lt;/li>
-&lt;/ul>
+&lt;/li>
+&lt;li>
+&lt;p>混合收集 &lt;code>Mixed GC&lt;/code>&lt;/p>
 &lt;p>目标是整个新生代和部分老年代的垃圾收集，目前只有 G1 收集器会有这种行为。&lt;/p>
+&lt;/li>
+&lt;/ul>
 &lt;h3 id="-整堆收集">🪨 整堆收集&lt;/h3>
 &lt;p>收集整个堆和方法区。&lt;code>Full GC&lt;/code>&lt;/p>
 &lt;ul>
@@ -3075,7 +3077,7 @@ data-flex-basis="1094px"
 &lt;h3 id="-parnew">🪵 ParNew&lt;/h3>
 &lt;p>Serial 的多线程版本，可以使用多条线程进行垃圾回收。（新生代）&lt;/p>
 &lt;ul>
-&lt;li>采用标记复制算法&lt;/li>
+&lt;li>采用标记-复制算法&lt;/li>
 &lt;/ul>
 &lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/java/jvm/garbage-collection/parnew.png"
 width="960"
@@ -3125,21 +3127,23 @@ data-flex-basis="1169px"
 >&lt;/p>
 &lt;p>CMS 收集器整个过程分为四个步骤：&lt;/p>
 &lt;ul>
-&lt;li>🐾 初始标记&lt;/li>
-&lt;/ul>
-&lt;p>标记与 GC Root 直接关联的对象。（stop the world）暂停用户线程，但速度较快。&lt;/p>
-&lt;ul>
-&lt;li>🐾 并发标记&lt;/li>
-&lt;/ul>
+&lt;li>
+&lt;p>🐾 初始标记&lt;/p>
+&lt;p>标记与 GC Root 直接关联的对象。暂停用户线程（stop the world），但速度较快。&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>🐾 并发标记&lt;/p>
 &lt;p>用户线程和垃圾回收线程同时工作，从 GC Root 直接关联的对象开始遍历，根据可达性分析，找出存活对象。&lt;/p>
-&lt;ul>
-&lt;li>🐾 重新标记&lt;/li>
-&lt;/ul>
-&lt;p>修正并发标记过程中，由于程序继续运行，导致的标记错误。暂停用户线程。&lt;/p>
-&lt;ul>
-&lt;li>🐾 并发清除&lt;/li>
-&lt;/ul>
+&lt;/li>
+&lt;li>
+&lt;p>🐾 重新标记&lt;/p>
+&lt;p>修正并发标记过程中，由于程序继续运行，导致的标记错误。暂停用户线程（stop the world）。&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>🐾 并发清除&lt;/p>
 &lt;p>并发地清理未被标记的区域。&lt;/p>
+&lt;/li>
+&lt;/ul>
 &lt;p>缺点：&lt;/p>
 &lt;ul>
 &lt;li>对 CPU 资源敏感&lt;/li>
@@ -3159,7 +3163,7 @@ data-flex-grow="133"
 data-flex-basis="320px"
 >&lt;/p>
 &lt;p>将 Java 堆分为 2048 个大小相同的独立 Region，每个 Region 的大小依据堆空间的大小而定，在 JVM 生命周期中不会改变。&lt;/p>
-&lt;p>每个 Region 都可以更具需要，作为新生代的 Eden 区，Survivor 区，或者是老年代；新生代和老年代在内存中不是连续的空间，收集器会根据区域的不同采取不同的策略。&lt;/p>
+&lt;p>每个 Region 都可以根据需要，作为新生代的 Eden 区，Survivor 区，或者是老年代；新生代和老年代在内存中不是连续的空间，收集器会根据区域的不同采取不同的策略。&lt;/p>
 &lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/java/jvm/garbage-collection/g1.png"
 width="941"
 height="209"
@@ -3173,23 +3177,25 @@ data-flex-basis="1080px"
 &lt;p>Region 中还会有一类特殊的巨大区域 Humongous，专门用来存储大对象。当对象的大小超过了一个 Region 的一半，就被判定为大对象。&lt;/p>
 &lt;p>G1 收集器回收的步骤：&lt;/p>
 &lt;ul>
-&lt;li>🐾 初始标记&lt;/li>
-&lt;/ul>
-&lt;p>标记 GC Root 能够直接关联到的对象，需要停顿线程，耗时较短。&lt;/p>
-&lt;ul>
-&lt;li>🐾 并发标记&lt;/li>
-&lt;/ul>
+&lt;li>
+&lt;p>🐾 初始标记&lt;/p>
+&lt;p>标记 GC Root 能够直接关联到的对象，需要停顿线程（stop the world），耗时较短。&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>🐾 并发标记&lt;/p>
 &lt;p>从 GC Root 开始对堆中的对象进行可达性分析，找出需要回收的对象，与用户线程同时执行。&lt;/p>
-&lt;ul>
-&lt;li>🐾 最终标记&lt;/li>
-&lt;/ul>
-&lt;p>修正并发标记期间因用户程序继续运作而导致标记产生变动。&lt;/p>
-&lt;ul>
-&lt;li>🐾 筛选回收&lt;/li>
-&lt;/ul>
+&lt;/li>
+&lt;li>
+&lt;p>🐾 最终标记&lt;/p>
+&lt;p>修正并发标记期间因用户程序继续运作而导致标记产生的变动。&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>🐾 筛选回收&lt;/p>
 &lt;p>对各个 Region 的回收价值和成本进行排序，会选择价值最大的区域进行回收。&lt;/p>
 &lt;p>将回收的 Region 中的存活对象，复制到空的 Region 中，再清理掉整个旧的 Region 区域。&lt;/p>
-&lt;p>涉及对象的移动，必须暂停用户线程，有多条垃圾收集器并发执行。但是只回收一部分Region，时间是用户可控制的。&lt;/p>
+&lt;p>涉及对象的移动，必须暂停用户线程（stop the world），有多条垃圾收集器并发执行。但是只回收一部分Region，时间是用户可控制的。&lt;/p>
+&lt;/li>
+&lt;/ul>
 &lt;!-- raw HTML omitted -->
 &lt;h2 id="-对象分配和回收原则">🌴 对象分配和回收原则&lt;/h2>
 &lt;ul>
@@ -3675,84 +3681,76 @@ data-flex-basis="366px"
 &lt;p>读取的是记录的最新版本。&lt;/p>
 &lt;p>&lt;code>update&lt;/code> &lt;code>insert&lt;/code> &lt;code>delete&lt;/code> &lt;code>select ... for update&lt;/code> &lt;code>select ... lock in share mode&lt;/code> 都是进行当前读。&lt;/p>
 &lt;h3 id="快照读">快照读&lt;/h3>
-&lt;p>简单的不加锁 &lt;code>select&lt;/code> 就是快照读。读取的是快照版本，通过 MVCC 进行并发控制。&lt;/p></description></item><item><title>SQL 语句优化</title><link>https://emerywan.github.io/blog/p/mysql/sql-optimize/</link><pubDate>Fri, 01 Jul 2022 18:02:02 +0800</pubDate><guid>https://emerywan.github.io/blog/p/mysql/sql-optimize/</guid><description>&lt;img src="https://emerywan.github.io/blog/imgs/20.jpeg" alt="Featured image of post SQL 语句优化" />&lt;h2 id="-insert-优化">🦮 insert 优化&lt;/h2>
-&lt;p>一次性往数据库中插入多条数据，可从以下三方面优化：&lt;/p>
-&lt;ul>
-&lt;li>批量插入数据&lt;/li>
-&lt;/ul>
-&lt;div class="highlight">&lt;div class="chroma">
-&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
-&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
-&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
-&lt;td class="lntd">
-&lt;pre tabindex="0" class="chroma">&lt;code class="language-sql" data-lang="sql">&lt;span class="line">&lt;span class="cl">&lt;span class="k">insert&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">into&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">tb_test&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">values&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="mi">1&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="s1">&amp;#39;Tom&amp;#39;&lt;/span>&lt;span class="p">),&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="mi">2&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="s1">&amp;#39;Cat&amp;#39;&lt;/span>&lt;span class="p">),&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="mi">3&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="s1">&amp;#39;Jerry&amp;#39;&lt;/span>&lt;span class="p">);&lt;/span>&lt;span class="w">
-&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
-&lt;/div>
-&lt;/div>&lt;ul>
-&lt;li>手动控制事务&lt;/li>
-&lt;/ul>
-&lt;div class="highlight">&lt;div class="chroma">
-&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
-&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
-&lt;/span>&lt;span class="lnt">2
-&lt;/span>&lt;span class="lnt">3
-&lt;/span>&lt;span class="lnt">4
-&lt;/span>&lt;span class="lnt">5
-&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
-&lt;td class="lntd">
-&lt;pre tabindex="0" class="chroma">&lt;code class="language-sql" data-lang="sql">&lt;span class="line">&lt;span class="cl">&lt;span class="k">start&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">transaction&lt;/span>&lt;span class="p">;&lt;/span>&lt;span class="w">
-&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="k">insert&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">into&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">tb_test&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">values&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="mi">1&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="s1">&amp;#39;Tom&amp;#39;&lt;/span>&lt;span class="p">),&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="mi">2&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="s1">&amp;#39;Cat&amp;#39;&lt;/span>&lt;span class="p">),&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="mi">3&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="s1">&amp;#39;Jerry&amp;#39;&lt;/span>&lt;span class="p">);&lt;/span>&lt;span class="w">
-&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="k">insert&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">into&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">tb_test&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">values&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="mi">4&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="s1">&amp;#39;Tom&amp;#39;&lt;/span>&lt;span class="p">),&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="mi">5&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="s1">&amp;#39;Cat&amp;#39;&lt;/span>&lt;span class="p">),&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="mi">6&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="s1">&amp;#39;Jerry&amp;#39;&lt;/span>&lt;span class="p">);&lt;/span>&lt;span class="w">
-&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="k">insert&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">into&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">tb_test&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">values&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="mi">7&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="s1">&amp;#39;Tom&amp;#39;&lt;/span>&lt;span class="p">),&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="mi">8&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="s1">&amp;#39;Cat&amp;#39;&lt;/span>&lt;span class="p">),&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="mi">9&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="s1">&amp;#39;Jerry&amp;#39;&lt;/span>&lt;span class="p">);&lt;/span>&lt;span class="w">
-&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="k">commit&lt;/span>&lt;span class="p">;&lt;/span>&lt;span class="w">
-&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
-&lt;/div>
-&lt;/div>&lt;ul>
-&lt;li>主键顺序插入&lt;/li>
-&lt;/ul>
-&lt;div class="highlight">&lt;div class="chroma">
-&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
-&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
-&lt;/span>&lt;span class="lnt">2
-&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
-&lt;td class="lntd">
-&lt;pre tabindex="0" class="chroma">&lt;code class="language-fallback" data-lang="fallback">&lt;span class="line">&lt;span class="cl">主键乱序插入 : 8 1 9 21 88 2 4 15 89 5 7 3
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">主键顺序插入 : 1 2 3 4 5 7 8 9 15 21 88 89
-&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
-&lt;/div>
-&lt;/div>&lt;h2 id="-order-by-优化">🦒 order by 优化&lt;/h2>
-&lt;!-- raw HTML omitted -->
-&lt;!-- raw HTML omitted -->
-&lt;!-- raw HTML omitted -->
+&lt;p>简单的不加锁 &lt;code>select&lt;/code> 就是快照读。读取的是快照版本，通过 MVCC 进行并发控制。&lt;/p></description></item><item><title>SQL 语句优化</title><link>https://emerywan.github.io/blog/p/mysql/sql-optimize/</link><pubDate>Fri, 01 Jul 2022 18:02:02 +0800</pubDate><guid>https://emerywan.github.io/blog/p/mysql/sql-optimize/</guid><description>&lt;img src="https://emerywan.github.io/blog/imgs/20.jpeg" alt="Featured image of post SQL 语句优化" />&lt;blockquote>
+&lt;p>🔥 主要思路：&lt;/p>
 &lt;ul>
 &lt;li>
-&lt;p>根据排序字段建立合适的索引，多字段排序时，也遵循最左前缀法则&lt;/p>
+&lt;p>🚀 增加数据时，尽量顺序插入&lt;/p>
 &lt;/li>
 &lt;li>
-&lt;p>尽量使用索引 / 覆盖索引 &lt;!-- raw HTML omitted -->&lt;/p>
+&lt;p>🚀 删除、修改、查询数据时，尽量走索引操作&lt;/p>
+&lt;/li>
+&lt;/ul>
+&lt;/blockquote>
+&lt;h2 id="-主键优化">🐈‍⬛ 主键优化&lt;/h2>
+&lt;ul>
+&lt;li>
+&lt;p>⭐ 满足业务需求的情况下，尽量降低主键的长度，减少磁盘 IO&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>⭐ 插入数据尽量选择顺序插入，选择使用 auto_increment 自增主键&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>⭐ 尽量不要使用 UUID 或其他自然主键（如身份证号） 作为主键&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>⭐ 业务操作避免对主键的修改&lt;/p>
+&lt;/li>
+&lt;/ul>
+&lt;p>在 InnoDB 存储引擎中，表数据是根据主键顺序组织存放的。这种存储方式为索引组织表（index organized table IOT）。&lt;/p>
+&lt;p>数据行是记录在逻辑结构 page 页中的，而每一个页的大小是固定的，默认 16K。也就意味着，一个页中所存储的行也是有限的，如果插入的数据行在该页存储不下，将会存储到下一个页中，页与页之间会通过指针连接。&lt;/p>
+&lt;!-- raw HTML omitted -->
+&lt;!-- raw HTML omitted -->
+&lt;h2 id="-update-优化">🦛 update 优化&lt;/h2>
+&lt;ul>
+&lt;li>
+&lt;p>🫧 防止索引失效&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>🫧 防止升级为表锁&lt;/p>
+&lt;p>InnoDB的行锁是针对索引加的锁，不是针对记录加的锁，并且该索引不能失效，否则会从行锁升级为表锁。&lt;/p>
+&lt;p>开启多个事务，在执行 SQL 时，防止行锁升级为表锁。&lt;/p>
+&lt;/li>
+&lt;/ul>
+&lt;h2 id="-order-by-优化">🦒 order by 优化&lt;/h2>
+&lt;!-- raw HTML omitted -->
+&lt;!-- raw HTML omitted -->
+&lt;!-- raw HTML omitted -->
+&lt;ul>
+&lt;li>
+&lt;p>🍀 根据排序字段建立合适的索引&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>🍀 多字段排序时，尽量遵循最左前缀法则&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>🍀 尽量使用索引 / 覆盖索引 &lt;!-- raw HTML omitted -->&lt;/p>
 &lt;/li>
 &lt;/ul>
 &lt;!-- raw HTML omitted -->
 &lt;!-- raw HTML omitted -->
 &lt;h2 id="-limit-优化">🐎 limit 优化&lt;/h2>
 &lt;p>在数据量比较大时，如果进行 limit 分页查询，在查询时，越往后，分页查询效率越低。&lt;/p>
-&lt;p>当在进行分页查询时，如果执行 &lt;code>limit 2000000,10&lt;/code> ，此时需要MySQL排序前2000010 记
-录，仅仅返回 2000000 - 2000010 的记录，其他记录丢弃，查询排序的代价非常大 。&lt;/p>
+&lt;p>当在进行分页查询时，如果执行 &lt;code>limit 2000000,10&lt;/code> ，此时 MySQL 会排序前 2000010 条的记录，
+仅仅返回 2000000 - 2000010 的记录，其他记录会被丢弃，查询排序的代价非常大。&lt;/p>
 &lt;p>优化思路:&lt;/p>
 &lt;ul>
-&lt;li>可以通过先定位数据，先偏移，再 limit&lt;/li>
-&lt;/ul>
-&lt;div class="highlight">&lt;div class="chroma">
-&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
-&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
-&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
-&lt;td class="lntd">
-&lt;pre tabindex="0" class="chroma">&lt;code class="language-sql" data-lang="sql">&lt;span class="line">&lt;span class="cl">&lt;span class="k">select&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">*&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">from&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">tb_sku&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">where&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">id&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">&amp;gt;&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="mi">2000000&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">limit&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="mi">10&lt;/span>&lt;span class="p">;&lt;/span>&lt;span class="w">
-&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
-&lt;/div>
-&lt;/div>&lt;ul>
-&lt;li>通过覆盖索引加子查询形式进行优化。&lt;/li>
-&lt;/ul>
+&lt;li>
+&lt;p>🎈 在业余允许的情况下，可以限制页数。通常用户也不会向后面翻很多页。&lt;/p>
+&lt;p>例如在淘宝双十一时不能查询历史购物记录。&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>🎈 可以通过先定位数据，先偏移，再 limit&lt;/p>
 &lt;div class="highlight">&lt;div class="chroma">
 &lt;table class="lntable">&lt;tr>&lt;td class="lntd">
 &lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
@@ -3761,106 +3759,72 @@ data-flex-basis="366px"
 &lt;/span>&lt;/code>&lt;/pre>&lt;/td>
 &lt;td class="lntd">
 &lt;pre tabindex="0" class="chroma">&lt;code class="language-sql" data-lang="sql">&lt;span class="line">&lt;span class="cl">&lt;span class="k">select&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">*&lt;/span>&lt;span class="w">
-&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="k">from&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">tb_sku&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">t&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="k">select&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">id&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">from&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">tb_sku&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">order&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">by&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">id&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">limit&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="mi">2000000&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="mi">10&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">a&lt;/span>&lt;span class="w">
-&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="k">where&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">t&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">id&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="n">a&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">id&lt;/span>&lt;span class="p">;&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="k">from&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">user&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="k">where&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">id&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">&amp;gt;&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="mi">2000000&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">limit&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="mi">10&lt;/span>&lt;span class="p">;&lt;/span>&lt;span class="w">
 &lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
 &lt;/div>
-&lt;/div>&lt;ul>
-&lt;li>在业余允许的情况下，可以限制页数。通常用户也不会向后面翻很多页。&lt;/li>
+&lt;/div>&lt;/li>
+&lt;li>
+&lt;p>🎈 通过覆盖索引 + 子查询形式进行优化&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-sql" data-lang="sql">&lt;span class="line">&lt;span class="cl">&lt;span class="k">select&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">*&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="k">from&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">user&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">u&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="k">where&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">id&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">&amp;gt;=&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="k">select&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">id&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">from&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">user&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">order&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">by&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">id&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">limit&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="mi">2000000&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="mi">1&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="k">limit&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="mi">10&lt;/span>&lt;span class="p">;&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="c1">-- or
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="k">select&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">*&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="k">from&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">user&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">u&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="k">select&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">id&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">from&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">tb_sku&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">order&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">by&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">id&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">limit&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="mi">2000000&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="mi">10&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">a&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="k">where&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">u&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">id&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="n">a&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">id&lt;/span>&lt;span class="p">;&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;!-- raw HTML omitted -->
+&lt;!-- raw HTML omitted -->
+&lt;/li>
 &lt;/ul>
 &lt;h2 id="-count-优化">🦬 count 优化&lt;/h2>
+&lt;p>&lt;code>count(*) == count(数字) &amp;gt; count(主键) &amp;gt; count(字段)&lt;/code>&lt;/p>
 &lt;ul>
 &lt;li>
-&lt;p>count(主键)&lt;/p>
+&lt;p>⭐ count(主键)&lt;/p>
 &lt;ul>
 &lt;li>InnoDB 引擎会遍历整张表，把每一行的 主键id 值都取出来，返回给服务层。服务层拿到主键后，按行进行累加（主键不可能为null）。&lt;/li>
 &lt;/ul>
 &lt;/li>
 &lt;li>
-&lt;p>count(字段)（注意 null 约束）&lt;/p>
+&lt;p>⭐ count(字段)（注意 null 约束）&lt;/p>
 &lt;ul>
 &lt;li>没有 not null 约束: InnoDB 引擎会遍历整张表把每一行的字段值都取出来，返回给服务层，服务层判断是否为 null，不为 null，就计数累加。&lt;/li>
 &lt;li>有 not null 约束：InnoDB 引擎会遍历整张表把每一行的字段值都取出来，返回给服务层，直接按行进行累加。&lt;/li>
 &lt;/ul>
 &lt;/li>
 &lt;li>
-&lt;p>count(数字)&lt;/p>
+&lt;p>⭐ count(数字)&lt;/p>
 &lt;ul>
 &lt;li>InnoDB 引擎遍历整张表，但不取值。服务层对于返回的每一行，放一个数字 “1” 进去，直接按行进行累加。&lt;/li>
 &lt;/ul>
 &lt;/li>
 &lt;li>
-&lt;p>count(*)&lt;/p>
+&lt;p>⭐ count(*)&lt;/p>
 &lt;ul>
 &lt;li>InnoDB引擎并不会把全部字段取出来，而是专门做了优化，不取值，服务层直接按行进行累加。&lt;/li>
 &lt;/ul>
 &lt;/li>
-&lt;/ul>
-&lt;h2 id="-update-优化">🦛 update 优化&lt;/h2>
-&lt;ul>
-&lt;li>
-&lt;p>防止索引失效&lt;/p>
-&lt;/li>
-&lt;li>
-&lt;p>防止升级为表锁&lt;/p>
-&lt;p>InnoDB的行锁是针对索引加的锁，不是针对记录加的锁，并且该索引不能失效，否则会从行锁升级为表锁。&lt;/p>
-&lt;p>开启多个事务，在执行 SQL 时，防止行锁升级为表锁。&lt;/p>
-&lt;/li>
-&lt;/ul>
-&lt;h2 id="-主键优化">🐈‍⬛ 主键优化&lt;/h2>
-&lt;ul>
-&lt;li>满足业务需求的情况下，尽量降低主键的长度，减少磁盘 IO&lt;/li>
-&lt;li>插入数据尽量选择顺序插入，选择使用 auto_increment 自增主键&lt;/li>
-&lt;li>尽量不要使用 UUID 或其他自然主键（如身份证号） 作为主键&lt;/li>
-&lt;li>业务操作避免对主键的修改&lt;/li>
-&lt;/ul>
-&lt;p>在 InnoDB 存储引擎中，表数据是根据主键顺序组织存放的。这种存储方式为索引组织表（index organized table IOT）。&lt;/p>
-&lt;p>数据行是记录在逻辑结构 page 页中的，而每一个页的大小是固定的，默认 16K。也就意味着，一个页中所存储的行也是有限的，如果插入的数据行在该页存储不下，将会存储到下一个页中，页与页之间会通过指针连接。&lt;/p>
-&lt;h3 id="页分裂">页分裂&lt;/h3>
-&lt;p>页可以为空，也可以填充一半，也可以填充100%。每个页包含了 2-N 行数据(如果一行数据过大，会行
-溢出)，根据主键排列。&lt;/p>
-&lt;p>乱序插入：&lt;/p>
-&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/mysql/sql-optimize/primary_index_1.png"
-width="898"
-height="636"
-srcset="https://emerywan.github.io/blog/blog/p/mysql/sql-optimize/primary_index_1_hu563b35cba82cad8802163900e924e8ca_143837_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/mysql/sql-optimize/primary_index_1_hu563b35cba82cad8802163900e924e8ca_143837_1024x0_resize_box_3.png 1024w"
-loading="lazy"
-alt="primary_index_1"
-class="gallery-image"
-data-flex-grow="141"
-data-flex-basis="338px"
->&lt;/p>
-&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/mysql/sql-optimize/primary_index_2.png"
-width="915"
-height="659"
-srcset="https://emerywan.github.io/blog/blog/p/mysql/sql-optimize/primary_index_2_hua83dc9b4ef4e3c90fc06cafc64e9881b_251787_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/mysql/sql-optimize/primary_index_2_hua83dc9b4ef4e3c90fc06cafc64e9881b_251787_1024x0_resize_box_3.png 1024w"
-loading="lazy"
-alt="primary_index_2"
-class="gallery-image"
-data-flex-grow="138"
-data-flex-basis="333px"
->&lt;/p>
-&lt;h3 id="页合并">页合并&lt;/h3>
-&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/mysql/sql-optimize/primary_index_3.png"
-width="906"
-height="382"
-srcset="https://emerywan.github.io/blog/blog/p/mysql/sql-optimize/primary_index_3_hu3b7e2aa6c3e2312a91f1497a31cd1dee_78730_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/mysql/sql-optimize/primary_index_3_hu3b7e2aa6c3e2312a91f1497a31cd1dee_78730_1024x0_resize_box_3.png 1024w"
-loading="lazy"
-alt="primary_index_3"
-class="gallery-image"
-data-flex-grow="237"
-data-flex-basis="569px"
->&lt;/p>
-&lt;p>&lt;img src="https://emerywan.github.io/blog/blog/p/mysql/sql-optimize/primary_index_4.png"
-width="887"
-height="573"
-srcset="https://emerywan.github.io/blog/blog/p/mysql/sql-optimize/primary_index_4_hu41da46b964a6401e487c72fb3de2f351_108741_480x0_resize_box_3.png 480w, https://emerywan.github.io/blog/blog/p/mysql/sql-optimize/primary_index_4_hu41da46b964a6401e487c72fb3de2f351_108741_1024x0_resize_box_3.png 1024w"
-loading="lazy"
-alt="primary_index_4"
-class="gallery-image"
-data-flex-grow="154"
-data-flex-basis="371px"
->&lt;/p></description></item><item><title>MySQL 中的日志</title><link>https://emerywan.github.io/blog/p/mysql/log/</link><pubDate>Thu, 30 Jun 2022 18:02:02 +0800</pubDate><guid>https://emerywan.github.io/blog/p/mysql/log/</guid><description>&lt;img src="https://emerywan.github.io/blog/imgs/19.jpeg" alt="Featured image of post MySQL 中的日志" />&lt;h2 id="-server-层日志">🖥️ Server 层日志&lt;/h2>
+&lt;/ul></description></item><item><title>MySQL 中的日志</title><link>https://emerywan.github.io/blog/p/mysql/log/</link><pubDate>Thu, 30 Jun 2022 18:02:02 +0800</pubDate><guid>https://emerywan.github.io/blog/p/mysql/log/</guid><description>&lt;img src="https://emerywan.github.io/blog/imgs/19.jpeg" alt="Featured image of post MySQL 中的日志" />&lt;h2 id="-server-层日志">🖥️ Server 层日志&lt;/h2>
 &lt;h3 id="错误日志">错误日志&lt;/h3>
 &lt;p>错误日志是 MySQL 中最重要的日志之一，它记录了当 mysqld 启动和停止时，以及服务器在运行过程中发生任何严重错误时的相关信息。&lt;/p>
 &lt;p>当数据库出现任何故障导致无法正常使用时，建议首先查看此日志。&lt;/p>
@@ -9649,7 +9613,7 @@ data-flex-basis="480px"
 &lt;ul>
 &lt;li>&lt;a class="link" href="https://tech.meituan.com/2018/11/15/java-lock.html" target="_blank" rel="noopener"
 >https://tech.meituan.com/2018/11/15/java-lock.html&lt;/a>&lt;/li>
-&lt;/ul></description></item><item><title>线程安全的单例模式</title><link>https://emerywan.github.io/blog/p/desgin-pattern/singleton/</link><pubDate>Mon, 11 Apr 2022 18:02:02 +0800</pubDate><guid>https://emerywan.github.io/blog/p/desgin-pattern/singleton/</guid><description>&lt;img src="https://emerywan.github.io/blog/imgs/8.jpeg" alt="Featured image of post 线程安全的单例模式" />&lt;p>单例模式所要实现的目标：保持一个类有且只有一个实例。&lt;/p>
+&lt;/ul></description></item><item><title>单例模式</title><link>https://emerywan.github.io/blog/p/desgin-pattern/singleton/</link><pubDate>Mon, 11 Apr 2022 18:02:02 +0800</pubDate><guid>https://emerywan.github.io/blog/p/desgin-pattern/singleton/</guid><description>&lt;img src="https://emerywan.github.io/blog/imgs/8.jpeg" alt="Featured image of post 单例模式" />&lt;p>单例模式所要实现的目标：保持一个类有且只有一个实例。&lt;/p>
 &lt;p>出于性能的考虑，不少单例模式都会采用延迟加载的方式。根据是否延迟创建对象，可以分为：&lt;/p>
 &lt;ul>
 &lt;li>
