@@ -1,4 +1,118 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>home on 一层</title><link>https://blog.letout.cn/</link><description>Recent content in home on 一层</description><generator>Hugo -- gohugo.io</generator><language>zh-cn</language><lastBuildDate>Mon, 06 Mar 2023 12:02:02 +0800</lastBuildDate><atom:link href="https://blog.letout.cn/index.xml" rel="self" type="application/rss+xml"/><item><title>观察者模式</title><link>https://blog.letout.cn/p/design-pattern/observer/</link><pubDate>Mon, 06 Mar 2023 12:02:02 +0800</pubDate><guid>https://blog.letout.cn/p/design-pattern/observer/</guid><description>&lt;img src="https://blog.letout.cn/p/design-pattern/observer/observer.png" alt="Featured image of post 观察者模式" />&lt;p>观察者模式是一种&lt;strong>行为型模式&lt;/strong>。&lt;/p>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>home on 一层</title><link>https://blog.letout.cn/</link><description>Recent content in home on 一层</description><generator>Hugo -- gohugo.io</generator><language>zh-cn</language><lastBuildDate>Tue, 07 Mar 2023 18:02:02 +0800</lastBuildDate><atom:link href="https://blog.letout.cn/index.xml" rel="self" type="application/rss+xml"/><item><title>InnoDB 缓冲池 Buffer Pool</title><link>https://blog.letout.cn/p/mysql/innodb/buffer-pool/</link><pubDate>Tue, 07 Mar 2023 18:02:02 +0800</pubDate><guid>https://blog.letout.cn/p/mysql/innodb/buffer-pool/</guid><description>&lt;img src="https://blog.letout.cn/p/mysql/innodb/buffer-pool/bufferpool.webp" alt="Featured image of post InnoDB 缓冲池 Buffer Pool" />&lt;h2 id="-buffer-pool">🧊 Buffer Pool&lt;/h2>
+&lt;p>MySQL 的数据是存储在磁盘中的，为了提升读写性能，InnoDB 设计了一个缓存池 Buffer Pool。&lt;/p>
+&lt;p>本质上是 InnoDB 向操作系统申请的一段连续内存空间，可以通过 &lt;code>innodb_buffer_pool_size&lt;/code> 来进行调整大小。&lt;/p>
+&lt;ul>
+&lt;li>
+&lt;p>当读取数据时，如果数据已经在 Buffer Pool 中，会直接返回；如果不在，就会将数据&lt;strong>完整的页信息&lt;/strong>全部加载到内存中，再返回给客户端。&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>当修改数据时，会修改 Buffer Pool 中的缓存页（-&amp;gt; 变成脏页），在合适的时机，由后台线程写入到磁盘。&lt;/p>
+&lt;/li>
+&lt;/ul>
+&lt;h3 id="-结构">🧩 结构&lt;/h3>
+&lt;p>Buffer Pool 中的连续内存，会被分割成一个个的页，和 InnoDB 的页大小一样，都是 &lt;code>16KB&lt;/code>，称为缓存页。&lt;/p>
+&lt;p>&lt;img src="https://blog.letout.cn/p/mysql/innodb/buffer-pool/cache-page.webp"
+width="962"
+height="234"
+srcset="https://blog.letout.cn/p/mysql/innodb/buffer-pool/cache-page_hucd01fda075157d782d9171d9e071f31a_7000_480x0_resize_q75_h2_box_2.webp 480w, https://blog.letout.cn/p/mysql/innodb/buffer-pool/cache-page_hucd01fda075157d782d9171d9e071f31a_7000_1024x0_resize_q75_h2_box_2.webp 1024w"
+loading="lazy"
+class="gallery-image"
+data-flex-grow="411"
+data-flex-basis="986px"
+>&lt;/p>
+&lt;p>每一个缓存页都会由一个控制块进行管理（位于 Buffer Pool 的最前面），每个缓存页与控制块一一对应。&lt;/p>
+&lt;h3 id="-内容">🧩 内容&lt;/h3>
+&lt;p>在 Buffer Pool 中，主要包括了六部分的内容：&lt;/p>
+&lt;ul>
+&lt;li>数据页&lt;/li>
+&lt;li>索引页&lt;/li>
+&lt;li>插入缓冲&lt;/li>
+&lt;li>undo 页&lt;/li>
+&lt;li>自适应哈希索引&lt;/li>
+&lt;li>锁信息&lt;/li>
+&lt;/ul>
+&lt;p>&lt;img src="https://blog.letout.cn/p/mysql/innodb/buffer-pool/bufferpool.webp"
+width="812"
+height="377"
+srcset="https://blog.letout.cn/p/mysql/innodb/buffer-pool/bufferpool_hu9753cf048aa8ef6ecf388c9b29af095f_8518_480x0_resize_q75_h2_box_2.webp 480w, https://blog.letout.cn/p/mysql/innodb/buffer-pool/bufferpool_hu9753cf048aa8ef6ecf388c9b29af095f_8518_1024x0_resize_q75_h2_box_2.webp 1024w"
+loading="lazy"
+class="gallery-image"
+data-flex-grow="215"
+data-flex-basis="516px"
+>&lt;/p>
+&lt;h2 id="-管理-buffer-pool-的链表">👷‍♂️ 管理 Buffer Pool 的链表&lt;/h2>
+&lt;p>在 MySQL 服务运行过程中，连续的 BuuferPool 内存空间的页面有空闲的，也有非空闲的，为了能够快速的找到需要的页面，防止一个一个的遍历浪费时间，
+InnoDB 使用了许多🔗&lt;strong>链表&lt;/strong>管理 Buffer Pool 的页（空闲页、干净页、脏页）。&lt;/p>
+&lt;h3 id="-free-链表----管理空闲页">⛓️ Free 链表 &amp;ndash; 管理空闲页&lt;/h3>
+&lt;p>💡 空闲页：Buffer Pool 内存中未被使用的页。&lt;/p>
+&lt;p>为了能快速找到空闲的缓存页，使用 Free 空闲链表管理空闲页。&lt;/p>
+&lt;p>Free 链表的节点是一个个空闲页所对应的控制块。&lt;/p>
+&lt;p>&lt;img src="https://blog.letout.cn/p/mysql/innodb/buffer-pool/free-list.webp"
+width="1217"
+height="597"
+srcset="https://blog.letout.cn/p/mysql/innodb/buffer-pool/free-list_hu2194ab0c933cdf7ef8a007d7c52bad5f_28012_480x0_resize_q75_h2_box_2.webp 480w, https://blog.letout.cn/p/mysql/innodb/buffer-pool/free-list_hu2194ab0c933cdf7ef8a007d7c52bad5f_28012_1024x0_resize_q75_h2_box_2.webp 1024w"
+loading="lazy"
+class="gallery-image"
+data-flex-grow="203"
+data-flex-basis="489px"
+>&lt;/p>
+&lt;p>当需要从磁盘中加载一个页到 Buffer Pool 时，就从 Free 链表中找到一个空闲页，加载数据并更改控制块的信息，并从 Free 链表中移除。&lt;/p>
+&lt;h3 id="-flush-链表----管理脏页">⛓️ Flush 链表 &amp;ndash; 管理脏页&lt;/h3>
+&lt;p>💡 脏页（dirty page）：修改了缓存页中的数据，与磁盘中的页数据不一致，称为脏页。&lt;/p>
+&lt;p>被修改过的缓存页的控制块，会被作为节点加入到 Flush 链表。&lt;/p>
+&lt;p>Flush 链表的结构和 Free 链表差不多。后台线程会在一定的时机，通过遍历 Flush 链表，将脏页写入磁盘（WAL）。&lt;/p>
+&lt;h3 id="-lru-链表----管理脏页干净页">⛓️ LRU 链表 &amp;ndash; 管理脏页&amp;amp;干净页&lt;/h3>
+&lt;p>💡 干净页（clean page）：加载了数据未作修改的缓存页。&lt;/p>
+&lt;p>💡 脏页（dirty page）：加载了数据做了修改的缓存页。&lt;/p>
+&lt;p>Buffer Pool 的大小是有限的，不可能将所有的数据都放在内存中，innoDB 通过 LRU 算法（修改过的），将频繁访问的数据停留在 Buffer Pool 中。&lt;/p>
+&lt;p>简单的 LRU 算法在 MySQL 中可能会导致：&lt;/p>
+&lt;ul>
+&lt;li>
+&lt;p>😵 预读失效&lt;/p>
+&lt;p>MySQL 会将被加载页的临近页一同加载到内存（为了减少磁盘 IO），如果这些页没有被访问，这个预读相当于浪费了。&lt;/p>
+&lt;p>（通过将 LRU 链表划分为 young 区和 old 区，加载的数据现放到 old 区域，被访问到之后，才被加入 young 区域）&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>🤢 Buffer Pool 污染&lt;/p>
+&lt;p>一个 SQL 扫描大量的数据（如索引失效时，进行全表扫描来判断条件），由于链表空间有限，可能会把内存中的所有页全部替换出去，导致热点数据全部失效，后续缓存全部没有命中，导致大量磁盘 IO。&lt;/p>
+&lt;p>（加大数据放入 young 区的条件，加载到 old 区域的数据，停留时间超过阈值时，才有资格放到 young 区域）&lt;/p>
+&lt;/li>
+&lt;/ul>
+&lt;p>&lt;img src="https://blog.letout.cn/p/mysql/innodb/buffer-pool/lru-list.webp"
+width="842"
+height="212"
+srcset="https://blog.letout.cn/p/mysql/innodb/buffer-pool/lru-list_hub80bcb1068b40da49c3759e6a067b1e3_15066_480x0_resize_q75_h2_box_2.webp 480w, https://blog.letout.cn/p/mysql/innodb/buffer-pool/lru-list_hub80bcb1068b40da49c3759e6a067b1e3_15066_1024x0_resize_q75_h2_box_2.webp 1024w"
+loading="lazy"
+class="gallery-image"
+data-flex-grow="397"
+data-flex-basis="953px"
+>&lt;/p>
+&lt;p>InnoDB 的 LRU 链表被分为两个区域：（1）热数据 young 区域；（2）冷数据 old 区域。&lt;/p>
+&lt;ul>
+&lt;li>
+&lt;p>📃 预读的页只会加载到 old 区域的头部，当该页真正被访问的时候，才会被移动到 young 区的头部。&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>⏱️ 移动到 young 区域的条件除了被访问外，还需要判断停留在 old 区域的时间。（防止全表扫描时，被访问一次后就不在使用）。当访问的缓存页已经在 old 区域停留时间超过阈值 &lt;code>innodb_old_blocks_time=1000ms&lt;/code> 时，才会被插入到 young 区头部。&lt;/p>
+&lt;/li>
+&lt;/ul>
+&lt;h2 id="-脏页刷盘的时机">💿 脏页刷盘的时机&lt;/h2>
+&lt;p>当修改数据时，会记录对应的 redo log &amp;amp; bin log（WAL），修改的是 Buffer Pool 中的缓存页，然后将其设置为脏页并加入 Flush 链表，由后台线程刷新数据到磁盘。&lt;/p>
+&lt;p>以下情况会主动刷新数据到磁盘：&lt;/p>
+&lt;ul>
+&lt;li>
+&lt;p>🎗️ 当 redo log 日志写满时&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>🎗️ 当 Buffer Pool 空间不足时，会淘汰一些缓存页，如果时脏页，会刷入磁盘&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>🎗️ 当 MySQL 认为空闲时，异步地将脏页刷新到磁盘&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>🎗️ 当 MySQL 主动正常关闭前&lt;/p>
+&lt;/li>
+&lt;/ul></description></item><item><title>观察者模式</title><link>https://blog.letout.cn/p/design-pattern/observer/</link><pubDate>Mon, 06 Mar 2023 12:02:02 +0800</pubDate><guid>https://blog.letout.cn/p/design-pattern/observer/</guid><description>&lt;img src="https://blog.letout.cn/p/design-pattern/observer/observer.png" alt="Featured image of post 观察者模式" />&lt;p>观察者模式是一种&lt;strong>行为型模式&lt;/strong>。&lt;/p>
 &lt;p>观察者模式定义对象间的一对多的依赖关系，当一个对象的状态发生改变时，其他所有依赖的对象都会得到通知，并自动更新。&lt;/p>
 &lt;p>观察者模式又称为「发布-订阅模式」&lt;code>Publish-Subscribe&lt;/code>，是一种通知机制，让发送通知的一方（被观察者）和接收通知的一方（观察者）彼此分离，互不影响。&lt;/p>
 &lt;h2 id="-实现方式">🎈 实现方式&lt;/h2>
@@ -404,307 +518,7 @@ data-flex-basis="262px"
 >https://mp.weixin.qq.com/s?__biz=MzU2MTM4NDAwMw==&amp;mid=2247491507&amp;idx=1&amp;sn=f1bec356c94cd0101809dc11dcf27ba2&amp;chksm=fc78c09fcb0f49898f6cc9b80499aeb871a80f95ab4fbe12c32567cab6a3521a6c33b61dd807&amp;cur_album_id=1763234202604388353&amp;scene=189#wechat_redirect&lt;/a>&lt;/li>
 &lt;li>&lt;a class="link" href="https://mp.weixin.qq.com/s?__biz=MzU2MTM4NDAwMw==&amp;amp;mid=2247491763&amp;amp;idx=1&amp;amp;sn=cc60a6ba13e5cf4384e623819c621e0d&amp;amp;chksm=fc7b3f9fcb0cb6897be67103d91854831b71909c0d12385fb52b2f1d011fca5d1844b3892019&amp;amp;cur_album_id=1763234202604388353&amp;amp;scene=190#rd" target="_blank" rel="noopener"
 >https://mp.weixin.qq.com/s?__biz=MzU2MTM4NDAwMw==&amp;mid=2247491763&amp;idx=1&amp;sn=cc60a6ba13e5cf4384e623819c621e0d&amp;chksm=fc7b3f9fcb0cb6897be67103d91854831b71909c0d12385fb52b2f1d011fca5d1844b3892019&amp;cur_album_id=1763234202604388353&amp;scene=190#rd&lt;/a>&lt;/li>
-&lt;/ul></description></item><item><title>MySQL 复制</title><link>https://blog.letout.cn/p/mysql/master-slave-replication/</link><pubDate>Thu, 02 Mar 2023 12:02:02 +0800</pubDate><guid>https://blog.letout.cn/p/mysql/master-slave-replication/</guid><description>&lt;img src="https://blog.letout.cn/p/mysql/master-slave-replication/copy.png" alt="Featured image of post MySQL 复制" />&lt;h2 id="-主从复制">📑 主从复制&lt;/h2>
-&lt;p>主从复制指主服务器（master server）上，任何修改和数据结构变更的事件，都会被写入到日志文件 &lt;code>bin log&lt;/code> 中，从服务器（slave server）读取主服务器上的日志文件中的事件变更，并在本地重放执行。&lt;/p>
-&lt;p>通过主从复制，能够提高数据库的&lt;strong>读&lt;/strong>性能。主库复制写，从库复制读。&lt;/p>
-&lt;p>并不适合来扩展写操作。例如在一主多从的架构中，写操作要被执行多次，整个系统的性能取决于写入最慢的那个。&lt;/p>
-&lt;p>💡 常见用途：&lt;/p>
-&lt;ul>
-&lt;li>数据备份&lt;/li>
-&lt;li>数据分发&lt;/li>
-&lt;li>提高读性能&lt;/li>
-&lt;li>高可用和故障切换&lt;/li>
-&lt;/ul>
-&lt;h2 id="-复制原理">📖 复制原理&lt;/h2>
-&lt;ul>
-&lt;li>
-&lt;p>👣 主库中的数据变更会记录到 binlog 中，主库会创建一个 binlog dump thread，将 binlog 传输到从库&lt;/p>
-&lt;/li>
-&lt;li>
-&lt;p>👣 从库创建 IO 线程，将主库传来的 binlog 写入到自己的 relay log 中继日志&lt;/p>
-&lt;/li>
-&lt;li>
-&lt;p>👣 从库创建 SQL 线程，从 relay log 中读取数据，重放到数据库中&lt;/p>
-&lt;/li>
-&lt;/ul>
-&lt;p>&lt;img src="https://blog.letout.cn/p/mysql/master-slave-replication/copy.png"
-width="1080"
-height="603"
-srcset="https://blog.letout.cn/p/mysql/master-slave-replication/copy_hu2815b7bcceb4bc2e593bd903d3b2a777_501311_480x0_resize_box_3.png 480w, https://blog.letout.cn/p/mysql/master-slave-replication/copy_hu2815b7bcceb4bc2e593bd903d3b2a777_501311_1024x0_resize_box_3.png 1024w"
-loading="lazy"
-class="gallery-image"
-data-flex-grow="179"
-data-flex-basis="429px"
->&lt;/p>
-&lt;p>这里的 IO 线程 和 SQL 线程的工作是解耦的，可以独立运行。&lt;/p>
-&lt;h2 id="-复制格式">🎫 复制格式&lt;/h2>
-&lt;p>MySQL 有三种方式记录 binlog，同样在用于复制时，也对应有三种复制格式。&lt;/p>
-&lt;p>💡 如果需要安全的数据复制方法，推荐使用&lt;strong>基于行&lt;/strong>的格式复制，除非某些场景下明确需要临时使用基于语句的格式。&lt;/p>
-&lt;h3 id="基于语句-statement">基于语句 statement&lt;/h3>
-&lt;p>通过重新执行主服务器中执行过的 SQL 语句来完成复制的。&lt;/p>
-&lt;p>优点是简单紧凑，例如批量更新了 1000 条数据，也只需要一条语句，节约 IO。&lt;/p>
-&lt;p>缺点是在一些情况下，可能导致主从数据不一致（例如使用了 now() 这样的函数）。&lt;/p>
-&lt;h3 id="基于行-row">基于行 row&lt;/h3>
-&lt;p>基于行的日志中，记录了该行数据发生了什么变化。在执行时，进行解析，找到需要变更的记录进行操作。&lt;/p>
-&lt;p>优点是数据具有强确定性。&lt;/p>
-&lt;p>缺点是可能会导致日志中记录大量数据。比如在批量更新时，出现大量的行，但是语句可能只有一条。&lt;/p>
-&lt;h3 id="混合模式-mix">混合模式 mix&lt;/h3>
-&lt;p>“试图” 混合模式结合以上两种格式的优点。（可能会有不稳定的情况）&lt;/p>
-&lt;p>默认情况下使用基于语句的格式，在有需要时切换到基于行的格式。&lt;strong>在写入事件时，会有很多的判断条件&lt;/strong>。&lt;/p>
-&lt;!-- raw HTML omitted -->
-&lt;!-- raw HTML omitted -->
-&lt;h2 id="-复制模式">🎚️ 复制模式&lt;/h2>
-&lt;h3 id="异步模式">异步模式&lt;/h3>
-&lt;p>主库不会主动推送 binlog 给从库，执行完直接返回，不关心从库是否接收到数据，异步的方式进行主从复制。&lt;/p>
-&lt;h3 id="半同步模式">半同步模式&lt;/h3>
-&lt;p>主库执行的事务，等到至少一个从库将日志记录到了 relay log 中之后，再提交（不能保证从库执行）。&lt;/p>
-&lt;p>注意：在超时时间之内没有返回，会退化成异步模式。&lt;/p>
-&lt;h3 id="全同步模式">全同步模式&lt;/h3>
-&lt;p>主库执行的事务，等到所有的从库都执行完之后，才提交，返回成功信息给客户端。&lt;/p>
-&lt;h2 id="参考">参考&lt;/h2>
-&lt;ul>
-&lt;li>&lt;a class="link" href="https://ost.51cto.com/posts/11721" target="_blank" rel="noopener"
->https://ost.51cto.com/posts/11721&lt;/a>&lt;/li>
-&lt;li>&lt;a class="link" href="https://mp.weixin.qq.com/s?__biz=MjM5ODYxMDA5OQ==&amp;amp;mid=2651961330&amp;amp;idx=1&amp;amp;sn=4bdbada3b26d4fc2fc505f7a0f2ad7c4" target="_blank" rel="noopener"
->https://mp.weixin.qq.com/s?__biz=MjM5ODYxMDA5OQ==&amp;mid=2651961330&amp;idx=1&amp;sn=4bdbada3b26d4fc2fc505f7a0f2ad7c4&lt;/a>&lt;/li>
-&lt;/ul></description></item><item><title>Redis 复制</title><link>https://blog.letout.cn/p/redis/replication/</link><pubDate>Wed, 01 Mar 2023 18:52:45 +0800</pubDate><guid>https://blog.letout.cn/p/redis/replication/</guid><description>&lt;img src="https://blog.letout.cn/p/redis/replication/replication.png" alt="Featured image of post Redis 复制" />&lt;h2 id="建立复制">建立复制&lt;/h2>
-&lt;p>参与复制的 Redis 实例划分为：&lt;/p>
-&lt;ul>
-&lt;li>主节点 &lt;code>master&lt;/code>&lt;/li>
-&lt;li>从节点 &lt;code>slave&lt;/code>&lt;/li>
-&lt;/ul>
-&lt;p>一个主节点可以有多个从节点，数据的复制是单向的 &lt;code>master -&amp;gt; slave&lt;/code>。&lt;/p>
-&lt;p>通过主从复制，可以实现「读写分离」，主服务器负责「写」操作，从服务器负责「读」操作。&lt;/p>
-&lt;p>同时，从节点也可以作为主节点的备份。&lt;/p>
-&lt;p>&lt;img src="https://blog.letout.cn/p/redis/replication/read-write.png"
-width="902"
-height="422"
-srcset="https://blog.letout.cn/p/redis/replication/read-write_huc9c3964624999041f81d0c7b2328e956_42565_480x0_resize_box_3.png 480w, https://blog.letout.cn/p/redis/replication/read-write_huc9c3964624999041f81d0c7b2328e956_42565_1024x0_resize_box_3.png 1024w"
-loading="lazy"
-class="gallery-image"
-data-flex-grow="213"
-data-flex-basis="512px"
->&lt;/p>
-&lt;p>在从服务器中，使用 &lt;code>slaveof&lt;/code> / &lt;code>replicaof&lt;/code> 命令/配置，建立主从服务关系，从节点只会保存主节点的信息，其余的复制流程在节点内部异步进行。&lt;/p>
-&lt;div class="highlight">&lt;div class="chroma">
-&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
-&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
-&lt;/span>&lt;span class="lnt">2
-&lt;/span>&lt;span class="lnt">3
-&lt;/span>&lt;span class="lnt">4
-&lt;/span>&lt;span class="lnt">5
-&lt;/span>&lt;span class="lnt">6
-&lt;/span>&lt;span class="lnt">7
-&lt;/span>&lt;span class="lnt">8
-&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
-&lt;td class="lntd">
-&lt;pre tabindex="0" class="chroma">&lt;code class="language-sh" data-lang="sh">&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># 配置文件中设置&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">slaveof &lt;span class="o">{&lt;/span>masterHost&lt;span class="o">}&lt;/span> &lt;span class="o">{&lt;/span>masterPort&lt;span class="o">}&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># 启动从服务时&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">redis-server --slaveof &lt;span class="o">{&lt;/span>masterHost&lt;span class="o">}&lt;/span> &lt;span class="o">{&lt;/span>masterPort&lt;span class="o">}&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># 从服务中使用命令&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">slaveof &lt;span class="o">{&lt;/span>masterHost&lt;span class="o">}&lt;/span> &lt;span class="o">{&lt;/span>masterPort&lt;span class="o">}&lt;/span>
-&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
-&lt;/div>
-&lt;/div>&lt;h3 id="同步原理">同步原理&lt;/h3>
-&lt;p>Redis 使用 &lt;code>psync&lt;/code> 完成主从数据的同步。&lt;/p>
-&lt;div class="highlight">&lt;div class="chroma">
-&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
-&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
-&lt;/span>&lt;span class="lnt">2
-&lt;/span>&lt;span class="lnt">3
-&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
-&lt;td class="lntd">
-&lt;pre tabindex="0" class="chroma">&lt;code class="language-sh" data-lang="sh">&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># runID 保存的主服务器的 id&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># offset 偏移量，第一次同步为 -1&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">psync &lt;span class="o">{&lt;/span>runID&lt;span class="o">}&lt;/span> &lt;span class="o">{&lt;/span>offset&lt;span class="o">}&lt;/span>
-&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
-&lt;/div>
-&lt;/div>&lt;ul>
-&lt;li>
-&lt;p>👣 主服务器会执行 &lt;code>bgsave&lt;/code> 命令来生成 RDB 文件，然后把文件发送给从服务器。&lt;/p>
-&lt;/li>
-&lt;li>
-&lt;p>👣 从服务器收到 RDB 文件后，会先「清空当前的数据」，然后载入 RDB 文件。&lt;/p>
-&lt;/li>
-&lt;li>
-&lt;p>👣 主服务器依然可以正常处理命令（fork子进程，COW），在复制期间为了保障数据的一致性，写命令会被同时记录在 「复制客户缓冲区」&lt;code>replication buffer&lt;/code> 中，从服务器加载完 RDB 后，会运行缓存区中记录的命令，保障数据一致性。&lt;/p>
-&lt;/li>
-&lt;/ul>
-&lt;h3 id="部分复制">部分复制&lt;/h3>
-&lt;ul>
-&lt;li>
-&lt;p>📃 复制偏移量 offset&lt;/p>
-&lt;p>参与主从的节点都会维护自身的复制偏移量，处理完「写命令」后，都会累计命令的字节长度。&lt;/p>
-&lt;p>从节点会没秒中上报自身的复制偏移量。&lt;/p>
-&lt;/li>
-&lt;li>
-&lt;p>♒ 复制积压缓冲区&lt;/p>
-&lt;p>replication backlog buffer&lt;/p>
-&lt;p>本质上一个先进先出的定长队列（默认两个，2 * 1M），与 MySQL redolog 一样是循环写入，新数据会覆盖旧数据。
-主节点响应写命令时，再发送命令到从节点时，同时会将数据写入复制积压缓冲区，用于部分复制命令丢失是的数据补救。&lt;/p>
-&lt;/li>
-&lt;/ul>
-&lt;p>主从服务器在完成第一次全量复制之后，会通过长连接进行命令传播。&lt;/p>
-&lt;p>网络是不稳定的，从服务器可能会有短暂的断开，当重新建立连接之后，可以根据情况使用增量复制来同步数据。&lt;/p>
-&lt;p>增量复制同样采用了 &lt;code>psync&lt;/code> 来同步，通过 offset 来告知主服务器当前的数据的偏移情况。&lt;/p>
-&lt;p>当从服务器的偏移量在复制积压缓冲区中找到，会进行部分复制；当偏移数据过大，已被覆盖无法找到时，会退化为全量复制。&lt;/p>
-&lt;h3 id="-保持连接">💓 保持连接&lt;/h3>
-&lt;p>主从节点间有心跳检测机制：&lt;/p>
-&lt;ul>
-&lt;li>
-&lt;p>主节点每 10s 向从节点发送 &lt;code>ping&lt;/code> 命令，判断从节点的连接状态&lt;/p>
-&lt;/li>
-&lt;li>
-&lt;p>从节点每 1s 上报自身 offset 情况&lt;/p>
-&lt;ul>
-&lt;li>实时监控从节点网络状态，延迟性&lt;/li>
-&lt;li>判断数据是否丢失&lt;/li>
-&lt;li>保障从节点的连接数量&lt;/li>
-&lt;/ul>
-&lt;/li>
-&lt;/ul>
-&lt;h2 id="-读写分离问题">📚 读写分离问题&lt;/h2>
-&lt;h3 id="-数据延迟">🎰 数据延迟&lt;/h3>
-&lt;p>Redis 由于异步复制的特性，延迟是无法避免的，取决于当前的网络情况和命令阻塞情况。&lt;/p>
-&lt;p>适合于业务场景对延迟不敏感的场景。根据具体业务场景而定，可以考虑使用 Redis 集群做水平扩展的方案。&lt;/p>
-&lt;h3 id="-过期数据">🗑️ 过期数据&lt;/h3>
-&lt;p>在 Redis 中，有（1）定期删除；（2）惰性删除；两种删除方案。&lt;/p>
-&lt;p>在从服务器中，不会检查是否过期，主服务器中找到过期数据，会同步一条 &lt;code>DEL&lt;/code> 命令到从服务器中，删除过期数据。&lt;/p>
-&lt;ul>
-&lt;li>
-&lt;p>在 Redis 3.2-，会直接返回过期数据，不会进行检查&lt;/p>
-&lt;/li>
-&lt;li>
-&lt;p>在 Redis 3.2+，在返回数据前，会检查过期时间，解决了从服务器读取到过期数据的问题&lt;/p>
-&lt;/li>
-&lt;/ul>
-&lt;h3 id="-节点故障">🌀 节点故障&lt;/h3>
-&lt;p>当主节点宕机后，从节点是无法自动升级为主节点的，需要人工干预。&lt;/p>
-&lt;p>考虑使用 Redis 哨兵模式或集群方案。&lt;/p>
-&lt;h2 id="-相关优化">👍 相关优化&lt;/h2>
-&lt;ul>
-&lt;li>
-&lt;p>避免全量复制&lt;/p>
-&lt;p>主从复制的全量复制是一个非常消耗资源的操作，除了第一次复制的全量复制，需要尽量避免全量复制。&lt;/p>
-&lt;p>复制积压缓存区不足，会导致复制退化为全量复制，在运维时，可以根据实际情况增加缓冲区的容量。&lt;/p>
-&lt;/li>
-&lt;li>
-&lt;p>避免复制风暴&lt;/p>
-&lt;p>如果一个主节点上挂载了多个从节点，如果同时与多个从节点进行全量同步时，会向多个从节点发送RDB文件（Redis 做了优化可共享一个 RDB），导致网络带宽的严重消耗，造成延迟问题。&lt;/p>
-&lt;p>建议使用链状/树状结构，从节点挂载到从节点上。&lt;/p>
-&lt;/li>
-&lt;li>
-&lt;p>单机复制风暴&lt;/p>
-&lt;p>由于 Redis 的瓶颈不在 CPU 上，通常会在一台服务器上部署多个实例。为了避免物理机问题导致的故障，导致恢复后大量从节点向一台机器进行复制操作，应该把主节点分散到多台机器上。&lt;/p>
-&lt;/li>
-&lt;/ul>
-&lt;h2 id="-哨兵机制">🎺 哨兵机制&lt;/h2>
-&lt;p>😓 Redis 在主从模式下，一旦主节点故障，需要人工干预将从节点提升为主节点，同时需要在客户端配置新的主节点地址。&lt;/p>
-&lt;p>为了达到高可用，提供了哨兵模式 &lt;code>Redis Sentinel&lt;/code> 解决这个问题，达到高可用。能够自动完成故障发现和故障转移。&lt;/p>
-&lt;p>在哨兵模式下，相比于复制模式，只是多了 Sentinel 节点，主从模式下的 Redis 节点没有任何特殊处理。
-其中，Sentinel 节点本质上是特殊的 Redis 节点，只是不会存储数据，只支持部分命令。&lt;/p>
-&lt;p>&lt;img src="https://blog.letout.cn/p/redis/replication/sentinel.png"
-width="545"
-height="732"
-srcset="https://blog.letout.cn/p/redis/replication/sentinel_hu9ca24b6840f6afec965ea3fe9eb87fe5_297258_480x0_resize_box_3.png 480w, https://blog.letout.cn/p/redis/replication/sentinel_hu9ca24b6840f6afec965ea3fe9eb87fe5_297258_1024x0_resize_box_3.png 1024w"
-loading="lazy"
-class="gallery-image"
-data-flex-grow="74"
-data-flex-basis="178px"
->&lt;/p>
-&lt;ul>
-&lt;li>
-&lt;p>🔍 监控&lt;/p>
-&lt;p>Sentinel 节点会定期检查 Redis 数据节点，其余 Sentinel 节点是否可达。&lt;/p>
-&lt;/li>
-&lt;li>
-&lt;p>📧 通知&lt;/p>
-&lt;p>Sentinel 节点会将故障转移的结果通知给应用方。&lt;/p>
-&lt;/li>
-&lt;li>
-&lt;p>📇 主节点故障转移&lt;/p>
-&lt;p>可以实现故障时，将从节点晋升为主节点，并维护正确的主从关系。&lt;/p>
-&lt;/li>
-&lt;li>
-&lt;p>📑 配置提供者&lt;/p>
-&lt;p>在哨兵结构中，客户端初始化连接的是哨兵集群，从中获取主节点的信息。&lt;/p>
-&lt;/li>
-&lt;/ul>
-&lt;h3 id="三个定时任务">三个定时任务&lt;/h3>
-&lt;p>Redis Sentinel 通过三个定时任务对各个节点发现和监控：&lt;/p>
-&lt;ul>
-&lt;li>
-&lt;p>每隔 10s，每个 Sentinel 节点会向主节点和从节点发送 info 命令获取最新的拓扑结构&lt;/p>
-&lt;/li>
-&lt;li>
-&lt;p>每隔 2s，每个 Sentinel 节点会向 Redis 数据节点的 __sentinel__:hello 频道上发送该 Sentinel 节点对于主节点的判断，以及当前 Sentinel 节点的信息&lt;/p>
-&lt;/li>
-&lt;li>
-&lt;p>每隔 1s，每个 Sentinel 会向其他 Sentinel 节点、主节点、从节点发送 ping 命令判断是否可达&lt;/p>
-&lt;/li>
-&lt;/ul>
-&lt;h3 id="主观下线和客观下线">主观下线和客观下线&lt;/h3>
-&lt;h4 id="主观下线">主观下线&lt;/h4>
-&lt;p>”一家之言“&lt;/p>
-&lt;p>Sentinel 每 1s 会向其他所有节点发送 &lt;code>ping&lt;/code> 进行💓心跳检测，当节点超过时间没有回复，就会对该节点做失败判定。只有这一个节点的判定称为「主观下线」。&lt;/p>
-&lt;h4 id="客观下线">客观下线&lt;/h4>
-&lt;p>当主观下线的为主节点时，当前 Sentinel 节点会询问其他哨兵对该主节点的判断，当多数哨兵都对主节点的下线做了同意判定，超过配置中的 quorum 个数，就被标记为 「客观下线」。&lt;/p>
-&lt;h3 id="sentinel-领导选举">Sentinel 领导选举&lt;/h3>
-&lt;p>当确定客观下线之后，需要进行故障转移工作。实际上故障转移工作只需要一个 Sentinel 节点来完成即可，所以需要先做一个领导者选举的工作。&lt;/p>
-&lt;p>Redis 使用 &lt;a class="link" href="https://raft.github.io/" target="_blank" rel="noopener"
->Raft&lt;/a> 算法实现领导的选举。&lt;/p>
-&lt;p>每个在线的 Redis Sentinel 都有资格成为领导者，在一个哨兵确定主节点客观下线时，会向其他的节点发送 &lt;code>sentinel is-master-down-by-addr&lt;/code> 命令，
-要求将自己设置为领导者。&lt;/p>
-&lt;p>收到命令的节点，如果没有同意过其他节点的请求，就会同意该请求，否则拒绝。每个哨兵节点只有一票。&lt;/p>
-&lt;p>当一个哨兵拿到 quorum 个票数时，就成为了领导者，否则进行下一次投票。&lt;/p>
-&lt;h3 id="故障转移">故障转移&lt;/h3>
-&lt;ul>
-&lt;li>
-&lt;p>👣 选取新的主节点&lt;/p>
-&lt;ul>
-&lt;li>
-&lt;p>🧩 过滤“不健康”节点（主观下线、掉线）&lt;/p>
-&lt;/li>
-&lt;li>
-&lt;p>🧩 选择优先级最高的节点，否则继续下一条规则&lt;/p>
-&lt;/li>
-&lt;li>
-&lt;p>🧩 选取offset最大的节点，否则下一条规则&lt;/p>
-&lt;/li>
-&lt;li>
-&lt;p>🧩 选取 runId 最小的节点&lt;/p>
-&lt;/li>
-&lt;/ul>
-&lt;/li>
-&lt;li>
-&lt;p>👣 从节点提升为主节点&lt;/p>
-&lt;p>从节点执行 &lt;code>slaveof no one&lt;/code> 成为主节点。&lt;/p>
-&lt;/li>
-&lt;li>
-&lt;p>👣 哨兵领导者向其他从节点发送命名，更换主节点信息&lt;/p>
-&lt;/li>
-&lt;li>
-&lt;p>👣 将下线的主节点更新为从节点，并保持监控，当再次上线时，作为从节点复制新的主节点信息&lt;/p>
-&lt;/li>
-&lt;/ul>
-&lt;h3 id="注意事项">注意事项&lt;/h3>
-&lt;ul>
-&lt;li>Sentinel 节点应该部署在多台物理机上&lt;/li>
-&lt;/ul>
-&lt;p>Redis 的瓶颈不在 CPU，通过一台物理机会部署多个 Redis 实例，如果哨兵全部都在一台物理机上，如果出现物理故障，所有的实例都会收到影响&lt;/p>
-&lt;ul>
-&lt;li>至少三个 Sentinel 节点，且为奇数节点&lt;/li>
-&lt;/ul>
-&lt;p>哨兵领导者选举时，至少需要获取「一半+1」个投票。奇数节点可以在满足条件的基础上节省一个节点。&lt;/p>
-&lt;h2 id="参考">参考&lt;/h2>
-&lt;ul>
-&lt;li>&lt;a class="link" href="https://segmentfault.com/a/1190000039766545" target="_blank" rel="noopener"
->https://segmentfault.com/a/1190000039766545&lt;/a>&lt;/li>
-&lt;li>Redis 开发于运维&lt;/li>
-&lt;/ul></description></item><item><title>分布式事务（Doing）</title><link>https://blog.letout.cn/p/distributed/transaction/</link><pubDate>Wed, 01 Mar 2023 12:14:45 +0800</pubDate><guid>https://blog.letout.cn/p/distributed/transaction/</guid><description>&lt;img src="https://blog.letout.cn/p/distributed/transaction/cap.webp" alt="Featured image of post 分布式事务（Doing）" />&lt;h2 id="事务">事务&lt;/h2>
+&lt;/ul></description></item><item><title>分布式事务（Doing）</title><link>https://blog.letout.cn/p/distributed/transaction/</link><pubDate>Fri, 03 Mar 2023 12:14:45 +0800</pubDate><guid>https://blog.letout.cn/p/distributed/transaction/</guid><description>&lt;img src="https://blog.letout.cn/p/distributed/transaction/cap.webp" alt="Featured image of post 分布式事务（Doing）" />&lt;h2 id="事务">事务&lt;/h2>
 &lt;h3 id="数据库事务">数据库事务&lt;/h3>
 &lt;p>事务（单数据库的本地事务）是指一组操作，要么全部正确执行，要么全部不执行。事务通常会有 ACID 四大特性：&lt;/p>
 &lt;ul>
@@ -786,8 +600,8 @@ data-flex-basis="261px"
 &lt;h3 id="同步超时">同步超时&lt;/h3>
 &lt;p>服务化的系统间调用常常因为网络问题导致系统间调用超时，系统A同步调用系统B超时，系统A可以明确得到超时反馈，但是无法确定系统B是否已经完成了预定的功能或者没有完成预定的功能。于是，系统A就迷茫了，不知道应该继续做什么，如何反馈给使用方。&lt;/p>
 &lt;h2 id="一致性协议">一致性协议&lt;/h2>
-&lt;h3 id="-2pc">👣 2PC&lt;/h3>
-&lt;h4 id="两阶段提交">两阶段提交&lt;/h4>
+&lt;h3 id="2pc">2PC&lt;/h3>
+&lt;h4 id="2-两阶段提交">2️⃣ 两阶段提交&lt;/h4>
 &lt;p>两阶段提交（2PC）把分布式事务分为两个过程：准备阶段 &lt;code>Prepare&lt;/code>，提交阶段 &lt;code>Commit&lt;/code> / 回滚阶段 &lt;code>Rollback&lt;/code>。&lt;/p>
 &lt;ul>
 &lt;li>
@@ -813,7 +627,7 @@ data-flex-basis="314px"
 &lt;p>事务管理器（TM）：负责协调和管理事务，控制着全局事务并管理事务的生命周期，并协调各个 RM。&lt;/p>
 &lt;p>资源管理器（RM）：事务的参与者，一般可以指一个数据库实例，通过资源管理器对数据库进行控制，即一个分支事务。&lt;/p>
 &lt;p>DTP 模型定义 TM 和 RM 之间的通讯接口规范叫做 XA（即数据库提供的 2PC 接口协议），基于数据库的 XA 协议来实现的 2PC 称为 XA 方案。&lt;/p>
-&lt;h4 id="seata-实现-2pc">Seata 实现 2PC&lt;/h4>
+&lt;h4 id="-seata-实现-2pc">⚒️ Seata 实现 2PC&lt;/h4>
 &lt;p>&lt;a class="link" href="https://github.com/seata/seata" target="_blank" rel="noopener"
 >Seata&lt;/a> 是一款开源的分布式事务解决方案，致力于在微服务架构下提供高性能和简单易用的分布式事务服务。&lt;/p>
 &lt;p>📇 Seata 把一个分布式事务理解成一个「全局事务」和若干「分支事务」：&lt;/p>
@@ -842,7 +656,7 @@ data-flex-basis="314px"
 &lt;/ul>
 &lt;p>📺 在架构方面，2PC 方案的 RM 实际上是在数据库层面，RM 本质上是数据库自身通过 XA 协议实现；seata 中 RM 以 jar 包的形式作为中间件层部署在应用程序一侧。&lt;/p>
 &lt;p>🗳️ 在两阶段提交方面，2PC 在第二阶段决议 commit / rollback，事务性资源锁要保持在第二阶段完成后释放；seata 在第一阶段就将事务提交，省去第二阶段持有锁的时间，提高整体效率。&lt;/p>
-&lt;h4 id="配置-seata-服务">配置 Seata 服务&lt;/h4>
+&lt;h5 id="配置-seata-服务">配置 Seata 服务&lt;/h5>
 &lt;ul>
 &lt;li>启动 seata 中间件服务&lt;/li>
 &lt;li>配置服务注册中心&lt;/li>
@@ -882,7 +696,7 @@ data-flex-basis="314px"
 &lt;/div>
 &lt;/div>&lt;/li>
 &lt;/ul>
-&lt;h4 id="创建代理数据源">创建代理数据源&lt;/h4>
+&lt;h5 id="创建代理数据源">创建代理数据源&lt;/h5>
 &lt;p>每个 RM 通过 DataSourceProxy 使用代理连接。与 TC 进行通信交互、记录 undo_log 等。&lt;/p>
 &lt;p>第一阶段业务操作生成对于的 undo_log，将 undo_log 和业务数据放在一个本地事务提交（undo_log 记录了修改前的值，同时提交后释放锁资源）。&lt;/p>
 &lt;p>TM 开启全局事务，会将全局事务ID &lt;code>XID&lt;/code> 放在事务上下文中，并通过远程调用传入下游的各个分支事务。&lt;/p>
@@ -929,7 +743,7 @@ data-flex-basis="314px"
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">}&lt;/span>
 &lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
 &lt;/div>
-&lt;/div>&lt;h4 id="双方业务实现">双方业务实现&lt;/h4>
+&lt;/div>&lt;h5 id="双方业务实现">双方业务实现&lt;/h5>
 &lt;p>&lt;code>@GlobalTransactional&lt;/code> 开启全局事务。&lt;code>GlobalTransactinalInterceptor&lt;/code> 会拦截 &lt;code>@GlobalTransactional&lt;/code> 注解的方法，生成全局事务ID&lt;code>XID&lt;/code>。&lt;/p>
 &lt;p>XID 会在整个分布式事务中传递，在远程调用时 spring-cloud-alibaba-seata 会拦截 Feign 调用将 XID 传递到下游服务。&lt;/p>
 &lt;div class="highlight">&lt;div class="chroma">
@@ -1107,9 +921,16 @@ data-flex-basis="314px"
 &lt;p>在 Try 阶段，是对业务系统进行检查和资源预览，如订单和存储操作，需要检查库存剩余数量是否可用，并进行资源预留。&lt;/p>
 &lt;p>基于 TCC 实现分布式事务，会将原来只需要一个接口的实现逻辑拆分为 Try、Confirm、Cancel 三个接口，相对来说代码实现复杂度较高。&lt;/p>
 &lt;h2 id="分布式解决方案">分布式解决方案&lt;/h2>
-&lt;h3 id="本地消息表">本地消息表&lt;/h3>
 &lt;h3 id="可靠消息最终一致性">可靠消息最终一致性&lt;/h3>
+&lt;p>可靠消息最终一致性是指，当事务发起方执行完本地事务后并发出一条消息，事务参与方（消息消费者）一定能够接收到消息并处理事务成功，最终事务要达到一致。&lt;/p>
+&lt;h4 id="本地消息表方案">本地消息表方案&lt;/h4>
+&lt;p>在同一个数据库中创建一张“消息表”，扫表进行发送消息&lt;/p>
+&lt;h4 id="rocketmq-方案">RocketMQ 方案&lt;/h4>
+&lt;p>在 RocketMQ 4.3+ 之后，正式支持事务消息。&lt;/p>
+&lt;p>事务消息解决 Producer 端消息的发送和本地事务执行的原子性问题。&lt;/p>
 &lt;h3 id="最大努力通知">最大努力通知&lt;/h3>
+&lt;!-- raw HTML omitted -->
+&lt;!-- raw HTML omitted -->
 &lt;h2 id="参考">参考&lt;/h2>
 &lt;ul>
 &lt;li>&lt;a class="link" href="https://www.jianshu.com/p/1156151e20c8" target="_blank" rel="noopener"
@@ -1122,6 +943,308 @@ data-flex-basis="314px"
 >https://mp.weixin.qq.com/s/XknegP66mnYboiBx556Kzw&lt;/a>&lt;/li>
 &lt;li>&lt;a class="link" href="https://mp.weixin.qq.com/s/ujRRtdLOeKEHsHrtDRNXGA" target="_blank" rel="noopener"
 >https://mp.weixin.qq.com/s/ujRRtdLOeKEHsHrtDRNXGA&lt;/a>&lt;/li>
+&lt;/ul></description></item><item><title>MySQL 复制</title><link>https://blog.letout.cn/p/mysql/master-slave-replication/</link><pubDate>Thu, 02 Mar 2023 12:02:02 +0800</pubDate><guid>https://blog.letout.cn/p/mysql/master-slave-replication/</guid><description>&lt;img src="https://blog.letout.cn/p/mysql/master-slave-replication/copy.png" alt="Featured image of post MySQL 复制" />&lt;h2 id="-主从复制">📑 主从复制&lt;/h2>
+&lt;p>主从复制指主服务器（master server）上，任何修改和数据结构变更的事件，都会被写入到日志文件 &lt;code>bin log&lt;/code> 中，从服务器（slave server）读取主服务器上的日志文件中的事件变更，并在本地重放执行。&lt;/p>
+&lt;p>通过主从复制，能够提高数据库的&lt;strong>读&lt;/strong>性能。主库复制写，从库复制读。&lt;/p>
+&lt;p>并不适合来扩展写操作。例如在一主多从的架构中，写操作要被执行多次，整个系统的性能会取决于写入最慢的那个。&lt;/p>
+&lt;p>💡 常见用途：&lt;/p>
+&lt;ul>
+&lt;li>数据备份&lt;/li>
+&lt;li>数据分发&lt;/li>
+&lt;li>提高读性能&lt;/li>
+&lt;li>高可用和故障切换&lt;/li>
+&lt;/ul>
+&lt;h2 id="-复制原理">📖 复制原理&lt;/h2>
+&lt;ul>
+&lt;li>
+&lt;p>👣 主库中的数据变更会记录到 binlog 中，主库会创建一个 binlog dump thread，将 binlog 传输到从库&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>👣 从库创建 IO 线程，将主库传来的 binlog 写入到自己的 relay log 中继日志&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>👣 从库创建 SQL 线程，从 relay log 中读取数据，重放到数据库中&lt;/p>
+&lt;/li>
+&lt;/ul>
+&lt;p>这里的 IO 线程 和 SQL 线程的工作是解耦的，可以独立运行。&lt;/p>
+&lt;p>&lt;img src="https://blog.letout.cn/p/mysql/master-slave-replication/copy.png"
+width="1080"
+height="603"
+srcset="https://blog.letout.cn/p/mysql/master-slave-replication/copy_hu2815b7bcceb4bc2e593bd903d3b2a777_501311_480x0_resize_box_3.png 480w, https://blog.letout.cn/p/mysql/master-slave-replication/copy_hu2815b7bcceb4bc2e593bd903d3b2a777_501311_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+class="gallery-image"
+data-flex-grow="179"
+data-flex-basis="429px"
+>&lt;/p>
+&lt;h2 id="-复制格式">🎫 复制格式&lt;/h2>
+&lt;p>MySQL 有三种方式记录 binlog，同样在复制时，也对应有三种复制格式。&lt;/p>
+&lt;p>💡 如果需要安全的数据复制方法，推荐使用&lt;strong>基于行&lt;/strong>的格式复制，除非某些场景下明确需要临时使用基于语句的格式。&lt;/p>
+&lt;h3 id="-基于语句-statement">📃 基于语句 statement&lt;/h3>
+&lt;p>通过重新执行主服务器中执行过的 SQL 语句来完成复制的。&lt;/p>
+&lt;p>优点🙋‍ 是简单紧凑，例如批量更新了 1000 条数据，也只需要一条语句，节约 IO。&lt;/p>
+&lt;p>缺点🙅‍♂️ 是在一些情况下，可能导致主从数据不一致（例如使用了 now() 这样的函数）。&lt;/p>
+&lt;h3 id="-基于行-row">📓 基于行 row&lt;/h3>
+&lt;p>基于行的日志中，记录了该行数据发生了什么变化，包含该行修改前和修改后的情况。在执行时，进行解析，找到需要变更的记录进行操作。&lt;/p>
+&lt;p>优点🙋 是数据具有强确定性。&lt;/p>
+&lt;p>缺点🙅‍♂️ 是可能会导致日志中记录大量数据。比如在批量更新时，出现大量的行的修改，但是语句可能只有一条。&lt;/p>
+&lt;h3 id="-混合模式-mix">🖇️ 混合模式 mix&lt;/h3>
+&lt;p>“试图” 混合模式结合以上两种格式的优点。（可能会有😵&lt;strong>不稳定&lt;/strong>的情况）&lt;/p>
+&lt;p>默认情况下使用基于语句的格式，在有需要时切换到基于行的格式。&lt;strong>在写入事件时，会有很多的判断条件&lt;/strong>。&lt;/p>
+&lt;!-- raw HTML omitted -->
+&lt;!-- raw HTML omitted -->
+&lt;h2 id="-复制模式">🎚️ 复制模式&lt;/h2>
+&lt;h3 id="-异步模式默认">🌑 异步模式（默认）&lt;/h3>
+&lt;p>主库不会主动推送 binlog 给从库，事务执行完直接返回，不关心从库是否接收到数据，从库通过异步的方式进行主从复制。&lt;/p>
+&lt;h3 id="-半同步模式">🌓 半同步模式&lt;/h3>
+&lt;p>主库执行的事务，等到至少一个从库将日志记录到了 relay log 中之后，再提交（不能保证从库执行完成，只能保证一个从库收到了日志）。&lt;/p>
+&lt;p>注意：如果从库在超时时间之内没有返回，会退化成异步模式。&lt;/p>
+&lt;h3 id="-全同步模式">🌕 全同步模式&lt;/h3>
+&lt;p>主库执行的事务，等到所有的从库都执行完成之后，主库才会提交，返回成功信息给客户端。&lt;/p>
+&lt;p>在实际项目中，基本不会使用。会严重影响性能，只要有一个从库发生故障，就会影响业务正常进行。&lt;/p>
+&lt;h2 id="参考">参考&lt;/h2>
+&lt;ul>
+&lt;li>&lt;a class="link" href="https://ost.51cto.com/posts/11721" target="_blank" rel="noopener"
+>https://ost.51cto.com/posts/11721&lt;/a>&lt;/li>
+&lt;li>&lt;a class="link" href="https://mp.weixin.qq.com/s?__biz=MjM5ODYxMDA5OQ==&amp;amp;mid=2651961330&amp;amp;idx=1&amp;amp;sn=4bdbada3b26d4fc2fc505f7a0f2ad7c4" target="_blank" rel="noopener"
+>https://mp.weixin.qq.com/s?__biz=MjM5ODYxMDA5OQ==&amp;mid=2651961330&amp;idx=1&amp;sn=4bdbada3b26d4fc2fc505f7a0f2ad7c4&lt;/a>&lt;/li>
+&lt;/ul></description></item><item><title>Redis 复制</title><link>https://blog.letout.cn/p/redis/replication/</link><pubDate>Wed, 01 Mar 2023 18:52:45 +0800</pubDate><guid>https://blog.letout.cn/p/redis/replication/</guid><description>&lt;img src="https://blog.letout.cn/p/redis/replication/replication.png" alt="Featured image of post Redis 复制" />&lt;h2 id="建立复制">建立复制&lt;/h2>
+&lt;p>参与复制的 Redis 实例被划分为：&lt;/p>
+&lt;ul>
+&lt;li>主节点 &lt;code>master&lt;/code>&lt;/li>
+&lt;li>从节点 &lt;code>slave&lt;/code>&lt;/li>
+&lt;/ul>
+&lt;p>一个主节点可以有多个从节点，数据的复制是单向的 &lt;code>master -&amp;gt; slave&lt;/code>。&lt;/p>
+&lt;p>通过主从复制，可以实现「读写分离」，主服务器负责「写」操作，从服务器负责「读」操作。&lt;/p>
+&lt;p>同时，从节点也可以作为主节点的备份。&lt;/p>
+&lt;p>&lt;img src="https://blog.letout.cn/p/redis/replication/read-write.png"
+width="902"
+height="422"
+srcset="https://blog.letout.cn/p/redis/replication/read-write_huc9c3964624999041f81d0c7b2328e956_42565_480x0_resize_box_3.png 480w, https://blog.letout.cn/p/redis/replication/read-write_huc9c3964624999041f81d0c7b2328e956_42565_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+class="gallery-image"
+data-flex-grow="213"
+data-flex-basis="512px"
+>&lt;/p>
+&lt;p>在从服务器中，使用 &lt;code>slaveof&lt;/code> / &lt;code>replicaof&lt;/code> 命令/配置，建立主从服务关系，执行命名后，从节点只会保存主节点的信息，其余的复制流程在节点内部异步进行。&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;span class="lnt">4
+&lt;/span>&lt;span class="lnt">5
+&lt;/span>&lt;span class="lnt">6
+&lt;/span>&lt;span class="lnt">7
+&lt;/span>&lt;span class="lnt">8
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-sh" data-lang="sh">&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># 配置文件中设置&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">slaveof &lt;span class="o">{&lt;/span>masterHost&lt;span class="o">}&lt;/span> &lt;span class="o">{&lt;/span>masterPort&lt;span class="o">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># 启动从服务时&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">redis-server --slaveof &lt;span class="o">{&lt;/span>masterHost&lt;span class="o">}&lt;/span> &lt;span class="o">{&lt;/span>masterPort&lt;span class="o">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># 从服务中使用命令&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">slaveof &lt;span class="o">{&lt;/span>masterHost&lt;span class="o">}&lt;/span> &lt;span class="o">{&lt;/span>masterPort&lt;span class="o">}&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;h3 id="同步原理">同步原理&lt;/h3>
+&lt;p>Redis 内部使用 &lt;code>psync&lt;/code> 完成主从数据的同步。&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-sh" data-lang="sh">&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># runID 保存的主服务器的 id&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># offset 偏移量，第一次同步为 -1&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">psync &lt;span class="o">{&lt;/span>runID&lt;span class="o">}&lt;/span> &lt;span class="o">{&lt;/span>offset&lt;span class="o">}&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;ul>
+&lt;li>
+&lt;p>👣 主服务器会执行 &lt;code>bgsave&lt;/code> 命令来生成 RDB 文件，然后把文件发送给从服务器。&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>👣 从服务器收到 RDB 文件后，会先「清空当前的数据」，然后载入 RDB 文件。&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>👣 在复制期间，主服务器依然可以正常处理命令（通过fork子进程，使用 copy-on-wirite COW），为了保障数据的一致性，写命令会被同时记录在 「复制客户端缓冲区」&lt;code>replication buffer&lt;/code> 中，从服务器加载完 RDB 后，会继续运行缓存区中记录的命令。&lt;/p>
+&lt;/li>
+&lt;/ul>
+&lt;h3 id="部分复制">部分复制&lt;/h3>
+&lt;ul>
+&lt;li>
+&lt;p>📃 复制偏移量 offset&lt;/p>
+&lt;p>参与主从的节点都会维护自身的复制偏移量，处理完「写命令」后，都会累计命令的字节长度。&lt;/p>
+&lt;p>从节点会每秒钟会向主节点上报自身的复制偏移量。&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>♒ 复制积压缓冲区&lt;/p>
+&lt;p>replication backlog buffer&lt;/p>
+&lt;p>本质上一个先进先出的定长队列（默认两个，2 * 1M），与 MySQL redolog 一样是循环写入，新数据会覆盖旧数据。&lt;/p>
+&lt;p>主节点响应写命令后，发送命令到从节点时，同时会将数据写入复制积压缓冲区，用于部分复制命令丢失是的数据补救。&lt;/p>
+&lt;/li>
+&lt;/ul>
+&lt;p>主从服务器在完成第一次全量复制之后，会通过长连接进行命令传播。&lt;/p>
+&lt;p>由于网络是不稳定的，从服务器可能会有短暂的断开，当重新建立连接之后，可以根据情况使用增量复制来同步数据，避免了全量复制带来的性能开销。&lt;/p>
+&lt;p>增量复制同样采用了 &lt;code>psync&lt;/code> 来同步，从服务器通过 offset 来告知主服务器当前的数据偏移情况。&lt;/p>
+&lt;p>当从服务器的偏移量能够在复制积压缓冲区中找到，会进行部分复制；当偏移数据过大，已被覆盖无法找到时，会退化为全量复制。&lt;/p>
+&lt;h3 id="-保持连接">💓 保持连接&lt;/h3>
+&lt;p>主从节点间有心跳检测机制：&lt;/p>
+&lt;ul>
+&lt;li>
+&lt;p>主节点每 10s 向从节点发送 &lt;code>ping&lt;/code> 命令，判断从节点的连接状态&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>从节点每 1s 上报自身 offset 情况&lt;/p>
+&lt;ul>
+&lt;li>实时监控从节点网络状态，延迟性&lt;/li>
+&lt;li>判断数据是否丢失&lt;/li>
+&lt;li>保障从节点的连接数量&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;h2 id="-读写分离问题">📚 读写分离问题&lt;/h2>
+&lt;h3 id="-数据延迟">🎰 数据延迟&lt;/h3>
+&lt;p>Redis 由于异步复制的特性，延迟是无法避免的，取决于当前的网络情况和命令阻塞情况。&lt;/p>
+&lt;p>适合于业务场景对延迟不敏感的场景。根据具体业务场景而定，可以考虑使用 Redis 集群做水平扩展的方案。&lt;/p>
+&lt;h3 id="-过期数据">🗑️ 过期数据&lt;/h3>
+&lt;p>在 Redis 中，有（1）定期删除；（2）惰性删除；两种删除方案。&lt;/p>
+&lt;p>在从服务器中，不会主动检查是否过期，主服务器中找到过期数据，会同步一条 &lt;code>DEL&lt;/code> 命令到从服务器中，删除过期数据。&lt;/p>
+&lt;ul>
+&lt;li>
+&lt;p>在 Redis 3.2-，从服务器会直接返回过期数据，不会进行检查&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>在 Redis 3.2+，在返回数据前，会检查过期时间，解决了从服务器读取到过期数据的问题&lt;/p>
+&lt;/li>
+&lt;/ul>
+&lt;h3 id="-节点故障">🌀 节点故障&lt;/h3>
+&lt;p>当主节点宕机后，从节点是无法自动升级为主节点的，需要人工干预。&lt;/p>
+&lt;p>考虑使用 Redis 哨兵模式或集群方案。&lt;/p>
+&lt;h2 id="-相关优化">👍 相关优化&lt;/h2>
+&lt;ul>
+&lt;li>
+&lt;p>避免全量复制&lt;/p>
+&lt;p>主从复制的全量复制是一个非常消耗资源的操作，除了第一次复制的全量复制，之后需要尽量避免全量复制。&lt;/p>
+&lt;p>复制积压缓存区不足，会导致复制退化为全量复制，在运维时，可以根据实际情况增加缓冲区的容量。&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>避免复制风暴&lt;/p>
+&lt;p>当一个主节点上挂载了多个从节点，如果同时与多个从节点进行全量同步时，会向多个从节点发送RDB文件（Redis 做了优化可共享一个 RDB），导致网络带宽的严重消耗，造成延迟问题。&lt;/p>
+&lt;p>建议使用链状/树状结构，从节点挂载到从节点上。&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>单机复制风暴&lt;/p>
+&lt;p>由于 Redis 的瓶颈不在 CPU 上，通常会在一台服务器上部署多个实例。
+为了避免物理机问题导致的故障，导致恢复后大量从节点向一台机器进行复制操作，部署时应该把不同服务的主节点分散到多台机器上。&lt;/p>
+&lt;/li>
+&lt;/ul>
+&lt;h2 id="-哨兵机制">🎺 哨兵机制&lt;/h2>
+&lt;p>Redis 在主从模式下，一旦主节点故障😓，需要人工干预将从节点提升为主节点，同时需要在客户端配置新的主节点地址。&lt;/p>
+&lt;p>为了达到高可用，提供了哨兵模式 &lt;code>Redis Sentinel&lt;/code> 解决这个问题，自动完成故障发现和故障转移。&lt;/p>
+&lt;p>在哨兵模式下，相比于复制模式，只是多了 Sentinel 节点，主从模式下的 Redis 节点没有任何特殊处理。
+其中，Sentinel 节点本质上是特殊的 Redis 节点，只是不会存储数据，只支持部分命令。&lt;/p>
+&lt;p>&lt;img src="https://blog.letout.cn/p/redis/replication/sentinel.png"
+width="545"
+height="732"
+srcset="https://blog.letout.cn/p/redis/replication/sentinel_hu9ca24b6840f6afec965ea3fe9eb87fe5_297258_480x0_resize_box_3.png 480w, https://blog.letout.cn/p/redis/replication/sentinel_hu9ca24b6840f6afec965ea3fe9eb87fe5_297258_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+class="gallery-image"
+data-flex-grow="74"
+data-flex-basis="178px"
+>&lt;/p>
+&lt;ul>
+&lt;li>
+&lt;p>🔍 监控&lt;/p>
+&lt;p>每个哨兵节点会定期检查 Redis 数据节点、其余哨兵节点是否可达。&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>📧 通知&lt;/p>
+&lt;p>哨兵节点会将故障转移的结果通知给应用方。&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>📇 主节点故障转移&lt;/p>
+&lt;p>可以实现故障时，将从节点晋升为主节点，并维护正确的主从关系。&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>📑 配置提供者&lt;/p>
+&lt;p>在哨兵结构中，客户端初始化连接的是哨兵集群，从中获取主节点的信息。&lt;/p>
+&lt;/li>
+&lt;/ul>
+&lt;h3 id="主观下线和客观下线">主观下线和客观下线&lt;/h3>
+&lt;h4 id="-主观下线">🧐 主观下线&lt;/h4>
+&lt;p>”一家之言“&lt;/p>
+&lt;p>Sentinel 每 1s 会向其他所有节点发送 &lt;code>ping&lt;/code> 进行💓心跳检测，当节点超过时间没有回复，就会对该节点做失败判定。只有这一个节点的判定称为「主观下线」。&lt;/p>
+&lt;h4 id="-客观下线">🗳️ 客观下线&lt;/h4>
+&lt;p>当主观下线的为主节点时，当前 Sentinel 节点会询问其他哨兵对该主节点的判断，当多数哨兵都对主节点的下线做了同意判定，超过配置中的 quorum 个数，该节点就被标记为「客观下线」。&lt;/p>
+&lt;h3 id="三个定时任务">三个定时任务&lt;/h3>
+&lt;p>Redis Sentinel 通过三个定时任务对各个节点发现和监控：&lt;/p>
+&lt;ul>
+&lt;li>
+&lt;p>每隔 10s，每个哨兵节点会向主节点和从节点发送 info 命令获取最新的拓扑结构&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>每隔 2s，每个哨兵节点会向 Redis 数据节点的 __sentinel__:hello 频道上发送该 Sentinel 节点对于主节点的判断，以及当前 Sentinel 节点的信息&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>每隔 1s，每个哨兵会向其他哨兵节点、主节点、从节点发送 ping 命令判断是否可达&lt;/p>
+&lt;/li>
+&lt;/ul>
+&lt;h3 id="sentinel-领导选举">Sentinel 领导选举&lt;/h3>
+&lt;p>当确定客观下线之后，需要进行故障转移工作。实际上故障转移工作只需要一个 Sentinel 节点来完成即可，所以需要先做一个领导者选举的工作。&lt;/p>
+&lt;p>Redis 使用 &lt;a class="link" href="https://raft.github.io/" target="_blank" rel="noopener"
+>Raft&lt;/a> 算法实现领导的选举。&lt;/p>
+&lt;p>每个在线的 Redis Sentinel 都有资格成为领导者，在一个哨兵确定主节点客观下线时，会向其他的节点发送 &lt;code>sentinel is-master-down-by-addr&lt;/code> 命令，
+要求将自己设置为领导者。&lt;/p>
+&lt;p>收到命令的节点，如果没有同意过其他节点的请求，就会同意该请求，否则拒绝。每个哨兵节点只有一票。&lt;/p>
+&lt;p>当一个哨兵拿到 quorum 个票数时，就成为了领导者，否则进行下一次投票。&lt;/p>
+&lt;h3 id="-故障转移">🎡 故障转移&lt;/h3>
+&lt;ul>
+&lt;li>
+&lt;p>👣 选取新的主节点&lt;/p>
+&lt;ul>
+&lt;li>
+&lt;p>🧩 过滤“不健康”节点（主观下线、掉线）&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>🧩 选择「优先级最高」的节点，否则继续下一条规则&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>🧩 选取「offset 最大」的节点，否则下一条规则&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>🧩 选取「runId 最小」的节点（runId 是 Redis 随机生成的一个id，在集群中这个 id 会保持不变）&lt;/p>
+&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>
+&lt;p>👣 从节点提升为主节点&lt;/p>
+&lt;p>从节点内部执行 &lt;code>slaveof no one&lt;/code> 成为主节点。&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>👣 哨兵领导者向其他从节点发送命令，更换主节点的信息&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>👣 将下线的主节点更新为从节点，并保持监控，当再次上线时，将作为从节点复制新的主节点信息&lt;/p>
+&lt;/li>
+&lt;/ul>
+&lt;h3 id="注意事项">注意事项&lt;/h3>
+&lt;ul>
+&lt;li>Sentinel 节点应该部署在多台物理机上&lt;/li>
+&lt;/ul>
+&lt;p>Redis 的瓶颈不在 CPU，通过一台物理机会部署多个 Redis 实例，如果哨兵全部都在一台物理机上，如果出现物理故障，所有的实例都会收到影响&lt;/p>
+&lt;ul>
+&lt;li>至少三个 Sentinel 节点，且为奇数节点&lt;/li>
+&lt;/ul>
+&lt;p>哨兵领导者选举时，至少需要获取「一半 + 1」个投票。奇数节点可以在满足条件的基础上节省一个节点。&lt;/p>
+&lt;h2 id="参考">参考&lt;/h2>
+&lt;ul>
+&lt;li>&lt;a class="link" href="https://segmentfault.com/a/1190000039766545" target="_blank" rel="noopener"
+>https://segmentfault.com/a/1190000039766545&lt;/a>&lt;/li>
+&lt;li>Redis 开发于运维&lt;/li>
 &lt;/ul></description></item><item><title>适配器模式</title><link>https://blog.letout.cn/p/design-pattern/adapter/</link><pubDate>Mon, 20 Feb 2023 20:02:02 +0800</pubDate><guid>https://blog.letout.cn/p/design-pattern/adapter/</guid><description>&lt;img src="https://blog.letout.cn/p/design-pattern/adapter/adapter.png" alt="Featured image of post 适配器模式" />&lt;h2 id="-介绍">📖 介绍&lt;/h2>
 &lt;p>适配器模式（Adapter / Wrapper）是一种 &lt;strong>结构型模式&lt;/strong>。&lt;/p>
 &lt;p>通过适配器模式，可以将一个类A的接口，转化成一个类B，以满足一些方法的调用。&lt;/p>
@@ -1571,7 +1694,7 @@ data-flex-grow="133"
 data-flex-basis="320px"
 >&lt;/p>
 &lt;h2 id="-server-层">🛎️ Server 层&lt;/h2>
-&lt;p>Server 层负责建立连接，分析和执行SQL。主要包括：连接器、查询缓存、分析器、优化器和执行器等，包含 MySQL 大多数核心服务共功能。&lt;/p>
+&lt;p>Server 层负责建立连接，分析和执行 SQL。主要包括：连接器、查询缓存、分析器、优化器和执行器等，包含 MySQL 大多数核心服务的公共功能。&lt;/p>
 &lt;h3 id="-连接器">🏒 连接器&lt;/h3>
 &lt;p>当我们使用 MySQL 服务连接到数据库时，首先就是通过连接器。&lt;/p>
 &lt;p>连接器负责与客户端建立连接、获取权限、维持和管理连接。&lt;/p>
@@ -1601,15 +1724,26 @@ data-flex-basis="320px"
 &lt;h3 id="-优化器">🏑 优化器&lt;/h3>
 &lt;p>优化器主要负责将 SQL 查询语句的执行方案确定下来。&lt;/p>
 &lt;p>比如在表中有多个索引的时候，优化器会基于查询成本的考虑，选择使用哪个索引。&lt;/p>
-&lt;h3 id="-执行器">🏓 执行器&lt;/h3>
+&lt;p>比如判断走索引查询回表和全表扫描的代价，选择进行回表或全表扫描。&lt;/p>
+&lt;p>我们可以通过 &lt;code>explain&lt;/code> 查看一个条查询语句的执行计划。&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-sql" data-lang="sql">&lt;span class="line">&lt;span class="cl">&lt;span class="k">explain&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">select&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">*&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">from&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">table&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">where&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">id&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">&amp;gt;&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="mi">100&lt;/span>&lt;span class="p">;&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;h3 id="-执行器">🏓 执行器&lt;/h3>
 &lt;p>通过优化器确定执行方案后，MySQL 开始真正执行语句了。&lt;/p>
 &lt;p>在执行过程中，执行器会与存储引擎进行交互，交互以记录（行）为单位。&lt;/p>
-&lt;p>对于没有命中索引的字段，执行器会调用 InnoDB 引擎接口的获取表的第一行，判断条件是否符合，符合就加入到结果集中。之后不断调用引擎接口重复这个过程，直到读取完表的最后一行。&lt;/p>
-&lt;p>对于命中了索引的字段，逻辑同样类似，会通过索引获取满足条件的第一行，再不断向后循环获取，知道不满足条件。&lt;/p>
+&lt;p>对于要进行全表扫描的情况，执行器会调用 InnoDB 引擎接口的获取表的第一行，判断条件是否符合，符合就加入到结果集中。之后不断调用引擎接口重复这个过程，直到读取完表的最后一行。&lt;/p>
+&lt;p>对于要使用索引的情况，逻辑同样类似，会通过索引获取满足条件的第一行，根据情况是否要回表、覆盖索引或索引下推，再不断向后循环获取，直到不满足条件。&lt;/p>
 &lt;h2 id="-存储引擎">💽 存储引擎&lt;/h2>
 &lt;p>存储引擎负责数据的存储和提取。&lt;/p>
-&lt;p>MySQL 存储引擎的架构模式是插件式的，支持 InnoDB、MyISAM、Memory 等多个存储引擎。&lt;/p>
-&lt;p>可以根据需要选择合适的存储引擎。&lt;/p></description></item><item><title>Redis 缓存问题</title><link>https://blog.letout.cn/p/redis/cache-problem/</link><pubDate>Wed, 11 Jan 2023 01:52:45 +0800</pubDate><guid>https://blog.letout.cn/p/redis/cache-problem/</guid><description>&lt;img src="https://blog.letout.cn/p/redis/cache-problem/cache.png" alt="Featured image of post Redis 缓存问题" />&lt;h2 id="-缓存雪崩">🌨️ 缓存雪崩&lt;/h2>
+&lt;p>MySQL 存储引擎的架构模式是插件式的，支持 InnoDB、MyISAM、Memory 等多个存储引擎。可以根据需要选择合适的存储引擎。通常我们会选择使用 InnoDB 存储引擎。&lt;/p>
+&lt;p>在 InnoDB 存储引擎中，如果查询的数据在 &lt;a class="link" href="https://www.letout.cn/p/mysql/innodb/buffer-pool/" target="_blank" rel="noopener"
+>BufferPool&lt;/a> 中，会直接返回；如果没有会将数据加载到内存中，在返回给客户端。&lt;/p></description></item><item><title>Redis 缓存问题</title><link>https://blog.letout.cn/p/redis/cache-problem/</link><pubDate>Wed, 11 Jan 2023 01:52:45 +0800</pubDate><guid>https://blog.letout.cn/p/redis/cache-problem/</guid><description>&lt;img src="https://blog.letout.cn/p/redis/cache-problem/cache.png" alt="Featured image of post Redis 缓存问题" />&lt;h2 id="-缓存雪崩">🌨️ 缓存雪崩&lt;/h2>
 &lt;p>为了保证缓存中数据与数据库中的数据的一致性，通常 Redis 中数据会设置过期时间。如果（1）缓存层在同一时间有大量数据失效，或者 （2）Redis 由于某些情况宕机，导致所有请求全部访问数据库，造成数据库宕机。&lt;/p>
 &lt;p>&lt;img src="https://blog.letout.cn/p/redis/cache-problem/1.png"
 width="1080"
@@ -1763,93 +1897,6 @@ data-flex-basis="392px"
 &lt;li>&lt;a class="link" href="https://xiaolincoding.com/redis/" target="_blank" rel="noopener"
 >https://xiaolincoding.com/redis/&lt;/a>&lt;/li>
 &lt;li>Redis 开发与运维&lt;/li>
-&lt;/ul></description></item><item><title>InnoDB 的缓冲池 Buffer Pool</title><link>https://blog.letout.cn/p/mysql/innodb/buffer-pool/</link><pubDate>Mon, 09 Jan 2023 18:02:02 +0800</pubDate><guid>https://blog.letout.cn/p/mysql/innodb/buffer-pool/</guid><description>&lt;img src="https://blog.letout.cn/p/mysql/innodb/buffer-pool/cache-page.webp" alt="Featured image of post InnoDB 的缓冲池 Buffer Pool" />&lt;h2 id="-buffer-pool">🧊 Buffer Pool&lt;/h2>
-&lt;p>MySQL 的数据是存在于磁盘中的，为了提升性能，InnoDB 设计了一个缓存池 Buffer Pool。本质上是 InnoDB 向操作系统申请的一段连续内存空间，可以通过 &lt;code>innodb_buffer_pool_size&lt;/code> 来进行调整大小。&lt;/p>
-&lt;ul>
-&lt;li>
-&lt;p>当读取数据时，如果数据已经在 Buffer Pool 中，会直接返回；如果不在，就会将数据&lt;!-- raw HTML omitted -->完整的页信息&lt;!-- raw HTML omitted -->全部加载到内存中。&lt;/p>
-&lt;/li>
-&lt;li>
-&lt;p>当修改数据时，会修改 Buffer Pool 中的缓存页（-&amp;gt; 变成脏页），在合适的时机，由后台线程写入到磁盘。&lt;/p>
-&lt;/li>
-&lt;/ul>
-&lt;h3 id="-结构">🧩 结构&lt;/h3>
-&lt;p>Buffer Pool 中的连续内存，会被分割成一个个的页，和 InnoDB 的表空间一样，都是 &lt;code>16KB&lt;/code>，称为缓存页。&lt;/p>
-&lt;p>&lt;img src="https://blog.letout.cn/p/mysql/innodb/buffer-pool/cache-page.webp"
-width="962"
-height="234"
-srcset="https://blog.letout.cn/p/mysql/innodb/buffer-pool/cache-page_hucd01fda075157d782d9171d9e071f31a_7000_480x0_resize_q75_h2_box_2.webp 480w, https://blog.letout.cn/p/mysql/innodb/buffer-pool/cache-page_hucd01fda075157d782d9171d9e071f31a_7000_1024x0_resize_q75_h2_box_2.webp 1024w"
-loading="lazy"
-class="gallery-image"
-data-flex-grow="411"
-data-flex-basis="986px"
->&lt;/p>
-&lt;p>每一个缓存页都会由一个控制块进行管理（位于 Buffer Pool 的最前面），每个 缓存页 与 控制块 一一对应。&lt;/p>
-&lt;h2 id="-管理-buffer-pool-的链表">👷‍♂️ 管理 Buffer Pool 的链表&lt;/h2>
-&lt;p>InnoDB 使用了许多链表管理 Buffer Pool。&lt;/p>
-&lt;h3 id="-free-链表----管理空闲页">⛓️ Free 链表 &amp;ndash; 管理空闲页&lt;/h3>
-&lt;p>💡 空闲页：Buffer Pool 内存中未被使用的页。&lt;/p>
-&lt;p>为了能快速找到空闲的缓存页，使用 Free 空闲链表管理空闲页。&lt;/p>
-&lt;p>&lt;img src="https://blog.letout.cn/p/mysql/innodb/buffer-pool/free-list.webp"
-width="1217"
-height="597"
-srcset="https://blog.letout.cn/p/mysql/innodb/buffer-pool/free-list_hu2194ab0c933cdf7ef8a007d7c52bad5f_28012_480x0_resize_q75_h2_box_2.webp 480w, https://blog.letout.cn/p/mysql/innodb/buffer-pool/free-list_hu2194ab0c933cdf7ef8a007d7c52bad5f_28012_1024x0_resize_q75_h2_box_2.webp 1024w"
-loading="lazy"
-class="gallery-image"
-data-flex-grow="203"
-data-flex-basis="489px"
->&lt;/p>
-&lt;p>Free 链表的节点是一个个空闲页所对应的控制块。&lt;/p>
-&lt;p>当需要从磁盘中加载一个页到 Buffer Pool 时，就从 Free 链表中找到一个空闲页，加载数据并更改控制块的信息，并从 Free 链表中移除。&lt;/p>
-&lt;h3 id="-flush-链表----管理脏页">⛓️ Flush 链表 &amp;ndash; 管理脏页&lt;/h3>
-&lt;p>💡 脏页（dirty page）：修改了缓存页中的数据，与磁盘中的页数据不一致，称为脏页。&lt;/p>
-&lt;p>被修改过的缓存页的控制块，会被作为节点加入到 Flush 链表。&lt;/p>
-&lt;p>Flush 链表的结构和 Free 链表差不多。后台线程会在一定的时机，通过遍历 Flush 链表，将脏页写入磁盘。&lt;/p>
-&lt;h3 id="-lru-链表----管理脏页干净页">⛓️ LRU 链表 &amp;ndash; 管理脏页&amp;amp;干净页&lt;/h3>
-&lt;p>💡 干净页（clean page）：加载了数据未作修改的缓存页。&lt;/p>
-&lt;p>💡 脏页（dirty page）：加载了数据做了修改的缓存页。&lt;/p>
-&lt;p>Buffer Pool 的大小是有限的，innoDB 通过 （修改过的）LRU 算法，将频繁访问的数据停留在 Bufer Pool 中。&lt;/p>
-&lt;p>简单的 LRU 算法在 MySQL 中可能会导致：&lt;/p>
-&lt;ul>
-&lt;li>
-&lt;p>预读失效&lt;/p>
-&lt;p>MySQL 会将被加载页的临近页一同加载到内存（为了减少磁盘 IO），如果这些页没有被访问，这个预读相当于浪费了。&lt;/p>
-&lt;p>（通过将 LRU 链表划分为 young 区和 old 区，预读数据加载到 old 区域）&lt;/p>
-&lt;/li>
-&lt;li>
-&lt;p>Buffer Pool 污染&lt;/p>
-&lt;p>一个 SQL 扫描大量的数据（如索引失效时，进行全表扫描来判断条件，空间有限）可能会把内存中的所有页全部替换出去，导致热点数据全部失效，后续缓存全部没有命中，导致大量磁盘 IO。&lt;/p>
-&lt;p>（加载到 old 区域的数据，停留时间超过阈值时，才有资格放到 young 区域）&lt;/p>
-&lt;/li>
-&lt;/ul>
-&lt;p>&lt;img src="https://blog.letout.cn/p/mysql/innodb/buffer-pool/lru-list.webp"
-width="842"
-height="212"
-srcset="https://blog.letout.cn/p/mysql/innodb/buffer-pool/lru-list_hub80bcb1068b40da49c3759e6a067b1e3_15066_480x0_resize_q75_h2_box_2.webp 480w, https://blog.letout.cn/p/mysql/innodb/buffer-pool/lru-list_hub80bcb1068b40da49c3759e6a067b1e3_15066_1024x0_resize_q75_h2_box_2.webp 1024w"
-loading="lazy"
-class="gallery-image"
-data-flex-grow="397"
-data-flex-basis="953px"
->&lt;/p>
-&lt;p>InnoDB 的 LRU 链表被分为两个区域：（1）热数据 young 区域；（2）冷数据 old 区域。&lt;/p>
-&lt;p>预读的页只会加载到 old 区域的头部，当该页真正被访问的时候，才会被移动到 young 区的头部。&lt;/p>
-&lt;p>移动到 young 区域的条件除了被访问外，还需要判断停留在 old 区域的时间。（防止全表扫描时，被访问一次后就不在使用）。当访问的缓存页已经在 old 区域停留时间超过阈值 &lt;code>innodb_old_blocks_time=1000ms&lt;/code> 时，才会被插入到 young 区头部。&lt;/p>
-&lt;h2 id="-脏页刷盘">💿 脏页刷盘&lt;/h2>
-&lt;p>当修改数据时，修改的是 Buffer Pool 中的缓存页，然后将其设置为脏页并加入 Flush 链表，由后台线程刷新数据到磁盘。&lt;/p>
-&lt;p>以下情况会主动刷新数据到磁盘：&lt;/p>
-&lt;ul>
-&lt;li>
-&lt;p>🎗️ 当 redo log 日志写满时&lt;/p>
-&lt;/li>
-&lt;li>
-&lt;p>🎗️ 当 Buffer Pool 空间不足时&lt;/p>
-&lt;/li>
-&lt;li>
-&lt;p>🎗️ 当 MySQL 认为空闲时&lt;/p>
-&lt;/li>
-&lt;li>
-&lt;p>🎗️ 当 MySQL 主动正常关闭前&lt;/p>
-&lt;/li>
 &lt;/ul></description></item><item><title>Redis 持久化</title><link>https://blog.letout.cn/p/redis/persistence/</link><pubDate>Fri, 06 Jan 2023 22:07:45 +0800</pubDate><guid>https://blog.letout.cn/p/redis/persistence/</guid><description>&lt;img src="https://blog.letout.cn/p/redis/persistence/cow.png" alt="Featured image of post Redis 持久化" />&lt;h2 id="保障数据不丢失">保障数据不丢失&lt;/h2>
 &lt;p>Redis 的读写操作都是在内存中，为了保证内存中的数据不会丢失，Redis 实现了数据持久化的机制，把数据存储到磁盘，这样在 Redis 重启就能够从磁盘中恢复原有的数据。&lt;/p>
 &lt;ul>
@@ -3601,87 +3648,7 @@ data-flex-basis="329px"
 &lt;li>
 &lt;p>深入理解 Java 虚拟机&lt;/p>
 &lt;/li>
-&lt;/ul></description></item><item><title>InnoDB 存储引擎</title><link>https://blog.letout.cn/p/mysql/innodb/</link><pubDate>Sun, 31 Jul 2022 13:02:02 +0800</pubDate><guid>https://blog.letout.cn/p/mysql/innodb/</guid><description>&lt;img src="https://blog.letout.cn/imgs/23.jpeg" alt="Featured image of post InnoDB 存储引擎" />&lt;h2 id="事务">事务&lt;/h2>
-&lt;p>事务是一组逻辑上的数据库操作，这些操作要么全部成功，要么全部失败。&lt;/p>
-&lt;ul>
-&lt;li>
-&lt;p>&lt;code>A&lt;/code> 原子性：事务是不可分割的最小操作单元，要么全部成功，要么全部失败。&lt;/p>
-&lt;/li>
-&lt;li>
-&lt;p>&lt;code>C&lt;/code> 一致性：事务完成时，必须使所有的数据都保持一致状态。&lt;/p>
-&lt;/li>
-&lt;li>
-&lt;p>&lt;code>I&lt;/code> 隔离性：数据库系统提供的隔离机制，保证事务在不受外部并发操作影响的独立环境下运行。&lt;/p>
-&lt;/li>
-&lt;li>
-&lt;p>&lt;code>D&lt;/code> 持久性：事务一旦提交或回滚，它对数据库中的数据的改变就是永久的。&lt;/p>
-&lt;/li>
-&lt;/ul>
-&lt;p>&lt;img src="https://blog.letout.cn/p/mysql/innodb/1.png"
-width="869"
-height="333"
-srcset="https://blog.letout.cn/p/mysql/innodb/1_hu3fd49fc1a58d123f3498503f7ff7204f_68265_480x0_resize_box_3.png 480w, https://blog.letout.cn/p/mysql/innodb/1_hu3fd49fc1a58d123f3498503f7ff7204f_68265_1024x0_resize_box_3.png 1024w"
-loading="lazy"
-alt="1"
-class="gallery-image"
-data-flex-grow="260"
-data-flex-basis="626px"
->&lt;/p>
-&lt;p>数据库通过原子性、隔离性、持久性来保证一致性。&lt;/p>
-&lt;p>C(一致性)是目的，A(原子性)、I(隔离性)、D(持久性)是是为了保证一致性，数据库提供的手段。&lt;/p>
-&lt;h2 id="redo-log">redo log&lt;/h2>
-&lt;p>重做日志，记录的是“某个数据页上做了什么修改”。属于物理日志。&lt;/p>
-&lt;p>&lt;img src="https://blog.letout.cn/p/mysql/innodb/redolog.png"
-width="889"
-height="359"
-srcset="https://blog.letout.cn/p/mysql/innodb/redolog_huec6805565d40a88bf7c70b51e3ee84c7_38212_480x0_resize_box_3.png 480w, https://blog.letout.cn/p/mysql/innodb/redolog_huec6805565d40a88bf7c70b51e3ee84c7_38212_1024x0_resize_box_3.png 1024w"
-loading="lazy"
-alt="redolog"
-class="gallery-image"
-data-flex-grow="247"
-data-flex-basis="594px"
->&lt;/p>
-&lt;p>redo log 用来保障数据库的持久性。&lt;/p>
-&lt;p>在一个事务中，执行多个增删改的操作时，InnoDB 引擎会先操作缓冲池中的数据，如果缓冲区没有对应的数据，会通过后台线程将磁盘中的数据加载出来，存放在缓冲区中，再将缓冲池中的数据修改，修改后的数据页我们称为脏页。&lt;/p>
-&lt;p>脏页则会在一定的时机，通过后台线程刷新到磁盘中，从而保证缓冲区与磁盘的数据一致。&lt;/p>
-&lt;p>缓冲区的脏页数据并不是实时刷新的，而是一段时间之后将缓冲区的数据刷新到磁盘中（随机磁盘 IO）。&lt;/p>
-&lt;p>当对缓冲区的数据进行增删改之后，会首先将操作的数据页的变化，记录在 redo log buffer 中。在事务提交时，会将 redo log buffer 中的数据刷新到 redo log 磁盘文件中（顺序磁盘 IO）。&lt;/p>
-&lt;p>如果刷新缓冲区的脏页到磁盘时，发生错误，此时就可以借助于 redo log 进行数据恢复，这样就保证了事务的持久性。&lt;/p>
-&lt;h2 id="undo-log">undo log&lt;/h2>
-&lt;p>回滚日志。记录操作数据库的逆操作，用于进行回滚。&lt;/p>
-&lt;p>作用：&lt;/p>
-&lt;ul>
-&lt;li>提供回滚（保障事务的原子性）&lt;/li>
-&lt;li>MVCC&lt;/li>
-&lt;/ul>
-&lt;p>undo log 是逻辑日志，可以认为当 delete 一条记录时，undo log 中会记录一条对应的 insert 记录；当 update 一条记录时，它记录一条对应相反的 update 记录。&lt;/p>
-&lt;h2 id="mvcc">MVCC&lt;/h2>
-&lt;p>多版本并发控制，同一条记录在数据库中，可以存在多个版本。&lt;/p>
-&lt;ul>
-&lt;li>隐式字段
-&lt;ul>
-&lt;li>DB_TRX_ID 事务 id&lt;/li>
-&lt;li>DB_ROLL_PTR 回滚指针（记录这条记录的上一个版本）&lt;/li>
-&lt;/ul>
-&lt;/li>
-&lt;li>undo log&lt;/li>
-&lt;li>readview&lt;/li>
-&lt;/ul>
-&lt;p>&lt;img src="https://blog.letout.cn/p/mysql/innodb/2.png"
-width="447"
-height="293"
-srcset="https://blog.letout.cn/p/mysql/innodb/2_hu6914e1ba0252a0a630b3ee48cb8867a4_30147_480x0_resize_box_3.png 480w, https://blog.letout.cn/p/mysql/innodb/2_hu6914e1ba0252a0a630b3ee48cb8867a4_30147_1024x0_resize_box_3.png 1024w"
-loading="lazy"
-alt="2"
-class="gallery-image"
-data-flex-grow="152"
-data-flex-basis="366px"
->&lt;/p>
-&lt;h3 id="当前读">当前读&lt;/h3>
-&lt;p>读取的是记录的最新版本。&lt;/p>
-&lt;p>&lt;code>update&lt;/code> &lt;code>insert&lt;/code> &lt;code>delete&lt;/code> &lt;code>select ... for update&lt;/code> &lt;code>select ... lock in share mode&lt;/code> 都是进行当前读。&lt;/p>
-&lt;h3 id="快照读">快照读&lt;/h3>
-&lt;p>简单的不加锁 &lt;code>select&lt;/code> 就是快照读。读取的是快照版本，通过 MVCC 进行并发控制。&lt;/p></description></item><item><title>SQL 语句优化</title><link>https://blog.letout.cn/p/mysql/sql-optimize/</link><pubDate>Fri, 01 Jul 2022 18:02:02 +0800</pubDate><guid>https://blog.letout.cn/p/mysql/sql-optimize/</guid><description>&lt;img src="https://blog.letout.cn/imgs/20.jpeg" alt="Featured image of post SQL 语句优化" />&lt;blockquote>
+&lt;/ul></description></item><item><title>SQL 语句优化</title><link>https://blog.letout.cn/p/mysql/sql-optimize/</link><pubDate>Fri, 01 Jul 2022 18:02:02 +0800</pubDate><guid>https://blog.letout.cn/p/mysql/sql-optimize/</guid><description>&lt;img src="https://blog.letout.cn/imgs/20.jpeg" alt="Featured image of post SQL 语句优化" />&lt;blockquote>
 &lt;p>🔥 主要思路：&lt;/p>
 &lt;ul>
 &lt;li>
@@ -3711,7 +3678,53 @@ data-flex-basis="366px"
 &lt;p>数据行是记录在逻辑结构 page 页中的，而每一个页的大小是固定的，默认 16K。也就意味着，一个页中所存储的行也是有限的，如果插入的数据行在该页存储不下，将会存储到下一个页中，页与页之间会通过指针连接。&lt;/p>
 &lt;!-- raw HTML omitted -->
 &lt;!-- raw HTML omitted -->
-&lt;h2 id="-update-优化">🦛 update 优化&lt;/h2>
+&lt;h2 id="-insert-优化">🦮 insert 优化&lt;/h2>
+&lt;p>一次性往数据库中插入多条数据，可从以下三方面优化：&lt;/p>
+&lt;ul>
+&lt;li>批量插入数据&lt;/li>
+&lt;/ul>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-sql" data-lang="sql">&lt;span class="line">&lt;span class="cl">&lt;span class="k">insert&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">into&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">tb_test&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">values&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="mi">1&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="s1">&amp;#39;Tom&amp;#39;&lt;/span>&lt;span class="p">),&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="mi">2&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="s1">&amp;#39;Cat&amp;#39;&lt;/span>&lt;span class="p">),&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="mi">3&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="s1">&amp;#39;Jerry&amp;#39;&lt;/span>&lt;span class="p">);&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;ul>
+&lt;li>手动控制事务&lt;/li>
+&lt;/ul>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;span class="lnt">4
+&lt;/span>&lt;span class="lnt">5
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-sql" data-lang="sql">&lt;span class="line">&lt;span class="cl">&lt;span class="k">start&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">transaction&lt;/span>&lt;span class="p">;&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="k">insert&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">into&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">tb_test&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">values&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="mi">1&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="s1">&amp;#39;Tom&amp;#39;&lt;/span>&lt;span class="p">),&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="mi">2&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="s1">&amp;#39;Cat&amp;#39;&lt;/span>&lt;span class="p">),&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="mi">3&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="s1">&amp;#39;Jerry&amp;#39;&lt;/span>&lt;span class="p">);&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="k">insert&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">into&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">tb_test&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">values&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="mi">4&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="s1">&amp;#39;Tom&amp;#39;&lt;/span>&lt;span class="p">),&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="mi">5&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="s1">&amp;#39;Cat&amp;#39;&lt;/span>&lt;span class="p">),&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="mi">6&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="s1">&amp;#39;Jerry&amp;#39;&lt;/span>&lt;span class="p">);&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="k">insert&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">into&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">tb_test&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">values&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="mi">7&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="s1">&amp;#39;Tom&amp;#39;&lt;/span>&lt;span class="p">),&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="mi">8&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="s1">&amp;#39;Cat&amp;#39;&lt;/span>&lt;span class="p">),&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="mi">9&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="s1">&amp;#39;Jerry&amp;#39;&lt;/span>&lt;span class="p">);&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="k">commit&lt;/span>&lt;span class="p">;&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;ul>
+&lt;li>主键顺序插入&lt;/li>
+&lt;/ul>
+&lt;p>数据在 B+ 树的叶子节点有序存放，顺序插入保障每次插入都是在后面添加一条记录（顺序磁盘 IO），不需要调整叶子节点中的内容。&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-fallback" data-lang="fallback">&lt;span class="line">&lt;span class="cl">🙅‍♂️ 主键乱序插入 : 8 1 9 21 88 2 4 15 89 5 7 3
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">🙋‍ 主键顺序插入 : 1 2 3 4 5 7 8 9 15 21 88 89
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;h2 id="-update-优化">🦛 update 优化&lt;/h2>
 &lt;ul>
 &lt;li>
 &lt;p>🫧 防止索引失效&lt;/p>
@@ -3824,11 +3837,145 @@ data-flex-basis="366px"
 &lt;li>InnoDB引擎并不会把全部字段取出来，而是专门做了优化，不取值，服务层直接按行进行累加。&lt;/li>
 &lt;/ul>
 &lt;/li>
-&lt;/ul></description></item><item><title>MySQL 中的日志</title><link>https://blog.letout.cn/p/mysql/log/</link><pubDate>Thu, 30 Jun 2022 18:02:02 +0800</pubDate><guid>https://blog.letout.cn/p/mysql/log/</guid><description>&lt;img src="https://blog.letout.cn/imgs/19.jpeg" alt="Featured image of post MySQL 中的日志" />&lt;h2 id="-server-层日志">🖥️ Server 层日志&lt;/h2>
+&lt;/ul></description></item><item><title>InnoDB 存储引擎</title><link>https://blog.letout.cn/p/mysql/innodb/</link><pubDate>Fri, 01 Jul 2022 13:01:02 +0800</pubDate><guid>https://blog.letout.cn/p/mysql/innodb/</guid><description>&lt;img src="https://blog.letout.cn/p/mysql/innodb/innodb.webp" alt="Featured image of post InnoDB 存储引擎" />&lt;h2 id="事务">事务&lt;/h2>
+&lt;p>事务是一组逻辑上的数据库操作，这些操作要么全部成功，要么全部失败。&lt;/p>
+&lt;ul>
+&lt;li>
+&lt;p>&lt;code>A&lt;/code> 原子性：事务是不可分割的最小操作单元，要么全部成功，要么全部失败。&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;code>C&lt;/code> 一致性：事务完成时，必须使所有的数据都保持一致状态。&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;code>I&lt;/code> 隔离性：数据库系统提供的隔离机制，保证事务在不受外部并发操作影响的独立环境下运行。&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;code>D&lt;/code> 持久性：事务一旦提交或回滚，它对数据库中的数据的改变就是永久的。&lt;/p>
+&lt;/li>
+&lt;/ul>
+&lt;p>&lt;img src="https://blog.letout.cn/p/mysql/innodb/1.png"
+width="869"
+height="333"
+srcset="https://blog.letout.cn/p/mysql/innodb/1_hu3fd49fc1a58d123f3498503f7ff7204f_68265_480x0_resize_box_3.png 480w, https://blog.letout.cn/p/mysql/innodb/1_hu3fd49fc1a58d123f3498503f7ff7204f_68265_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+alt="1"
+class="gallery-image"
+data-flex-grow="260"
+data-flex-basis="626px"
+>&lt;/p>
+&lt;p>C(一致性)是目的，A(原子性)、I(隔离性)、D(持久性)是是为了保证一致性，数据库提供的手段。&lt;/p>
+&lt;h2 id="-redo-log">🔃 redo log&lt;/h2>
+&lt;p>重做日志，记录的是“某个数据页上做了什么修改”。（物理日志）&lt;/p>
+&lt;p>redo log 用来保障数据库的持久性。在一个事务中，执行增删改的操作时，InnoDB 引擎会先操作缓冲池 Buffer Pool 中的数据，如果缓冲区没有对应的数据，会通过后台线程将磁盘中的数据加载出来，存放在缓冲区中，再将缓冲池中的数据修改。&lt;/p>
+&lt;p>&lt;img src="https://blog.letout.cn/p/mysql/innodb/redolog.png"
+width="889"
+height="359"
+srcset="https://blog.letout.cn/p/mysql/innodb/redolog_huec6805565d40a88bf7c70b51e3ee84c7_38212_480x0_resize_box_3.png 480w, https://blog.letout.cn/p/mysql/innodb/redolog_huec6805565d40a88bf7c70b51e3ee84c7_38212_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+alt="redolog"
+class="gallery-image"
+data-flex-grow="247"
+data-flex-basis="594px"
+>&lt;/p>
+&lt;p>修改后的数据页我们称为脏页，缓冲区的脏页数据并不是实时刷新的，而是一段时间之后将缓冲区的数据刷新到磁盘中（随机磁盘 IO），从而保证缓冲区与磁盘的数据一致。&lt;/p>
+&lt;p>对缓冲区的数据进行增删改，会首先将操作的数据页的变化，记录在 redo log buffer 中。在事务提交时，将 redo log buffer 中的数据刷新到 redo log 磁盘文件中（顺序磁盘 IO）。&lt;/p>
+&lt;p>如果刷新缓冲区的脏页到磁盘时发生错误，或者发生了异常断电，就可以借助于 redo log 进行数据恢复，这样就保证了事务的持久性。&lt;/p>
+&lt;h2 id="-undo-log">🔙 undo log&lt;/h2>
+&lt;p>回滚日志。记录操作数据库的逆操作，用于进行回滚。&lt;/p>
+&lt;p>作用：&lt;/p>
+&lt;ul>
+&lt;li>提供回滚操作（保障事务的原子性）&lt;/li>
+&lt;li>实现 MVCC 操作，提升数据库性能&lt;/li>
+&lt;/ul>
+&lt;p>undo log 是逻辑日志，在 InnoDB 存储引擎对记录进行修改时，会把回滚需要的信息全部记录到 undo 中，如果发生回滚，就会读取 undo log，然后执行与之相反的操作。&lt;/p>
+&lt;ul>
+&lt;li>
+&lt;p>➕ 插入数据，记录这条数据的主键，回滚时根据主键把该条记录删除&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>➖ 删除数据，记录这条数据的所有内容，回滚时将这些内容组成的记录插入表中&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>🖋️ 更新数据，&lt;/p>
+&lt;ul>
+&lt;li>更新了主键，会记录两条 undo log，一条删除的，一条更新的&lt;/li>
+&lt;li>没有更新主键，记录这条数据更新列的旧值，回滚时将数据更新为旧值&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;h2 id="-mvcc">📔 MVCC&lt;/h2>
+&lt;p>多版本并发控制，同一条记录在数据库中，可以存在多个版本。&lt;/p>
+&lt;p>依赖于：&lt;/p>
+&lt;ul>
+&lt;li>行的隐式字段
+&lt;ul>
+&lt;li>DB_TRX_ID 事务 id&lt;/li>
+&lt;li>DB_ROLL_PTR 回滚指针（记录这条记录的上一个版本）&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>undo log&lt;/li>
+&lt;li>Read View&lt;/li>
+&lt;/ul>
+&lt;p>&lt;img src="https://blog.letout.cn/p/mysql/innodb/2.png"
+width="447"
+height="293"
+srcset="https://blog.letout.cn/p/mysql/innodb/2_hu6914e1ba0252a0a630b3ee48cb8867a4_30147_480x0_resize_box_3.png 480w, https://blog.letout.cn/p/mysql/innodb/2_hu6914e1ba0252a0a630b3ee48cb8867a4_30147_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+alt="2"
+class="gallery-image"
+data-flex-grow="152"
+data-flex-basis="366px"
+>&lt;/p>
+&lt;h3 id="当前读">当前读&lt;/h3>
+&lt;p>读取的是记录的最新版本。&lt;/p>
+&lt;p>&lt;code>update&lt;/code> &lt;code>insert&lt;/code> &lt;code>delete&lt;/code> &lt;code>select ... for update&lt;/code> &lt;code>select ... lock in share mode&lt;/code> 都是进行当前读。&lt;/p>
+&lt;h3 id="快照读">快照读&lt;/h3>
+&lt;p>简单的不加锁 &lt;code>select&lt;/code> 就是快照读。读取的是快照版本，通过 MVCC 进行并发控制。&lt;/p>
+&lt;h2 id="-关键特性">🚀 关键特性&lt;/h2>
+&lt;p>InnoDB 存储引擎的特性，可以带来更高的性能和可靠性。&lt;/p>
+&lt;h3 id="-插入缓冲-insert-buffer">🧮 插入缓冲 Insert Buffer&lt;/h3>
+&lt;p>当插入一条数据的时候，在聚簇索引中，通常数据都是在叶子节点顺序存放的，只需要将插入的数据放到最后即可（主键顺序存放）。&lt;/p>
+&lt;p>通常我们都会在一张表上创建一些二级索引，而这些二级索引在数据插入时，需要维护索引是离散的，由于随机 IO 就会导致插入性能的下降。&lt;/p>
+&lt;p>为了解决以上问题，InnoDB 设计了 &lt;code>Insert Buffer&lt;/code>。&lt;/p>
+&lt;p>二级索引的更新操作：&lt;/p>
+&lt;ul>
+&lt;li>如果需要更新的索引页在 Buffer Pool 中，则直接插入；&lt;/li>
+&lt;li>如果不在，则插入 Insert Buffer，之后以一定的频率和情况在与二级索引合并&lt;/li>
+&lt;/ul>
+&lt;p>使用 Insert Buffer 需要满足两个条件：&lt;/p>
+&lt;ul>
+&lt;li>⭐ 二级索引&lt;/li>
+&lt;li>⭐ 非唯一索引&lt;/li>
+&lt;/ul>
+&lt;p>如果二级索引是唯一的，在插入时，还需要去索引页查找改索引是否唯一，这样的离散读取两部分，会导致 Insert Buffer 失去意义。&lt;/p>
+&lt;p>后续的版本提供了升级版本 &lt;code>Change Buffer&lt;/code>，对 Insert、Delete、Update 都进行缓冲。&lt;/p>
+&lt;h3 id="-两次写-double-write">🖋️ 两次写 Double Write&lt;/h3>
+&lt;p>InnoDB 将脏页刷新到磁盘中时，突然发生宕机，只写入了一半，可能会发生数据丢失的问题。&lt;/p>
+&lt;p>InnDB 使用 Double Wirte 机制，给数据添加副本，防止数据丢失。&lt;/p>
+&lt;p>&lt;img src="https://blog.letout.cn/p/mysql/innodb/doublewrite.png"
+width="1178"
+height="730"
+srcset="https://blog.letout.cn/p/mysql/innodb/doublewrite_hu9ca5738e358d4e9e6de3d859e62edb84_153884_480x0_resize_box_3.png 480w, https://blog.letout.cn/p/mysql/innodb/doublewrite_hu9ca5738e358d4e9e6de3d859e62edb84_153884_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+class="gallery-image"
+data-flex-grow="161"
+data-flex-basis="387px"
+>&lt;/p>
+&lt;p>需要刷新的脏页会被复制到 Double Write Buffer 中，在需要刷盘时：&lt;/p>
+&lt;ul>
+&lt;li>先分两次写入一份到共享表空间的 double wirte 物理磁盘上（顺序写入）&lt;/li>
+&lt;li>再将数据同步到磁盘中（随机 IO）&lt;/li>
+&lt;/ul>
+&lt;h3 id="-自适应哈希索引">🗂️ 自适应哈希索引&lt;/h3>
+&lt;p>InnoDB 存储引擎会自动根据访问的频率和模式给热点数据建立一个 Hash 索引，加快读请求。&lt;/p>
+&lt;p>只能为等值查询建立，范围查询不能建立。&lt;/p>
+&lt;h3 id="-预读机制">📖 预读机制&lt;/h3>
+&lt;p>InnoDB 会将查询页的邻近页一起读到 &lt;a class="link" href="https://www.letout.cn/p/mysql/innodb/buffer-pool/" target="_blank" rel="noopener"
+>Buffer Pool&lt;/a> 中。&lt;/p>
+&lt;p>通过改进的 LRU 链表（管理干净页 &amp;amp; 脏页的链表），解决了预读失效的问题。。&lt;/p></description></item><item><title>MySQL 中的日志</title><link>https://blog.letout.cn/p/mysql/log/</link><pubDate>Thu, 30 Jun 2022 18:02:02 +0800</pubDate><guid>https://blog.letout.cn/p/mysql/log/</guid><description>&lt;img src="https://blog.letout.cn/imgs/19.jpeg" alt="Featured image of post MySQL 中的日志" />&lt;h2 id="-server-层日志">🖥️ Server 层日志&lt;/h2>
 &lt;h3 id="错误日志">错误日志&lt;/h3>
 &lt;p>错误日志是 MySQL 中最重要的日志之一，它记录了当 mysqld 启动和停止时，以及服务器在运行过程中发生任何严重错误时的相关信息。&lt;/p>
-&lt;p>当数据库出现任何故障导致无法正常使用时，建议首先查看此日志。&lt;/p>
-&lt;p>查看日志位置：&lt;/p>
+&lt;p>当数据库出现任何故障导致无法正常使用时，建议首先查看此日志。查看日志位置：&lt;/p>
 &lt;div class="highlight">&lt;div class="chroma">
 &lt;table class="lntable">&lt;tr>&lt;td class="lntd">
 &lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
@@ -3846,148 +3993,6 @@ alt="errorlog"
 class="gallery-image"
 data-flex-grow="312"
 data-flex-basis="750px"
->&lt;/p>
-&lt;h3 id="-bin-log">🔢 bin log&lt;/h3>
-&lt;p>二进制日志（bin log）是记录了所有的数据库表结构变更（DDL）和表数据修改（DML）的日志。&lt;/p>
-&lt;p>作用：&lt;/p>
-&lt;ul>
-&lt;li>灾难时数据恢复&lt;/li>
-&lt;li>MySQL 主从复制&lt;/li>
-&lt;/ul>
-&lt;div class="highlight">&lt;div class="chroma">
-&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
-&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
-&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
-&lt;td class="lntd">
-&lt;pre tabindex="0" class="chroma">&lt;code class="language-sql" data-lang="sql">&lt;span class="line">&lt;span class="cl">&lt;span class="k">show&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">variables&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">like&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="s1">&amp;#39;%log_bin%&amp;#39;&lt;/span>&lt;span class="p">;&lt;/span>&lt;span class="w">
-&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
-&lt;/div>
-&lt;/div>&lt;p>&lt;img src="https://blog.letout.cn/p/mysql/log/binlog.png"
-width="602"
-height="240"
-srcset="https://blog.letout.cn/p/mysql/log/binlog_hue4b3570af35eb515872cd8390aac573d_28397_480x0_resize_box_3.png 480w, https://blog.letout.cn/p/mysql/log/binlog_hue4b3570af35eb515872cd8390aac573d_28397_1024x0_resize_box_3.png 1024w"
-loading="lazy"
-alt="binlog"
-class="gallery-image"
-data-flex-grow="250"
-data-flex-basis="602px"
->&lt;/p>
-&lt;ul>
-&lt;li>
-&lt;p>log_bin_basename&lt;/p>
-&lt;ul>
-&lt;li>当前数据库服务器的binlog日志的基础名称(前缀)，具体的binlog文件名需要再该basename的基础上加上编号(编号从000001开始)。&lt;/li>
-&lt;/ul>
-&lt;/li>
-&lt;li>
-&lt;p>log_bin_index&lt;/p>
-&lt;ul>
-&lt;li>binlog的索引文件，里面记录了当前服务器关联的binlog文件有哪些。&lt;/li>
-&lt;/ul>
-&lt;/li>
-&lt;/ul>
-&lt;h4 id="binlog-格式">binlog 格式&lt;/h4>
-&lt;p>MySQL 服务器中提供了多种格式来记录二进制日志：&lt;/p>
-&lt;p>配置二进制日志的格式，只需要在 /etc/my.cnf 中配置 binlog_format 参数即可。&lt;/p>
-&lt;ul>
-&lt;li>
-&lt;p>&lt;code>statement&lt;/code>&lt;/p>
-&lt;ul>
-&lt;li>基于 SQL 语句的日志记录，记录的是 SQL 语句，对数据进行修改的 SQL 都会记录在日志文件中。&lt;/li>
-&lt;/ul>
-&lt;/li>
-&lt;li>
-&lt;p>&lt;code>row&lt;/code> （默认）&lt;/p>
-&lt;ul>
-&lt;li>基于行的日志记录，记录的是每一行的数据变更。&lt;/li>
-&lt;/ul>
-&lt;/li>
-&lt;li>
-&lt;p>&lt;code>mixed&lt;/code>&lt;/p>
-&lt;ul>
-&lt;li>混合了 statememt 和 row 两种格式，默认采用statement，在某些特殊情况下会自动切换为 row 进行记录。&lt;/li>
-&lt;/ul>
-&lt;/li>
-&lt;/ul>
-&lt;div class="highlight">&lt;div class="chroma">
-&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
-&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
-&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
-&lt;td class="lntd">
-&lt;pre tabindex="0" class="chroma">&lt;code class="language-sql" data-lang="sql">&lt;span class="line">&lt;span class="cl">&lt;span class="k">show&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">variables&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">like&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="s1">&amp;#39;%binlog_format%&amp;#39;&lt;/span>&lt;span class="p">;&lt;/span>&lt;span class="w">
-&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
-&lt;/div>
-&lt;/div>&lt;p>&lt;img src="https://blog.letout.cn/p/mysql/log/binlogformat.png"
-width="432"
-height="156"
-srcset="https://blog.letout.cn/p/mysql/log/binlogformat_hu025aaab383e907dcebf622698b084bf9_13882_480x0_resize_box_3.png 480w, https://blog.letout.cn/p/mysql/log/binlogformat_hu025aaab383e907dcebf622698b084bf9_13882_1024x0_resize_box_3.png 1024w"
-loading="lazy"
-alt="binlogformat"
-class="gallery-image"
-data-flex-grow="276"
-data-flex-basis="664px"
->&lt;/p>
-&lt;h4 id="查看-binlog">查看 binlog&lt;/h4>
-&lt;p>日志是以二进制方式存储的，不能直接读取，需要通过二进制日志查询工具 &lt;code>mysqlbinlog&lt;/code> 来查看。&lt;/p>
-&lt;div class="highlight">&lt;div class="chroma">
-&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
-&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
-&lt;/span>&lt;span class="lnt">2
-&lt;/span>&lt;span class="lnt">3
-&lt;/span>&lt;span class="lnt">4
-&lt;/span>&lt;span class="lnt">5
-&lt;/span>&lt;span class="lnt">6
-&lt;/span>&lt;span class="lnt">7
-&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
-&lt;td class="lntd">
-&lt;pre tabindex="0" class="chroma">&lt;code class="language-fallback" data-lang="fallback">&lt;span class="line">&lt;span class="cl">mysqlbinlog [参数] logfilename
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">参数选项：
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> -d 指定数据库名称，只列出指定的数据库相关操作
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> -o 忽略掉日志中的前 n 行命令
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> -v 将行事件(数据变更)重构为SQL语句
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> -vv 将行事件(数据变更)重构为SQL语句，并输出注释信息
-&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
-&lt;/div>
-&lt;/div>&lt;h4 id="清理-binlog">清理 binlog&lt;/h4>
-&lt;ul>
-&lt;li>
-&lt;p>&lt;code>reset master&lt;/code>&lt;/p>
-&lt;ul>
-&lt;li>删除全部 binlog 日志，删除之后，日志编号，将从 binlog.000001重新开始&lt;/li>
-&lt;/ul>
-&lt;/li>
-&lt;li>
-&lt;p>&lt;code>purge master logs to 'binlog.000005'&lt;/code>&lt;/p>
-&lt;ul>
-&lt;li>删除 000005 之前的所有日志&lt;/li>
-&lt;/ul>
-&lt;/li>
-&lt;li>
-&lt;p>&lt;code>purge master logs before 'yyyy-mm-dd hh24:mi:ss'&lt;/code>&lt;/p>
-&lt;ul>
-&lt;li>删除日志为 &amp;ldquo;yyyy-mm-dd hh24:mi:ss&amp;rdquo; 之前产生的所有日志&lt;/li>
-&lt;/ul>
-&lt;/li>
-&lt;/ul>
-&lt;p>可以在 mysql 的配置文件中配置二进制日志的过期时间，设置了之后，二进制日志过期会自动删除。&lt;/p>
-&lt;div class="highlight">&lt;div class="chroma">
-&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
-&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
-&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
-&lt;td class="lntd">
-&lt;pre tabindex="0" class="chroma">&lt;code class="language-sql" data-lang="sql">&lt;span class="line">&lt;span class="cl">&lt;span class="k">show&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">variables&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">like&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="s1">&amp;#39;%binlog_expire_logs_seconds%&amp;#39;&lt;/span>&lt;span class="p">;&lt;/span>&lt;span class="w">
-&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
-&lt;/div>
-&lt;/div>&lt;p>&lt;img src="https://blog.letout.cn/p/mysql/log/binlogexpire.png"
-width="541"
-height="153"
-srcset="https://blog.letout.cn/p/mysql/log/binlogexpire_hua71c1465b703f02a37880ff6dd450f1c_15632_480x0_resize_box_3.png 480w, https://blog.letout.cn/p/mysql/log/binlogexpire_hua71c1465b703f02a37880ff6dd450f1c_15632_1024x0_resize_box_3.png 1024w"
-loading="lazy"
-alt="binlogexpire"
-class="gallery-image"
-data-flex-grow="353"
-data-flex-basis="848px"
 >&lt;/p>
 &lt;h3 id="查询日志">查询日志&lt;/h3>
 &lt;p>查询日志中记录了客户端的所有操作语句。（binlog 不包含查询数据的 SQL 语句）&lt;/p>
@@ -4056,31 +4061,158 @@ data-flex-basis="848px"
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">log_queries_not_using_indexes= 1
 &lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
 &lt;/div>
-&lt;/div>&lt;h2 id="-inoodb-日志">💽 InooDB 日志&lt;/h2>
-&lt;h3 id="-redo-log-重做日志">🔃 redo log 重做日志&lt;/h3>
+&lt;/div>&lt;h3 id="-bin-log">🔢 bin log&lt;/h3>
+&lt;p>二进制日志（bin log）是记录了所有的数据库表结构变更（DDL）和表数据修改（DML）的日志。&lt;/p>
+&lt;p>作用：&lt;/p>
+&lt;ul>
+&lt;li>数据归档&lt;/li>
+&lt;li>灾难时数据恢复&lt;/li>
+&lt;li>MySQL 主从复制&lt;/li>
+&lt;/ul>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-sql" data-lang="sql">&lt;span class="line">&lt;span class="cl">&lt;span class="k">show&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">variables&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">like&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="s1">&amp;#39;%log_bin%&amp;#39;&lt;/span>&lt;span class="p">;&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>&lt;img src="https://blog.letout.cn/p/mysql/log/binlog.png"
+width="602"
+height="240"
+srcset="https://blog.letout.cn/p/mysql/log/binlog_hue4b3570af35eb515872cd8390aac573d_28397_480x0_resize_box_3.png 480w, https://blog.letout.cn/p/mysql/log/binlog_hue4b3570af35eb515872cd8390aac573d_28397_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+alt="binlog"
+class="gallery-image"
+data-flex-grow="250"
+data-flex-basis="602px"
+>&lt;/p>
+&lt;ul>
+&lt;li>
+&lt;p>log_bin_basename&lt;/p>
+&lt;ul>
+&lt;li>当前数据库服务器的binlog日志的基础名称(前缀)，具体的binlog文件名需要再该basename的基础上加上编号(编号从000001开始)。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>
+&lt;p>log_bin_index&lt;/p>
+&lt;ul>
+&lt;li>binlog的索引文件，里面记录了当前服务器关联的binlog文件有哪些。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;h4 id="binlog-格式">binlog 格式&lt;/h4>
+&lt;p>MySQL 服务器中提供了多种格式来记录二进制日志：&lt;/p>
+&lt;p>配置二进制日志的格式，只需要在 /etc/my.cnf 中配置 binlog_format 参数即可。&lt;/p>
+&lt;ul>
+&lt;li>
+&lt;p>📃 &lt;code>statement&lt;/code>&lt;/p>
+&lt;ul>
+&lt;li>基于 SQL 语句的日志记录，记录的是 SQL 语句，对数据进行修改的 SQL 都会记录在日志文件中。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>
+&lt;p>📕 &lt;code>row&lt;/code> （默认）&lt;/p>
+&lt;ul>
+&lt;li>基于行的日志记录，记录的是每一行的数据变更。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>
+&lt;p>🖇️ &lt;code>mixed&lt;/code>&lt;/p>
+&lt;ul>
+&lt;li>混合了 statememt 和 row 两种格式，默认采用statement，在某些特殊情况下会自动切换为 row 进行记录。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-sql" data-lang="sql">&lt;span class="line">&lt;span class="cl">&lt;span class="k">show&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">variables&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">like&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="s1">&amp;#39;%binlog_format%&amp;#39;&lt;/span>&lt;span class="p">;&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>&lt;img src="https://blog.letout.cn/p/mysql/log/binlogformat.png"
+width="432"
+height="156"
+srcset="https://blog.letout.cn/p/mysql/log/binlogformat_hu025aaab383e907dcebf622698b084bf9_13882_480x0_resize_box_3.png 480w, https://blog.letout.cn/p/mysql/log/binlogformat_hu025aaab383e907dcebf622698b084bf9_13882_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+alt="binlogformat"
+class="gallery-image"
+data-flex-grow="276"
+data-flex-basis="664px"
+>&lt;/p>
+&lt;h4 id="查看-bin-log">查看 bin log&lt;/h4>
+&lt;p>日志是以二进制方式存储的，不能直接读取，需要通过二进制日志查询工具 &lt;code>mysqlbinlog&lt;/code> 来查看。&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;span class="lnt">4
+&lt;/span>&lt;span class="lnt">5
+&lt;/span>&lt;span class="lnt">6
+&lt;/span>&lt;span class="lnt">7
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-fallback" data-lang="fallback">&lt;span class="line">&lt;span class="cl">mysqlbinlog [参数] logfilename
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">参数选项：
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> -d 指定数据库名称，只列出指定的数据库相关操作
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> -o 忽略掉日志中的前 n 行命令
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> -v 将行事件(数据变更)重构为SQL语句
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> -vv 将行事件(数据变更)重构为SQL语句，并输出注释信息
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;h4 id="清理-bin-log">清理 bin log&lt;/h4>
+&lt;ul>
+&lt;li>
+&lt;p>&lt;code>reset master&lt;/code>&lt;/p>
+&lt;ul>
+&lt;li>删除全部 binlog 日志，删除之后，日志编号，将从 binlog.000001重新开始&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;code>purge master logs to 'binlog.000005'&lt;/code>&lt;/p>
+&lt;ul>
+&lt;li>删除 000005 之前的所有日志&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;code>purge master logs before 'yyyy-mm-dd hh24:mi:ss'&lt;/code>&lt;/p>
+&lt;ul>
+&lt;li>删除日志为 &amp;ldquo;yyyy-mm-dd hh24:mi:ss&amp;rdquo; 之前产生的所有日志&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;p>可以在 mysql 的配置文件中配置二进制日志的过期时间，设置了之后，二进制日志过期会自动删除。&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-sql" data-lang="sql">&lt;span class="line">&lt;span class="cl">&lt;span class="k">show&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">variables&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">like&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="s1">&amp;#39;%binlog_expire_logs_seconds%&amp;#39;&lt;/span>&lt;span class="p">;&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>&lt;img src="https://blog.letout.cn/p/mysql/log/binlogexpire.png"
+width="541"
+height="153"
+srcset="https://blog.letout.cn/p/mysql/log/binlogexpire_hua71c1465b703f02a37880ff6dd450f1c_15632_480x0_resize_box_3.png 480w, https://blog.letout.cn/p/mysql/log/binlogexpire_hua71c1465b703f02a37880ff6dd450f1c_15632_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+alt="binlogexpire"
+class="gallery-image"
+data-flex-grow="353"
+data-flex-basis="848px"
+>&lt;/p>
+&lt;h2 id="-inoodb-存储引擎日志">💽 InooDB 存储引擎日志&lt;/h2>
+&lt;h3 id="-redo-log-重做日志">⏱️ redo log 重做日志&lt;/h3>
+&lt;p>MySQL 更新数据操作的都是 Buffer Pool 内存中的缓存页，被修改过的脏页不会立即被刷新到磁盘中（随机磁盘 IO 性能低），为了防止断电等情况造成内存中的数据丢失，利用 redo log 记录数据页的更新操作，后续在合适的时间再修改磁盘中的数据。（WAL 技术）&lt;/p>
 &lt;p>redo log 是物理日志，记录了数据页做了什么修改。例如：对 XXX 表空间中的 YYY 数据页 ZZZ 偏移量的地方做了 AAA 更新。&lt;/p>
 &lt;p>redo log 记录了事务完成后的数据状态，当事务提交时，只要将 redo log 持久化到硬盘即可（顺序磁盘 IO），不需要将 Buffer Pool 中的脏页持久化到硬盘（随机磁盘 IO）。&lt;/p>
 &lt;p>保证了事务 ACID 特性中的持久性，当数据库发生故障时，可以利用 redo log 恢复数据。&lt;/p>
-&lt;h4 id="刷盘">刷盘&lt;/h4>
-&lt;p>产生的 redo log 不是直接写入磁盘的，会先写到 redo log buffer 中，后续持久化化到磁盘。&lt;/p>
-&lt;p>redo log buffer 默认大小为 &lt;code>innodb_log_Buffer_size = 16MB&lt;/code>，增加它的大小，可以让 MySQL 处理大事务不必写入到磁盘，进而提升 IO 性能。&lt;/p>
-&lt;p>redo log buffer 刷盘时机：&lt;/p>
-&lt;ul>
-&lt;li>
-&lt;p>InnoDB 的后台线程，每隔 1s，会将 redo log buffer 持久化到内存&lt;/p>
-&lt;/li>
-&lt;li>
-&lt;p>redo log buffer 中记录的写入量大于 redo log buffer 内存空间的一半时&lt;/p>
-&lt;/li>
-&lt;li>
-&lt;p>MySQL 正常关闭时&lt;/p>
-&lt;/li>
-&lt;li>
-&lt;p>每次事务提交时，将 redo log buffer 中 redo log 持久化到磁盘 &lt;code>innodb_flush_log_at_trx_commit&lt;/code> 控制&lt;/p>
-&lt;/li>
-&lt;/ul>
-&lt;h4 id="redo-log-循环写">redo log 循环写&lt;/h4>
+&lt;h4 id="-redo-log-循环写">🔃 redo log 循环写&lt;/h4>
 &lt;p>redo log 是为了防止 Buffer Pool 中的脏页丢失而设计的。当随着服务的运行，Buffer Pool 中的脏页刷新到了磁盘中，redo log 中的记录就没有用了，可以擦除旧记录。&lt;/p>
+&lt;p>所以 redo log 采用了循环写的方式，数据写到末尾又会回到文件的开头，新数据可以覆盖无用的旧数据。&lt;/p>
 &lt;p>&lt;img src="https://blog.letout.cn/p/mysql/log/redo-log.webp"
 width="1362"
 height="906"
@@ -4090,6 +4222,24 @@ class="gallery-image"
 data-flex-grow="150"
 data-flex-basis="360px"
 >&lt;/p>
+&lt;h4 id="刷盘">刷盘&lt;/h4>
+&lt;p>产生的 redo log 并不是直接写入磁盘的，会先写到 redo log buffer 中，后续再持久化到磁盘。&lt;/p>
+&lt;p>redo log buffer 默认大小为 &lt;code>innodb_log_Buffer_size = 16MB&lt;/code>，增加它的大小，可以让 MySQL 处理大事务不必写入到磁盘，进而提升 IO 性能。&lt;/p>
+&lt;p>redo log buffer 刷盘时机：&lt;/p>
+&lt;ul>
+&lt;li>
+&lt;p>InnoDB 的后台线程，每隔 1s，会将 redo log buffer 持久化到磁盘&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>redo log buffer 中记录的写入量大于设置空间的一半时&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>MySQL 正常关闭时&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>每次事务提交时，将 redo log buffer 中 redo log 持久化到磁盘 &lt;code>innodb_flush_log_at_trx_commit&lt;/code> 控制&lt;/p>
+&lt;/li>
+&lt;/ul>
 &lt;h4 id="两阶段提交">两阶段提交&lt;/h4>
 &lt;p>redo log 和 bin log 持久化到硬盘，是两个独立的操作，可能会出现半成功的状态，导致两份日志之间的逻辑不一致。&lt;/p>
 &lt;p>为了避免这个问题，保证两个日志的一致性，使用了”两阶段提交“来解决。把单个事务的提交拆分成了两个阶段：&lt;/p>
@@ -4101,8 +4251,9 @@ data-flex-basis="360px"
 &lt;p>Commit 提交阶段&lt;/p>
 &lt;/li>
 &lt;/ul>
-&lt;p>将 redo log 写入拆成了两个步骤：prepare 和 commit，中间再穿插写入 bin log。
-当 bin log 成功持久化到磁盘，就被认为事务已经执行成功（即使 redo log 是 prepare 也没有关系）。&lt;/p>
+&lt;p>将 redo log 写入拆成了两个步骤：prepare 和 commit，中间再穿插写入 bin log。&lt;/p>
+&lt;p>&lt;code>redo log prepare -&amp;gt; bin log -&amp;gt; redo log commit&lt;/code>&lt;/p>
+&lt;p>当 bin log 成功持久化到磁盘，就被认为事务已经执行成功（即使 redo log 是 prepare 也没有关系）。&lt;/p>
 &lt;p>&lt;img src="https://blog.letout.cn/p/mysql/log/prepare-commit.png"
 width="887"
 height="859"
@@ -4113,7 +4264,7 @@ data-flex-grow="103"
 data-flex-basis="247px"
 >&lt;/p>
 &lt;h3 id="-undo-log-回滚日志">🔙 undo log 回滚日志&lt;/h3>
-&lt;p>undo log 是一种用于撤销回滚的日志。InnoDB 层更新记录前，会将操作前的数据记录的 undo 中，当事务回滚时，利用 undo log 进行回滚。&lt;/p>
+&lt;p>undo log 是一种用于撤销回滚的日志。InnoDB 更新记录前，会将操作前的数据记录的 undo 中，当事务回滚时，利用 undo log 进行回滚。&lt;/p>
 &lt;p>undo log 主要用于：&lt;/p>
 &lt;ul>
 &lt;li>
@@ -4125,9 +4276,19 @@ data-flex-basis="247px"
 &lt;/ul>
 &lt;p>在 InnoDB 存储引擎对记录进行修改时，会把回滚需要的信息全部记录到 undo 中，如果发生回滚，就会读取 undo log，然后执行与之相反的操作。&lt;/p>
 &lt;ul>
-&lt;li>插入数据，记录这条数据的主键，回滚时根据主键把该条记录删除&lt;/li>
-&lt;li>删除数据，记录这条数据的所有内容，回滚时将这些内容组成的记录插入表中&lt;/li>
-&lt;li>更新数据，记录这条数据更新列的旧值，回滚时将数据更新为旧值&lt;/li>
+&lt;li>
+&lt;p>➕ 插入数据，记录这条数据的主键，回滚时根据主键把该条记录删除&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>➖ 删除数据，记录这条数据的所有内容，回滚时将这些内容组成的记录插入表中&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>🖋️ 更新数据，&lt;/p>
+&lt;ul>
+&lt;li>更新了主键，会记录两条 undo log，一条删除的，一条更新的&lt;/li>
+&lt;li>没有更新主键，记录这条数据更新列的旧值，回滚时将数据更新为旧值&lt;/li>
+&lt;/ul>
+&lt;/li>
 &lt;/ul>
 &lt;h4 id="版本链">版本链&lt;/h4>
 &lt;p>一条记录的每次更新操作产生的 undo log 格式都会有：&lt;/p>
@@ -4527,6 +4688,10 @@ data-flex-basis="445px"
 &lt;/li>
 &lt;/ul>
 &lt;h2 id="索引失效与解决方案">索引失效与解决方案&lt;/h2>
+&lt;blockquote>
+&lt;p>是否使用索引取决于 🚀 查询代价&lt;/p>
+&lt;p>即使可以使用索引时，但 MySQL 评估后，不如全表扫描，会放弃使用索引&lt;/p>
+&lt;/blockquote>
 &lt;h3 id="-索引列不独立进行了计算或变成了参数">⚠️ 索引列不独立，进行了计算或变成了参数&lt;/h3>
 &lt;ul>
 &lt;li>索引字段进行了表达式计算&lt;/li>

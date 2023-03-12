@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>事务 on 一层</title><link>https://blog.letout.cn/tags/%E4%BA%8B%E5%8A%A1/</link><description>Recent content in 事务 on 一层</description><generator>Hugo -- gohugo.io</generator><language>zh-cn</language><lastBuildDate>Wed, 01 Mar 2023 12:14:45 +0800</lastBuildDate><atom:link href="https://blog.letout.cn/tags/%E4%BA%8B%E5%8A%A1/index.xml" rel="self" type="application/rss+xml"/><item><title>分布式事务（Doing）</title><link>https://blog.letout.cn/p/distributed/transaction/</link><pubDate>Wed, 01 Mar 2023 12:14:45 +0800</pubDate><guid>https://blog.letout.cn/p/distributed/transaction/</guid><description>&lt;img src="https://blog.letout.cn/p/distributed/transaction/cap.webp" alt="Featured image of post 分布式事务（Doing）" />&lt;h2 id="事务">事务&lt;/h2>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>事务 on 一层</title><link>https://blog.letout.cn/tags/%E4%BA%8B%E5%8A%A1/</link><description>Recent content in 事务 on 一层</description><generator>Hugo -- gohugo.io</generator><language>zh-cn</language><lastBuildDate>Fri, 03 Mar 2023 12:14:45 +0800</lastBuildDate><atom:link href="https://blog.letout.cn/tags/%E4%BA%8B%E5%8A%A1/index.xml" rel="self" type="application/rss+xml"/><item><title>分布式事务（Doing）</title><link>https://blog.letout.cn/p/distributed/transaction/</link><pubDate>Fri, 03 Mar 2023 12:14:45 +0800</pubDate><guid>https://blog.letout.cn/p/distributed/transaction/</guid><description>&lt;img src="https://blog.letout.cn/p/distributed/transaction/cap.webp" alt="Featured image of post 分布式事务（Doing）" />&lt;h2 id="事务">事务&lt;/h2>
 &lt;h3 id="数据库事务">数据库事务&lt;/h3>
 &lt;p>事务（单数据库的本地事务）是指一组操作，要么全部正确执行，要么全部不执行。事务通常会有 ACID 四大特性：&lt;/p>
 &lt;ul>
@@ -80,8 +80,8 @@ data-flex-basis="261px"
 &lt;h3 id="同步超时">同步超时&lt;/h3>
 &lt;p>服务化的系统间调用常常因为网络问题导致系统间调用超时，系统A同步调用系统B超时，系统A可以明确得到超时反馈，但是无法确定系统B是否已经完成了预定的功能或者没有完成预定的功能。于是，系统A就迷茫了，不知道应该继续做什么，如何反馈给使用方。&lt;/p>
 &lt;h2 id="一致性协议">一致性协议&lt;/h2>
-&lt;h3 id="-2pc">👣 2PC&lt;/h3>
-&lt;h4 id="两阶段提交">两阶段提交&lt;/h4>
+&lt;h3 id="2pc">2PC&lt;/h3>
+&lt;h4 id="2-两阶段提交">2️⃣ 两阶段提交&lt;/h4>
 &lt;p>两阶段提交（2PC）把分布式事务分为两个过程：准备阶段 &lt;code>Prepare&lt;/code>，提交阶段 &lt;code>Commit&lt;/code> / 回滚阶段 &lt;code>Rollback&lt;/code>。&lt;/p>
 &lt;ul>
 &lt;li>
@@ -107,7 +107,7 @@ data-flex-basis="314px"
 &lt;p>事务管理器（TM）：负责协调和管理事务，控制着全局事务并管理事务的生命周期，并协调各个 RM。&lt;/p>
 &lt;p>资源管理器（RM）：事务的参与者，一般可以指一个数据库实例，通过资源管理器对数据库进行控制，即一个分支事务。&lt;/p>
 &lt;p>DTP 模型定义 TM 和 RM 之间的通讯接口规范叫做 XA（即数据库提供的 2PC 接口协议），基于数据库的 XA 协议来实现的 2PC 称为 XA 方案。&lt;/p>
-&lt;h4 id="seata-实现-2pc">Seata 实现 2PC&lt;/h4>
+&lt;h4 id="-seata-实现-2pc">⚒️ Seata 实现 2PC&lt;/h4>
 &lt;p>&lt;a class="link" href="https://github.com/seata/seata" target="_blank" rel="noopener"
 >Seata&lt;/a> 是一款开源的分布式事务解决方案，致力于在微服务架构下提供高性能和简单易用的分布式事务服务。&lt;/p>
 &lt;p>📇 Seata 把一个分布式事务理解成一个「全局事务」和若干「分支事务」：&lt;/p>
@@ -136,7 +136,7 @@ data-flex-basis="314px"
 &lt;/ul>
 &lt;p>📺 在架构方面，2PC 方案的 RM 实际上是在数据库层面，RM 本质上是数据库自身通过 XA 协议实现；seata 中 RM 以 jar 包的形式作为中间件层部署在应用程序一侧。&lt;/p>
 &lt;p>🗳️ 在两阶段提交方面，2PC 在第二阶段决议 commit / rollback，事务性资源锁要保持在第二阶段完成后释放；seata 在第一阶段就将事务提交，省去第二阶段持有锁的时间，提高整体效率。&lt;/p>
-&lt;h4 id="配置-seata-服务">配置 Seata 服务&lt;/h4>
+&lt;h5 id="配置-seata-服务">配置 Seata 服务&lt;/h5>
 &lt;ul>
 &lt;li>启动 seata 中间件服务&lt;/li>
 &lt;li>配置服务注册中心&lt;/li>
@@ -176,7 +176,7 @@ data-flex-basis="314px"
 &lt;/div>
 &lt;/div>&lt;/li>
 &lt;/ul>
-&lt;h4 id="创建代理数据源">创建代理数据源&lt;/h4>
+&lt;h5 id="创建代理数据源">创建代理数据源&lt;/h5>
 &lt;p>每个 RM 通过 DataSourceProxy 使用代理连接。与 TC 进行通信交互、记录 undo_log 等。&lt;/p>
 &lt;p>第一阶段业务操作生成对于的 undo_log，将 undo_log 和业务数据放在一个本地事务提交（undo_log 记录了修改前的值，同时提交后释放锁资源）。&lt;/p>
 &lt;p>TM 开启全局事务，会将全局事务ID &lt;code>XID&lt;/code> 放在事务上下文中，并通过远程调用传入下游的各个分支事务。&lt;/p>
@@ -223,7 +223,7 @@ data-flex-basis="314px"
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">}&lt;/span>
 &lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
 &lt;/div>
-&lt;/div>&lt;h4 id="双方业务实现">双方业务实现&lt;/h4>
+&lt;/div>&lt;h5 id="双方业务实现">双方业务实现&lt;/h5>
 &lt;p>&lt;code>@GlobalTransactional&lt;/code> 开启全局事务。&lt;code>GlobalTransactinalInterceptor&lt;/code> 会拦截 &lt;code>@GlobalTransactional&lt;/code> 注解的方法，生成全局事务ID&lt;code>XID&lt;/code>。&lt;/p>
 &lt;p>XID 会在整个分布式事务中传递，在远程调用时 spring-cloud-alibaba-seata 会拦截 Feign 调用将 XID 传递到下游服务。&lt;/p>
 &lt;div class="highlight">&lt;div class="chroma">
@@ -401,9 +401,16 @@ data-flex-basis="314px"
 &lt;p>在 Try 阶段，是对业务系统进行检查和资源预览，如订单和存储操作，需要检查库存剩余数量是否可用，并进行资源预留。&lt;/p>
 &lt;p>基于 TCC 实现分布式事务，会将原来只需要一个接口的实现逻辑拆分为 Try、Confirm、Cancel 三个接口，相对来说代码实现复杂度较高。&lt;/p>
 &lt;h2 id="分布式解决方案">分布式解决方案&lt;/h2>
-&lt;h3 id="本地消息表">本地消息表&lt;/h3>
 &lt;h3 id="可靠消息最终一致性">可靠消息最终一致性&lt;/h3>
+&lt;p>可靠消息最终一致性是指，当事务发起方执行完本地事务后并发出一条消息，事务参与方（消息消费者）一定能够接收到消息并处理事务成功，最终事务要达到一致。&lt;/p>
+&lt;h4 id="本地消息表方案">本地消息表方案&lt;/h4>
+&lt;p>在同一个数据库中创建一张“消息表”，扫表进行发送消息&lt;/p>
+&lt;h4 id="rocketmq-方案">RocketMQ 方案&lt;/h4>
+&lt;p>在 RocketMQ 4.3+ 之后，正式支持事务消息。&lt;/p>
+&lt;p>事务消息解决 Producer 端消息的发送和本地事务执行的原子性问题。&lt;/p>
 &lt;h3 id="最大努力通知">最大努力通知&lt;/h3>
+&lt;!-- raw HTML omitted -->
+&lt;!-- raw HTML omitted -->
 &lt;h2 id="参考">参考&lt;/h2>
 &lt;ul>
 &lt;li>&lt;a class="link" href="https://www.jianshu.com/p/1156151e20c8" target="_blank" rel="noopener"
