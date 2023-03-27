@@ -1,9 +1,607 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Kafka on 一层</title><link>https://blog.letout.cn/tags/kafka/</link><description>Recent content in Kafka on 一层</description><generator>Hugo -- gohugo.io</generator><language>zh-cn</language><lastBuildDate>Sat, 04 Mar 2023 11:14:45 +0800</lastBuildDate><atom:link href="https://blog.letout.cn/tags/kafka/index.xml" rel="self" type="application/rss+xml"/><item><title>Kafka</title><link>https://blog.letout.cn/p/kafka/</link><pubDate>Sat, 04 Mar 2023 11:14:45 +0800</pubDate><guid>https://blog.letout.cn/p/kafka/</guid><description>&lt;img src="https://blog.letout.cn/p/kafka/kafka.webp" alt="Featured image of post Kafka" />&lt;blockquote>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Kafka on 一层</title><link>https://blog.letout.cn/tags/kafka/</link><description>Recent content in Kafka on 一层</description><generator>Hugo -- gohugo.io</generator><language>zh-cn</language><lastBuildDate>Sun, 26 Mar 2023 12:14:45 +0800</lastBuildDate><atom:link href="https://blog.letout.cn/tags/kafka/index.xml" rel="self" type="application/rss+xml"/><item><title>Kafka 操作（Doing）</title><link>https://blog.letout.cn/p/kafka/operation/</link><pubDate>Sun, 26 Mar 2023 12:14:45 +0800</pubDate><guid>https://blog.letout.cn/p/kafka/operation/</guid><description>&lt;img src="https://blog.letout.cn/p/kafka/operation/1.png" alt="Featured image of post Kafka 操作（Doing）" />&lt;h2 id="命令行工具">命令行工具&lt;/h2>
+&lt;p>Kafka 提供了一些基于脚本的命名行工具 &lt;code>${dir}/bin/xxx.sh&lt;/code>，用于管理集群。这些管理通过 Java 类实现，通过脚本调用。&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;span class="lnt">4
+&lt;/span>&lt;span class="lnt">5
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-sh" data-lang="sh">&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># 启动 Zookeeper 服务（新版已内置）&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">bin/zookeeper-server-start.sh config/zeekeeper.properties
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># 启动 Kafka 服务&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">bin/kafka-server-start.sh config/server.properties
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;blockquote>
+&lt;p>🔍 更多 CLI 操作：&lt;a class="link" href="https://www.conduktor.io/kafka/kafka-topics-cli-tutorial/" target="_blank" rel="noopener"
+>🌐 https://www.conduktor.io/kafka/kafka-topics-cli-tutorial/&lt;/a>&lt;/p>
+&lt;/blockquote>
+&lt;h3 id="topic-操作">Topic 操作&lt;/h3>
+&lt;p>Kafka 大部分命令行工具直接操作 Zookeeper 上的元数据，并不会直接连接到 Broker 上，需要确保所使用的工具版本与集群中的 Broker 版本相匹配。&lt;/p>
+&lt;blockquote>
+&lt;p>🎗️&lt;/p>
+&lt;p>Kafka 2.2+ 使用 Kafka 的 hostname &amp;amp; port 进行操作 &lt;code>--bootstrap-server 127.0.0.1:9092&lt;/code>&lt;/p>
+&lt;p>旧版本使用 Zookeeper 的 URL &amp;amp; port 进行操作 &lt;code>--zookeeper 127.0.0.1:2181&lt;/code>&lt;/p>
+&lt;/blockquote>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-sh" data-lang="sh">&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># 创建主题&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># 2.2 +&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">kafka-topics.sh --bootstrap-server localhost:9092 &lt;span class="se">\
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="se">&lt;/span> --create &lt;span class="se">\ &lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> --topic first_topic &lt;span class="se">\
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="se">&lt;/span> --partitions &lt;span class="m">3&lt;/span> &lt;span class="se">\ &lt;/span> &lt;span class="c1"># 分区数量&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> --replication-factor &lt;span class="m">1&lt;/span> &lt;span class="c1"># 副本数量&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># old&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">kafka-topics.sh --zookeeper localhost:2181 --topic first_topic --create --partitions &lt;span class="m">3&lt;/span> --replication-factor &lt;span class="m">1&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;span class="lnt">4
+&lt;/span>&lt;span class="lnt">5
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-sh" data-lang="sh">&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># 列出主题&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># 2.2 + &lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">kafka-topics.sh --bootstrap-server localhost:9092 --list
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># 详细信息&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">kafka-topics.sh --bootstrap-server localhost:9092 --describe --topic first_topic
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;span class="lnt">4
+&lt;/span>&lt;span class="lnt">5
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-sh" data-lang="sh">&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># 修改主题&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">kafka-topics.sh --bootstrap-server localhost:9092 &lt;span class="se">\
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="se">&lt;/span> --alter &lt;span class="se">\
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="se">&lt;/span> --topic first_topic &lt;span class="se">\
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="se">&lt;/span> --partitions &lt;span class="m">5&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;h3 id="生产--消费">生产 &amp;amp; 消费&lt;/h3>
+&lt;blockquote>
+&lt;p>🎗️ Producer&lt;/p>
+&lt;p>Kafka 2.5+ 使用 &lt;code>--bootstrap-server&lt;/code>&lt;/p>
+&lt;p>旧版本 Kafka 使用 &lt;code>--broker-list&lt;/code>&lt;/p>
+&lt;/blockquote>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-sh" data-lang="sh">&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># 生产&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">kafka-console-producer.sh --bootstrap-server localhost:9092 &lt;span class="se">\
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="se">&lt;/span> --topic first_topic
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;blockquote>
+&lt;p>🎗️ Consumer&lt;/p>
+&lt;p>使用 &lt;code>--bootstrap-server&lt;/code>，自 v0.10 开始 &lt;code>--zookeeper&lt;/code> 已被废弃&lt;/p>
+&lt;/blockquote>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-sh" data-lang="sh">&lt;span class="line">&lt;span class="cl">kafka-console-consumer.sh --bootstrap-server localhost:9092 &lt;span class="se">\
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="se">&lt;/span> --topic first_topic
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;h2 id="-producer">🤲 Producer&lt;/h2>
+&lt;h3 id="-生产者">🐈 生产者&lt;/h3>
+&lt;ul>
+&lt;li>🧩 &lt;code>ProducerRecord&lt;/code> 对象包含目标主题 Topic 和需要发送的内容 Value，可以可以指定分区 Partition 和键值 Key（消息的附加信息，可以用来决定消息被写入哪个分区，相同 Key 的消息会写入同一个分区）&lt;/li>
+&lt;li>🧩 发送消息时，生产者需要将 &lt;code>ProducerRecord&lt;/code> 对象序列化为字节数组，在网络上传输&lt;/li>
+&lt;li>🧩 数据被传送给分区器 &lt;code>Partitioner&lt;/code>，如果指定了分区，会直接返回；没有指定，根据 Key 选择一个分区；没有指定 Key，会根据 Value 进行散列，根据散列值把消息映射到相应的分区&lt;/li>
+&lt;li>🧩 这条记录选好分区后，会被添加到一个记录批次中，这个批次的所有消息会被发送到相同的主题和分区上（批处理），独立的 &lt;code>Processer&lt;/code> 线程会负责把这些数据发送到对应的 broker 上&lt;/li>
+&lt;li>🧩 Broker 收到消息时会返回一个响应
+&lt;ul>
+&lt;li>消息成功写入 Kafka，返回一个 &lt;code>RecordMetaData&lt;/code> 对象，包含主题和分区的信息&lt;/li>
+&lt;li>写入失败，会返回一个错误，生产者收到错误之后会尝试重新发送，多次失败直接返回错误信息&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;p>&lt;img src="https://blog.letout.cn/p/kafka/operation/producer.webp"
+width="780"
+height="678"
+srcset="https://blog.letout.cn/p/kafka/operation/producer_huebfba9d061e763283d9c37fc8487b94d_24528_480x0_resize_q75_h2_box_2.webp 480w, https://blog.letout.cn/p/kafka/operation/producer_huebfba9d061e763283d9c37fc8487b94d_24528_1024x0_resize_q75_h2_box_2.webp 1024w"
+loading="lazy"
+class="gallery-image"
+data-flex-grow="115"
+data-flex-basis="276px"
+>&lt;/p>
+&lt;h4 id="重要配置">重要配置&lt;/h4>
+&lt;ul>
+&lt;li>
+&lt;p>&lt;code>acks&lt;/code>&lt;/p>
+&lt;p>指定了必须要有多少个分区副本收到消息，生产者才会任务消息写入时成功的&lt;/p>
+&lt;ul>
+&lt;li>&lt;code>acks=0&lt;/code> 不会等待任务来自服务器的响应。达到最高的吞吐量，无法得知消息状态。&lt;/li>
+&lt;li>&lt;code>acks=1&lt;/code> 只要 Partition Leader 收到响应。消息可能会丢失，Leader宕机后，一个未同步的Fllower成为新的Leader。&lt;/li>
+&lt;li>&lt;code>acks=all&lt;/code> 消息要全部同步到所有的 Leader&amp;amp;Fllower。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;code>retries&lt;/code>&lt;/p>
+&lt;p>生产者可以重发消息的次数&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;code>max.in.flight.requests.per.connection&lt;/code>&lt;/p>
+&lt;p>生产者在收到服务器响应前可以发送多少个消息。&lt;/p>
+&lt;p>Kafka 可以保证同一个分区里的消息是有序的，&lt;code>max.in.flight.requests.per.connection=1&lt;/code>，即使发送了重试，消息依旧有序，但是会严重影响生产者的吞吐量。&lt;/p>
+&lt;/li>
+&lt;/ul>
+&lt;h3 id="-同步发送">🐈‍⬛ 同步发送&lt;/h3>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-java" data-lang="java">&lt;span class="line">&lt;span class="cl">&lt;span class="kd">public&lt;/span> &lt;span class="n">Future&lt;/span>&lt;span class="o">&amp;lt;&lt;/span>&lt;span class="n">RecordMetadata&lt;/span>&lt;span class="o">&amp;gt;&lt;/span> &lt;span class="nf">send&lt;/span>&lt;span class="o">(&lt;/span>&lt;span class="n">ProducerRecord&lt;/span>&lt;span class="o">&amp;lt;&lt;/span>&lt;span class="n">K&lt;/span>&lt;span class="o">,&lt;/span> &lt;span class="n">V&lt;/span>&lt;span class="o">&amp;gt;&lt;/span> &lt;span class="n">record&lt;/span>&lt;span class="o">)&lt;/span> &lt;span class="o">{&lt;/span> &lt;span class="o">}&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>使用 &lt;code>send()&lt;/code> 方法发送消息，会返回一个 Future 对象，调用 &lt;code>get()&lt;/code> 方法进行等待，就可以知道消息是否发送成功。&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;span class="lnt">11
+&lt;/span>&lt;span class="lnt">12
+&lt;/span>&lt;span class="lnt">13
+&lt;/span>&lt;span class="lnt">14
+&lt;/span>&lt;span class="lnt">15
+&lt;/span>&lt;span class="lnt">16
+&lt;/span>&lt;span class="lnt">17
+&lt;/span>&lt;span class="lnt">18
+&lt;/span>&lt;span class="lnt">19
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-java" data-lang="java">&lt;span class="line">&lt;span class="cl">&lt;span class="c1">// 相关配置
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span>&lt;span class="n">String&lt;/span> &lt;span class="n">bootstrapServers&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="s">&amp;#34;127.0.0.1:9092&amp;#34;&lt;/span>&lt;span class="o">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="n">Properties&lt;/span> &lt;span class="n">properties&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="k">new&lt;/span> &lt;span class="n">Properties&lt;/span>&lt;span class="o">();&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="n">properties&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">setProperty&lt;/span>&lt;span class="o">(&lt;/span>&lt;span class="n">ProducerConfig&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">BOOTSTRAP_SERVERS_CONFIG&lt;/span>&lt;span class="o">,&lt;/span> &lt;span class="n">bootstrapServers&lt;/span>&lt;span class="o">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="n">properties&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">setProperty&lt;/span>&lt;span class="o">(&lt;/span>&lt;span class="n">ProducerConfig&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">KEY_SERIALIZER_CLASS_CONFIG&lt;/span>&lt;span class="o">,&lt;/span> &lt;span class="n">StringSerializer&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">class&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">getName&lt;/span>&lt;span class="o">());&lt;/span> &lt;span class="c1">// 序列化方式
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span>&lt;span class="n">properties&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">setProperty&lt;/span>&lt;span class="o">(&lt;/span>&lt;span class="n">ProducerConfig&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">VALUE_SERIALIZER_CLASS_CONFIG&lt;/span>&lt;span class="o">,&lt;/span> &lt;span class="n">StringSerializer&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">class&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">getName&lt;/span>&lt;span class="o">());&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">// 创建 Producer
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span>&lt;span class="n">KafkaProducer&lt;/span>&lt;span class="o">&amp;lt;&lt;/span>&lt;span class="n">String&lt;/span>&lt;span class="o">,&lt;/span> &lt;span class="n">String&lt;/span>&lt;span class="o">&amp;gt;&lt;/span> &lt;span class="n">producer&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="k">new&lt;/span> &lt;span class="n">KafkaProducer&lt;/span>&lt;span class="o">&amp;lt;&amp;gt;(&lt;/span>&lt;span class="n">properties&lt;/span>&lt;span class="o">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">// 创建消息
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span>&lt;span class="n">ProducerRecord&lt;/span>&lt;span class="o">&amp;lt;&lt;/span>&lt;span class="n">String&lt;/span>&lt;span class="o">,&lt;/span> &lt;span class="n">String&lt;/span>&lt;span class="o">&amp;gt;&lt;/span> &lt;span class="n">producerRecord&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="k">new&lt;/span> &lt;span class="n">ProducerRecord&lt;/span>&lt;span class="o">&amp;lt;&amp;gt;(&lt;/span>&lt;span class="s">&amp;#34;demo_topic&amp;#34;&lt;/span>&lt;span class="o">,&lt;/span> &lt;span class="s">&amp;#34;hello world!&amp;#34;&lt;/span>&lt;span class="o">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">// 发送消息
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span>&lt;span class="k">try&lt;/span> &lt;span class="o">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">producer&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">send&lt;/span>&lt;span class="o">(&lt;/span>&lt;span class="n">record&lt;/span>&lt;span class="o">).&lt;/span>&lt;span class="na">get&lt;/span>&lt;span class="o">();&lt;/span> &lt;span class="c1">// get() 同步
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span>&lt;span class="o">}&lt;/span> &lt;span class="k">catch&lt;/span> &lt;span class="o">(&lt;/span>&lt;span class="n">Exception&lt;/span> &lt;span class="n">e&lt;/span>&lt;span class="o">)&lt;/span> &lt;span class="o">{&lt;/span> &lt;span class="c1">// 发生了无法解决的错误 或 重试超过最大次数
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span> &lt;span class="n">e&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">printStackTrace&lt;/span>&lt;span class="o">();&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">}&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;h3 id="-异步发送">🐅 异步发送&lt;/h3>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-java" data-lang="java">&lt;span class="line">&lt;span class="cl">&lt;span class="kd">public&lt;/span> &lt;span class="n">Future&lt;/span>&lt;span class="o">&amp;lt;&lt;/span>&lt;span class="n">RecordMetadata&lt;/span>&lt;span class="o">&amp;gt;&lt;/span> &lt;span class="nf">send&lt;/span>&lt;span class="o">(&lt;/span>&lt;span class="n">ProducerRecord&lt;/span>&lt;span class="o">&amp;lt;&lt;/span>&lt;span class="n">K&lt;/span>&lt;span class="o">,&lt;/span> &lt;span class="n">V&lt;/span>&lt;span class="o">&amp;gt;&lt;/span> &lt;span class="n">record&lt;/span>&lt;span class="o">,&lt;/span> &lt;span class="n">Callback&lt;/span> &lt;span class="n">callback&lt;/span>&lt;span class="o">)&lt;/span> &lt;span class="o">{&lt;/span> &lt;span class="o">}&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>调用 &lt;code>send()&lt;/code> 方法，并指定一个回调函数，服务器在返回响应时调用该函数。&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;span class="lnt">4
+&lt;/span>&lt;span class="lnt">5
+&lt;/span>&lt;span class="lnt">6
+&lt;/span>&lt;span class="lnt">7
+&lt;/span>&lt;span class="lnt">8
+&lt;/span>&lt;span class="lnt">9
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-java" data-lang="java">&lt;span class="line">&lt;span class="cl">&lt;span class="n">producer&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">send&lt;/span>&lt;span class="o">(&lt;/span>&lt;span class="n">producerRecord&lt;/span>&lt;span class="o">,&lt;/span> &lt;span class="k">new&lt;/span> &lt;span class="n">Callback&lt;/span>&lt;span class="o">()&lt;/span> &lt;span class="o">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kd">public&lt;/span> &lt;span class="kt">void&lt;/span> &lt;span class="nf">onCompletion&lt;/span>&lt;span class="o">(&lt;/span>&lt;span class="n">RecordMetadata&lt;/span> &lt;span class="n">recordMetadata&lt;/span>&lt;span class="o">,&lt;/span> &lt;span class="n">Exception&lt;/span> &lt;span class="n">e&lt;/span>&lt;span class="o">)&lt;/span> &lt;span class="o">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">if&lt;/span> &lt;span class="o">(&lt;/span>&lt;span class="n">e&lt;/span> &lt;span class="o">!=&lt;/span> &lt;span class="kc">null&lt;/span>&lt;span class="o">)&lt;/span> &lt;span class="o">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c1">// 发送失败
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span> &lt;span class="c1">// ...
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span> &lt;span class="c1">// 对应的业务处理逻辑
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span> &lt;span class="o">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="o">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">});&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;h3 id="-序列化器">🐆 序列化器&lt;/h3>
+&lt;p>常见的序列化&amp;amp;反序列化器有 Avro、Thrift、Protobuf 等。&lt;/p>
+&lt;p>Apache &lt;a class="link" href="https://zhuanlan.zhihu.com/p/370519371" target="_blank" rel="noopener"
+>Avro&lt;/a> 是一种与编程语言无关的序列化格式。&lt;/p>
+&lt;p>Avro 通过与语言无关的 schema 来定义，使用 JSON 来描述，数据会被序列化为二进制文件或 JSON 文件。&lt;/p>
+&lt;p>满足 Avro 兼容原则下，写入的消息改动 schema 写入了新的数据，负责读消息的应用程序可以继续处理而无需做任何更改。&lt;/p>
+&lt;h3 id="-分区">🐕 分区&lt;/h3>
+&lt;p>&lt;code>ProducerRecord&lt;/code> 对象可以包含 topic、partition、key、value 等，通常我们会指定 key，作为附加消息，决定消息该被写入哪个分区，拥有相同 key 的消息会被写入同一个分区。&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;span class="lnt">4
+&lt;/span>&lt;span class="lnt">5
+&lt;/span>&lt;span class="lnt">6
+&lt;/span>&lt;span class="lnt">7
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-java" data-lang="java">&lt;span class="line">&lt;span class="cl">&lt;span class="c1">// topic: CustomerCountry
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">// key: Laboratory Equipment
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">// value: USA
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span>&lt;span class="n">ProducerRecord&lt;/span>&lt;span class="o">&amp;lt;&lt;/span>&lt;span class="n">String&lt;/span>&lt;span class="o">,&lt;/span> &lt;span class="n">String&lt;/span>&lt;span class="o">&amp;gt;&lt;/span> &lt;span class="n">record&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="k">new&lt;/span> &lt;span class="n">ProducerRecord&lt;/span>&lt;span class="o">&amp;lt;&amp;gt;(&lt;/span>&lt;span class="s">&amp;#34;CustomerConuntry&amp;#34;&lt;/span>&lt;span class="o">,&lt;/span> &lt;span class="s">&amp;#34;Laboratory Equipment&amp;#34;&lt;/span>&lt;span class="o">,&lt;/span> &lt;span class="s">&amp;#34;USA&amp;#34;&lt;/span>&lt;span class="o">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">// 创建 key-&amp;gt;null 的消息
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span>&lt;span class="n">ProducerRecord&lt;/span>&lt;span class="o">&amp;lt;&lt;/span>&lt;span class="n">String&lt;/span>&lt;span class="o">,&lt;/span> &lt;span class="n">String&lt;/span>&lt;span class="o">&amp;gt;&lt;/span> &lt;span class="n">record&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="k">new&lt;/span> &lt;span class="n">ProducerRecord&lt;/span>&lt;span class="o">&amp;lt;&amp;gt;(&lt;/span>&lt;span class="s">&amp;#34;CustomerCountry&amp;#34;&lt;/span>&lt;span class="o">,&lt;/span> &lt;span class="s">&amp;#34;USA&amp;#34;&lt;/span>&lt;span class="o">);&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>当 key 为 null 时，Kafka 会对键进行散列（Kafka 自己的散列算法），然后根据散列值映射到特殊的分区。&lt;/p>
+&lt;h4 id="自定义分区策略">自定义分区策略&lt;/h4>
+&lt;p>通过实现 &lt;code>interface Partitioner&lt;/code> 实现自定义分区策略，主要包含：&lt;/p>
+&lt;ul>
+&lt;li>&lt;code>void configure(Map&amp;lt;String, ?&amp;gt; configs)&lt;/code>
+&lt;ul>
+&lt;li>实际应用中，应通过该方法传入相关信息&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>&lt;code>void partition(String topic, Object key, byte[] keyBytes, Object value, byte[] valueBytes, Cluster cluster)&lt;/code>&lt;/li>
+&lt;li>&lt;code>void close()&lt;/code>&lt;/li>
+&lt;/ul>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;span class="lnt">11
+&lt;/span>&lt;span class="lnt">12
+&lt;/span>&lt;span class="lnt">13
+&lt;/span>&lt;span class="lnt">14
+&lt;/span>&lt;span class="lnt">15
+&lt;/span>&lt;span class="lnt">16
+&lt;/span>&lt;span class="lnt">17
+&lt;/span>&lt;span class="lnt">18
+&lt;/span>&lt;span class="lnt">19
+&lt;/span>&lt;span class="lnt">20
+&lt;/span>&lt;span class="lnt">21
+&lt;/span>&lt;span class="lnt">22
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-java" data-lang="java">&lt;span class="line">&lt;span class="cl">&lt;span class="kd">public&lt;/span> &lt;span class="kd">class&lt;/span> &lt;span class="nc">BananaPartitioner&lt;/span> &lt;span class="kd">implements&lt;/span> &lt;span class="n">Partitioner&lt;/span> &lt;span class="o">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kt">void&lt;/span> &lt;span class="nf">configure&lt;/span>&lt;span class="o">(&lt;/span>&lt;span class="n">Map&lt;/span>&lt;span class="o">&amp;lt;&lt;/span>&lt;span class="n">String&lt;/span>&lt;span class="o">,&lt;/span> &lt;span class="o">?&amp;gt;&lt;/span> &lt;span class="n">configs&lt;/span>&lt;span class="o">)&lt;/span> &lt;span class="o">{}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c1">// 自定义分区策略
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span> &lt;span class="kt">int&lt;/span> &lt;span class="nf">partition&lt;/span>&lt;span class="o">(&lt;/span>&lt;span class="n">String&lt;/span> &lt;span class="n">topic&lt;/span>&lt;span class="o">,&lt;/span> &lt;span class="n">Object&lt;/span> &lt;span class="n">key&lt;/span>&lt;span class="o">,&lt;/span> &lt;span class="kt">byte&lt;/span>&lt;span class="o">[]&lt;/span> &lt;span class="n">keyBytes&lt;/span>&lt;span class="o">,&lt;/span> &lt;span class="n">Object&lt;/span> &lt;span class="n">value&lt;/span>&lt;span class="o">,&lt;/span> &lt;span class="kt">byte&lt;/span>&lt;span class="o">[]&lt;/span> &lt;span class="n">valueBytes&lt;/span>&lt;span class="o">,&lt;/span> &lt;span class="n">Cluster&lt;/span> &lt;span class="n">cluster&lt;/span>&lt;span class="o">)&lt;/span> &lt;span class="o">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">List&lt;/span>&lt;span class="o">&amp;lt;&lt;/span>&lt;span class="n">PartitionInfo&lt;/span>&lt;span class="o">&amp;gt;&lt;/span> &lt;span class="n">partitions&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">cluster&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">partitionsForTopic&lt;/span>&lt;span class="o">(&lt;/span>&lt;span class="n">topic&lt;/span>&lt;span class="o">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kt">int&lt;/span> &lt;span class="n">numPartitions&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">partition&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">size&lt;/span>&lt;span class="o">();&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">if&lt;/span> &lt;span class="o">((&lt;/span>&lt;span class="n">keyBytes&lt;/span> &lt;span class="o">==&lt;/span> &lt;span class="kc">null&lt;/span>&lt;span class="o">)&lt;/span> &lt;span class="o">||&lt;/span> &lt;span class="o">(!(&lt;/span>&lt;span class="n">key&lt;/span> &lt;span class="n">instanceOf&lt;/span> &lt;span class="n">String&lt;/span>&lt;span class="o">)))&lt;/span> &lt;span class="o">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">throw&lt;/span> &lt;span class="k">new&lt;/span> &lt;span class="n">InvalidRecordException&lt;/span>&lt;span class="o">(&lt;/span>&lt;span class="s">&amp;#34;We expect all messages to have customer name as key&amp;#34;&lt;/span>&lt;span class="o">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="o">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">if&lt;/span> &lt;span class="o">(((&lt;/span>&lt;span class="n">String&lt;/span>&lt;span class="o">)&lt;/span> &lt;span class="n">key&lt;/span>&lt;span class="o">).&lt;/span>&lt;span class="na">equals&lt;/span>&lt;span class="o">(&lt;/span>&lt;span class="s">&amp;#34;Banana&amp;#34;&lt;/span>&lt;span class="o">))&lt;/span> &lt;span class="o">{&lt;/span> &lt;span class="c1">// Banana 总是被分配到最后一个分区
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span> &lt;span class="k">return&lt;/span> &lt;span class="n">numPartitions&lt;/span>&lt;span class="o">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="o">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c1">// 其它记录被散列到其他分区
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span> &lt;span class="k">return&lt;/span> &lt;span class="o">((&lt;/span>&lt;span class="n">Math&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">abs&lt;/span>&lt;span class="o">(&lt;/span>&lt;span class="n">Utils&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">murmur2&lt;/span>&lt;span class="o">(&lt;/span>&lt;span class="n">keyBytes&lt;/span>&lt;span class="o">)))&lt;/span> &lt;span class="o">%&lt;/span> &lt;span class="o">(&lt;/span>&lt;span class="n">numPartitions&lt;/span> &lt;span class="o">-&lt;/span> &lt;span class="mi">1&lt;/span>&lt;span class="o">));&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="o">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kt">void&lt;/span> &lt;span class="nf">close&lt;/span>&lt;span class="o">()&lt;/span> &lt;span class="o">{&lt;/span> &lt;span class="o">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">}&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;h2 id="-consumer">👌 Consumer&lt;/h2>
+&lt;h3 id="-消费者组">🦜 消费者组&lt;/h3>
+&lt;h3 id="-消息轮询">🦚 消息轮询&lt;/h3>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;span class="lnt">11
+&lt;/span>&lt;span class="lnt">12
+&lt;/span>&lt;span class="lnt">13
+&lt;/span>&lt;span class="lnt">14
+&lt;/span>&lt;span class="lnt">15
+&lt;/span>&lt;span class="lnt">16
+&lt;/span>&lt;span class="lnt">17
+&lt;/span>&lt;span class="lnt">18
+&lt;/span>&lt;span class="lnt">19
+&lt;/span>&lt;span class="lnt">20
+&lt;/span>&lt;span class="lnt">21
+&lt;/span>&lt;span class="lnt">22
+&lt;/span>&lt;span class="lnt">23
+&lt;/span>&lt;span class="lnt">24
+&lt;/span>&lt;span class="lnt">25
+&lt;/span>&lt;span class="lnt">26
+&lt;/span>&lt;span class="lnt">27
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-java" data-lang="java">&lt;span class="line">&lt;span class="cl">&lt;span class="c1">// 配置
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span>&lt;span class="n">String&lt;/span> &lt;span class="n">bootstrapServers&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="s">&amp;#34;127.0.0.1:9092&amp;#34;&lt;/span>&lt;span class="o">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="n">String&lt;/span> &lt;span class="n">groupId&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="s">&amp;#34;demo_groupId&amp;#34;&lt;/span>&lt;span class="o">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="n">String&lt;/span> &lt;span class="n">topic&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="s">&amp;#34;demo_topic&amp;#34;&lt;/span>&lt;span class="o">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="n">Properties&lt;/span> &lt;span class="n">properties&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="k">new&lt;/span> &lt;span class="n">Properties&lt;/span>&lt;span class="o">();&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="n">properties&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">setProperty&lt;/span>&lt;span class="o">(&lt;/span>&lt;span class="n">ConsumerConfig&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">BOOTSTRAP_SERVERS_CONFIG&lt;/span>&lt;span class="o">,&lt;/span> &lt;span class="n">bootstrapServers&lt;/span>&lt;span class="o">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="n">properties&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">setProperty&lt;/span>&lt;span class="o">(&lt;/span>&lt;span class="n">ConsumerConfig&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">KEY_DESERIALIZER_CLASS_CONFIG&lt;/span>&lt;span class="o">,&lt;/span> &lt;span class="n">StringDeserializer&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">class&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">getName&lt;/span>&lt;span class="o">());&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="n">properties&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">setProperty&lt;/span>&lt;span class="o">(&lt;/span>&lt;span class="n">ConsumerConfig&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">VALUE_DESERIALIZER_CLASS_CONFIG&lt;/span>&lt;span class="o">,&lt;/span> &lt;span class="n">StringDeserializer&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">class&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">getName&lt;/span>&lt;span class="o">());&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="n">properties&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">setProperty&lt;/span>&lt;span class="o">(&lt;/span>&lt;span class="n">ConsumerConfig&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">GROUP_ID_CONFIG&lt;/span>&lt;span class="o">,&lt;/span> &lt;span class="n">groupId&lt;/span>&lt;span class="o">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="n">properties&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">setProperty&lt;/span>&lt;span class="o">(&lt;/span>&lt;span class="n">ConsumerConfig&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">AUTO_OFFSET_RESET_CONFIG&lt;/span>&lt;span class="o">,&lt;/span> &lt;span class="s">&amp;#34;earliest&amp;#34;&lt;/span>&lt;span class="o">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">// 创建消费者
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span>&lt;span class="n">KafkaConsumer&lt;/span>&lt;span class="o">&amp;lt;&lt;/span>&lt;span class="n">String&lt;/span>&lt;span class="o">,&lt;/span> &lt;span class="n">String&lt;/span>&lt;span class="o">&amp;gt;&lt;/span> &lt;span class="n">consumer&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="k">new&lt;/span> &lt;span class="n">KafkaConsumer&lt;/span>&lt;span class="o">&amp;lt;&amp;gt;(&lt;/span>&lt;span class="n">properties&lt;/span>&lt;span class="o">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">// 订阅主题
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span>&lt;span class="n">consumer&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">subscribe&lt;/span>&lt;span class="o">(&lt;/span>&lt;span class="n">Arrays&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">asList&lt;/span>&lt;span class="o">(&lt;/span>&lt;span class="n">topic&lt;/span>&lt;span class="o">));&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">// 轮询
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span>&lt;span class="k">while&lt;/span>&lt;span class="o">(&lt;/span>&lt;span class="kc">true&lt;/span>&lt;span class="o">){&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">ConsumerRecords&lt;/span>&lt;span class="o">&amp;lt;&lt;/span>&lt;span class="n">String&lt;/span>&lt;span class="o">,&lt;/span> &lt;span class="n">String&lt;/span>&lt;span class="o">&amp;gt;&lt;/span> &lt;span class="n">records&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">consumer&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">poll&lt;/span>&lt;span class="o">(&lt;/span>&lt;span class="n">Duration&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">ofMillis&lt;/span>&lt;span class="o">(&lt;/span>&lt;span class="mi">100&lt;/span>&lt;span class="o">));&lt;/span> &lt;span class="c1">// 100 -&amp;gt; 超时时间
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">for&lt;/span> &lt;span class="o">(&lt;/span>&lt;span class="n">ConsumerRecord&lt;/span>&lt;span class="o">&amp;lt;&lt;/span>&lt;span class="n">String&lt;/span>&lt;span class="o">,&lt;/span> &lt;span class="n">String&lt;/span>&lt;span class="o">&amp;gt;&lt;/span> &lt;span class="n">record&lt;/span> &lt;span class="o">:&lt;/span> &lt;span class="n">records&lt;/span>&lt;span class="o">){&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c1">// 业务处理
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span> &lt;span class="n">log&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">info&lt;/span>&lt;span class="o">(&lt;/span>&lt;span class="s">&amp;#34;Key: &amp;#34;&lt;/span> &lt;span class="o">+&lt;/span> &lt;span class="n">record&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">key&lt;/span>&lt;span class="o">()&lt;/span> &lt;span class="o">+&lt;/span> &lt;span class="s">&amp;#34;, Value: &amp;#34;&lt;/span> &lt;span class="o">+&lt;/span> &lt;span class="n">record&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">value&lt;/span>&lt;span class="o">());&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">log&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">info&lt;/span>&lt;span class="o">(&lt;/span>&lt;span class="s">&amp;#34;Partition: &amp;#34;&lt;/span> &lt;span class="o">+&lt;/span> &lt;span class="n">record&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">partition&lt;/span>&lt;span class="o">()&lt;/span> &lt;span class="o">+&lt;/span> &lt;span class="s">&amp;#34;, Offset:&amp;#34;&lt;/span> &lt;span class="o">+&lt;/span> &lt;span class="n">record&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">offset&lt;/span>&lt;span class="o">());&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="o">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">}&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>消息轮询是消费者 API 的核心，一旦消费者订阅的主题，轮询会处理所有的细节。
+&lt;code>poll()&lt;/code> 会负责查找 GroupCordinator，加入群组，接受分配的分区，发送心跳和获取数据。如果发生了再均衡，也是这个轮询期间进行的。&lt;/p>
+&lt;p>⚠️ 消费者组中的一个消费者只能运行在一个线程中。如果需要多个线程处理一个 Patition 中的消息，可以将这个消费者获取的一批数据，可以使用 ExecutorService 启动多个线程处理。&lt;/p>
+&lt;h3 id="-偏移量">🦉 偏移量&lt;/h3>
+&lt;p>Kafka 使用偏移量 offset 追踪消息在分区中的位置。&lt;/p>
+&lt;p>Consumer 向一个特殊的主题 &lt;code>_consumer_offset&lt;/code> 发送消息，更新分区当前的位置。&lt;/p>
+&lt;ul>
+&lt;li>如果提交的 offset「小于」客户端处理的最后一个消息偏移量，那么「两个偏移量之间的消息会被重复处理」&lt;/li>
+&lt;/ul>
+&lt;p>&lt;img src="https://blog.letout.cn/p/kafka/operation/offset1.png"
+width="978"
+height="422"
+srcset="https://blog.letout.cn/p/kafka/operation/offset1_hu7de55e7adbd4de02cc42f3a04ca7fa88_35082_480x0_resize_box_3.png 480w, https://blog.letout.cn/p/kafka/operation/offset1_hu7de55e7adbd4de02cc42f3a04ca7fa88_35082_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+class="gallery-image"
+data-flex-grow="231"
+data-flex-basis="556px"
+>&lt;/p>
+&lt;ul>
+&lt;li>如果提交的 offset「大于」客户端处理的最后一个消息偏移量，那么「两个偏移量之间的消息会丢失」&lt;/li>
+&lt;/ul>
+&lt;p>&lt;img src="https://blog.letout.cn/p/kafka/operation/offset2.png"
+width="979"
+height="485"
+srcset="https://blog.letout.cn/p/kafka/operation/offset2_hu389bebeaa08efdc7ddfc7a71cffd3a76_34010_480x0_resize_box_3.png 480w, https://blog.letout.cn/p/kafka/operation/offset2_hu389bebeaa08efdc7ddfc7a71cffd3a76_34010_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+class="gallery-image"
+data-flex-grow="201"
+data-flex-basis="484px"
+>&lt;/p>
+&lt;h4 id="自动提交">自动提交&lt;/h4>
+&lt;p>如果 &lt;code>enable.auto.commit = true&lt;/code>，消费者会自动把从 &lt;code>poll()&lt;/code> 方法接收到的最大偏移量提交上去。提交的时间间隔由 &lt;code>auto.commit.interval.ms&lt;/code> 控制，默认为 5s。&lt;/p>
+&lt;p>自动提交发生在每次轮询时，如果没有提交偏移量，会把上一次调用返回的偏移量提交上去，「不能保证这些消息已经被业务处理了」。&lt;/p>
+&lt;p>⚠️ 如果设置默认提交时间为 5s，在提交后 3s 发生了再均衡，之后的消费者会再次获取到 3s 前提交的偏移量，这些消息会被重复处理，「无法避免这种情况」，只能缩小提交的时间间隔更频繁地提交 offset，「Kafka 也没有为自动提交预留避免重复处理消息的方法」。&lt;/p>
+&lt;p>适合于不重要的消息场景，如日志采集。&lt;/p>
+&lt;h4 id="同步提交">同步提交&lt;/h4>
+&lt;p>设置 &lt;code>auto.commit.offset = false&lt;/code>，可以让应用程序决定在什么时候提交偏移量。&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;span class="lnt">11
+&lt;/span>&lt;span class="lnt">12
+&lt;/span>&lt;span class="lnt">13
+&lt;/span>&lt;span class="lnt">14
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-java" data-lang="java">&lt;span class="line">&lt;span class="cl">&lt;span class="k">while&lt;/span> &lt;span class="o">(&lt;/span>&lt;span class="kc">true&lt;/span>&lt;span class="o">)&lt;/span> &lt;span class="o">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">ConsumerRecords&lt;/span>&lt;span class="o">&amp;lt;&lt;/span>&lt;span class="n">String&lt;/span>&lt;span class="o">,&lt;/span> &lt;span class="n">String&lt;/span>&lt;span class="o">&amp;gt;&lt;/span> &lt;span class="n">records&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">consumer&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">poll&lt;/span>&lt;span class="o">(&lt;/span>&lt;span class="mi">100&lt;/span>&lt;span class="o">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">for&lt;/span> &lt;span class="o">(&lt;/span>&lt;span class="n">ConsumerRecord&lt;/span>&lt;span class="o">&amp;lt;&lt;/span>&lt;span class="n">String&lt;/span>&lt;span class="o">,&lt;/span> &lt;span class="n">String&lt;/span>&lt;span class="o">&amp;gt;&lt;/span> &lt;span class="n">record&lt;/span> &lt;span class="o">:&lt;/span> &lt;span class="n">records&lt;/span>&lt;span class="o">)&lt;/span> &lt;span class="o">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c1">// ...
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span> &lt;span class="c1">// 处理业务
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span> &lt;span class="c1">// ...
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">try&lt;/span> &lt;span class="o">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">consumer&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">commitSync&lt;/span>&lt;span class="o">();&lt;/span> &lt;span class="c1">// 手动提交
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span> &lt;span class="o">}&lt;/span> &lt;span class="k">catch&lt;/span> &lt;span class="o">(&lt;/span>&lt;span class="n">CommitFailedException&lt;/span> &lt;span class="n">e&lt;/span>&lt;span class="o">)&lt;/span> &lt;span class="o">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">log&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">error&lt;/span>&lt;span class="o">(&lt;/span>&lt;span class="s">&amp;#34;commit failed&amp;#34;&lt;/span>&lt;span class="o">,&lt;/span> &lt;span class="n">e&lt;/span>&lt;span class="o">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="o">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="o">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">}&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>只要没有发生不可恢复的错误，&lt;code>commitSync()&lt;/code> 方法会「一直尝试直到提交成功为止」。如果提交失败，则抛出异常。&lt;/p>
+&lt;h4 id="异步提交">异步提交&lt;/h4>
+&lt;p>使用异步提交 API，只管发送提交请求，无需等待 Broker 的响应。&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-java" data-lang="java">&lt;span class="line">&lt;span class="cl">&lt;span class="n">consumer&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">commitAsync&lt;/span>&lt;span class="o">();&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>同步提交 &lt;code>commitSync()&lt;/code> 会一直重试，但是异步提交 &lt;code>commitAsync()&lt;/code>「不会重试」。不进行重试，是因为在收到服务器响应的时候，可能有一个更大的 offset 已经提交成功。&lt;/p>
+&lt;p>异步提交同样支持回调。&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;span class="lnt">4
+&lt;/span>&lt;span class="lnt">5
+&lt;/span>&lt;span class="lnt">6
+&lt;/span>&lt;span class="lnt">7
+&lt;/span>&lt;span class="lnt">8
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-java" data-lang="java">&lt;span class="line">&lt;span class="cl">&lt;span class="n">consumer&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">commitAsync&lt;/span>&lt;span class="o">(&lt;/span>&lt;span class="k">new&lt;/span> &lt;span class="n">OffsetCommitCallback&lt;/span>&lt;span class="o">())&lt;/span> &lt;span class="o">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kd">public&lt;/span> &lt;span class="kt">void&lt;/span> &lt;span class="nf">onComplete&lt;/span>&lt;span class="o">(&lt;/span>&lt;span class="n">Map&lt;/span>&lt;span class="o">&amp;lt;&lt;/span>&lt;span class="n">TopicPartition&lt;/span>&lt;span class="o">,&lt;/span> &lt;span class="n">OffsetAndMetadata&lt;/span>&lt;span class="o">&amp;gt;&lt;/span> &lt;span class="n">offsets&lt;/span>&lt;span class="o">,&lt;/span> &lt;span class="n">Exception&lt;/span> &lt;span class="n">e&lt;/span>&lt;span class="o">)&lt;/span> &lt;span class="o">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">if&lt;/span> &lt;span class="o">(&lt;/span>&lt;span class="n">e&lt;/span> &lt;span class="o">!=&lt;/span> &lt;span class="kc">null&lt;/span>&lt;span class="o">)&lt;/span> &lt;span class="o">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c1">// 异步提交失败
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span> &lt;span class="c1">// ... 业务处理 / 重试
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span> &lt;span class="o">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="o">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">}&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>异步提交重试，可以使用一个单调递增的序列号维护异步提交的顺序。在进行重试前，先检查回调序列号与维护的序列号的大小，如果回调序列号较大，说明有一个新的提交已经发送，不应该重试。&lt;/p>
+&lt;h4 id="组合提交">组合提交&lt;/h4>
+&lt;p>一般情况下，偶尔的提交失败不进行重试没有太大问题，只要后续有更大的 offset 成功提交，就不会有问题。&lt;/p>
+&lt;p>所以，在消费者关闭前，可以组合使用两种提交方式。&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;span class="lnt">11
+&lt;/span>&lt;span class="lnt">12
+&lt;/span>&lt;span class="lnt">13
+&lt;/span>&lt;span class="lnt">14
+&lt;/span>&lt;span class="lnt">15
+&lt;/span>&lt;span class="lnt">16
+&lt;/span>&lt;span class="lnt">17
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-java" data-lang="java">&lt;span class="line">&lt;span class="cl">&lt;span class="k">try&lt;/span> &lt;span class="o">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">while&lt;/span> &lt;span class="o">(&lt;/span>&lt;span class="kc">true&lt;/span>&lt;span class="o">)&lt;/span> &lt;span class="o">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c1">// ...
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span> &lt;span class="c1">// 消费消息业务
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span> &lt;span class="c1">// ...
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">comsumer&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">commitAsync&lt;/span>&lt;span class="o">();&lt;/span> &lt;span class="c1">// 异步提交
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span> &lt;span class="o">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">}&lt;/span> &lt;span class="k">catch&lt;/span> &lt;span class="o">(&lt;/span>&lt;span class="n">Exception&lt;/span> &lt;span class="n">e&lt;/span>&lt;span class="o">)&lt;/span> &lt;span class="o">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">log&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">error&lt;/span>&lt;span class="o">(&lt;/span>&lt;span class="s">&amp;#34;Unexpected error&amp;#34;&lt;/span>&lt;span class="o">,&lt;/span> &lt;span class="n">e&lt;/span>&lt;span class="o">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">}&lt;/span> &lt;span class="k">finally&lt;/span> &lt;span class="o">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">try&lt;/span> &lt;span class="o">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">consumer&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">commitSync&lt;/span>&lt;span class="o">();&lt;/span> &lt;span class="c1">// 同步，会不断重试
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span> &lt;span class="o">}&lt;/span> &lt;span class="k">finally&lt;/span> &lt;span class="o">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">consumer&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">close&lt;/span>&lt;span class="o">();&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="o">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">}&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;h4 id="提交特定偏移量">提交特定偏移量&lt;/h4>
+&lt;p>每次消费者 &lt;code>poll()&lt;/code> 的都是一批数据，&lt;code>commitSync() / commitAsync()&lt;/code> 每次提交都是这个批次最后的 offset，如果想要在批次中间提交偏移量，可以传入「希望提交的分区和偏移量的 map」。&lt;/p>
+&lt;p>但是，消费者可能不知读取一个分区，这样做需要「跟踪所有分区的偏移量」，通常会使代码变得很复杂。&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;span class="lnt">11
+&lt;/span>&lt;span class="lnt">12
+&lt;/span>&lt;span class="lnt">13
+&lt;/span>&lt;span class="lnt">14
+&lt;/span>&lt;span class="lnt">15
+&lt;/span>&lt;span class="lnt">16
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-java" data-lang="java">&lt;span class="line">&lt;span class="cl">&lt;span class="kd">private&lt;/span> &lt;span class="n">Map&lt;/span>&lt;span class="o">&amp;lt;&lt;/span>&lt;span class="n">TopicPartition&lt;/span>&lt;span class="o">,&lt;/span> &lt;span class="n">OffsetAndMetadata&lt;/span>&lt;span class="o">&amp;gt;&lt;/span> &lt;span class="n">currentOffsets&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="k">new&lt;/span> &lt;span class="n">HashMap&lt;/span>&lt;span class="o">&amp;lt;&amp;gt;();&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="kt">int&lt;/span> &lt;span class="n">count&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="mi">0&lt;/span>&lt;span class="o">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="k">while&lt;/span> &lt;span class="o">(&lt;/span>&lt;span class="kc">true&lt;/span>&lt;span class="o">)&lt;/span> &lt;span class="o">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">ConsumerRecords&lt;/span>&lt;span class="o">&amp;lt;&lt;/span>&lt;span class="n">String&lt;/span>&lt;span class="o">,&lt;/span> &lt;span class="n">String&lt;/span>&lt;span class="o">&amp;gt;&lt;/span> &lt;span class="n">records&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">consumer&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">poll&lt;/span>&lt;span class="o">(&lt;/span>&lt;span class="mi">100&lt;/span>&lt;span class="o">);&lt;/span> &lt;span class="c1">// 假设每个批次 10000 条数据
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span> &lt;span class="k">for&lt;/span> &lt;span class="o">(&lt;/span>&lt;span class="n">ConsumerRecord&lt;/span>&lt;span class="o">&amp;lt;&lt;/span>&lt;span class="n">String&lt;/span>&lt;span class="o">,&lt;/span> &lt;span class="n">String&lt;/span>&lt;span class="o">&amp;gt;&lt;/span> &lt;span class="n">record&lt;/span> &lt;span class="o">:&lt;/span> &lt;span class="n">records&lt;/span>&lt;span class="o">)&lt;/span> &lt;span class="o">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c1">// 业务处理
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span> &lt;span class="c1">// ...
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">currentOffsets&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">put&lt;/span>&lt;span class="o">(&lt;/span>&lt;span class="k">new&lt;/span> &lt;span class="n">TopicPartition&lt;/span>&lt;span class="o">(&lt;/span>&lt;span class="n">record&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">topic&lt;/span>&lt;span class="o">(),&lt;/span> &lt;span class="n">record&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">partition&lt;/span>&lt;span class="o">()),&lt;/span> &lt;span class="k">new&lt;/span> &lt;span class="n">OffsetAndMetadata&lt;/span>&lt;span class="o">(&lt;/span>&lt;span class="n">record&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">offset&lt;/span>&lt;span class="o">()&lt;/span> &lt;span class="o">+&lt;/span> &lt;span class="mi">1&lt;/span>&lt;span class="o">,&lt;/span> &lt;span class="s">&amp;#34;no metadata&amp;#34;&lt;/span>&lt;span class="o">));&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">if&lt;/span> &lt;span class="o">(&lt;/span>&lt;span class="n">count&lt;/span> &lt;span class="o">%&lt;/span> &lt;span class="mi">1000&lt;/span> &lt;span class="o">==&lt;/span> &lt;span class="mi">0&lt;/span>&lt;span class="o">)&lt;/span> &lt;span class="o">{&lt;/span> &lt;span class="c1">// 在每个批次中，没处理 1000 条数据提交一次 offset
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span> &lt;span class="n">consumer&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">commitAsync&lt;/span>&lt;span class="o">(&lt;/span>&lt;span class="n">currentOffsets&lt;/span>&lt;span class="o">,&lt;/span> &lt;span class="kc">null&lt;/span>&lt;span class="o">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="o">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">count&lt;/span>&lt;span class="o">++;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="o">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">}&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;h3 id="-特定offset开始处理">🦩 特定offset开始处理&lt;/h3>
+&lt;h2 id="-connect">🖇️ Connect&lt;/h2>
+&lt;h2 id="-stream">💦 Stream&lt;/h2>
+&lt;!-- raw HTML omitted --></description></item><item><title>Kafka</title><link>https://blog.letout.cn/p/kafka/</link><pubDate>Sat, 04 Mar 2023 11:14:45 +0800</pubDate><guid>https://blog.letout.cn/p/kafka/</guid><description>&lt;img src="https://blog.letout.cn/p/kafka/kafka.webp" alt="Featured image of post Kafka" />&lt;blockquote>
 &lt;p>Apache Kafka is an open-source distributed event streaming platform.&lt;/p>
 &lt;p>Kafka 是一个开源的分布式事件流平台。&lt;/p>
 &lt;/blockquote>
 &lt;h2 id="-基本概念">📑 基本概念&lt;/h2>
-&lt;h3 id="生产者--消费者">生产者 &amp;amp; 消费者&lt;/h3>
+&lt;h3 id="productor--consumer">Productor &amp;amp; Consumer&lt;/h3>
 &lt;p>把消息放到队列里面的叫「生产者」；从队列中消费消息的叫「消费者」。&lt;/p>
 &lt;p>&lt;img src="https://blog.letout.cn/p/kafka/productor-consumer.png"
 width="1482"
@@ -99,9 +697,9 @@ class="gallery-image"
 data-flex-grow="167"
 data-flex-basis="401px"
 >&lt;/p>
-&lt;h3 id="消费者组">消费者组&lt;/h3>
+&lt;h3 id="consumer-group">Consumer Group&lt;/h3>
 &lt;p>Kafka 是个高并发的系统，消息的拉取同样是并行的，多个消费者去消费 Topic 消息。&lt;/p>
-&lt;p>Kafka 引入了消费者组的概念，每一个消费者都有一个对应的消费者组。组间进行广播消费，组内进行集群消费。同时限定：「每个 Partition 只能由消费者组中的一个消费者进行消费」。&lt;/p>
+&lt;p>Kafka 引入了消费者组 &lt;code>Consumer Group&lt;/code> 的概念，每一个消费者都有一个对应的消费者组。组间进行广播消费，组内进行集群消费。同时限定：「每个 Partition 只能由消费者组中的一个消费者进行消费」。&lt;/p>
 &lt;p>&lt;img src="https://blog.letout.cn/p/kafka/consumer_group.png"
 width="1952"
 height="1378"
@@ -180,7 +778,10 @@ data-flex-basis="262px"
 &lt;li>
 &lt;p>🫧 IO 多路复用&lt;/p>
 &lt;p>使用 &lt;code>1&lt;/code> 个 &lt;code>Acceptor&lt;/code> 线程，处理新的连接；使用 &lt;code>N&lt;/code> 个 &lt;code>Processor&lt;/code> 线程，读取请求；使用 &lt;code>M&lt;/code> 个 &lt;code>Handler&lt;/code> 线程，处理业务逻辑。&lt;/p>
-&lt;p>与 Redis 相同，IO 多路复用允许内核中同时管理多个 scoket 连接，内核会一直监听这些连接，一旦有请求到达，就会通知处理线程，达到一个线程处理多个请求的效果。&lt;/p>
+&lt;p>&lt;code>1&lt;/code> 个 &lt;code>Acceptor&lt;/code> 线程：用于监听网络套接字，接受请求，然后将请求派发给 Processor 线程池中的一个线程来处理。
+与 Redis 相同，IO 多路复用允许内核中同时管理多个 scoket 连接，内核会一直监听这些连接，一旦有请求到达，就会通知处理线程，达到一个线程处理多个请求的效果。&lt;/p>
+&lt;p>&lt;code>N&lt;/code> 个 &lt;code>Processor&lt;/code> 线程：Kafka 会维护一个线程池，将请求分发给可用的 Processor 线程处理。主要负责从套接字读取消息，解析处理，并将响应发送给客户端。达到批量操作，提高吞吐量。&lt;/p>
+&lt;p>&lt;code>M&lt;/code> 个 &lt;code>Handler&lt;/code> 线程：维护的线程池，负责读取 Kafka Topic 中的消息，并将其提交到对应的 Consumer Group。&lt;/p>
 &lt;/li>
 &lt;li>
 &lt;p>🫧 磁盘顺序 IO&lt;/p>
@@ -209,7 +810,7 @@ data-flex-basis="262px"
 &lt;/li>
 &lt;li>
 &lt;p>🫧 mmap&lt;/p>
-&lt;p>memory mapped files&lt;/p>
+&lt;p>&lt;code>memory mapped files&lt;/code>&lt;/p>
 &lt;p>采用 mmap 映射索引文件，加快索引的查找过程。将磁盘文件与内存虚拟地址做了映射，不需要操作磁盘IO，进程可以使用指针的方式操作这一块内存，系统会自动将脏页写入到对应的磁盘文件上。&lt;/p>
 &lt;!-- raw HTML omitted -->
 &lt;!-- raw HTML omitted -->
