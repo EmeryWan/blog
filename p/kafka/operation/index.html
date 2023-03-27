@@ -1,0 +1,353 @@
+<!doctype html><html lang dir=ltr><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><meta name=description content="命令行工具 Kafka 提供了一些基于脚本的命名行工具 ${dir}/bin/xxx.sh，用于管理集群。这些管理通过 Java 类实现，通过脚本调用。 1 2 3 4 5 #"><title>Kafka 操作（Doing）</title><link rel=canonical href=https://emerywan.github.io/blog/p/kafka/operation/><link rel=stylesheet href=/blog/scss/style.min.53b36bd111ab91c36b669e22939503ad8be1ecdac357e4514855ae8d8deda711.css><meta property="og:title" content="Kafka 操作（Doing）"><meta property="og:description" content="命令行工具 Kafka 提供了一些基于脚本的命名行工具 ${dir}/bin/xxx.sh，用于管理集群。这些管理通过 Java 类实现，通过脚本调用。 1 2 3 4 5 #"><meta property="og:url" content="https://emerywan.github.io/blog/p/kafka/operation/"><meta property="og:site_name" content="一层"><meta property="og:type" content="article"><meta property="article:section" content="Post"><meta property="article:tag" content="Kafka"><meta property="article:published_time" content="2023-03-26T12:14:45+08:00"><meta property="article:modified_time" content="2023-03-26T12:14:45+08:00"><meta property="og:image" content="https://emerywan.github.io/blog/p/kafka/operation/1.png"><meta name=twitter:title content="Kafka 操作（Doing）"><meta name=twitter:description content="命令行工具 Kafka 提供了一些基于脚本的命名行工具 ${dir}/bin/xxx.sh，用于管理集群。这些管理通过 Java 类实现，通过脚本调用。 1 2 3 4 5 #"><meta name=twitter:card content="summary_large_image"><meta name=twitter:image content="https://emerywan.github.io/blog/p/kafka/operation/1.png"><link rel="shortcut icon" href=https://emerywan.github.io/blog/imgs/favicon.ico><link rel=preconnect href=https://fonts.proxy.ustclug.org><link rel=preconnect href=https://fonts.gstatic.com crossorigin><link href="https://fonts.proxy.ustclug.org/css2?family=Noto+Sans+SC&family=Roboto&family=Roboto+Mono&display=swap" rel=stylesheet><style>:root{--sys-font-family:-apple-system, BlinkMacSystemFont, "Roboto", "Noto Sans SC", "Segoe UI", "Droid Sans", "Helvetica Neue", Ubuntu;--zh-font-family:-apple-system, BlinkMacSystemFont, "Roboto", "Noto Sans SC",  "PingFang SC", "Hiragino Sans GB", "Droid Sans Fallback", Ubuntu, "Microsoft YaHei";--code-font-family:"SF Mono", SFMono-Regular, "Roboto Mono", "Ubuntu Mono", Menlo, Monaco, Consolas, "Courier New", monospace;--base-font-family:-apple-system, BlinkMacSystemFont, "Roboto", "Noto Sans SC", var(--sys-font-family), var(--zh-font-family), sans-serif;--article-font-family:-apple-system, BlinkMacSystemFont, "Roboto", "Noto Sans SC", var(--base-font-family);--article-line-height:1.6;--article-font-size:1.6rem}</style></head><body class=article-page><script>(function(){const e="StackColorScheme";localStorage.getItem(e)||localStorage.setItem(e,"auto")})()</script><script>(function(){const t="StackColorScheme",e=localStorage.getItem(t),n=window.matchMedia("(prefers-color-scheme: dark)").matches===!0;e=="dark"||e==="auto"&&n?document.documentElement.dataset.scheme="dark":document.documentElement.dataset.scheme="light"})()</script><div class="container main-container flex on-phone--column extended"><aside class="sidebar left-sidebar sticky"><button class="hamburger hamburger--spin" type=button id=toggle-menu aria-label=切换菜单>
+<span class=hamburger-box><span class=hamburger-inner></span></span></button><header><figure class=site-avatar><a href=/blog><img src=/blog/img/avatar_hud10ed4afecf1b63b1391b35c2778f738_36574_300x0_resize_box_3.png width=300 height=300 class=site-logo loading=lazy alt=Avatar></a></figure><div class=site-meta><h1 class=site-name><a href=/blog>一层</a></h1><h2 class=site-description>迎着这岁月的风。</h2></div></header><ol class=social-menu><li><a href=https://github.com/emerywan target=_blank title=GitHub><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-brand-github" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M9 19c-4.3 1.4-4.3-2.5-6-3m12 5v-3.5c0-1 .1-1.4-.5-2 2.8-.3 5.5-1.4 5.5-6a4.6 4.6.0 00-1.3-3.2 4.2 4.2.0 00-.1-3.2s-1.1-.3-3.5 1.3a12.3 12.3.0 00-6.2.0C6.5 2.8 5.4 3.1 5.4 3.1a4.2 4.2.0 00-.1 3.2A4.6 4.6.0 004 9.5c0 4.6 2.7 5.7 5.5 6-.6.6-.6 1.2-.5 2V21"/></svg></a></li><li><a href=https://emery.letout.cn target=_blank title=Home><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-smart-home" width="44" height="44" viewBox="0 0 24 24" stroke-width="1.5" stroke="#6f32be" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M19 8.71l-5.333-4.148a2.666 2.666.0 00-3.274.0L5.059 8.71A2.665 2.665.0 004.03 10.815v7.2a2 2 0 002 2h12a2 2 0 002-2v-7.2c0-.823-.38-1.6-1.03-2.105"/><path d="M16 15c-2.21 1.333-5.792 1.333-8 0"/></svg></a></li></ol><ol class=menu id=main-menu><li><a href=/blog/><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><polyline points="5 12 3 12 12 3 21 12 19 12"/><path d="M5 12v7a2 2 0 002 2h10a2 2 0 002-2v-7"/><path d="M9 21v-6a2 2 0 012-2h2a2 2 0 012 2v6"/></svg><span>首页</span></a></li><li><a href=/blog/about/><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="7" r="4"/><path d="M6 21v-2a4 4 0 014-4h4a4 4 0 014 4v2"/></svg><span>关于</span></a></li><li><a href=/blog/categories/><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><line x1="5" y1="9" x2="19" y2="9"/><line x1="5" y1="15" x2="19" y2="15"/><line x1="11" y1="4" x2="7" y2="20"/><line x1="17" y1="4" x2="13" y2="20"/></svg><span>分类</span></a></li><li><a href=/blog/archives/><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><rect x="3" y="4" width="18" height="4" rx="2"/><path d="M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8"/><line x1="10" y1="12" x2="14" y2="12"/></svg><span>归档</span></a></li><li><a href=/blog/search/><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="10" cy="10" r="7"/><line x1="21" y1="21" x2="15" y2="15"/></svg><span>搜索</span></a></li><div class=menu-bottom-section><li id=dark-mode-toggle><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="8" cy="12" r="2"/><rect x="2" y="6" width="20" height="12" rx="6"/></svg><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="16" cy="12" r="2"/><rect x="2" y="6" width="20" height="12" rx="6"/></svg><span>🌗 Dark</span></li></div></ol></aside><main class="main full-width"><article class="has-image main-article"><header class=article-header><div class=article-image><a href=/blog/p/kafka/operation/><img src=/blog/p/kafka/operation/1_hu7e5e6f704cbbe344fcb15d211398a1e1_48507_800x0_resize_box_3.png srcset="/blog/p/kafka/operation/1_hu7e5e6f704cbbe344fcb15d211398a1e1_48507_800x0_resize_box_3.png 800w, /blog/p/kafka/operation/1_hu7e5e6f704cbbe344fcb15d211398a1e1_48507_1600x0_resize_box_3.png 1600w" width=800 height=433 loading=lazy alt="Featured image of post Kafka 操作（Doing）"></a></div><div class=article-details><header class=article-category><a href=/blog/categories/%E6%8A%80%E6%9C%AF/ style=background-color:#91d5ff;color:#fff>技术</a></header><div class=article-title-wrapper><h2 class=article-title><a href=/blog/p/kafka/operation/>Kafka 操作（Doing）</a></h2></div><footer class=article-time><div><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><path d="M11.795 21H5a2 2 0 01-2-2V7a2 2 0 012-2h12a2 2 0 012 2v4"/><circle cx="18" cy="18" r="4"/><path d="M15 3v4"/><path d="M7 3v4"/><path d="M3 11h16"/><path d="M18 16.496V18l1 1"/></svg><time class=article-time--published>03 - 26, 2023</time></div></footer></div></header><section class=article-content><h2 id=命令行工具>命令行工具</h2><p>Kafka 提供了一些基于脚本的命名行工具 <code>${dir}/bin/xxx.sh</code>，用于管理集群。这些管理通过 Java 类实现，通过脚本调用。</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-sh data-lang=sh><span class=line><span class=cl><span class=c1># 启动 Zookeeper 服务（新版已内置）</span>
+</span></span><span class=line><span class=cl>bin/zookeeper-server-start.sh config/zeekeeper.properties
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 启动 Kafka 服务</span>
+</span></span><span class=line><span class=cl>bin/kafka-server-start.sh config/server.properties
+</span></span></code></pre></td></tr></table></div></div><blockquote><p>🔍 更多 CLI 操作：<a class=link href=https://www.conduktor.io/kafka/kafka-topics-cli-tutorial/ target=_blank rel=noopener>🌐 https://www.conduktor.io/kafka/kafka-topics-cli-tutorial/</a></p></blockquote><h3 id=topic-操作>Topic 操作</h3><p>Kafka 大部分命令行工具直接操作 Zookeeper 上的元数据，并不会直接连接到 Broker 上，需要确保所使用的工具版本与集群中的 Broker 版本相匹配。</p><blockquote><p>🎗️</p><p>Kafka 2.2+ 使用 Kafka 的 hostname & port 进行操作 <code>--bootstrap-server 127.0.0.1:9092</code></p><p>旧版本使用 Zookeeper 的 URL & port 进行操作 <code>--zookeeper 127.0.0.1:2181</code></p></blockquote><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-sh data-lang=sh><span class=line><span class=cl><span class=c1># 创建主题</span>
+</span></span><span class=line><span class=cl><span class=c1># 2.2 +</span>
+</span></span><span class=line><span class=cl>kafka-topics.sh --bootstrap-server localhost:9092 <span class=se>\
+</span></span></span><span class=line><span class=cl><span class=se></span>                --create <span class=se>\ </span>
+</span></span><span class=line><span class=cl>                --topic first_topic <span class=se>\
+</span></span></span><span class=line><span class=cl><span class=se></span>                --partitions <span class=m>3</span> <span class=se>\ </span> <span class=c1># 分区数量</span>
+</span></span><span class=line><span class=cl>                --replication-factor <span class=m>1</span>  <span class=c1># 副本数量</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># old</span>
+</span></span><span class=line><span class=cl>kafka-topics.sh --zookeeper localhost:2181 --topic first_topic --create --partitions <span class=m>3</span> --replication-factor <span class=m>1</span>
+</span></span></code></pre></td></tr></table></div></div><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-sh data-lang=sh><span class=line><span class=cl><span class=c1># 列出主题</span>
+</span></span><span class=line><span class=cl><span class=c1># 2.2 + </span>
+</span></span><span class=line><span class=cl>kafka-topics.sh --bootstrap-server localhost:9092 --list
+</span></span><span class=line><span class=cl><span class=c1># 详细信息</span>
+</span></span><span class=line><span class=cl>kafka-topics.sh --bootstrap-server localhost:9092 --describe --topic first_topic
+</span></span></code></pre></td></tr></table></div></div><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-sh data-lang=sh><span class=line><span class=cl><span class=c1># 修改主题</span>
+</span></span><span class=line><span class=cl>kafka-topics.sh --bootstrap-server localhost:9092 <span class=se>\
+</span></span></span><span class=line><span class=cl><span class=se></span>                --alter <span class=se>\
+</span></span></span><span class=line><span class=cl><span class=se></span>                --topic first_topic <span class=se>\
+</span></span></span><span class=line><span class=cl><span class=se></span>                --partitions <span class=m>5</span>
+</span></span></code></pre></td></tr></table></div></div><h3 id=生产--消费>生产 & 消费</h3><blockquote><p>🎗️ Producer</p><p>Kafka 2.5+ 使用 <code>--bootstrap-server</code></p><p>旧版本 Kafka 使用 <code>--broker-list</code></p></blockquote><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-sh data-lang=sh><span class=line><span class=cl><span class=c1># 生产</span>
+</span></span><span class=line><span class=cl>kafka-console-producer.sh --bootstrap-server localhost:9092 <span class=se>\
+</span></span></span><span class=line><span class=cl><span class=se></span>                          --topic first_topic
+</span></span></code></pre></td></tr></table></div></div><blockquote><p>🎗️ Consumer</p><p>使用 <code>--bootstrap-server</code>，自 v0.10 开始 <code>--zookeeper</code> 已被废弃</p></blockquote><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-sh data-lang=sh><span class=line><span class=cl>kafka-console-consumer.sh --bootstrap-server localhost:9092 <span class=se>\
+</span></span></span><span class=line><span class=cl><span class=se></span>                          --topic first_topic
+</span></span></code></pre></td></tr></table></div></div><h2 id=-producer>🤲 Producer</h2><h3 id=-生产者>🐈 生产者</h3><ul><li>🧩 <code>ProducerRecord</code> 对象包含目标主题 Topic 和需要发送的内容 Value，可以可以指定分区 Partition 和键值 Key（消息的附加信息，可以用来决定消息被写入哪个分区，相同 Key 的消息会写入同一个分区）</li><li>🧩 发送消息时，生产者需要将 <code>ProducerRecord</code> 对象序列化为字节数组，在网络上传输</li><li>🧩 数据被传送给分区器 <code>Partitioner</code>，如果指定了分区，会直接返回；没有指定，根据 Key 选择一个分区；没有指定 Key，会根据 Value 进行散列，根据散列值把消息映射到相应的分区</li><li>🧩 这条记录选好分区后，会被添加到一个记录批次中，这个批次的所有消息会被发送到相同的主题和分区上（批处理），独立的 <code>Processer</code> 线程会负责把这些数据发送到对应的 broker 上</li><li>🧩 Broker 收到消息时会返回一个响应<ul><li>消息成功写入 Kafka，返回一个 <code>RecordMetaData</code> 对象，包含主题和分区的信息</li><li>写入失败，会返回一个错误，生产者收到错误之后会尝试重新发送，多次失败直接返回错误信息</li></ul></li></ul><p><img src=/blog/p/kafka/operation/producer.webp width=780 height=678 srcset="/blog/p/kafka/operation/producer_huebfba9d061e763283d9c37fc8487b94d_24528_480x0_resize_q75_h2_box_2.webp 480w, /blog/p/kafka/operation/producer_huebfba9d061e763283d9c37fc8487b94d_24528_1024x0_resize_q75_h2_box_2.webp 1024w" loading=lazy class=gallery-image data-flex-grow=115 data-flex-basis=276px></p><h4 id=重要配置>重要配置</h4><ul><li><p><code>acks</code></p><p>指定了必须要有多少个分区副本收到消息，生产者才会任务消息写入时成功的</p><ul><li><code>acks=0</code> 不会等待任务来自服务器的响应。达到最高的吞吐量，无法得知消息状态。</li><li><code>acks=1</code> 只要 Partition Leader 收到响应。消息可能会丢失，Leader宕机后，一个未同步的Fllower成为新的Leader。</li><li><code>acks=all</code> 消息要全部同步到所有的 Leader&amp;Fllower。</li></ul></li><li><p><code>retries</code></p><p>生产者可以重发消息的次数</p></li><li><p><code>max.in.flight.requests.per.connection</code></p><p>生产者在收到服务器响应前可以发送多少个消息。</p><p>Kafka 可以保证同一个分区里的消息是有序的，<code>max.in.flight.requests.per.connection=1</code>，即使发送了重试，消息依旧有序，但是会严重影响生产者的吞吐量。</p></li></ul><h3 id=-同步发送>🐈‍⬛ 同步发送</h3><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-java data-lang=java><span class=line><span class=cl><span class=kd>public</span> <span class=n>Future</span><span class=o>&lt;</span><span class=n>RecordMetadata</span><span class=o>&gt;</span> <span class=nf>send</span><span class=o>(</span><span class=n>ProducerRecord</span><span class=o>&lt;</span><span class=n>K</span><span class=o>,</span> <span class=n>V</span><span class=o>&gt;</span> <span class=n>record</span><span class=o>)</span> <span class=o>{</span> <span class=o>}</span>
+</span></span></code></pre></td></tr></table></div></div><p>使用 <code>send()</code> 方法发送消息，会返回一个 Future 对象，调用 <code>get()</code> 方法进行等待，就可以知道消息是否发送成功。</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-java data-lang=java><span class=line><span class=cl><span class=c1>// 相关配置
+</span></span></span><span class=line><span class=cl><span class=c1></span><span class=n>String</span> <span class=n>bootstrapServers</span> <span class=o>=</span> <span class=s>&#34;127.0.0.1:9092&#34;</span><span class=o>;</span>
+</span></span><span class=line><span class=cl><span class=n>Properties</span> <span class=n>properties</span> <span class=o>=</span> <span class=k>new</span> <span class=n>Properties</span><span class=o>();</span>
+</span></span><span class=line><span class=cl><span class=n>properties</span><span class=o>.</span><span class=na>setProperty</span><span class=o>(</span><span class=n>ProducerConfig</span><span class=o>.</span><span class=na>BOOTSTRAP_SERVERS_CONFIG</span><span class=o>,</span> <span class=n>bootstrapServers</span><span class=o>);</span>
+</span></span><span class=line><span class=cl><span class=n>properties</span><span class=o>.</span><span class=na>setProperty</span><span class=o>(</span><span class=n>ProducerConfig</span><span class=o>.</span><span class=na>KEY_SERIALIZER_CLASS_CONFIG</span><span class=o>,</span> <span class=n>StringSerializer</span><span class=o>.</span><span class=na>class</span><span class=o>.</span><span class=na>getName</span><span class=o>());</span>  <span class=c1>// 序列化方式
+</span></span></span><span class=line><span class=cl><span class=c1></span><span class=n>properties</span><span class=o>.</span><span class=na>setProperty</span><span class=o>(</span><span class=n>ProducerConfig</span><span class=o>.</span><span class=na>VALUE_SERIALIZER_CLASS_CONFIG</span><span class=o>,</span> <span class=n>StringSerializer</span><span class=o>.</span><span class=na>class</span><span class=o>.</span><span class=na>getName</span><span class=o>());</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1>// 创建 Producer
+</span></span></span><span class=line><span class=cl><span class=c1></span><span class=n>KafkaProducer</span><span class=o>&lt;</span><span class=n>String</span><span class=o>,</span> <span class=n>String</span><span class=o>&gt;</span> <span class=n>producer</span> <span class=o>=</span> <span class=k>new</span> <span class=n>KafkaProducer</span><span class=o>&lt;&gt;(</span><span class=n>properties</span><span class=o>);</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1>// 创建消息
+</span></span></span><span class=line><span class=cl><span class=c1></span><span class=n>ProducerRecord</span><span class=o>&lt;</span><span class=n>String</span><span class=o>,</span> <span class=n>String</span><span class=o>&gt;</span> <span class=n>producerRecord</span> <span class=o>=</span> <span class=k>new</span> <span class=n>ProducerRecord</span><span class=o>&lt;&gt;(</span><span class=s>&#34;demo_topic&#34;</span><span class=o>,</span> <span class=s>&#34;hello world!&#34;</span><span class=o>);</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1>// 发送消息
+</span></span></span><span class=line><span class=cl><span class=c1></span><span class=k>try</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>  <span class=n>producer</span><span class=o>.</span><span class=na>send</span><span class=o>(</span><span class=n>record</span><span class=o>).</span><span class=na>get</span><span class=o>();</span>  <span class=c1>// get() 同步
+</span></span></span><span class=line><span class=cl><span class=c1></span><span class=o>}</span> <span class=k>catch</span> <span class=o>(</span><span class=n>Exception</span> <span class=n>e</span><span class=o>)</span> <span class=o>{</span>  <span class=c1>// 发生了无法解决的错误 或 重试超过最大次数
+</span></span></span><span class=line><span class=cl><span class=c1></span>  <span class=n>e</span><span class=o>.</span><span class=na>printStackTrace</span><span class=o>();</span>
+</span></span><span class=line><span class=cl><span class=o>}</span>
+</span></span></code></pre></td></tr></table></div></div><h3 id=-异步发送>🐅 异步发送</h3><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-java data-lang=java><span class=line><span class=cl><span class=kd>public</span> <span class=n>Future</span><span class=o>&lt;</span><span class=n>RecordMetadata</span><span class=o>&gt;</span> <span class=nf>send</span><span class=o>(</span><span class=n>ProducerRecord</span><span class=o>&lt;</span><span class=n>K</span><span class=o>,</span> <span class=n>V</span><span class=o>&gt;</span> <span class=n>record</span><span class=o>,</span> <span class=n>Callback</span> <span class=n>callback</span><span class=o>)</span> <span class=o>{</span> <span class=o>}</span>
+</span></span></code></pre></td></tr></table></div></div><p>调用 <code>send()</code> 方法，并指定一个回调函数，服务器在返回响应时调用该函数。</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span><span class=lnt>7
+</span><span class=lnt>8
+</span><span class=lnt>9
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-java data-lang=java><span class=line><span class=cl><span class=n>producer</span><span class=o>.</span><span class=na>send</span><span class=o>(</span><span class=n>producerRecord</span><span class=o>,</span> <span class=k>new</span> <span class=n>Callback</span><span class=o>()</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>  <span class=kd>public</span> <span class=kt>void</span> <span class=nf>onCompletion</span><span class=o>(</span><span class=n>RecordMetadata</span> <span class=n>recordMetadata</span><span class=o>,</span> <span class=n>Exception</span> <span class=n>e</span><span class=o>)</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>    <span class=k>if</span> <span class=o>(</span><span class=n>e</span> <span class=o>!=</span> <span class=kc>null</span><span class=o>)</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>      <span class=c1>// 发送失败
+</span></span></span><span class=line><span class=cl><span class=c1></span>      <span class=c1>// ...
+</span></span></span><span class=line><span class=cl><span class=c1></span>      <span class=c1>// 对应的业务处理逻辑
+</span></span></span><span class=line><span class=cl><span class=c1></span>    <span class=o>}</span>
+</span></span><span class=line><span class=cl>  <span class=o>}</span>
+</span></span><span class=line><span class=cl><span class=o>});</span>
+</span></span></code></pre></td></tr></table></div></div><h3 id=-序列化器>🐆 序列化器</h3><p>常见的序列化&反序列化器有 Avro、Thrift、Protobuf 等。</p><p>Apache <a class=link href=https://zhuanlan.zhihu.com/p/370519371 target=_blank rel=noopener>Avro</a> 是一种与编程语言无关的序列化格式。</p><p>Avro 通过与语言无关的 schema 来定义，使用 JSON 来描述，数据会被序列化为二进制文件或 JSON 文件。</p><p>满足 Avro 兼容原则下，写入的消息改动 schema 写入了新的数据，负责读消息的应用程序可以继续处理而无需做任何更改。</p><h3 id=-分区>🐕 分区</h3><p><code>ProducerRecord</code> 对象可以包含 topic、partition、key、value 等，通常我们会指定 key，作为附加消息，决定消息该被写入哪个分区，拥有相同 key 的消息会被写入同一个分区。</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span><span class=lnt>7
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-java data-lang=java><span class=line><span class=cl><span class=c1>// topic: CustomerCountry
+</span></span></span><span class=line><span class=cl><span class=c1>// key: Laboratory Equipment
+</span></span></span><span class=line><span class=cl><span class=c1>// value: USA
+</span></span></span><span class=line><span class=cl><span class=c1></span><span class=n>ProducerRecord</span><span class=o>&lt;</span><span class=n>String</span><span class=o>,</span> <span class=n>String</span><span class=o>&gt;</span> <span class=n>record</span> <span class=o>=</span> <span class=k>new</span> <span class=n>ProducerRecord</span><span class=o>&lt;&gt;(</span><span class=s>&#34;CustomerConuntry&#34;</span><span class=o>,</span> <span class=s>&#34;Laboratory Equipment&#34;</span><span class=o>,</span> <span class=s>&#34;USA&#34;</span><span class=o>);</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1>// 创建 key-&gt;null 的消息
+</span></span></span><span class=line><span class=cl><span class=c1></span><span class=n>ProducerRecord</span><span class=o>&lt;</span><span class=n>String</span><span class=o>,</span> <span class=n>String</span><span class=o>&gt;</span> <span class=n>record</span> <span class=o>=</span> <span class=k>new</span> <span class=n>ProducerRecord</span><span class=o>&lt;&gt;(</span><span class=s>&#34;CustomerCountry&#34;</span><span class=o>,</span> <span class=s>&#34;USA&#34;</span><span class=o>);</span>
+</span></span></code></pre></td></tr></table></div></div><p>当 key 为 null 时，Kafka 会对键进行散列（Kafka 自己的散列算法），然后根据散列值映射到特殊的分区。</p><h4 id=自定义分区策略>自定义分区策略</h4><p>通过实现 <code>interface Partitioner</code> 实现自定义分区策略，主要包含：</p><ul><li><code>void configure(Map&lt;String, ?> configs)</code><ul><li>实际应用中，应通过该方法传入相关信息</li></ul></li><li><code>void partition(String topic, Object key, byte[] keyBytes, Object value, byte[] valueBytes, Cluster cluster)</code></li><li><code>void close()</code></li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-java data-lang=java><span class=line><span class=cl><span class=kd>public</span> <span class=kd>class</span> <span class=nc>BananaPartitioner</span> <span class=kd>implements</span> <span class=n>Partitioner</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>  <span class=kt>void</span> <span class=nf>configure</span><span class=o>(</span><span class=n>Map</span><span class=o>&lt;</span><span class=n>String</span><span class=o>,</span> <span class=o>?&gt;</span> <span class=n>configs</span><span class=o>)</span> <span class=o>{}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>  <span class=c1>// 自定义分区策略
+</span></span></span><span class=line><span class=cl><span class=c1></span>  <span class=kt>int</span> <span class=nf>partition</span><span class=o>(</span><span class=n>String</span> <span class=n>topic</span><span class=o>,</span> <span class=n>Object</span> <span class=n>key</span><span class=o>,</span> <span class=kt>byte</span><span class=o>[]</span> <span class=n>keyBytes</span><span class=o>,</span> <span class=n>Object</span> <span class=n>value</span><span class=o>,</span> <span class=kt>byte</span><span class=o>[]</span> <span class=n>valueBytes</span><span class=o>,</span> <span class=n>Cluster</span> <span class=n>cluster</span><span class=o>)</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>    <span class=n>List</span><span class=o>&lt;</span><span class=n>PartitionInfo</span><span class=o>&gt;</span> <span class=n>partitions</span> <span class=o>=</span> <span class=n>cluster</span><span class=o>.</span><span class=na>partitionsForTopic</span><span class=o>(</span><span class=n>topic</span><span class=o>);</span>
+</span></span><span class=line><span class=cl>    <span class=kt>int</span> <span class=n>numPartitions</span> <span class=o>=</span> <span class=n>partition</span><span class=o>.</span><span class=na>size</span><span class=o>();</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=k>if</span> <span class=o>((</span><span class=n>keyBytes</span> <span class=o>==</span> <span class=kc>null</span><span class=o>)</span> <span class=o>||</span> <span class=o>(!(</span><span class=n>key</span> <span class=n>instanceOf</span> <span class=n>String</span><span class=o>)))</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>      <span class=k>throw</span> <span class=k>new</span> <span class=n>InvalidRecordException</span><span class=o>(</span><span class=s>&#34;We expect all messages to have customer name as key&#34;</span><span class=o>);</span>
+</span></span><span class=line><span class=cl>    <span class=o>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=k>if</span> <span class=o>(((</span><span class=n>String</span><span class=o>)</span> <span class=n>key</span><span class=o>).</span><span class=na>equals</span><span class=o>(</span><span class=s>&#34;Banana&#34;</span><span class=o>))</span> <span class=o>{</span>  <span class=c1>// Banana 总是被分配到最后一个分区
+</span></span></span><span class=line><span class=cl><span class=c1></span>      <span class=k>return</span> <span class=n>numPartitions</span><span class=o>;</span>
+</span></span><span class=line><span class=cl>    <span class=o>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=c1>// 其它记录被散列到其他分区
+</span></span></span><span class=line><span class=cl><span class=c1></span>    <span class=k>return</span> <span class=o>((</span><span class=n>Math</span><span class=o>.</span><span class=na>abs</span><span class=o>(</span><span class=n>Utils</span><span class=o>.</span><span class=na>murmur2</span><span class=o>(</span><span class=n>keyBytes</span><span class=o>)))</span> <span class=o>%</span> <span class=o>(</span><span class=n>numPartitions</span> <span class=o>-</span> <span class=mi>1</span><span class=o>));</span>
+</span></span><span class=line><span class=cl>  <span class=o>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>  <span class=kt>void</span> <span class=nf>close</span><span class=o>()</span> <span class=o>{</span> <span class=o>}</span>
+</span></span><span class=line><span class=cl><span class=o>}</span> 
+</span></span></code></pre></td></tr></table></div></div><h2 id=-consumer>👌 Consumer</h2><h3 id=-消费者组>🦜 消费者组</h3><h3 id=-消息轮询>🦚 消息轮询</h3><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-java data-lang=java><span class=line><span class=cl><span class=c1>// 配置
+</span></span></span><span class=line><span class=cl><span class=c1></span><span class=n>String</span> <span class=n>bootstrapServers</span> <span class=o>=</span> <span class=s>&#34;127.0.0.1:9092&#34;</span><span class=o>;</span>
+</span></span><span class=line><span class=cl><span class=n>String</span> <span class=n>groupId</span> <span class=o>=</span> <span class=s>&#34;demo_groupId&#34;</span><span class=o>;</span>
+</span></span><span class=line><span class=cl><span class=n>String</span> <span class=n>topic</span> <span class=o>=</span> <span class=s>&#34;demo_topic&#34;</span><span class=o>;</span>
+</span></span><span class=line><span class=cl><span class=n>Properties</span> <span class=n>properties</span> <span class=o>=</span> <span class=k>new</span> <span class=n>Properties</span><span class=o>();</span>
+</span></span><span class=line><span class=cl><span class=n>properties</span><span class=o>.</span><span class=na>setProperty</span><span class=o>(</span><span class=n>ConsumerConfig</span><span class=o>.</span><span class=na>BOOTSTRAP_SERVERS_CONFIG</span><span class=o>,</span> <span class=n>bootstrapServers</span><span class=o>);</span>
+</span></span><span class=line><span class=cl><span class=n>properties</span><span class=o>.</span><span class=na>setProperty</span><span class=o>(</span><span class=n>ConsumerConfig</span><span class=o>.</span><span class=na>KEY_DESERIALIZER_CLASS_CONFIG</span><span class=o>,</span> <span class=n>StringDeserializer</span><span class=o>.</span><span class=na>class</span><span class=o>.</span><span class=na>getName</span><span class=o>());</span>
+</span></span><span class=line><span class=cl><span class=n>properties</span><span class=o>.</span><span class=na>setProperty</span><span class=o>(</span><span class=n>ConsumerConfig</span><span class=o>.</span><span class=na>VALUE_DESERIALIZER_CLASS_CONFIG</span><span class=o>,</span> <span class=n>StringDeserializer</span><span class=o>.</span><span class=na>class</span><span class=o>.</span><span class=na>getName</span><span class=o>());</span>
+</span></span><span class=line><span class=cl><span class=n>properties</span><span class=o>.</span><span class=na>setProperty</span><span class=o>(</span><span class=n>ConsumerConfig</span><span class=o>.</span><span class=na>GROUP_ID_CONFIG</span><span class=o>,</span> <span class=n>groupId</span><span class=o>);</span>
+</span></span><span class=line><span class=cl><span class=n>properties</span><span class=o>.</span><span class=na>setProperty</span><span class=o>(</span><span class=n>ConsumerConfig</span><span class=o>.</span><span class=na>AUTO_OFFSET_RESET_CONFIG</span><span class=o>,</span> <span class=s>&#34;earliest&#34;</span><span class=o>);</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1>// 创建消费者
+</span></span></span><span class=line><span class=cl><span class=c1></span><span class=n>KafkaConsumer</span><span class=o>&lt;</span><span class=n>String</span><span class=o>,</span> <span class=n>String</span><span class=o>&gt;</span> <span class=n>consumer</span> <span class=o>=</span> <span class=k>new</span> <span class=n>KafkaConsumer</span><span class=o>&lt;&gt;(</span><span class=n>properties</span><span class=o>);</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1>// 订阅主题
+</span></span></span><span class=line><span class=cl><span class=c1></span><span class=n>consumer</span><span class=o>.</span><span class=na>subscribe</span><span class=o>(</span><span class=n>Arrays</span><span class=o>.</span><span class=na>asList</span><span class=o>(</span><span class=n>topic</span><span class=o>));</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1>// 轮询 
+</span></span></span><span class=line><span class=cl><span class=c1></span><span class=k>while</span><span class=o>(</span><span class=kc>true</span><span class=o>){</span>
+</span></span><span class=line><span class=cl>  <span class=n>ConsumerRecords</span><span class=o>&lt;</span><span class=n>String</span><span class=o>,</span> <span class=n>String</span><span class=o>&gt;</span> <span class=n>records</span> <span class=o>=</span> <span class=n>consumer</span><span class=o>.</span><span class=na>poll</span><span class=o>(</span><span class=n>Duration</span><span class=o>.</span><span class=na>ofMillis</span><span class=o>(</span><span class=mi>100</span><span class=o>));</span>  <span class=c1>// 100 -&gt; 超时时间
+</span></span></span><span class=line><span class=cl><span class=c1></span>
+</span></span><span class=line><span class=cl>  <span class=k>for</span> <span class=o>(</span><span class=n>ConsumerRecord</span><span class=o>&lt;</span><span class=n>String</span><span class=o>,</span> <span class=n>String</span><span class=o>&gt;</span> <span class=n>record</span> <span class=o>:</span> <span class=n>records</span><span class=o>){</span>
+</span></span><span class=line><span class=cl>    <span class=c1>// 业务处理
+</span></span></span><span class=line><span class=cl><span class=c1></span>    <span class=n>log</span><span class=o>.</span><span class=na>info</span><span class=o>(</span><span class=s>&#34;Key: &#34;</span> <span class=o>+</span> <span class=n>record</span><span class=o>.</span><span class=na>key</span><span class=o>()</span> <span class=o>+</span> <span class=s>&#34;, Value: &#34;</span> <span class=o>+</span> <span class=n>record</span><span class=o>.</span><span class=na>value</span><span class=o>());</span>
+</span></span><span class=line><span class=cl>    <span class=n>log</span><span class=o>.</span><span class=na>info</span><span class=o>(</span><span class=s>&#34;Partition: &#34;</span> <span class=o>+</span> <span class=n>record</span><span class=o>.</span><span class=na>partition</span><span class=o>()</span> <span class=o>+</span> <span class=s>&#34;, Offset:&#34;</span> <span class=o>+</span> <span class=n>record</span><span class=o>.</span><span class=na>offset</span><span class=o>());</span>
+</span></span><span class=line><span class=cl>  <span class=o>}</span>
+</span></span><span class=line><span class=cl><span class=o>}</span>
+</span></span></code></pre></td></tr></table></div></div><p>消息轮询是消费者 API 的核心，一旦消费者订阅的主题，轮询会处理所有的细节。
+<code>poll()</code> 会负责查找 GroupCordinator，加入群组，接受分配的分区，发送心跳和获取数据。如果发生了再均衡，也是这个轮询期间进行的。</p><p>⚠️ 消费者组中的一个消费者只能运行在一个线程中。如果需要多个线程处理一个 Patition 中的消息，可以将这个消费者获取的一批数据，可以使用 ExecutorService 启动多个线程处理。</p><h3 id=-偏移量>🦉 偏移量</h3><p>Kafka 使用偏移量 offset 追踪消息在分区中的位置。</p><p>Consumer 向一个特殊的主题 <code>_consumer_offset</code> 发送消息，更新分区当前的位置。</p><ul><li>如果提交的 offset「小于」客户端处理的最后一个消息偏移量，那么「两个偏移量之间的消息会被重复处理」</li></ul><p><img src=/blog/p/kafka/operation/offset1.png width=978 height=422 srcset="/blog/p/kafka/operation/offset1_hu7de55e7adbd4de02cc42f3a04ca7fa88_35082_480x0_resize_box_3.png 480w, /blog/p/kafka/operation/offset1_hu7de55e7adbd4de02cc42f3a04ca7fa88_35082_1024x0_resize_box_3.png 1024w" loading=lazy class=gallery-image data-flex-grow=231 data-flex-basis=556px></p><ul><li>如果提交的 offset「大于」客户端处理的最后一个消息偏移量，那么「两个偏移量之间的消息会丢失」</li></ul><p><img src=/blog/p/kafka/operation/offset2.png width=979 height=485 srcset="/blog/p/kafka/operation/offset2_hu389bebeaa08efdc7ddfc7a71cffd3a76_34010_480x0_resize_box_3.png 480w, /blog/p/kafka/operation/offset2_hu389bebeaa08efdc7ddfc7a71cffd3a76_34010_1024x0_resize_box_3.png 1024w" loading=lazy class=gallery-image data-flex-grow=201 data-flex-basis=484px></p><h4 id=自动提交>自动提交</h4><p>如果 <code>enable.auto.commit = true</code>，消费者会自动把从 <code>poll()</code> 方法接收到的最大偏移量提交上去。提交的时间间隔由 <code>auto.commit.interval.ms</code> 控制，默认为 5s。</p><p>自动提交发生在每次轮询时，如果没有提交偏移量，会把上一次调用返回的偏移量提交上去，「不能保证这些消息已经被业务处理了」。</p><p>⚠️ 如果设置默认提交时间为 5s，在提交后 3s 发生了再均衡，之后的消费者会再次获取到 3s 前提交的偏移量，这些消息会被重复处理，「无法避免这种情况」，只能缩小提交的时间间隔更频繁地提交 offset，「Kafka 也没有为自动提交预留避免重复处理消息的方法」。</p><p>适合于不重要的消息场景，如日志采集。</p><h4 id=同步提交>同步提交</h4><p>设置 <code>auto.commit.offset = false</code>，可以让应用程序决定在什么时候提交偏移量。</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-java data-lang=java><span class=line><span class=cl><span class=k>while</span> <span class=o>(</span><span class=kc>true</span><span class=o>)</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>  <span class=n>ConsumerRecords</span><span class=o>&lt;</span><span class=n>String</span><span class=o>,</span> <span class=n>String</span><span class=o>&gt;</span> <span class=n>records</span> <span class=o>=</span> <span class=n>consumer</span><span class=o>.</span><span class=na>poll</span><span class=o>(</span><span class=mi>100</span><span class=o>);</span>
+</span></span><span class=line><span class=cl>  <span class=k>for</span> <span class=o>(</span><span class=n>ConsumerRecord</span><span class=o>&lt;</span><span class=n>String</span><span class=o>,</span> <span class=n>String</span><span class=o>&gt;</span> <span class=n>record</span> <span class=o>:</span> <span class=n>records</span><span class=o>)</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>    <span class=c1>// ...
+</span></span></span><span class=line><span class=cl><span class=c1></span>    <span class=c1>// 处理业务
+</span></span></span><span class=line><span class=cl><span class=c1></span>    <span class=c1>// ...
+</span></span></span><span class=line><span class=cl><span class=c1></span>
+</span></span><span class=line><span class=cl>    <span class=k>try</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>      <span class=n>consumer</span><span class=o>.</span><span class=na>commitSync</span><span class=o>();</span>  <span class=c1>// 手动提交
+</span></span></span><span class=line><span class=cl><span class=c1></span>    <span class=o>}</span> <span class=k>catch</span> <span class=o>(</span><span class=n>CommitFailedException</span> <span class=n>e</span><span class=o>)</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>      <span class=n>log</span><span class=o>.</span><span class=na>error</span><span class=o>(</span><span class=s>&#34;commit failed&#34;</span><span class=o>,</span> <span class=n>e</span><span class=o>);</span>
+</span></span><span class=line><span class=cl>    <span class=o>}</span>
+</span></span><span class=line><span class=cl>  <span class=o>}</span>
+</span></span><span class=line><span class=cl><span class=o>}</span>
+</span></span></code></pre></td></tr></table></div></div><p>只要没有发生不可恢复的错误，<code>commitSync()</code> 方法会「一直尝试直到提交成功为止」。如果提交失败，则抛出异常。</p><h4 id=异步提交>异步提交</h4><p>使用异步提交 API，只管发送提交请求，无需等待 Broker 的响应。</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-java data-lang=java><span class=line><span class=cl><span class=n>consumer</span><span class=o>.</span><span class=na>commitAsync</span><span class=o>();</span>
+</span></span></code></pre></td></tr></table></div></div><p>同步提交 <code>commitSync()</code> 会一直重试，但是异步提交 <code>commitAsync()</code>「不会重试」。不进行重试，是因为在收到服务器响应的时候，可能有一个更大的 offset 已经提交成功。</p><p>异步提交同样支持回调。</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span><span class=lnt>7
+</span><span class=lnt>8
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-java data-lang=java><span class=line><span class=cl><span class=n>consumer</span><span class=o>.</span><span class=na>commitAsync</span><span class=o>(</span><span class=k>new</span> <span class=n>OffsetCommitCallback</span><span class=o>())</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>  <span class=kd>public</span> <span class=kt>void</span> <span class=nf>onComplete</span><span class=o>(</span><span class=n>Map</span><span class=o>&lt;</span><span class=n>TopicPartition</span><span class=o>,</span> <span class=n>OffsetAndMetadata</span><span class=o>&gt;</span> <span class=n>offsets</span><span class=o>,</span> <span class=n>Exception</span> <span class=n>e</span><span class=o>)</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>    <span class=k>if</span> <span class=o>(</span><span class=n>e</span> <span class=o>!=</span> <span class=kc>null</span><span class=o>)</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>      <span class=c1>// 异步提交失败
+</span></span></span><span class=line><span class=cl><span class=c1></span>      <span class=c1>// ... 业务处理 / 重试
+</span></span></span><span class=line><span class=cl><span class=c1></span>    <span class=o>}</span>
+</span></span><span class=line><span class=cl>  <span class=o>}</span>
+</span></span><span class=line><span class=cl><span class=o>}</span>
+</span></span></code></pre></td></tr></table></div></div><p>异步提交重试，可以使用一个单调递增的序列号维护异步提交的顺序。在进行重试前，先检查回调序列号与维护的序列号的大小，如果回调序列号较大，说明有一个新的提交已经发送，不应该重试。</p><h4 id=组合提交>组合提交</h4><p>一般情况下，偶尔的提交失败不进行重试没有太大问题，只要后续有更大的 offset 成功提交，就不会有问题。</p><p>所以，在消费者关闭前，可以组合使用两种提交方式。</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-java data-lang=java><span class=line><span class=cl><span class=k>try</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>  <span class=k>while</span> <span class=o>(</span><span class=kc>true</span><span class=o>)</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>    <span class=c1>// ...
+</span></span></span><span class=line><span class=cl><span class=c1></span>    <span class=c1>// 消费消息业务
+</span></span></span><span class=line><span class=cl><span class=c1></span>    <span class=c1>// ...
+</span></span></span><span class=line><span class=cl><span class=c1></span>
+</span></span><span class=line><span class=cl>    <span class=n>comsumer</span><span class=o>.</span><span class=na>commitAsync</span><span class=o>();</span>  <span class=c1>// 异步提交
+</span></span></span><span class=line><span class=cl><span class=c1></span>  <span class=o>}</span>
+</span></span><span class=line><span class=cl><span class=o>}</span> <span class=k>catch</span> <span class=o>(</span><span class=n>Exception</span> <span class=n>e</span><span class=o>)</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>  <span class=n>log</span><span class=o>.</span><span class=na>error</span><span class=o>(</span><span class=s>&#34;Unexpected error&#34;</span><span class=o>,</span> <span class=n>e</span><span class=o>);</span>
+</span></span><span class=line><span class=cl><span class=o>}</span> <span class=k>finally</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>  <span class=k>try</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>    <span class=n>consumer</span><span class=o>.</span><span class=na>commitSync</span><span class=o>();</span>  <span class=c1>// 同步，会不断重试
+</span></span></span><span class=line><span class=cl><span class=c1></span>  <span class=o>}</span> <span class=k>finally</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>    <span class=n>consumer</span><span class=o>.</span><span class=na>close</span><span class=o>();</span>
+</span></span><span class=line><span class=cl>  <span class=o>}</span>
+</span></span><span class=line><span class=cl><span class=o>}</span>
+</span></span></code></pre></td></tr></table></div></div><h4 id=提交特定偏移量>提交特定偏移量</h4><p>每次消费者 <code>poll()</code> 的都是一批数据，<code>commitSync() / commitAsync()</code> 每次提交都是这个批次最后的 offset，如果想要在批次中间提交偏移量，可以传入「希望提交的分区和偏移量的 map」。</p><p>但是，消费者可能不知读取一个分区，这样做需要「跟踪所有分区的偏移量」，通常会使代码变得很复杂。</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-java data-lang=java><span class=line><span class=cl><span class=kd>private</span> <span class=n>Map</span><span class=o>&lt;</span><span class=n>TopicPartition</span><span class=o>,</span> <span class=n>OffsetAndMetadata</span><span class=o>&gt;</span> <span class=n>currentOffsets</span> <span class=o>=</span> <span class=k>new</span> <span class=n>HashMap</span><span class=o>&lt;&gt;();</span>
+</span></span><span class=line><span class=cl><span class=kt>int</span> <span class=n>count</span> <span class=o>=</span> <span class=mi>0</span><span class=o>;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>while</span> <span class=o>(</span><span class=kc>true</span><span class=o>)</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>  <span class=n>ConsumerRecords</span><span class=o>&lt;</span><span class=n>String</span><span class=o>,</span> <span class=n>String</span><span class=o>&gt;</span> <span class=n>records</span> <span class=o>=</span> <span class=n>consumer</span><span class=o>.</span><span class=na>poll</span><span class=o>(</span><span class=mi>100</span><span class=o>);</span>  <span class=c1>// 假设每个批次 10000 条数据
+</span></span></span><span class=line><span class=cl><span class=c1></span>  <span class=k>for</span> <span class=o>(</span><span class=n>ConsumerRecord</span><span class=o>&lt;</span><span class=n>String</span><span class=o>,</span> <span class=n>String</span><span class=o>&gt;</span> <span class=n>record</span> <span class=o>:</span> <span class=n>records</span><span class=o>)</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>    <span class=c1>// 业务处理
+</span></span></span><span class=line><span class=cl><span class=c1></span>    <span class=c1>// ...
+</span></span></span><span class=line><span class=cl><span class=c1></span>
+</span></span><span class=line><span class=cl>    <span class=n>currentOffsets</span><span class=o>.</span><span class=na>put</span><span class=o>(</span><span class=k>new</span> <span class=n>TopicPartition</span><span class=o>(</span><span class=n>record</span><span class=o>.</span><span class=na>topic</span><span class=o>(),</span> <span class=n>record</span><span class=o>.</span><span class=na>partition</span><span class=o>()),</span> <span class=k>new</span> <span class=n>OffsetAndMetadata</span><span class=o>(</span><span class=n>record</span><span class=o>.</span><span class=na>offset</span><span class=o>()</span> <span class=o>+</span> <span class=mi>1</span><span class=o>,</span>  <span class=s>&#34;no metadata&#34;</span><span class=o>));</span>
+</span></span><span class=line><span class=cl>    <span class=k>if</span> <span class=o>(</span><span class=n>count</span> <span class=o>%</span> <span class=mi>1000</span> <span class=o>==</span> <span class=mi>0</span><span class=o>)</span> <span class=o>{</span>  <span class=c1>// 在每个批次中，没处理 1000 条数据提交一次 offset
+</span></span></span><span class=line><span class=cl><span class=c1></span>      <span class=n>consumer</span><span class=o>.</span><span class=na>commitAsync</span><span class=o>(</span><span class=n>currentOffsets</span><span class=o>,</span> <span class=kc>null</span><span class=o>);</span>
+</span></span><span class=line><span class=cl>    <span class=o>}</span>
+</span></span><span class=line><span class=cl>    <span class=n>count</span><span class=o>++;</span>
+</span></span><span class=line><span class=cl>  <span class=o>}</span>
+</span></span><span class=line><span class=cl><span class=o>}</span>
+</span></span></code></pre></td></tr></table></div></div><h3 id=-特定offset开始处理>🦩 特定offset开始处理</h3><h2 id=-connect>🖇️ Connect</h2><h2 id=-stream>💦 Stream</h2></section><footer class=article-footer><section class=article-tags><a href=/blog/tags/kafka/>Kafka</a></section><section class=article-copyright><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-copyright" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><path d="M14.5 9a3.5 4 0 100 6"/></svg><span>Licensed under CC BY-NC-SA 4.0</span></section></footer></article><aside class=related-contents--wrapper><h2 class=section-title>相关文章</h2><div class=related-contents><div class="flex article-list--tile"><article class=has-image><a href=/blog/p/kafka/><div class=article-image><img src=/blog/p/kafka/kafka.db4908225078178f01f03b9a6e00091d_hu0e688a86da638634e8e15b21ceb1a2b6_8026_250x150_fill_q75_h2_box_smart1_2.webp width=250 height=150 loading=lazy alt="Featured image of post Kafka" data-key=/Kafka data-hash="md5-20kIIlB4F48B8DuabgAJHQ=="></div><div class=article-details><h2 class=article-title>Kafka</h2></div></a></article><article class=has-image><a href=/blog/p/mysql/innodb/buffer-pool/><div class=article-image><img src=/blog/p/mysql/innodb/buffer-pool/bufferpool.afc31921376eaf2e2d6bba9b82da6f9b_hu9753cf048aa8ef6ecf388c9b29af095f_8518_250x150_fill_q75_h2_box_smart1_2.webp width=250 height=150 loading=lazy alt="Featured image of post InnoDB 缓冲池 Buffer Pool" data-key=/mysql/innodb/buffer-pool data-hash="md5-r8MZITdury4ta7qbgtpvmw=="></div><div class=article-details><h2 class=article-title>InnoDB 缓冲池 Buffer Pool</h2></div></a></article><article class=has-image><a href=/blog/p/design-pattern/observer/><div class=article-image><img src=/blog/p/design-pattern/observer/observer.d66f5921d7d3ecf6b53b22504fe1af1d_hua5fe444eaf0979d6378130641051be73_47507_250x150_fill_box_smart1_3.png width=250 height=150 loading=lazy alt="Featured image of post 观察者模式" data-key=/design-pattern/observer data-hash="md5-1m9ZIdfT7Pa1OyJQT+GvHQ=="></div><div class=article-details><h2 class=article-title>观察者模式</h2></div></a></article><article class=has-image><a href=/blog/p/distributed/transaction/><div class=article-image><img src=/blog/p/distributed/transaction/cap.656dd86f9115f93b7182f059d2fa5f8e_hu553ea908437f51f5f9df5986bc7065cb_18394_250x150_fill_q75_h2_box_smart1_2.webp width=250 height=150 loading=lazy alt="Featured image of post 分布式事务" data-key=/distributed/transaction data-hash="md5-ZW3Yb5EV+TtxgvBZ0vpfjg=="></div><div class=article-details><h2 class=article-title>分布式事务</h2></div></a></article><article class=has-image><a href=/blog/p/mysql/master-slave-replication/><div class=article-image><img src=/blog/p/mysql/master-slave-replication/copy.aadc4504c6a415278334a163547b1cd3_hu2815b7bcceb4bc2e593bd903d3b2a777_501311_250x150_fill_box_smart1_3.png width=250 height=150 loading=lazy alt="Featured image of post MySQL 复制" data-key=/mysql/master-slave-replication data-hash="md5-qtxFBMakFSeDNKFjVHsc0w=="></div><div class=article-details><h2 class=article-title>MySQL 复制</h2></div></a></article></div></div></aside><footer class=site-footer><section class=copyright>&copy;
+2023 一层</section><section class=powerby><b><a href=http://beian.miit.gov.cn/ target=_blank rel="nofollow noopener">赣ICP备19004365号-3</a></b><br>Built with <a href=https://gohugo.io/ target=_blank rel=noopener>Hugo</a> & <b><a href=https://github.com/CaiJimmy/hugo-theme-stack target=_blank rel=noopener data-version=%s>Stack</a></b> by <a href=https://jimmycai.com target=_blank rel=noopener>Jimmy</a><br></section></footer><div class=pswp tabindex=-1 role=dialog aria-hidden=true><div class=pswp__bg></div><div class=pswp__scroll-wrap><div class=pswp__container><div class=pswp__item></div><div class=pswp__item></div><div class=pswp__item></div></div><div class="pswp__ui pswp__ui--hidden"><div class=pswp__top-bar><div class=pswp__counter></div><button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+<button class="pswp__button pswp__button--share" title=Share></button>
+<button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+<button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button><div class=pswp__preloader><div class=pswp__preloader__icn><div class=pswp__preloader__cut><div class=pswp__preloader__donut></div></div></div></div></div><div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap"><div class=pswp__share-tooltip></div></div><button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)"></button>
+<button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)"></button><div class=pswp__caption><div class=pswp__caption__center></div></div></div></div></div><script src=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo=" crossorigin=anonymous defer></script><script src=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU=" crossorigin=anonymous defer></script><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.css integrity="sha256-c0uckgykQ9v5k+IqViZOZKc47Jn7KQil4/MP3ySA3F8=" crossorigin=anonymous><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.css integrity="sha256-SBLU4vv6CA6lHsZ1XyTdhyjJxCjPif/TRkjnsyGAGnE=" crossorigin=anonymous></main><aside class="sidebar right-sidebar sticky"><section class="widget archives"><div class=widget-icon><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><line x1="5" y1="9" x2="19" y2="9"/><line x1="5" y1="15" x2="19" y2="15"/><line x1="11" y1="4" x2="7" y2="20"/><line x1="17" y1="4" x2="13" y2="20"/></svg></div><h2 class="widget-title section-title">目录</h2><div class=widget--toc><nav id=TableOfContents><ol><li><a href=#命令行工具>命令行工具</a><ol><li><a href=#topic-操作>Topic 操作</a></li><li><a href=#生产--消费>生产 & 消费</a></li></ol></li><li><a href=#-producer>🤲 Producer</a><ol><li><a href=#-生产者>🐈 生产者</a><ol><li><a href=#重要配置>重要配置</a></li></ol></li><li><a href=#-同步发送>🐈‍⬛ 同步发送</a></li><li><a href=#-异步发送>🐅 异步发送</a></li><li><a href=#-序列化器>🐆 序列化器</a></li><li><a href=#-分区>🐕 分区</a><ol><li><a href=#自定义分区策略>自定义分区策略</a></li></ol></li></ol></li><li><a href=#-consumer>👌 Consumer</a><ol><li><a href=#-消费者组>🦜 消费者组</a></li><li><a href=#-消息轮询>🦚 消息轮询</a></li><li><a href=#-偏移量>🦉 偏移量</a><ol><li><a href=#自动提交>自动提交</a></li><li><a href=#同步提交>同步提交</a></li><li><a href=#异步提交>异步提交</a></li><li><a href=#组合提交>组合提交</a></li><li><a href=#提交特定偏移量>提交特定偏移量</a></li></ol></li><li><a href=#-特定offset开始处理>🦩 特定offset开始处理</a></li></ol></li><li><a href=#-connect>🖇️ Connect</a></li><li><a href=#-stream>💦 Stream</a></li></ol></nav></div></section></aside></div><script src=https://cdn.jsdelivr.net/npm/node-vibrant@3.1.5/dist/vibrant.min.js integrity="sha256-5NovOZc4iwiAWTYIFiIM7DxKUXKWvpVEuMEPLzcm5/g=" crossorigin=anonymous></script><script type=text/javascript src=/blog/ts/main.js defer></script>
+<script></script></body></html>

@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Java on 一层</title><link>https://emerywan.github.io/blog/tags/java/</link><description>Recent content in Java on 一层</description><generator>Hugo -- gohugo.io</generator><lastBuildDate>Mon, 06 Mar 2023 12:02:02 +0800</lastBuildDate><atom:link href="https://emerywan.github.io/blog/tags/java/index.xml" rel="self" type="application/rss+xml"/><item><title>观察者模式</title><link>https://emerywan.github.io/blog/p/design-pattern/observer/</link><pubDate>Mon, 06 Mar 2023 12:02:02 +0800</pubDate><guid>https://emerywan.github.io/blog/p/design-pattern/observer/</guid><description>&lt;img src="https://emerywan.github.io/blog/p/design-pattern/observer/observer.png" alt="Featured image of post 观察者模式" />&lt;p>观察者模式是一种&lt;strong>行为型模式&lt;/strong>。&lt;/p>
 &lt;p>观察者模式定义对象间的一对多的依赖关系，当一个对象的状态发生改变时，其他所有依赖的对象都会得到通知，并自动更新。&lt;/p>
 &lt;p>观察者模式又称为「发布-订阅模式」&lt;code>Publish-Subscribe&lt;/code>，是一种通知机制，让发送通知的一方（被观察者）和接收通知的一方（观察者）彼此分离，互不影响。&lt;/p>
+&lt;p>常见的场景：&lt;/p>
+&lt;ul>
+&lt;li>🔖 比如 Github 的 Actions，其实就是观察者模式的一种体现，当我们根据规则进行了一些 git 操作后，Github Actions 会根据配置做一些操作，比如编译/检查格式等。&lt;/li>
+&lt;/ul>
 &lt;h2 id="-实现方式">🎈 实现方式&lt;/h2>
 &lt;ul>
 &lt;li>
