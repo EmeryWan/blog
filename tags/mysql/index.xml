@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>MySQL on 一层</title><link>https://emerywan.github.io/blog/tags/mysql/</link><description>Recent content in MySQL on 一层</description><generator>Hugo -- gohugo.io</generator><lastBuildDate>Tue, 07 Mar 2023 18:02:02 +0800</lastBuildDate><atom:link href="https://emerywan.github.io/blog/tags/mysql/index.xml" rel="self" type="application/rss+xml"/><item><title>InnoDB 缓冲池 Buffer Pool</title><link>https://emerywan.github.io/blog/p/mysql/innodb/buffer-pool/</link><pubDate>Tue, 07 Mar 2023 18:02:02 +0800</pubDate><guid>https://emerywan.github.io/blog/p/mysql/innodb/buffer-pool/</guid><description>&lt;img src="https://emerywan.github.io/blog/p/mysql/innodb/buffer-pool/bufferpool.webp" alt="Featured image of post InnoDB 缓冲池 Buffer Pool" />&lt;h2 id="-buffer-pool">🧊 Buffer Pool&lt;/h2>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>MySQL on 一层</title><link>https://emerywan.github.io/blog/tags/mysql/</link><description>Recent content in MySQL on 一层</description><generator>Hugo -- gohugo.io</generator><language>zh-cn</language><lastBuildDate>Tue, 07 Mar 2023 18:02:02 +0800</lastBuildDate><atom:link href="https://emerywan.github.io/blog/tags/mysql/index.xml" rel="self" type="application/rss+xml"/><item><title>InnoDB 缓冲池 Buffer Pool</title><link>https://emerywan.github.io/blog/p/mysql/innodb/buffer-pool/</link><pubDate>Tue, 07 Mar 2023 18:02:02 +0800</pubDate><guid>https://emerywan.github.io/blog/p/mysql/innodb/buffer-pool/</guid><description>&lt;img src="https://emerywan.github.io/blog/p/mysql/innodb/buffer-pool/bufferpool.webp" alt="Featured image of post InnoDB 缓冲池 Buffer Pool" />&lt;h2 id="-buffer-pool">🧊 Buffer Pool&lt;/h2>
 &lt;p>MySQL 的数据是存储在磁盘中的，为了提升读写性能，InnoDB 设计了一个缓存池 Buffer Pool。&lt;/p>
 &lt;p>本质上是 InnoDB 向操作系统申请的一段连续内存空间，可以通过 &lt;code>innodb_buffer_pool_size&lt;/code> 来进行调整大小。&lt;/p>
 &lt;ul>
@@ -599,13 +599,13 @@ data-flex-basis="750px"
 &lt;/span>&lt;span class="lnt">7
 &lt;/span>&lt;/code>&lt;/pre>&lt;/td>
 &lt;td class="lntd">
-&lt;pre tabindex="0" class="chroma">&lt;code class="language-fallback" data-lang="fallback">&lt;span class="line">&lt;span class="cl"># 该选项用来开启查询日志
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"># 可选值 0 关闭 1 开启
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">general_log=1
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-conf" data-lang="conf">&lt;span class="line">&lt;span class="cl">&lt;span class="c"># 该选项用来开启查询日志
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c"># 可选值 0 关闭 1 开启
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c">&lt;/span>&lt;span class="nv">general_log&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="nv">1&lt;/span>
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"># 设置日志的文件名
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"># 如果没有指定，默认的文件名为 host_name.log
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">general_log_file=mysql_query.log
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c"># 设置日志的文件名
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c"># 如果没有指定，默认的文件名为 host_name.log
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c">&lt;/span>&lt;span class="nv">general_log_file&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="nv">mysql_query.log&lt;/span>
 &lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
 &lt;/div>
 &lt;/div>&lt;p>开启了查询日志之后，/var/lib/mysql/ 目录下就会出现 mysql_query.log 文件。&lt;/p>
@@ -627,11 +627,11 @@ data-flex-basis="750px"
 &lt;/span>&lt;span class="lnt">5
 &lt;/span>&lt;/code>&lt;/pre>&lt;/td>
 &lt;td class="lntd">
-&lt;pre tabindex="0" class="chroma">&lt;code class="language-fallback" data-lang="fallback">&lt;span class="line">&lt;span class="cl"># 慢查询日志
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">slow_query_log=1
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-conf" data-lang="conf">&lt;span class="line">&lt;span class="cl">&lt;span class="c"># 慢查询日志
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c">&lt;/span>&lt;span class="nv">slow_query_log&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="nv">1&lt;/span>
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"># 执行时间参数
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">long_query_time=2
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c"># 执行时间参数
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c">&lt;/span>&lt;span class="nv">long_query_time&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="nv">2&lt;/span>
 &lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
 &lt;/div>
 &lt;/div>&lt;p>默认情况下，不会记录管理语句，也不会记录不使用索引进行查找的查询。&lt;/p>
@@ -644,11 +644,11 @@ data-flex-basis="750px"
 &lt;/span>&lt;span class="lnt">5
 &lt;/span>&lt;/code>&lt;/pre>&lt;/td>
 &lt;td class="lntd">
-&lt;pre tabindex="0" class="chroma">&lt;code class="language-fallback" data-lang="fallback">&lt;span class="line">&lt;span class="cl"># 记录执行较慢的管理语句
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">log_slow_admin_statements=1
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-conf" data-lang="conf">&lt;span class="line">&lt;span class="cl">&lt;span class="c"># 记录执行较慢的管理语句
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c">&lt;/span>&lt;span class="nv">log_slow_admin_statements&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="nv">1&lt;/span>
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"># 记录执行较慢的未使用索引的语句
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">log_queries_not_using_indexes= 1
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c"># 记录执行较慢的未使用索引的语句
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c">&lt;/span>&lt;span class="nv">log_queries_not_using_indexes&lt;/span>&lt;span class="o">=&lt;/span> &lt;span class="nv">1&lt;/span>
 &lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
 &lt;/div>
 &lt;/div>&lt;h3 id="-bin-log">🔢 bin log&lt;/h3>

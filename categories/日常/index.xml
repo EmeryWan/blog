@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>日常 on 一层</title><link>https://emerywan.github.io/blog/categories/%E6%97%A5%E5%B8%B8/</link><description>Recent content in 日常 on 一层</description><generator>Hugo -- gohugo.io</generator><lastBuildDate>Sat, 01 Jan 2022 01:00:00 +0800</lastBuildDate><atom:link href="https://emerywan.github.io/blog/categories/%E6%97%A5%E5%B8%B8/index.xml" rel="self" type="application/rss+xml"/><item><title>动手维修罗技鼠标 🤭</title><link>https://emerywan.github.io/blog/p/fix-logi-mouse/</link><pubDate>Sat, 12 Nov 2022 21:14:45 +0800</pubDate><guid>https://emerywan.github.io/blog/p/fix-logi-mouse/</guid><description>&lt;img src="https://emerywan.github.io/blog/p/fix-logi-mouse/05.png" alt="Featured image of post 动手维修罗技鼠标 🤭" />&lt;h2 id="前言">前言&lt;/h2>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>日常 on 一层</title><link>https://emerywan.github.io/blog/categories/%E6%97%A5%E5%B8%B8/</link><description>Recent content in 日常 on 一层</description><generator>Hugo -- gohugo.io</generator><language>zh-cn</language><lastBuildDate>Sat, 01 Jan 2022 01:00:00 +0800</lastBuildDate><atom:link href="https://emerywan.github.io/blog/categories/%E6%97%A5%E5%B8%B8/index.xml" rel="self" type="application/rss+xml"/><item><title>动手维修罗技鼠标 🤭</title><link>https://emerywan.github.io/blog/p/fix-logi-mouse/</link><pubDate>Sat, 12 Nov 2022 21:14:45 +0800</pubDate><guid>https://emerywan.github.io/blog/p/fix-logi-mouse/</guid><description>&lt;img src="https://emerywan.github.io/blog/p/fix-logi-mouse/05.png" alt="Featured image of post 动手维修罗技鼠标 🤭" />&lt;h2 id="前言">前言&lt;/h2>
 &lt;p>之前鼠按键一直不灵，经常需要按很多下，换了电池之后还是这样，网上一搜，竟然是这鼠标的通病 😓。看到很多教怎么换鼠标微动的，就打算自己试试了。😤&lt;/p>
 &lt;h2 id="-工具准备">🛠️ 工具准备&lt;/h2>
 &lt;p>淘宝随便买焊接工具一套：&lt;/p>
@@ -971,15 +971,15 @@ data-flex-basis="642px"
 &lt;/span>&lt;span class="lnt">9
 &lt;/span>&lt;/code>&lt;/pre>&lt;/td>
 &lt;td class="lntd">
-&lt;pre tabindex="0" class="chroma">&lt;code class="language-fallback" data-lang="fallback">&lt;span class="line">&lt;span class="cl">[Desktop Entry]
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">Name=Clash for Linux
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">Icon=/home/emery/Applications/icon/clash_icon.png # 替换为自己的目录
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">Comment=Clash for Linux
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">Exec=&amp;#34;/home/emery/Applications/Clash/clash&amp;#34; %u # 替换为自己的目录
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">Type=Application
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">Categories=Network
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">Terminal=false
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">StartupNotify=true
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-conf" data-lang="conf">&lt;span class="line">&lt;span class="cl">&lt;span class="err">[&lt;/span>&lt;span class="nv">Desktop&lt;/span> &lt;span class="nv">Entry&lt;/span>&lt;span class="err">]&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nv">Name&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="nv">Clash&lt;/span> &lt;span class="nv">for&lt;/span> &lt;span class="nv">Linux&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nv">Icon&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="err">/&lt;/span>&lt;span class="nv">home&lt;/span>&lt;span class="err">/&lt;/span>&lt;span class="nv">emery&lt;/span>&lt;span class="err">/&lt;/span>&lt;span class="nv">Applications&lt;/span>&lt;span class="err">/&lt;/span>&lt;span class="nv">icon&lt;/span>&lt;span class="err">/&lt;/span>&lt;span class="nv">clash_icon.png&lt;/span> &lt;span class="c"># 替换为自己的目录
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c">&lt;/span>&lt;span class="nv">Comment&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="nv">Clash&lt;/span> &lt;span class="nv">for&lt;/span> &lt;span class="nv">Linux&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nv">Exec&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s">&amp;#34;/home/emery/Applications/Clash/clash&amp;#34;&lt;/span> &lt;span class="err">%&lt;/span>&lt;span class="nv">u&lt;/span> &lt;span class="c"># 替换为自己的目录
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c">&lt;/span>&lt;span class="nv">Type&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="nv">Application&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nv">Categories&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="nv">Network&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nv">Terminal&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="kc">false&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nv">StartupNotify&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="kc">true&lt;/span>
 &lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
 &lt;/div>
 &lt;/div></description></item><item><title>在 Ubuntu 中搭建 CUDA 环境</title><link>https://emerywan.github.io/blog/p/cuda/</link><pubDate>Mon, 02 May 2022 02:02:02 +0800</pubDate><guid>https://emerywan.github.io/blog/p/cuda/</guid><description>&lt;img src="https://emerywan.github.io/blog/imgs/11.jpeg" alt="Featured image of post 在 Ubuntu 中搭建 CUDA 环境" />&lt;h2 id="nvdia-驱动">Nvdia 驱动&lt;/h2>
