@@ -1,21 +1,21 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>日常 on 一层</title><link>https://blog.letout.cn/categories/%E6%97%A5%E5%B8%B8/</link><description>Recent content in 日常 on 一层</description><generator>Hugo -- gohugo.io</generator><language>zh-cn</language><lastBuildDate>Sat, 01 Jan 2022 01:00:00 +0800</lastBuildDate><atom:link href="https://blog.letout.cn/categories/%E6%97%A5%E5%B8%B8/index.xml" rel="self" type="application/rss+xml"/><item><title>动手维修罗技鼠标 🤭</title><link>https://blog.letout.cn/p/fix-logi-mouse/</link><pubDate>Sat, 12 Nov 2022 21:14:45 +0800</pubDate><guid>https://blog.letout.cn/p/fix-logi-mouse/</guid><description>&lt;img src="https://blog.letout.cn/p/fix-logi-mouse/05.png" alt="Featured image of post 动手维修罗技鼠标 🤭" />&lt;h2 id="前言">前言&lt;/h2>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>日常 on 一层</title><link>https://www.letout.cn/categories/%E6%97%A5%E5%B8%B8/</link><description>Recent content in 日常 on 一层</description><generator>Hugo -- gohugo.io</generator><language>zh-cn</language><lastBuildDate>Sat, 01 Jan 2022 01:00:00 +0800</lastBuildDate><atom:link href="https://www.letout.cn/categories/%E6%97%A5%E5%B8%B8/index.xml" rel="self" type="application/rss+xml"/><item><title>动手维修罗技鼠标 🤭</title><link>https://www.letout.cn/p/fix-logi-mouse/</link><pubDate>Sat, 12 Nov 2022 21:14:45 +0800</pubDate><guid>https://www.letout.cn/p/fix-logi-mouse/</guid><description>&lt;img src="https://www.letout.cn/p/fix-logi-mouse/05.png" alt="Featured image of post 动手维修罗技鼠标 🤭" />&lt;h2 id="前言">前言&lt;/h2>
 &lt;p>之前鼠按键一直不灵，经常需要按很多下，换了电池之后还是这样，网上一搜，竟然是这鼠标的通病 😓。看到很多教怎么换鼠标微动的，就打算自己试试了。😤&lt;/p>
 &lt;h2 id="-工具准备">🛠️ 工具准备&lt;/h2>
 &lt;p>淘宝随便买焊接工具一套：&lt;/p>
-&lt;p>&lt;img src="https://blog.letout.cn/p/fix-logi-mouse/07.png"
+&lt;p>&lt;img src="https://www.letout.cn/p/fix-logi-mouse/07.png"
 width="747"
 height="666"
-srcset="https://blog.letout.cn/p/fix-logi-mouse/07_hu230206bcd028f2628d907e1698990dc3_223298_480x0_resize_box_3.png 480w, https://blog.letout.cn/p/fix-logi-mouse/07_hu230206bcd028f2628d907e1698990dc3_223298_1024x0_resize_box_3.png 1024w"
+srcset="https://www.letout.cn/p/fix-logi-mouse/07_hu230206bcd028f2628d907e1698990dc3_223298_480x0_resize_box_3.png 480w, https://www.letout.cn/p/fix-logi-mouse/07_hu230206bcd028f2628d907e1698990dc3_223298_1024x0_resize_box_3.png 1024w"
 loading="lazy"
 class="gallery-image"
 data-flex-grow="112"
 data-flex-basis="269px"
 >&lt;/p>
 &lt;p>相同的鼠标微动：这个不要买错了，注意高度！我这个是黄的那个，看到网上同款有些时红色的，如果是新手推荐多买几个，不小心弄坏了还可有备用。&lt;/p>
-&lt;p>&lt;img src="https://blog.letout.cn/p/fix-logi-mouse/06.png"
+&lt;p>&lt;img src="https://www.letout.cn/p/fix-logi-mouse/06.png"
 width="740"
 height="927"
-srcset="https://blog.letout.cn/p/fix-logi-mouse/06_hu112ba3385e7e0151f22fcae72c4b4ae4_291824_480x0_resize_box_3.png 480w, https://blog.letout.cn/p/fix-logi-mouse/06_hu112ba3385e7e0151f22fcae72c4b4ae4_291824_1024x0_resize_box_3.png 1024w"
+srcset="https://www.letout.cn/p/fix-logi-mouse/06_hu112ba3385e7e0151f22fcae72c4b4ae4_291824_480x0_resize_box_3.png 480w, https://www.letout.cn/p/fix-logi-mouse/06_hu112ba3385e7e0151f22fcae72c4b4ae4_291824_1024x0_resize_box_3.png 1024w"
 loading="lazy"
 class="gallery-image"
 data-flex-grow="79"
@@ -23,10 +23,10 @@ data-flex-basis="191px"
 >&lt;/p>
 &lt;h3 id="推荐">推荐&lt;/h3>
 &lt;p>助焊剂可选的话，安利买焊油🙋‍而不是松香🙅‍，感觉松下这东西不适合新手用，很不方便感觉。&lt;/p>
-&lt;p>&lt;img src="https://blog.letout.cn/p/fix-logi-mouse/02.png"
+&lt;p>&lt;img src="https://www.letout.cn/p/fix-logi-mouse/02.png"
 width="1219"
 height="661"
-srcset="https://blog.letout.cn/p/fix-logi-mouse/02_hu75550ba33c3ffe7db7aa5f7ae7029655_945321_480x0_resize_box_3.png 480w, https://blog.letout.cn/p/fix-logi-mouse/02_hu75550ba33c3ffe7db7aa5f7ae7029655_945321_1024x0_resize_box_3.png 1024w"
+srcset="https://www.letout.cn/p/fix-logi-mouse/02_hu75550ba33c3ffe7db7aa5f7ae7029655_945321_480x0_resize_box_3.png 480w, https://www.letout.cn/p/fix-logi-mouse/02_hu75550ba33c3ffe7db7aa5f7ae7029655_945321_1024x0_resize_box_3.png 1024w"
 loading="lazy"
 class="gallery-image"
 data-flex-grow="184"
@@ -34,20 +34,20 @@ data-flex-basis="442px"
 >&lt;/p>
 &lt;h2 id="-过程">📚 过程&lt;/h2>
 &lt;p>拆开还是很简单的，只要把两颗看得见的螺丝卸掉，就可以把外壳给开了。&lt;/p>
-&lt;p>&lt;img src="https://blog.letout.cn/p/fix-logi-mouse/01.png"
+&lt;p>&lt;img src="https://www.letout.cn/p/fix-logi-mouse/01.png"
 width="766"
 height="893"
-srcset="https://blog.letout.cn/p/fix-logi-mouse/01_hu53453d44ceb54b6652dae9a441b1db5e_780198_480x0_resize_box_3.png 480w, https://blog.letout.cn/p/fix-logi-mouse/01_hu53453d44ceb54b6652dae9a441b1db5e_780198_1024x0_resize_box_3.png 1024w"
+srcset="https://www.letout.cn/p/fix-logi-mouse/01_hu53453d44ceb54b6652dae9a441b1db5e_780198_480x0_resize_box_3.png 480w, https://www.letout.cn/p/fix-logi-mouse/01_hu53453d44ceb54b6652dae9a441b1db5e_780198_1024x0_resize_box_3.png 1024w"
 loading="lazy"
 class="gallery-image"
 data-flex-grow="85"
 data-flex-basis="205px"
 >&lt;/p>
 &lt;p>只要把这两个地方的焊锡熔化，就可以把旧的拆下来，换微动啦。😲&lt;/p>
-&lt;p>&lt;img src="https://blog.letout.cn/p/fix-logi-mouse/03.png"
+&lt;p>&lt;img src="https://www.letout.cn/p/fix-logi-mouse/03.png"
 width="1261"
 height="873"
-srcset="https://blog.letout.cn/p/fix-logi-mouse/03_huaca2ffe580913d2e122e0dd5797f45d4_1319425_480x0_resize_box_3.png 480w, https://blog.letout.cn/p/fix-logi-mouse/03_huaca2ffe580913d2e122e0dd5797f45d4_1319425_1024x0_resize_box_3.png 1024w"
+srcset="https://www.letout.cn/p/fix-logi-mouse/03_huaca2ffe580913d2e122e0dd5797f45d4_1319425_480x0_resize_box_3.png 480w, https://www.letout.cn/p/fix-logi-mouse/03_huaca2ffe580913d2e122e0dd5797f45d4_1319425_1024x0_resize_box_3.png 1024w"
 loading="lazy"
 class="gallery-image"
 data-flex-grow="144"
@@ -59,31 +59,31 @@ data-flex-basis="346px"
 &lt;p>最后换起来还是很方便的，把新的插进去，再用电烙铁焊上去两点锡，就固定的很好了。👍&lt;/p>
 &lt;p>哈哈，第一次焊接，看起来效果非常好。😀&lt;/p>
 &lt;p>主板看起来有点脏，没有洗版水洗主板，其实没有影响，不洗也不会影响电气性能。&lt;/p>
-&lt;p>&lt;img src="https://blog.letout.cn/p/fix-logi-mouse/04.png"
+&lt;p>&lt;img src="https://www.letout.cn/p/fix-logi-mouse/04.png"
 width="1212"
 height="800"
-srcset="https://blog.letout.cn/p/fix-logi-mouse/04_hud083438dbea24b69dfd6acee6b76afad_1328794_480x0_resize_box_3.png 480w, https://blog.letout.cn/p/fix-logi-mouse/04_hud083438dbea24b69dfd6acee6b76afad_1328794_1024x0_resize_box_3.png 1024w"
+srcset="https://www.letout.cn/p/fix-logi-mouse/04_hud083438dbea24b69dfd6acee6b76afad_1328794_480x0_resize_box_3.png 480w, https://www.letout.cn/p/fix-logi-mouse/04_hud083438dbea24b69dfd6acee6b76afad_1328794_1024x0_resize_box_3.png 1024w"
 loading="lazy"
 class="gallery-image"
 data-flex-grow="151"
 data-flex-basis="363px"
 >&lt;/p>
 &lt;p>最后就是这个烙铁，竟然用几下就变得这么脏了。😂&lt;/p>
-&lt;p>&lt;img src="https://blog.letout.cn/p/fix-logi-mouse/05.png"
+&lt;p>&lt;img src="https://www.letout.cn/p/fix-logi-mouse/05.png"
 width="1546"
 height="910"
-srcset="https://blog.letout.cn/p/fix-logi-mouse/05_hu6e2e43df522d586c0a61d755538e45f9_1576731_480x0_resize_box_3.png 480w, https://blog.letout.cn/p/fix-logi-mouse/05_hu6e2e43df522d586c0a61d755538e45f9_1576731_1024x0_resize_box_3.png 1024w"
+srcset="https://www.letout.cn/p/fix-logi-mouse/05_hu6e2e43df522d586c0a61d755538e45f9_1576731_480x0_resize_box_3.png 480w, https://www.letout.cn/p/fix-logi-mouse/05_hu6e2e43df522d586c0a61d755538e45f9_1576731_1024x0_resize_box_3.png 1024w"
 loading="lazy"
 class="gallery-image"
 data-flex-grow="169"
 data-flex-basis="407px"
->&lt;/p></description></item><item><title>迁移博客到 Webify</title><link>https://blog.letout.cn/p/hugo-in-webify/</link><pubDate>Mon, 22 Aug 2022 18:14:45 +0800</pubDate><guid>https://blog.letout.cn/p/hugo-in-webify/</guid><description>&lt;img src="https://blog.letout.cn/imgs/1.jpeg" alt="Featured image of post 迁移博客到 Webify" />&lt;h2 id="起因">起因&lt;/h2>
+>&lt;/p></description></item><item><title>迁移博客到 Webify</title><link>https://www.letout.cn/p/hugo-in-webify/</link><pubDate>Mon, 22 Aug 2022 18:14:45 +0800</pubDate><guid>https://www.letout.cn/p/hugo-in-webify/</guid><description>&lt;img src="https://www.letout.cn/imgs/1.jpeg" alt="Featured image of post 迁移博客到 Webify" />&lt;h2 id="起因">起因&lt;/h2>
 &lt;p>之前博客都部署在腾讯云的 CloudBase，以按量收费的方式，每个月都有一些免费的流程和 CDN，我的博客完全用不完，每月就只需要几毛，基本不用花钱。🫣&lt;/p>
 &lt;p>除了偶尔会无法推送成功之外，国内访问速度相当快，毕竟部署在国内。&lt;/p>
-&lt;p>&lt;img src="https://blog.letout.cn/p/hugo-in-webify/0.png"
+&lt;p>&lt;img src="https://www.letout.cn/p/hugo-in-webify/0.png"
 width="472"
 height="85"
-srcset="https://blog.letout.cn/p/hugo-in-webify/0_huc20776329d75d184c515505bb9bc6a17_15870_480x0_resize_box_3.png 480w, https://blog.letout.cn/p/hugo-in-webify/0_huc20776329d75d184c515505bb9bc6a17_15870_1024x0_resize_box_3.png 1024w"
+srcset="https://www.letout.cn/p/hugo-in-webify/0_huc20776329d75d184c515505bb9bc6a17_15870_480x0_resize_box_3.png 480w, https://www.letout.cn/p/hugo-in-webify/0_huc20776329d75d184c515505bb9bc6a17_15870_1024x0_resize_box_3.png 1024w"
 loading="lazy"
 alt="0"
 class="gallery-image"
@@ -91,10 +91,10 @@ data-flex-grow="555"
 data-flex-basis="1332px"
 >&lt;/p>
 &lt;p>但是最近改了付费方式，先买套餐，超出再进行按量收费。🤔&lt;/p>
-&lt;p>&lt;img src="https://blog.letout.cn/p/hugo-in-webify/1.png"
+&lt;p>&lt;img src="https://www.letout.cn/p/hugo-in-webify/1.png"
 width="1077"
 height="854"
-srcset="https://blog.letout.cn/p/hugo-in-webify/1_hu56ae18acc6ac70d7209e9eb3aa6fad3a_126909_480x0_resize_box_3.png 480w, https://blog.letout.cn/p/hugo-in-webify/1_hu56ae18acc6ac70d7209e9eb3aa6fad3a_126909_1024x0_resize_box_3.png 1024w"
+srcset="https://www.letout.cn/p/hugo-in-webify/1_hu56ae18acc6ac70d7209e9eb3aa6fad3a_126909_480x0_resize_box_3.png 480w, https://www.letout.cn/p/hugo-in-webify/1_hu56ae18acc6ac70d7209e9eb3aa6fad3a_126909_1024x0_resize_box_3.png 1024w"
 loading="lazy"
 alt="1"
 class="gallery-image"
@@ -102,10 +102,10 @@ data-flex-grow="126"
 data-flex-basis="302px"
 >&lt;/p>
 &lt;p>虽然 CloudBase 可以部署完整的项目，但是我只需要托管一点静态页面，最低正常价 39.9 每月，到时候买这个套餐不如直接买个云服务器。果然白嫖是不可能一直白嫖的。🫠&lt;/p>
-&lt;p>&lt;img src="https://blog.letout.cn/p/hugo-in-webify/2.png"
+&lt;p>&lt;img src="https://www.letout.cn/p/hugo-in-webify/2.png"
 width="438"
 height="256"
-srcset="https://blog.letout.cn/p/hugo-in-webify/2_hue69ff45008c2c92db458f250a5d53c45_43271_480x0_resize_box_3.png 480w, https://blog.letout.cn/p/hugo-in-webify/2_hue69ff45008c2c92db458f250a5d53c45_43271_1024x0_resize_box_3.png 1024w"
+srcset="https://www.letout.cn/p/hugo-in-webify/2_hue69ff45008c2c92db458f250a5d53c45_43271_480x0_resize_box_3.png 480w, https://www.letout.cn/p/hugo-in-webify/2_hue69ff45008c2c92db458f250a5d53c45_43271_1024x0_resize_box_3.png 1024w"
 loading="lazy"
 alt="2"
 class="gallery-image"
@@ -115,10 +115,10 @@ data-flex-basis="410px"
 &lt;h2 id="流程">流程&lt;/h2>
 &lt;p>腾讯云中还有专门托管静态页面的服务 Webify，类似于 Github 中的静态页面服务，费用相较来说挺低的，这里打算把博客迁移过去。&lt;/p>
 &lt;p>在部署模板里面，只有一些前端框架，没有 Hugo，所以这里利用 Github Action 编译成静态页面后，推送到其他分支/仓库，再托管这些静态代码。&lt;/p>
-&lt;p>&lt;img src="https://blog.letout.cn/p/hugo-in-webify/3.png"
+&lt;p>&lt;img src="https://www.letout.cn/p/hugo-in-webify/3.png"
 width="327"
 height="528"
-srcset="https://blog.letout.cn/p/hugo-in-webify/3_huaa7d4ed28d1f1de02cf9b29093fabf99_48914_480x0_resize_box_3.png 480w, https://blog.letout.cn/p/hugo-in-webify/3_huaa7d4ed28d1f1de02cf9b29093fabf99_48914_1024x0_resize_box_3.png 1024w"
+srcset="https://www.letout.cn/p/hugo-in-webify/3_huaa7d4ed28d1f1de02cf9b29093fabf99_48914_480x0_resize_box_3.png 480w, https://www.letout.cn/p/hugo-in-webify/3_huaa7d4ed28d1f1de02cf9b29093fabf99_48914_1024x0_resize_box_3.png 1024w"
 loading="lazy"
 alt="3"
 class="gallery-image"
@@ -206,10 +206,10 @@ data-flex-basis="148px"
 &lt;li>新建应用&lt;/li>
 &lt;/ul>
 &lt;p>云产品 - Web 应用托管&lt;/p>
-&lt;p>&lt;img src="https://blog.letout.cn/p/hugo-in-webify/4.png"
+&lt;p>&lt;img src="https://www.letout.cn/p/hugo-in-webify/4.png"
 width="2316"
 height="1230"
-srcset="https://blog.letout.cn/p/hugo-in-webify/4_huf9354845b150a28a9bbe99c4ce9a2902_136523_480x0_resize_box_3.png 480w, https://blog.letout.cn/p/hugo-in-webify/4_huf9354845b150a28a9bbe99c4ce9a2902_136523_1024x0_resize_box_3.png 1024w"
+srcset="https://www.letout.cn/p/hugo-in-webify/4_huf9354845b150a28a9bbe99c4ce9a2902_136523_480x0_resize_box_3.png 480w, https://www.letout.cn/p/hugo-in-webify/4_huf9354845b150a28a9bbe99c4ce9a2902_136523_1024x0_resize_box_3.png 1024w"
 loading="lazy"
 alt="4"
 class="gallery-image"
@@ -217,10 +217,10 @@ data-flex-grow="188"
 data-flex-basis="451px"
 >&lt;/p>
 &lt;p>选择需要托管的仓库就可以了，下一步就行了。&lt;/p>
-&lt;p>&lt;img src="https://blog.letout.cn/p/hugo-in-webify/5.png"
+&lt;p>&lt;img src="https://www.letout.cn/p/hugo-in-webify/5.png"
 width="571"
 height="248"
-srcset="https://blog.letout.cn/p/hugo-in-webify/5_hu609fa268f17278829789499f6682a8f8_37202_480x0_resize_box_3.png 480w, https://blog.letout.cn/p/hugo-in-webify/5_hu609fa268f17278829789499f6682a8f8_37202_1024x0_resize_box_3.png 1024w"
+srcset="https://www.letout.cn/p/hugo-in-webify/5_hu609fa268f17278829789499f6682a8f8_37202_480x0_resize_box_3.png 480w, https://www.letout.cn/p/hugo-in-webify/5_hu609fa268f17278829789499f6682a8f8_37202_1024x0_resize_box_3.png 1024w"
 loading="lazy"
 alt="5"
 class="gallery-image"
@@ -228,25 +228,25 @@ data-flex-grow="230"
 data-flex-basis="552px"
 >&lt;/p>
 &lt;p>自定义域名，也是可以使用免费 CDN 的 🫣 ，只是没有一些高级功能，设置防盗链什么的，作为国内的服务，已经很不错啦。这个再改计费方式，就打算直接用 Vercel 了。😂&lt;/p>
-&lt;p>&lt;img src="https://blog.letout.cn/p/hugo-in-webify/6.png"
+&lt;p>&lt;img src="https://www.letout.cn/p/hugo-in-webify/6.png"
 width="2458"
 height="382"
-srcset="https://blog.letout.cn/p/hugo-in-webify/6_hu71f99e798b96b20bb419371b96863ee5_50312_480x0_resize_box_3.png 480w, https://blog.letout.cn/p/hugo-in-webify/6_hu71f99e798b96b20bb419371b96863ee5_50312_1024x0_resize_box_3.png 1024w"
+srcset="https://www.letout.cn/p/hugo-in-webify/6_hu71f99e798b96b20bb419371b96863ee5_50312_480x0_resize_box_3.png 480w, https://www.letout.cn/p/hugo-in-webify/6_hu71f99e798b96b20bb419371b96863ee5_50312_1024x0_resize_box_3.png 1024w"
 loading="lazy"
 alt="6"
 class="gallery-image"
 data-flex-grow="643"
 data-flex-basis="1544px"
->&lt;/p></description></item><item><title>Linux 目录结构介绍</title><link>https://blog.letout.cn/p/linux-dir/</link><pubDate>Thu, 23 Jun 2022 02:02:02 +0800</pubDate><guid>https://blog.letout.cn/p/linux-dir/</guid><description>&lt;img src="https://blog.letout.cn/imgs/10.jpeg" alt="Featured image of post Linux 目录结构介绍" />&lt;p>Linux 是一个开源的系统，使得 Linux 发行版本有很多，利用 Linux 开发产品的团队也有很多，如果任由每个人都按照自己的想法来配置 Linux 系统文件目录，后期可能会产生诸多的管理问题。&lt;/p>
+>&lt;/p></description></item><item><title>Linux 目录结构介绍</title><link>https://www.letout.cn/p/linux-dir/</link><pubDate>Thu, 23 Jun 2022 02:02:02 +0800</pubDate><guid>https://www.letout.cn/p/linux-dir/</guid><description>&lt;img src="https://www.letout.cn/imgs/10.jpeg" alt="Featured image of post Linux 目录结构介绍" />&lt;p>Linux 是一个开源的系统，使得 Linux 发行版本有很多，利用 Linux 开发产品的团队也有很多，如果任由每个人都按照自己的想法来配置 Linux 系统文件目录，后期可能会产生诸多的管理问题。&lt;/p>
 &lt;p>为了避免诸多使用者对 Linux 系统目录结构天马行空，Linux 基金会发布了 FHS 标准。多数 Linux 发行版系统都遵循这一标准。&lt;/p>
 &lt;blockquote>
 &lt;p>FHS（Filesystem Hierarchy Standard），文件系统层次化标准，该标准规定了 Linux 系统中所有一级目录以及部分二级目录（/usr 和 /var）的用途。发布此标准的主要目的就是为了让用户清楚地了解每个目录应该存放什么类型的文件。&lt;/p>
 &lt;/blockquote>
 &lt;p>几乎所有的 Linux 发行版都包含以下的目录结构：&lt;/p>
-&lt;p>&lt;img src="https://blog.letout.cn/p/linux-dir/directory.png"
+&lt;p>&lt;img src="https://www.letout.cn/p/linux-dir/directory.png"
 width="950"
 height="450"
-srcset="https://blog.letout.cn/p/linux-dir/directory_hua98ec03a363a3999681794ab96f9f09a_36725_480x0_resize_box_3.png 480w, https://blog.letout.cn/p/linux-dir/directory_hua98ec03a363a3999681794ab96f9f09a_36725_1024x0_resize_box_3.png 1024w"
+srcset="https://www.letout.cn/p/linux-dir/directory_hua98ec03a363a3999681794ab96f9f09a_36725_480x0_resize_box_3.png 480w, https://www.letout.cn/p/linux-dir/directory_hua98ec03a363a3999681794ab96f9f09a_36725_1024x0_resize_box_3.png 1024w"
 loading="lazy"
 alt="directory"
 class="gallery-image"
@@ -254,10 +254,10 @@ data-flex-grow="211"
 data-flex-basis="506px"
 >&lt;/p>
 &lt;p>不同的发行版可能会添加一下独有的目录，例如 Ubuntu 中包含 &lt;code>/snap&lt;/code> 来放置 snap 应用。&lt;/p>
-&lt;p>&lt;img src="https://blog.letout.cn/p/linux-dir/root.png"
+&lt;p>&lt;img src="https://www.letout.cn/p/linux-dir/root.png"
 width="893"
 height="485"
-srcset="https://blog.letout.cn/p/linux-dir/root_hu18035549831c69e974e5e46a3403bc3f_73150_480x0_resize_box_3.png 480w, https://blog.letout.cn/p/linux-dir/root_hu18035549831c69e974e5e46a3403bc3f_73150_1024x0_resize_box_3.png 1024w"
+srcset="https://www.letout.cn/p/linux-dir/root_hu18035549831c69e974e5e46a3403bc3f_73150_480x0_resize_box_3.png 480w, https://www.letout.cn/p/linux-dir/root_hu18035549831c69e974e5e46a3403bc3f_73150_1024x0_resize_box_3.png 1024w"
 loading="lazy"
 alt="root"
 class="gallery-image"
@@ -268,10 +268,10 @@ data-flex-basis="441px"
 &lt;p>Binary&lt;/p>
 &lt;p>二进制可执行文件和可执行文件的快捷方式（软链接），存放着常用的命令。&lt;/p>
 &lt;p>例如常用的 &lt;code>ls&lt;/code> &lt;code>cp&lt;/code> &lt;code>cd&lt;/code> 等命令都存放在这里。&lt;/p>
-&lt;p>&lt;img src="https://blog.letout.cn/p/linux-dir/bin.png"
+&lt;p>&lt;img src="https://www.letout.cn/p/linux-dir/bin.png"
 width="893"
 height="485"
-srcset="https://blog.letout.cn/p/linux-dir/bin_hu88e8cbe9114805e25899e6212c3f7b45_50694_480x0_resize_box_3.png 480w, https://blog.letout.cn/p/linux-dir/bin_hu88e8cbe9114805e25899e6212c3f7b45_50694_1024x0_resize_box_3.png 1024w"
+srcset="https://www.letout.cn/p/linux-dir/bin_hu88e8cbe9114805e25899e6212c3f7b45_50694_480x0_resize_box_3.png 480w, https://www.letout.cn/p/linux-dir/bin_hu88e8cbe9114805e25899e6212c3f7b45_50694_1024x0_resize_box_3.png 1024w"
 loading="lazy"
 alt="bin"
 class="gallery-image"
@@ -280,10 +280,10 @@ data-flex-basis="441px"
 >&lt;/p>
 &lt;h2 id="boot">/boot&lt;/h2>
 &lt;p>启动 Linux 时使用的一些核心文件，包括一些连接文件以及镜像文件。&lt;/p>
-&lt;p>&lt;img src="https://blog.letout.cn/p/linux-dir/boot.png"
+&lt;p>&lt;img src="https://www.letout.cn/p/linux-dir/boot.png"
 width="893"
 height="485"
-srcset="https://blog.letout.cn/p/linux-dir/boot_hu918783384ee5a012af8445662a5570f5_99689_480x0_resize_box_3.png 480w, https://blog.letout.cn/p/linux-dir/boot_hu918783384ee5a012af8445662a5570f5_99689_1024x0_resize_box_3.png 1024w"
+srcset="https://www.letout.cn/p/linux-dir/boot_hu918783384ee5a012af8445662a5570f5_99689_480x0_resize_box_3.png 480w, https://www.letout.cn/p/linux-dir/boot_hu918783384ee5a012af8445662a5570f5_99689_1024x0_resize_box_3.png 1024w"
 loading="lazy"
 alt="boot"
 class="gallery-image"
@@ -294,10 +294,10 @@ data-flex-basis="441px"
 &lt;h2 id="dev">/dev&lt;/h2>
 &lt;p>Device&lt;/p>
 &lt;p>存放着所有的设备文件。在 Linux 中，所有东西都是以文件的形式存在的，包括硬件设备。&lt;/p>
-&lt;p>&lt;img src="https://blog.letout.cn/p/linux-dir/dev.png"
+&lt;p>&lt;img src="https://www.letout.cn/p/linux-dir/dev.png"
 width="893"
 height="485"
-srcset="https://blog.letout.cn/p/linux-dir/dev_hu5755a852922f274414d0e5a0eab070dd_98725_480x0_resize_box_3.png 480w, https://blog.letout.cn/p/linux-dir/dev_hu5755a852922f274414d0e5a0eab070dd_98725_1024x0_resize_box_3.png 1024w"
+srcset="https://www.letout.cn/p/linux-dir/dev_hu5755a852922f274414d0e5a0eab070dd_98725_480x0_resize_box_3.png 480w, https://www.letout.cn/p/linux-dir/dev_hu5755a852922f274414d0e5a0eab070dd_98725_1024x0_resize_box_3.png 1024w"
 loading="lazy"
 alt="dev"
 class="gallery-image"
@@ -314,10 +314,10 @@ data-flex-basis="441px"
 &lt;li>&lt;code>/etc/nginx&lt;/code> nginx 配置目录&lt;/li>
 &lt;li>&lt;code>/ect/redis&lt;/code> redis 配置目录&lt;/li>
 &lt;/ul>
-&lt;p>&lt;img src="https://blog.letout.cn/p/linux-dir/etc.png"
+&lt;p>&lt;img src="https://www.letout.cn/p/linux-dir/etc.png"
 width="893"
 height="485"
-srcset="https://blog.letout.cn/p/linux-dir/etc_hu7a52980e1c04af5a90bf8edab9585ec6_85844_480x0_resize_box_3.png 480w, https://blog.letout.cn/p/linux-dir/etc_hu7a52980e1c04af5a90bf8edab9585ec6_85844_1024x0_resize_box_3.png 1024w"
+srcset="https://www.letout.cn/p/linux-dir/etc_hu7a52980e1c04af5a90bf8edab9585ec6_85844_480x0_resize_box_3.png 480w, https://www.letout.cn/p/linux-dir/etc_hu7a52980e1c04af5a90bf8edab9585ec6_85844_1024x0_resize_box_3.png 1024w"
 loading="lazy"
 alt="etc"
 class="gallery-image"
@@ -327,10 +327,10 @@ data-flex-basis="441px"
 &lt;h2 id="home">/home&lt;/h2>
 &lt;p>用户的主目录。&lt;/p>
 &lt;p>在 Linux 中，每个用户都有一个自己的目录，一般该目录名是以用户的账号命名。&lt;/p>
-&lt;p>&lt;img src="https://blog.letout.cn/p/linux-dir/home.png"
+&lt;p>&lt;img src="https://www.letout.cn/p/linux-dir/home.png"
 width="893"
 height="485"
-srcset="https://blog.letout.cn/p/linux-dir/home_hud18e334789b3c740b9a20da6a45ce695_61060_480x0_resize_box_3.png 480w, https://blog.letout.cn/p/linux-dir/home_hud18e334789b3c740b9a20da6a45ce695_61060_1024x0_resize_box_3.png 1024w"
+srcset="https://www.letout.cn/p/linux-dir/home_hud18e334789b3c740b9a20da6a45ce695_61060_480x0_resize_box_3.png 480w, https://www.letout.cn/p/linux-dir/home_hud18e334789b3c740b9a20da6a45ce695_61060_1024x0_resize_box_3.png 1024w"
 loading="lazy"
 alt="home"
 class="gallery-image"
@@ -341,10 +341,10 @@ data-flex-basis="441px"
 &lt;p>Library&lt;/p>
 &lt;p>系统最基本的动态连接共享库，其作用类似于 Windows 里的 DLL 文件。&lt;/p>
 &lt;p>几乎所有的应用程序都需要用到这些共享库。包含 bin 和 sbin 中可执行文件的依赖。&lt;/p>
-&lt;p>&lt;img src="https://blog.letout.cn/p/linux-dir/lib.png"
+&lt;p>&lt;img src="https://www.letout.cn/p/linux-dir/lib.png"
 width="893"
 height="485"
-srcset="https://blog.letout.cn/p/linux-dir/lib_hub083733446fb3cb4ae55f28313c8182b_83036_480x0_resize_box_3.png 480w, https://blog.letout.cn/p/linux-dir/lib_hub083733446fb3cb4ae55f28313c8182b_83036_1024x0_resize_box_3.png 1024w"
+srcset="https://www.letout.cn/p/linux-dir/lib_hub083733446fb3cb4ae55f28313c8182b_83036_480x0_resize_box_3.png 480w, https://www.letout.cn/p/linux-dir/lib_hub083733446fb3cb4ae55f28313c8182b_83036_1024x0_resize_box_3.png 1024w"
 loading="lazy"
 alt="lib"
 class="gallery-image"
@@ -369,10 +369,10 @@ data-flex-basis="441px"
 &lt;p>Optional&lt;/p>
 &lt;p>一些第三方软件安装的目录。&lt;/p>
 &lt;p>比如 Chrome 浏览器，WPS 等软件，都会安装在这里。&lt;/p>
-&lt;p>&lt;img src="https://blog.letout.cn/p/linux-dir/opt.png"
+&lt;p>&lt;img src="https://www.letout.cn/p/linux-dir/opt.png"
 width="893"
 height="485"
-srcset="https://blog.letout.cn/p/linux-dir/opt_huea96cc753b9c5430ebdf81edcd8754fb_76369_480x0_resize_box_3.png 480w, https://blog.letout.cn/p/linux-dir/opt_huea96cc753b9c5430ebdf81edcd8754fb_76369_1024x0_resize_box_3.png 1024w"
+srcset="https://www.letout.cn/p/linux-dir/opt_huea96cc753b9c5430ebdf81edcd8754fb_76369_480x0_resize_box_3.png 480w, https://www.letout.cn/p/linux-dir/opt_huea96cc753b9c5430ebdf81edcd8754fb_76369_1024x0_resize_box_3.png 1024w"
 loading="lazy"
 alt="opt"
 class="gallery-image"
@@ -384,10 +384,10 @@ data-flex-basis="441px"
 &lt;h2 id="proc">/proc&lt;/h2>
 &lt;p>Processes&lt;/p>
 &lt;p>&lt;code>/proc&lt;/code> 是一种伪文件系统（也即虚拟文件系统），存储的是当前内核运行状态的一系列特殊文件，这个目录是一个虚拟的目录，它是系统内存的映射，我们可以通过直接访问这个目录来获取系统信息。&lt;/p>
-&lt;p>&lt;img src="https://blog.letout.cn/p/linux-dir/procversion.png"
+&lt;p>&lt;img src="https://www.letout.cn/p/linux-dir/procversion.png"
 width="734"
 height="476"
-srcset="https://blog.letout.cn/p/linux-dir/procversion_hua30e25cc62b3a6421f2f9b1383e8ea4d_32573_480x0_resize_box_3.png 480w, https://blog.letout.cn/p/linux-dir/procversion_hua30e25cc62b3a6421f2f9b1383e8ea4d_32573_1024x0_resize_box_3.png 1024w"
+srcset="https://www.letout.cn/p/linux-dir/procversion_hua30e25cc62b3a6421f2f9b1383e8ea4d_32573_480x0_resize_box_3.png 480w, https://www.letout.cn/p/linux-dir/procversion_hua30e25cc62b3a6421f2f9b1383e8ea4d_32573_1024x0_resize_box_3.png 1024w"
 loading="lazy"
 alt="procversion"
 class="gallery-image"
@@ -395,30 +395,30 @@ data-flex-grow="154"
 data-flex-basis="370px"
 >&lt;/p>
 &lt;p>&lt;code>/proc&lt;/code> 里面有一大堆数字命名的文件夹，这个数字其实是 Process ID（PID），对应着运行的服务。&lt;/p>
-&lt;p>&lt;img src="https://blog.letout.cn/p/linux-dir/procps.png"
+&lt;p>&lt;img src="https://www.letout.cn/p/linux-dir/procps.png"
 width="734"
 height="476"
-srcset="https://blog.letout.cn/p/linux-dir/procps_hu3633a821f850bd2d5d2ffca1ae08eb64_38818_480x0_resize_box_3.png 480w, https://blog.letout.cn/p/linux-dir/procps_hu3633a821f850bd2d5d2ffca1ae08eb64_38818_1024x0_resize_box_3.png 1024w"
+srcset="https://www.letout.cn/p/linux-dir/procps_hu3633a821f850bd2d5d2ffca1ae08eb64_38818_480x0_resize_box_3.png 480w, https://www.letout.cn/p/linux-dir/procps_hu3633a821f850bd2d5d2ffca1ae08eb64_38818_1024x0_resize_box_3.png 1024w"
 loading="lazy"
 alt="procps"
 class="gallery-image"
 data-flex-grow="154"
 data-flex-basis="370px"
 >&lt;/p>
-&lt;p>&lt;img src="https://blog.letout.cn/p/linux-dir/proccat.png"
+&lt;p>&lt;img src="https://www.letout.cn/p/linux-dir/proccat.png"
 width="734"
 height="476"
-srcset="https://blog.letout.cn/p/linux-dir/proccat_hu433bb9e8c82cee4321d94d03495747e7_47919_480x0_resize_box_3.png 480w, https://blog.letout.cn/p/linux-dir/proccat_hu433bb9e8c82cee4321d94d03495747e7_47919_1024x0_resize_box_3.png 1024w"
+srcset="https://www.letout.cn/p/linux-dir/proccat_hu433bb9e8c82cee4321d94d03495747e7_47919_480x0_resize_box_3.png 480w, https://www.letout.cn/p/linux-dir/proccat_hu433bb9e8c82cee4321d94d03495747e7_47919_1024x0_resize_box_3.png 1024w"
 loading="lazy"
 alt="proccat"
 class="gallery-image"
 data-flex-grow="154"
 data-flex-basis="370px"
 >&lt;/p>
-&lt;p>&lt;img src="https://blog.letout.cn/p/linux-dir/proc1929.png"
+&lt;p>&lt;img src="https://www.letout.cn/p/linux-dir/proc1929.png"
 width="893"
 height="485"
-srcset="https://blog.letout.cn/p/linux-dir/proc1929_hue982c12fdacf4a0dd83c56ac9a4d5cac_81321_480x0_resize_box_3.png 480w, https://blog.letout.cn/p/linux-dir/proc1929_hue982c12fdacf4a0dd83c56ac9a4d5cac_81321_1024x0_resize_box_3.png 1024w"
+srcset="https://www.letout.cn/p/linux-dir/proc1929_hue982c12fdacf4a0dd83c56ac9a4d5cac_81321_480x0_resize_box_3.png 480w, https://www.letout.cn/p/linux-dir/proc1929_hue982c12fdacf4a0dd83c56ac9a4d5cac_81321_1024x0_resize_box_3.png 1024w"
 loading="lazy"
 alt="proc1929"
 class="gallery-image"
@@ -429,10 +429,10 @@ data-flex-basis="441px"
 &lt;p>Superuser Binaries&lt;/p>
 &lt;p>这里存放的是系统管理员使用的系统管理程序。&lt;/p>
 &lt;p>例如常见的 &lt;code>groupadd&lt;/code> &lt;code>groupdel&lt;/code>。&lt;/p>
-&lt;p>&lt;img src="https://blog.letout.cn/p/linux-dir/sbin.png"
+&lt;p>&lt;img src="https://www.letout.cn/p/linux-dir/sbin.png"
 width="893"
 height="485"
-srcset="https://blog.letout.cn/p/linux-dir/sbin_hufd2d26ea46f84ef22af6fb59ef9f4da6_85048_480x0_resize_box_3.png 480w, https://blog.letout.cn/p/linux-dir/sbin_hufd2d26ea46f84ef22af6fb59ef9f4da6_85048_1024x0_resize_box_3.png 1024w"
+srcset="https://www.letout.cn/p/linux-dir/sbin_hufd2d26ea46f84ef22af6fb59ef9f4da6_85048_480x0_resize_box_3.png 480w, https://www.letout.cn/p/linux-dir/sbin_hufd2d26ea46f84ef22af6fb59ef9f4da6_85048_1024x0_resize_box_3.png 1024w"
 loading="lazy"
 alt="sbin"
 class="gallery-image"
@@ -446,10 +446,10 @@ data-flex-basis="441px"
 &lt;p>Temporary&lt;/p>
 &lt;p>存储一些程序的临时文件。&lt;/p>
 &lt;p>临时文件可能起到很重要的作用。比如有时候 Word 文档崩溃了，好不容易写的东西全没了，Linux 的很多文本编辑器都会在 &lt;code>/tmp&lt;/code> 放一份当前文本的 copy 作为临时文件，如果你的编辑器意外崩溃，有机会在 &lt;code>/tmp&lt;/code> 找一找临时文件抢救一下。&lt;/p>
-&lt;p>&lt;img src="https://blog.letout.cn/p/linux-dir/tmp.png"
+&lt;p>&lt;img src="https://www.letout.cn/p/linux-dir/tmp.png"
 width="893"
 height="485"
-srcset="https://blog.letout.cn/p/linux-dir/tmp_hu1b50e9a39b2feae689bf9b3fbfb30a17_96039_480x0_resize_box_3.png 480w, https://blog.letout.cn/p/linux-dir/tmp_hu1b50e9a39b2feae689bf9b3fbfb30a17_96039_1024x0_resize_box_3.png 1024w"
+srcset="https://www.letout.cn/p/linux-dir/tmp_hu1b50e9a39b2feae689bf9b3fbfb30a17_96039_480x0_resize_box_3.png 480w, https://www.letout.cn/p/linux-dir/tmp_hu1b50e9a39b2feae689bf9b3fbfb30a17_96039_1024x0_resize_box_3.png 1024w"
 loading="lazy"
 alt="tmp"
 class="gallery-image"
@@ -459,10 +459,10 @@ data-flex-basis="441px"
 &lt;h2 id="usr">/usr&lt;/h2>
 &lt;p>Unix Shared Resources&lt;/p>
 &lt;p>共享资源，这是一个非常重要的目录，用户的很多应用程序和文件都放在这个目录下，类似于 windows 下的 program files 目录。&lt;/p>
-&lt;p>&lt;img src="https://blog.letout.cn/p/linux-dir/usr.png"
+&lt;p>&lt;img src="https://www.letout.cn/p/linux-dir/usr.png"
 width="893"
 height="485"
-srcset="https://blog.letout.cn/p/linux-dir/usr_hu2204c3c3a7c106aec9dea68c29029999_46168_480x0_resize_box_3.png 480w, https://blog.letout.cn/p/linux-dir/usr_hu2204c3c3a7c106aec9dea68c29029999_46168_1024x0_resize_box_3.png 1024w"
+srcset="https://www.letout.cn/p/linux-dir/usr_hu2204c3c3a7c106aec9dea68c29029999_46168_480x0_resize_box_3.png 480w, https://www.letout.cn/p/linux-dir/usr_hu2204c3c3a7c106aec9dea68c29029999_46168_1024x0_resize_box_3.png 1024w"
 loading="lazy"
 alt="usr"
 class="gallery-image"
@@ -472,10 +472,10 @@ data-flex-basis="441px"
 &lt;h3 id="usrbin---usrsbin">/usr/bin /usr/sbin&lt;/h3>
 &lt;p>系统用户 / 超级管理员 使用的应用程序。&lt;/p>
 &lt;p>在 Ubuntu 中，&lt;code>/bin&lt;/code> &lt;code>/sbin&lt;/code> 其实就是 &lt;code>/usr/bin&lt;/code> &lt;code>/usr/sbin&lt;/code> 的一个链接。&lt;/p>
-&lt;p>&lt;img src="https://blog.letout.cn/p/linux-dir/usrbin.png"
+&lt;p>&lt;img src="https://www.letout.cn/p/linux-dir/usrbin.png"
 width="734"
 height="476"
-srcset="https://blog.letout.cn/p/linux-dir/usrbin_hu6a478b7090e2cf503d0d2abd86c3db3e_22476_480x0_resize_box_3.png 480w, https://blog.letout.cn/p/linux-dir/usrbin_hu6a478b7090e2cf503d0d2abd86c3db3e_22476_1024x0_resize_box_3.png 1024w"
+srcset="https://www.letout.cn/p/linux-dir/usrbin_hu6a478b7090e2cf503d0d2abd86c3db3e_22476_480x0_resize_box_3.png 480w, https://www.letout.cn/p/linux-dir/usrbin_hu6a478b7090e2cf503d0d2abd86c3db3e_22476_1024x0_resize_box_3.png 1024w"
 loading="lazy"
 alt="usrbin"
 class="gallery-image"
@@ -492,10 +492,10 @@ data-flex-basis="370px"
 &lt;p>例如系统桌面图标目录 &lt;code>/user/share/applications&lt;/code>。&lt;/p>
 &lt;h3 id="usrlocal">/usr/local&lt;/h3>
 &lt;p>用于本地安装软件的目标目录。从源代码安装的用户程序都将安装到这里。&lt;/p>
-&lt;p>&lt;img src="https://blog.letout.cn/p/linux-dir/usrlocal.png"
+&lt;p>&lt;img src="https://www.letout.cn/p/linux-dir/usrlocal.png"
 width="893"
 height="485"
-srcset="https://blog.letout.cn/p/linux-dir/usrlocal_hu79bfa6340b43e74ca17a031487cf8d3c_78872_480x0_resize_box_3.png 480w, https://blog.letout.cn/p/linux-dir/usrlocal_hu79bfa6340b43e74ca17a031487cf8d3c_78872_1024x0_resize_box_3.png 1024w"
+srcset="https://www.letout.cn/p/linux-dir/usrlocal_hu79bfa6340b43e74ca17a031487cf8d3c_78872_480x0_resize_box_3.png 480w, https://www.letout.cn/p/linux-dir/usrlocal_hu79bfa6340b43e74ca17a031487cf8d3c_78872_1024x0_resize_box_3.png 1024w"
 loading="lazy"
 alt="usrlocal"
 class="gallery-image"
@@ -506,10 +506,10 @@ data-flex-basis="441px"
 &lt;p>Variable&lt;/p>
 &lt;p>存放着在不断扩充着的东西，我们习惯将那些经常被修改的目录放在这个目录下。&lt;/p>
 &lt;p>例如日志文件。&lt;/p>
-&lt;p>&lt;img src="https://blog.letout.cn/p/linux-dir/var.png"
+&lt;p>&lt;img src="https://www.letout.cn/p/linux-dir/var.png"
 width="893"
 height="485"
-srcset="https://blog.letout.cn/p/linux-dir/var_hu71c741f1b1910044aff61d309cf9c7cd_50789_480x0_resize_box_3.png 480w, https://blog.letout.cn/p/linux-dir/var_hu71c741f1b1910044aff61d309cf9c7cd_50789_1024x0_resize_box_3.png 1024w"
+srcset="https://www.letout.cn/p/linux-dir/var_hu71c741f1b1910044aff61d309cf9c7cd_50789_480x0_resize_box_3.png 480w, https://www.letout.cn/p/linux-dir/var_hu71c741f1b1910044aff61d309cf9c7cd_50789_1024x0_resize_box_3.png 1024w"
 loading="lazy"
 alt="var"
 class="gallery-image"
@@ -522,7 +522,7 @@ data-flex-basis="441px"
 >https://segmentfault.com/a/1190000038497705&lt;/a>&lt;/li>
 &lt;li>&lt;a class="link" href="https://www.runoob.com/linux/linux-system-contents.html" target="_blank" rel="noopener"
 >https://www.runoob.com/linux/linux-system-contents.html&lt;/a>&lt;/li>
-&lt;/ul></description></item><item><title>使用 Github Actions 在腾讯云 CloudBase 部署 Hugo</title><link>https://blog.letout.cn/p/hugo-in-cloudbase/</link><pubDate>Mon, 02 May 2022 21:14:45 +0800</pubDate><guid>https://blog.letout.cn/p/hugo-in-cloudbase/</guid><description>&lt;img src="https://blog.letout.cn/imgs/3.jpeg" alt="Featured image of post 使用 Github Actions 在腾讯云 CloudBase 部署 Hugo" />&lt;h2 id="-介绍">🌱 介绍&lt;/h2>
+&lt;/ul></description></item><item><title>使用 Github Actions 在腾讯云 CloudBase 部署 Hugo</title><link>https://www.letout.cn/p/hugo-in-cloudbase/</link><pubDate>Mon, 02 May 2022 21:14:45 +0800</pubDate><guid>https://www.letout.cn/p/hugo-in-cloudbase/</guid><description>&lt;img src="https://www.letout.cn/imgs/3.jpeg" alt="Featured image of post 使用 Github Actions 在腾讯云 CloudBase 部署 Hugo" />&lt;h2 id="-介绍">🌱 介绍&lt;/h2>
 &lt;p>许多平台都提供了免费的静态页面托管的服务，如 &lt;code>Github Pages&lt;/code>，&lt;code>Vercel&lt;/code>，&lt;code>Netlify&lt;/code>等。但在国内由于一些“原因”，这些国外的服务在国内的访问并不稳定。&lt;/p>
 &lt;p>国内的免费托管平台如 &lt;code>Gitee&lt;/code> 限制很多，不可以自定义域名而且之前出现了防盗链问题，访问也不是很快，不太推荐作为托管平台。&lt;/p>
 &lt;p>腾讯云推出的云开发 &lt;code>CloudBase&lt;/code> 也有静态页面托管服务。其实它相比这些静态托管平台，有更多强大的功能，甚至能够搭一整套系统。虽然是付费服务，但是在按量付费的情况下资费不是很高，在博客访问量不是很高的情况下十分合适。&lt;/p>
@@ -540,10 +540,10 @@ data-flex-basis="441px"
 &lt;h3 id="-腾讯云">☁️ 腾讯云&lt;/h3>
 &lt;h4 id="创建环境">创建环境&lt;/h4>
 &lt;p>在 &lt;code>云开发 CloudBase&lt;/code> 新建一个应用，选择 &lt;strong>空模板&lt;/strong>，根据自身需求填写信息。&lt;/p>
-&lt;p>&lt;img src="https://blog.letout.cn/p/hugo-in-cloudbase/new.png"
+&lt;p>&lt;img src="https://www.letout.cn/p/hugo-in-cloudbase/new.png"
 width="1896"
 height="1608"
-srcset="https://blog.letout.cn/p/hugo-in-cloudbase/new_hu99910b72135936b76933bc6c60d2f8a9_394958_480x0_resize_box_3.png 480w, https://blog.letout.cn/p/hugo-in-cloudbase/new_hu99910b72135936b76933bc6c60d2f8a9_394958_1024x0_resize_box_3.png 1024w"
+srcset="https://www.letout.cn/p/hugo-in-cloudbase/new_hu99910b72135936b76933bc6c60d2f8a9_394958_480x0_resize_box_3.png 480w, https://www.letout.cn/p/hugo-in-cloudbase/new_hu99910b72135936b76933bc6c60d2f8a9_394958_1024x0_resize_box_3.png 1024w"
 loading="lazy"
 alt="new"
 class="gallery-image"
@@ -551,10 +551,10 @@ data-flex-grow="117"
 data-flex-basis="282px"
 >&lt;/p>
 &lt;p>创建成功后，获得 &lt;code>环境ID&lt;/code>。&lt;/p>
-&lt;p>&lt;img src="https://blog.letout.cn/p/hugo-in-cloudbase/env_id.png"
+&lt;p>&lt;img src="https://www.letout.cn/p/hugo-in-cloudbase/env_id.png"
 width="796"
 height="406"
-srcset="https://blog.letout.cn/p/hugo-in-cloudbase/env_id_hucc29efc322e6de70f5fc042978c8e74b_42486_480x0_resize_box_3.png 480w, https://blog.letout.cn/p/hugo-in-cloudbase/env_id_hucc29efc322e6de70f5fc042978c8e74b_42486_1024x0_resize_box_3.png 1024w"
+srcset="https://www.letout.cn/p/hugo-in-cloudbase/env_id_hucc29efc322e6de70f5fc042978c8e74b_42486_480x0_resize_box_3.png 480w, https://www.letout.cn/p/hugo-in-cloudbase/env_id_hucc29efc322e6de70f5fc042978c8e74b_42486_1024x0_resize_box_3.png 1024w"
 loading="lazy"
 alt="env_id"
 class="gallery-image"
@@ -565,10 +565,10 @@ data-flex-basis="470px"
 &lt;p>为部署新建一个密钥对。在 &lt;code>访问管理 -&amp;gt; 用户列表 -&amp;gt; 新建用户 -&amp;gt; 自定义创建 -&amp;gt; 可访问资源并接收消息&lt;/code>。&lt;a class="link" href="https://console.cloud.tencent.com/cam" target="_blank" rel="noopener"
 >🔗 传送门&lt;/a>&lt;/p>
 &lt;p>根据自己的需要，新建用户名后选择 &lt;code>编程访问&lt;/code>，点击下一步。&lt;/p>
-&lt;p>&lt;img src="https://blog.letout.cn/p/hugo-in-cloudbase/new_user.png"
+&lt;p>&lt;img src="https://www.letout.cn/p/hugo-in-cloudbase/new_user.png"
 width="2122"
 height="1158"
-srcset="https://blog.letout.cn/p/hugo-in-cloudbase/new_user_hu5db7ae8d8e85e220ba3039161cacacd8_188871_480x0_resize_box_3.png 480w, https://blog.letout.cn/p/hugo-in-cloudbase/new_user_hu5db7ae8d8e85e220ba3039161cacacd8_188871_1024x0_resize_box_3.png 1024w"
+srcset="https://www.letout.cn/p/hugo-in-cloudbase/new_user_hu5db7ae8d8e85e220ba3039161cacacd8_188871_480x0_resize_box_3.png 480w, https://www.letout.cn/p/hugo-in-cloudbase/new_user_hu5db7ae8d8e85e220ba3039161cacacd8_188871_1024x0_resize_box_3.png 1024w"
 loading="lazy"
 alt="new_user"
 class="gallery-image"
@@ -580,10 +580,10 @@ data-flex-basis="439px"
 &lt;li>&lt;code>QcloudAccessForTCBRole&lt;/code>：授予云开发（TCB）对云资源的访问权限；&lt;/li>
 &lt;li>&lt;code>QcloudAccessForTCBRoleInAccessCloudBaseRun&lt;/code>：供云开发（TCB）服务角色（TCB_QcsRole）进行关联，用于 TCB 访问其他云服务资源。包含私有网络 VPC、云服务器 CVM 相关操作权限。&lt;/li>
 &lt;/ul>
-&lt;p>&lt;img src="https://blog.letout.cn/p/hugo-in-cloudbase/access.png"
+&lt;p>&lt;img src="https://www.letout.cn/p/hugo-in-cloudbase/access.png"
 width="2048"
 height="626"
-srcset="https://blog.letout.cn/p/hugo-in-cloudbase/access_hu76f892695bd748244f5434357abaf2d0_122725_480x0_resize_box_3.png 480w, https://blog.letout.cn/p/hugo-in-cloudbase/access_hu76f892695bd748244f5434357abaf2d0_122725_1024x0_resize_box_3.png 1024w"
+srcset="https://www.letout.cn/p/hugo-in-cloudbase/access_hu76f892695bd748244f5434357abaf2d0_122725_480x0_resize_box_3.png 480w, https://www.letout.cn/p/hugo-in-cloudbase/access_hu76f892695bd748244f5434357abaf2d0_122725_1024x0_resize_box_3.png 1024w"
 loading="lazy"
 alt="access"
 class="gallery-image"
@@ -594,10 +594,10 @@ data-flex-basis="785px"
 &lt;h3 id="-github-actions">⚙️ Github Actions&lt;/h3>
 &lt;h4 id="设置-github-secrets">设置 Github Secrets&lt;/h4>
 &lt;p>在项目的 &lt;code>Settings -&amp;gt; Secrets -&amp;gt; Actions&lt;/code> 中添加上述得到的 &lt;code>ENV_ID&lt;/code>，&lt;code>SECRET_ID&lt;/code>，&lt;code>SECRET_KEY&lt;/code>（名称可以自定义）。&lt;/p>
-&lt;p>&lt;img src="https://blog.letout.cn/p/hugo-in-cloudbase/secret.png"
+&lt;p>&lt;img src="https://www.letout.cn/p/hugo-in-cloudbase/secret.png"
 width="1616"
 height="366"
-srcset="https://blog.letout.cn/p/hugo-in-cloudbase/secret_hu55ad514f0e88b8a75da2092c1dc5a21a_68162_480x0_resize_box_3.png 480w, https://blog.letout.cn/p/hugo-in-cloudbase/secret_hu55ad514f0e88b8a75da2092c1dc5a21a_68162_1024x0_resize_box_3.png 1024w"
+srcset="https://www.letout.cn/p/hugo-in-cloudbase/secret_hu55ad514f0e88b8a75da2092c1dc5a21a_68162_480x0_resize_box_3.png 480w, https://www.letout.cn/p/hugo-in-cloudbase/secret_hu55ad514f0e88b8a75da2092c1dc5a21a_68162_1024x0_resize_box_3.png 1024w"
 loading="lazy"
 alt="secret"
 class="gallery-image"
@@ -763,10 +763,10 @@ data-flex-basis="1059px"
 &lt;p>使用 Web 应用托管（webify）主要是利用 &lt;code>Github Actions&lt;/code> 生成 静态页面到另一个分支，再托管这个分支的内容。&lt;/p>
 &lt;h3 id="-创建服务">☁️ 创建服务&lt;/h3>
 &lt;p>在 &lt;code>Web 应用托管 -&amp;gt; 新建应用&lt;/code> 新建一个简易静态页面模板。根据需求填写信息。选择纯静态页面。&lt;/p>
-&lt;p>&lt;img src="https://blog.letout.cn/p/hugo-in-cloudbase/webify.png"
+&lt;p>&lt;img src="https://www.letout.cn/p/hugo-in-cloudbase/webify.png"
 width="2530"
 height="1256"
-srcset="https://blog.letout.cn/p/hugo-in-cloudbase/webify_hu211af589e3a728aa0fd91d8fdf6a5a77_643488_480x0_resize_box_3.png 480w, https://blog.letout.cn/p/hugo-in-cloudbase/webify_hu211af589e3a728aa0fd91d8fdf6a5a77_643488_1024x0_resize_box_3.png 1024w"
+srcset="https://www.letout.cn/p/hugo-in-cloudbase/webify_hu211af589e3a728aa0fd91d8fdf6a5a77_643488_480x0_resize_box_3.png 480w, https://www.letout.cn/p/hugo-in-cloudbase/webify_hu211af589e3a728aa0fd91d8fdf6a5a77_643488_1024x0_resize_box_3.png 1024w"
 loading="lazy"
 alt="webify"
 class="gallery-image"
@@ -774,10 +774,10 @@ data-flex-grow="201"
 data-flex-basis="483px"
 >&lt;/p>
 &lt;p>在 &lt;code>应用列表 -&amp;gt; 应用设置&lt;/code> 中配置仓库信息，并根据自身情况选择静态文件的部署分支。（如果当前没有生成静态页面的分支，可完成后面操作后再进行此步骤）。&lt;/p>
-&lt;p>&lt;img src="https://blog.letout.cn/p/hugo-in-cloudbase/webify_info.png"
+&lt;p>&lt;img src="https://www.letout.cn/p/hugo-in-cloudbase/webify_info.png"
 width="1896"
 height="1164"
-srcset="https://blog.letout.cn/p/hugo-in-cloudbase/webify_info_hufa1571ab4508131ee643c8a2551cf3ff_136359_480x0_resize_box_3.png 480w, https://blog.letout.cn/p/hugo-in-cloudbase/webify_info_hufa1571ab4508131ee643c8a2551cf3ff_136359_1024x0_resize_box_3.png 1024w"
+srcset="https://www.letout.cn/p/hugo-in-cloudbase/webify_info_hufa1571ab4508131ee643c8a2551cf3ff_136359_480x0_resize_box_3.png 480w, https://www.letout.cn/p/hugo-in-cloudbase/webify_info_hufa1571ab4508131ee643c8a2551cf3ff_136359_1024x0_resize_box_3.png 1024w"
 loading="lazy"
 alt="webify_info"
 class="gallery-image"
@@ -789,10 +789,10 @@ data-flex-basis="390px"
 &lt;p>在用户的 &lt;code>Settings -&amp;gt; Developer settings -&amp;gt; Personal access tokens -&amp;gt; Generate new token&lt;/code> 获取一个 &lt;code>Repo Token&lt;/code>。&lt;a class="link" href="https://github.com/settings/tokens" target="_blank" rel="noopener"
 >🔗 传送门&lt;/a>&lt;/p>
 &lt;p>在项目的 &lt;code>Settings -&amp;gt; Secrets -&amp;gt; Actions&lt;/code> 中添加上述得到的 &lt;code>Token&lt;/code>。&lt;/p>
-&lt;p>&lt;img src="https://blog.letout.cn/p/hugo-in-cloudbase/access_token.png"
+&lt;p>&lt;img src="https://www.letout.cn/p/hugo-in-cloudbase/access_token.png"
 width="1600"
 height="598"
-srcset="https://blog.letout.cn/p/hugo-in-cloudbase/access_token_hu161bb7d01a4edfa7f2231ebb5df9a1e4_123158_480x0_resize_box_3.png 480w, https://blog.letout.cn/p/hugo-in-cloudbase/access_token_hu161bb7d01a4edfa7f2231ebb5df9a1e4_123158_1024x0_resize_box_3.png 1024w"
+srcset="https://www.letout.cn/p/hugo-in-cloudbase/access_token_hu161bb7d01a4edfa7f2231ebb5df9a1e4_123158_480x0_resize_box_3.png 480w, https://www.letout.cn/p/hugo-in-cloudbase/access_token_hu161bb7d01a4edfa7f2231ebb5df9a1e4_123158_1024x0_resize_box_3.png 1024w"
 loading="lazy"
 alt="access_token"
 class="gallery-image"
@@ -886,7 +886,7 @@ data-flex-basis="642px"
 >https://github.com/TencentCloudBase/cloudbase-action&lt;/a>&lt;/li>
 &lt;li>🔗 &lt;a class="link" href="https://github.com/TencentCloudBase/cloudbase-action/blob/3354b442713265aa9d7c5bf03b0b8cb0173f546f/README.md" target="_blank" rel="noopener"
 >https://github.com/TencentCloudBase/cloudbase-action/blob/3354b442713265aa9d7c5bf03b0b8cb0173f546f/README.md&lt;/a>&lt;/li>
-&lt;/ul></description></item><item><title>在 Ubuntu 优雅地安装 zip 应用 🤔</title><link>https://blog.letout.cn/p/ubuntu-software-install/</link><pubDate>Mon, 02 May 2022 02:02:02 +0800</pubDate><guid>https://blog.letout.cn/p/ubuntu-software-install/</guid><description>&lt;img src="https://blog.letout.cn/imgs/4.jpeg" alt="Featured image of post 在 Ubuntu 优雅地安装 zip 应用 🤔" />&lt;h2 id="说明">说明&lt;/h2>
+&lt;/ul></description></item><item><title>在 Ubuntu 优雅地安装 zip 应用 🤔</title><link>https://www.letout.cn/p/ubuntu-software-install/</link><pubDate>Mon, 02 May 2022 02:02:02 +0800</pubDate><guid>https://www.letout.cn/p/ubuntu-software-install/</guid><description>&lt;img src="https://www.letout.cn/imgs/4.jpeg" alt="Featured image of post 在 Ubuntu 优雅地安装 zip 应用 🤔" />&lt;h2 id="说明">说明&lt;/h2>
 &lt;p>Ubuntu 有些第三方软件只提供二进制执行文件（压缩包或 AppImage），而不是安装包或者 apt 源，这时候需要我们去自己解压文件，放在自定义目录，并进行配置。&lt;/p>
 &lt;p>平常使用桌面环境的话，这样安装后，更新还是有点麻烦的，一更新就要修改很多地方。&lt;/p>
 &lt;p>这里介绍我平常的配置方式，每次更新后，只需要修改软链接即可，感觉还是挺方便的。&lt;/p>
@@ -971,24 +971,24 @@ data-flex-basis="642px"
 &lt;/span>&lt;span class="lnt">9
 &lt;/span>&lt;/code>&lt;/pre>&lt;/td>
 &lt;td class="lntd">
-&lt;pre tabindex="0" class="chroma">&lt;code class="language-fallback" data-lang="fallback">&lt;span class="line">&lt;span class="cl">[Desktop Entry]
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">Name=Clash for Linux
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">Icon=/home/emery/Applications/icon/clash_icon.png # 替换为自己的目录
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">Comment=Clash for Linux
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">Exec=&amp;#34;/home/emery/Applications/Clash/clash&amp;#34; %u # 替换为自己的目录
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">Type=Application
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">Categories=Network
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">Terminal=false
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">StartupNotify=true
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-conf" data-lang="conf">&lt;span class="line">&lt;span class="cl">&lt;span class="err">[&lt;/span>&lt;span class="nv">Desktop&lt;/span> &lt;span class="nv">Entry&lt;/span>&lt;span class="err">]&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nv">Name&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="nv">Clash&lt;/span> &lt;span class="nv">for&lt;/span> &lt;span class="nv">Linux&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nv">Icon&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="err">/&lt;/span>&lt;span class="nv">home&lt;/span>&lt;span class="err">/&lt;/span>&lt;span class="nv">emery&lt;/span>&lt;span class="err">/&lt;/span>&lt;span class="nv">Applications&lt;/span>&lt;span class="err">/&lt;/span>&lt;span class="nv">icon&lt;/span>&lt;span class="err">/&lt;/span>&lt;span class="nv">clash_icon.png&lt;/span> &lt;span class="c"># 替换为自己的目录
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c">&lt;/span>&lt;span class="nv">Comment&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="nv">Clash&lt;/span> &lt;span class="nv">for&lt;/span> &lt;span class="nv">Linux&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nv">Exec&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s">&amp;#34;/home/emery/Applications/Clash/clash&amp;#34;&lt;/span> &lt;span class="err">%&lt;/span>&lt;span class="nv">u&lt;/span> &lt;span class="c"># 替换为自己的目录
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c">&lt;/span>&lt;span class="nv">Type&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="nv">Application&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nv">Categories&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="nv">Network&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nv">Terminal&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="kc">false&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nv">StartupNotify&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="kc">true&lt;/span>
 &lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
 &lt;/div>
-&lt;/div></description></item><item><title>在 Ubuntu 中搭建 CUDA 环境</title><link>https://blog.letout.cn/p/cuda/</link><pubDate>Mon, 02 May 2022 02:02:02 +0800</pubDate><guid>https://blog.letout.cn/p/cuda/</guid><description>&lt;img src="https://blog.letout.cn/imgs/11.jpeg" alt="Featured image of post 在 Ubuntu 中搭建 CUDA 环境" />&lt;h2 id="nvdia-驱动">Nvdia 驱动&lt;/h2>
+&lt;/div></description></item><item><title>在 Ubuntu 中搭建 CUDA 环境</title><link>https://www.letout.cn/p/cuda/</link><pubDate>Mon, 02 May 2022 02:02:02 +0800</pubDate><guid>https://www.letout.cn/p/cuda/</guid><description>&lt;img src="https://www.letout.cn/imgs/11.jpeg" alt="Featured image of post 在 Ubuntu 中搭建 CUDA 环境" />&lt;h2 id="nvdia-驱动">Nvdia 驱动&lt;/h2>
 &lt;p>首先，请确保在系统中安装了英伟达显卡驱动，可以使用 &lt;code>nvidia-msi&lt;/code> 命令查看显卡对应信息。&lt;/p>
-&lt;p>如果没有安装驱动，可以参考该章节。&lt;a class="link" href="https://blog.letout.cn/guide/prepare/driver.html" >传送门➡️&lt;/a>&lt;/p>
-&lt;p>&lt;img src="https://blog.letout.cn/p/cuda/nvidia-msi.png"
+&lt;p>如果没有安装驱动，可以参考该章节。&lt;a class="link" href="https://www.letout.cn/guide/prepare/driver.html" >传送门➡️&lt;/a>&lt;/p>
+&lt;p>&lt;img src="https://www.letout.cn/p/cuda/nvidia-msi.png"
 width="734"
 height="512"
-srcset="https://blog.letout.cn/p/cuda/nvidia-msi_hu25fedbd9e105d28334236f2eb0bd81d5_56804_480x0_resize_box_3.png 480w, https://blog.letout.cn/p/cuda/nvidia-msi_hu25fedbd9e105d28334236f2eb0bd81d5_56804_1024x0_resize_box_3.png 1024w"
+srcset="https://www.letout.cn/p/cuda/nvidia-msi_hu25fedbd9e105d28334236f2eb0bd81d5_56804_480x0_resize_box_3.png 480w, https://www.letout.cn/p/cuda/nvidia-msi_hu25fedbd9e105d28334236f2eb0bd81d5_56804_1024x0_resize_box_3.png 1024w"
 loading="lazy"
 alt="nvidia-msi"
 class="gallery-image"
@@ -996,10 +996,10 @@ data-flex-grow="143"
 data-flex-basis="344px"
 >&lt;/p>
 &lt;p>推荐使用系统自带软件 &lt;code>软件和更新&lt;/code> 安装显卡驱动。打开应用后，点击 &lt;code>附加驱动&lt;/code> 选项，会对所有可选的附加驱动进行搜索。&lt;/p>
-&lt;p>&lt;img src="https://blog.letout.cn/p/cuda/nvidia-install.png"
+&lt;p>&lt;img src="https://www.letout.cn/p/cuda/nvidia-install.png"
 width="877"
 height="500"
-srcset="https://blog.letout.cn/p/cuda/nvidia-install_hud8377b5c2eaf750be9838eb34291d82b_111878_480x0_resize_box_3.png 480w, https://blog.letout.cn/p/cuda/nvidia-install_hud8377b5c2eaf750be9838eb34291d82b_111878_1024x0_resize_box_3.png 1024w"
+srcset="https://www.letout.cn/p/cuda/nvidia-install_hud8377b5c2eaf750be9838eb34291d82b_111878_480x0_resize_box_3.png 480w, https://www.letout.cn/p/cuda/nvidia-install_hud8377b5c2eaf750be9838eb34291d82b_111878_1024x0_resize_box_3.png 1024w"
 loading="lazy"
 alt="nvidia-install"
 class="gallery-image"
@@ -1011,10 +1011,10 @@ data-flex-basis="420px"
 &lt;h2 id="cuda">CUDA&lt;/h2>
 &lt;p>你可以在 &lt;a class="link" href="https://docs.nvidia.com/cuda/cuda-toolkit-release-notes/index.html" target="_blank" rel="noopener"
 >这里&lt;/a> 看到显卡驱动版本与 CUDA 版本的对应关系。&lt;/p>
-&lt;p>&lt;img src="https://blog.letout.cn/p/cuda/cuda.png"
+&lt;p>&lt;img src="https://www.letout.cn/p/cuda/cuda.png"
 width="1540"
 height="358"
-srcset="https://blog.letout.cn/p/cuda/cuda_hu06d82653b392e263a912d34e822f7d1a_74559_480x0_resize_box_3.png 480w, https://blog.letout.cn/p/cuda/cuda_hu06d82653b392e263a912d34e822f7d1a_74559_1024x0_resize_box_3.png 1024w"
+srcset="https://www.letout.cn/p/cuda/cuda_hu06d82653b392e263a912d34e822f7d1a_74559_480x0_resize_box_3.png 480w, https://www.letout.cn/p/cuda/cuda_hu06d82653b392e263a912d34e822f7d1a_74559_1024x0_resize_box_3.png 1024w"
 loading="lazy"
 alt="cuda"
 class="gallery-image"
@@ -1025,10 +1025,10 @@ data-flex-basis="1032px"
 &lt;p>之后，可在官网 &lt;a class="link" href="https://developer.nvidia.com/cuda-toolkit-archive" target="_blank" rel="noopener"
 >该页面&lt;/a> 中，选择对应的 CUDA Toolkit。&lt;/p>
 &lt;p>可根据当前系统环境，选择对应的下载选项（推荐下载 &lt;code>.drunfile&lt;/code>，&lt;code>.deb&lt;/code> 会覆盖系统安装的显卡驱动）：&lt;/p>
-&lt;p>&lt;img src="https://blog.letout.cn/p/cuda/cuda-platform.png"
+&lt;p>&lt;img src="https://www.letout.cn/p/cuda/cuda-platform.png"
 width="2506"
 height="894"
-srcset="https://blog.letout.cn/p/cuda/cuda-platform_hu9bf542e30b48a580f041a55f80ab65bc_245327_480x0_resize_box_3.png 480w, https://blog.letout.cn/p/cuda/cuda-platform_hu9bf542e30b48a580f041a55f80ab65bc_245327_1024x0_resize_box_3.png 1024w"
+srcset="https://www.letout.cn/p/cuda/cuda-platform_hu9bf542e30b48a580f041a55f80ab65bc_245327_480x0_resize_box_3.png 480w, https://www.letout.cn/p/cuda/cuda-platform_hu9bf542e30b48a580f041a55f80ab65bc_245327_1024x0_resize_box_3.png 1024w"
 loading="lazy"
 alt="cuda-platform"
 class="gallery-image"
@@ -1053,10 +1053,10 @@ data-flex-basis="672px"
 &lt;/div>&lt;p>::: warning 警告 🚧
 注意：在安装过程中，请取消勾选安装驱动选项。
 :::&lt;/p>
-&lt;p>&lt;img src="https://blog.letout.cn/p/cuda/cuda-install.png"
+&lt;p>&lt;img src="https://www.letout.cn/p/cuda/cuda-install.png"
 width="734"
 height="476"
-srcset="https://blog.letout.cn/p/cuda/cuda-install_hu423287ac940ffb3bc75497440c5c47d7_30663_480x0_resize_box_3.png 480w, https://blog.letout.cn/p/cuda/cuda-install_hu423287ac940ffb3bc75497440c5c47d7_30663_1024x0_resize_box_3.png 1024w"
+srcset="https://www.letout.cn/p/cuda/cuda-install_hu423287ac940ffb3bc75497440c5c47d7_30663_480x0_resize_box_3.png 480w, https://www.letout.cn/p/cuda/cuda-install_hu423287ac940ffb3bc75497440c5c47d7_30663_1024x0_resize_box_3.png 1024w"
 loading="lazy"
 alt="cuda-install"
 class="gallery-image"
@@ -1080,10 +1080,10 @@ data-flex-basis="370px"
 &lt;p>你可以在官网 &lt;a class="link" href="https://developer.nvidia.com/rdp/cudnn-download" target="_blank" rel="noopener"
 >此链接&lt;/a> 下载 CUDNN，需要注册开发者账号，可能还需要一个“良好的网络环境”。&lt;/p>
 &lt;p>选择与 CUDA 相对应用的 cuDNN，推荐下载压缩包格式。&lt;/p>
-&lt;p>&lt;img src="https://blog.letout.cn/p/cuda/cudnn.png"
+&lt;p>&lt;img src="https://www.letout.cn/p/cuda/cudnn.png"
 width="2228"
 height="1498"
-srcset="https://blog.letout.cn/p/cuda/cudnn_hu2d2e598f2ebb22e3f94073a6174ea5e2_332327_480x0_resize_box_3.png 480w, https://blog.letout.cn/p/cuda/cudnn_hu2d2e598f2ebb22e3f94073a6174ea5e2_332327_1024x0_resize_box_3.png 1024w"
+srcset="https://www.letout.cn/p/cuda/cudnn_hu2d2e598f2ebb22e3f94073a6174ea5e2_332327_480x0_resize_box_3.png 480w, https://www.letout.cn/p/cuda/cudnn_hu2d2e598f2ebb22e3f94073a6174ea5e2_332327_1024x0_resize_box_3.png 1024w"
 loading="lazy"
 alt="cudnn"
 class="gallery-image"
@@ -1114,7 +1114,7 @@ data-flex-basis="356px"
 &lt;pre tabindex="0" class="chroma">&lt;code class="language-sh" data-lang="sh">&lt;span class="line">&lt;span class="cl">cat /usr/local/cuda-10.1/include/cudnn.h &lt;span class="p">|&lt;/span> grep CUDNN_MAJOR -A &lt;span class="m">2&lt;/span>
 &lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
 &lt;/div>
-&lt;/div></description></item><item><title>解决 Ubuntu 笔记本耳机没有声音的问题</title><link>https://blog.letout.cn/p/ubuntu-sound/</link><pubDate>Sat, 02 Jan 2021 02:02:02 +0800</pubDate><guid>https://blog.letout.cn/p/ubuntu-sound/</guid><description>&lt;img src="https://blog.letout.cn/imgs/5.jpeg" alt="Featured image of post 解决 Ubuntu 笔记本耳机没有声音的问题" />&lt;h2 id="ubuntu-耳机没有声音">Ubuntu 耳机没有声音&lt;/h2>
+&lt;/div></description></item><item><title>解决 Ubuntu 笔记本耳机没有声音的问题</title><link>https://www.letout.cn/p/ubuntu-sound/</link><pubDate>Sat, 02 Jan 2021 02:02:02 +0800</pubDate><guid>https://www.letout.cn/p/ubuntu-sound/</guid><description>&lt;img src="https://www.letout.cn/imgs/5.jpeg" alt="Featured image of post 解决 Ubuntu 笔记本耳机没有声音的问题" />&lt;h2 id="ubuntu-耳机没有声音">Ubuntu 耳机没有声音&lt;/h2>
 &lt;p>笔记本使用 Ubuntu 插有线耳机后，并没有反应，该外放还是外放。&lt;/p>
 &lt;p>感觉是适配问题，windows 下没有问题。找了一圈办法，只能通过软件手动切换了，效果还不错。&lt;/p>
 &lt;div class="highlight">&lt;div class="chroma">
@@ -1126,10 +1126,10 @@ data-flex-basis="356px"
 &lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
 &lt;/div>
 &lt;/div>&lt;p>可以在这里切换输出设备：&lt;/p>
-&lt;p>&lt;img src="https://blog.letout.cn/p/ubuntu-sound/output.png"
+&lt;p>&lt;img src="https://www.letout.cn/p/ubuntu-sound/output.png"
 width="514"
 height="446"
-srcset="https://blog.letout.cn/p/ubuntu-sound/output_hubad1730db6fbe32ffe9d254c812a9365_52081_480x0_resize_box_3.png 480w, https://blog.letout.cn/p/ubuntu-sound/output_hubad1730db6fbe32ffe9d254c812a9365_52081_1024x0_resize_box_3.png 1024w"
+srcset="https://www.letout.cn/p/ubuntu-sound/output_hubad1730db6fbe32ffe9d254c812a9365_52081_480x0_resize_box_3.png 480w, https://www.letout.cn/p/ubuntu-sound/output_hubad1730db6fbe32ffe9d254c812a9365_52081_1024x0_resize_box_3.png 1024w"
 loading="lazy"
 alt="output"
 class="gallery-image"
@@ -1137,10 +1137,10 @@ data-flex-grow="115"
 data-flex-basis="276px"
 >&lt;/p>
 &lt;p>切换输入设备：&lt;/p>
-&lt;p>&lt;img src="https://blog.letout.cn/p/ubuntu-sound/input.png"
+&lt;p>&lt;img src="https://www.letout.cn/p/ubuntu-sound/input.png"
 width="517"
 height="448"
-srcset="https://blog.letout.cn/p/ubuntu-sound/input_hufb6fce95f1bcffd19d35ec16e321d778_54938_480x0_resize_box_3.png 480w, https://blog.letout.cn/p/ubuntu-sound/input_hufb6fce95f1bcffd19d35ec16e321d778_54938_1024x0_resize_box_3.png 1024w"
+srcset="https://www.letout.cn/p/ubuntu-sound/input_hufb6fce95f1bcffd19d35ec16e321d778_54938_480x0_resize_box_3.png 480w, https://www.letout.cn/p/ubuntu-sound/input_hufb6fce95f1bcffd19d35ec16e321d778_54938_1024x0_resize_box_3.png 1024w"
 loading="lazy"
 alt="input"
 class="gallery-image"

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>设计模式 on 一层</title><link>https://blog.letout.cn/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/</link><description>Recent content in 设计模式 on 一层</description><generator>Hugo -- gohugo.io</generator><language>zh-cn</language><lastBuildDate>Mon, 06 Mar 2023 12:02:02 +0800</lastBuildDate><atom:link href="https://blog.letout.cn/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/index.xml" rel="self" type="application/rss+xml"/><item><title>观察者模式</title><link>https://blog.letout.cn/p/design-pattern/observer/</link><pubDate>Mon, 06 Mar 2023 12:02:02 +0800</pubDate><guid>https://blog.letout.cn/p/design-pattern/observer/</guid><description>&lt;img src="https://blog.letout.cn/p/design-pattern/observer/observer.png" alt="Featured image of post 观察者模式" />&lt;p>观察者模式是一种&lt;strong>行为型模式&lt;/strong>。&lt;/p>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>设计模式 on 一层</title><link>https://www.letout.cn/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/</link><description>Recent content in 设计模式 on 一层</description><generator>Hugo -- gohugo.io</generator><language>zh-cn</language><lastBuildDate>Mon, 06 Mar 2023 12:02:02 +0800</lastBuildDate><atom:link href="https://www.letout.cn/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/index.xml" rel="self" type="application/rss+xml"/><item><title>观察者模式</title><link>https://www.letout.cn/p/design-pattern/observer/</link><pubDate>Mon, 06 Mar 2023 12:02:02 +0800</pubDate><guid>https://www.letout.cn/p/design-pattern/observer/</guid><description>&lt;img src="https://www.letout.cn/p/design-pattern/observer/observer.png" alt="Featured image of post 观察者模式" />&lt;p>观察者模式是一种&lt;strong>行为型模式&lt;/strong>。&lt;/p>
 &lt;p>观察者模式定义对象间的一对多的依赖关系，当一个对象的状态发生改变时，其他所有依赖的对象都会得到通知，并自动更新。&lt;/p>
 &lt;p>观察者模式又称为「发布-订阅模式」&lt;code>Publish-Subscribe&lt;/code>，是一种通知机制，让发送通知的一方（被观察者）和接收通知的一方（观察者）彼此分离，互不影响。&lt;/p>
 &lt;p>常见的场景：&lt;/p>
@@ -16,10 +16,10 @@
 &lt;/ul>
 &lt;/li>
 &lt;/ul>
-&lt;p>&lt;img src="https://blog.letout.cn/p/design-pattern/observer/publish.png"
+&lt;p>&lt;img src="https://www.letout.cn/p/design-pattern/observer/publish.png"
 width="470"
 height="180"
-srcset="https://blog.letout.cn/p/design-pattern/observer/publish_hu2c6d1291c57d095b00122414ede351f4_6623_480x0_resize_box_3.png 480w, https://blog.letout.cn/p/design-pattern/observer/publish_hu2c6d1291c57d095b00122414ede351f4_6623_1024x0_resize_box_3.png 1024w"
+srcset="https://www.letout.cn/p/design-pattern/observer/publish_hu2c6d1291c57d095b00122414ede351f4_6623_480x0_resize_box_3.png 480w, https://www.letout.cn/p/design-pattern/observer/publish_hu2c6d1291c57d095b00122414ede351f4_6623_1024x0_resize_box_3.png 1024w"
 loading="lazy"
 class="gallery-image"
 data-flex-grow="261"
@@ -164,7 +164,7 @@ data-flex-basis="626px"
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="n">store&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">addObserver&lt;/span>&lt;span class="o">(&lt;/span>&lt;span class="n">customer&lt;/span>&lt;span class="o">);&lt;/span>
 &lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
 &lt;/div>
-&lt;/div></description></item><item><title>适配器模式</title><link>https://blog.letout.cn/p/design-pattern/adapter/</link><pubDate>Mon, 20 Feb 2023 20:02:02 +0800</pubDate><guid>https://blog.letout.cn/p/design-pattern/adapter/</guid><description>&lt;img src="https://blog.letout.cn/p/design-pattern/adapter/adapter.png" alt="Featured image of post 适配器模式" />&lt;h2 id="-介绍">📖 介绍&lt;/h2>
+&lt;/div></description></item><item><title>适配器模式</title><link>https://www.letout.cn/p/design-pattern/adapter/</link><pubDate>Mon, 20 Feb 2023 20:02:02 +0800</pubDate><guid>https://www.letout.cn/p/design-pattern/adapter/</guid><description>&lt;img src="https://www.letout.cn/p/design-pattern/adapter/adapter.png" alt="Featured image of post 适配器模式" />&lt;h2 id="-介绍">📖 介绍&lt;/h2>
 &lt;p>适配器模式（Adapter / Wrapper）是一种 &lt;strong>结构型模式&lt;/strong>。&lt;/p>
 &lt;p>通过适配器模式，可以将一个类A的接口，转化成一个类B，以满足一些方法的调用。&lt;/p>
 &lt;p>如类A是一个第三方、遗留类等，已经被其他地方使用，无法更改，通过适配器模式的思想，通过一个中间的类，封装复杂的转化过程，转换为需要的类型。&lt;/p>
@@ -291,7 +291,7 @@ data-flex-basis="626px"
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">}&lt;/span>
 &lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
 &lt;/div>
-&lt;/div></description></item><item><title>责任链模式</title><link>https://blog.letout.cn/p/design-pattern/chain-of-responsibility/</link><pubDate>Sun, 19 Feb 2023 20:02:02 +0800</pubDate><guid>https://blog.letout.cn/p/design-pattern/chain-of-responsibility/</guid><description>&lt;img src="https://blog.letout.cn/p/design-pattern/chain-of-responsibility/chain-of-responsibility.png" alt="Featured image of post 责任链模式" />&lt;h2 id="-介绍">📖 介绍&lt;/h2>
+&lt;/div></description></item><item><title>责任链模式</title><link>https://www.letout.cn/p/design-pattern/chain-of-responsibility/</link><pubDate>Sun, 19 Feb 2023 20:02:02 +0800</pubDate><guid>https://www.letout.cn/p/design-pattern/chain-of-responsibility/</guid><description>&lt;img src="https://www.letout.cn/p/design-pattern/chain-of-responsibility/chain-of-responsibility.png" alt="Featured image of post 责任链模式" />&lt;h2 id="-介绍">📖 介绍&lt;/h2>
 &lt;p>责任链模式是一种&lt;strong>行为型模式&lt;/strong>。是一种处理请求的模式，请求在链上传递，每个处理器都有机会处理请求。处理器可以决定请求是否向下传递（如无法处理，需要交给下一个处理），或者直接返回（如处理完成，返回结果）。&lt;/p>
 &lt;p>通过责任链模式，可以让请求的发送者和处理请求的处理器进行结构，每个处理器只处理特定的情况，可以方便地添加/删除处理器。&lt;/p>
 &lt;p>常见的场景：&lt;/p>
@@ -430,7 +430,7 @@ data-flex-basis="626px"
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">}&lt;/span>
 &lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
 &lt;/div>
-&lt;/div></description></item><item><title>策略模式</title><link>https://blog.letout.cn/p/design-pattern/strategy/</link><pubDate>Sat, 28 Jan 2023 23:02:02 +0800</pubDate><guid>https://blog.letout.cn/p/design-pattern/strategy/</guid><description>&lt;img src="https://blog.letout.cn/p/design-pattern/strategy/1.png" alt="Featured image of post 策略模式" />&lt;h2 id="-介绍">📖 介绍&lt;/h2>
+&lt;/div></description></item><item><title>策略模式</title><link>https://www.letout.cn/p/design-pattern/strategy/</link><pubDate>Sat, 28 Jan 2023 23:02:02 +0800</pubDate><guid>https://www.letout.cn/p/design-pattern/strategy/</guid><description>&lt;img src="https://www.letout.cn/p/design-pattern/strategy/1.png" alt="Featured image of post 策略模式" />&lt;h2 id="-介绍">📖 介绍&lt;/h2>
 &lt;p>策略模式是一种&lt;strong>行为型模式&lt;/strong>。&lt;/p>
 &lt;p>策略模式指定义一系列算法，每种算法都封装到不同的类中，在运行时，可以灵活地替换这些的算法（替换执行的策略）。&lt;/p>
 &lt;p>📖 常见的场景：&lt;/p>
@@ -491,14 +491,14 @@ data-flex-basis="626px"
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">// 打折优惠
 &lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span>&lt;span class="kd">public&lt;/span> &lt;span class="kd">class&lt;/span> &lt;span class="nc">UserDiscountStrategy&lt;/span> &lt;span class="kd">implements&lt;/span> &lt;span class="n">DiscountStrategy&lt;/span> &lt;span class="o">{&lt;/span>
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kd">public&lt;/span> &lt;span class="n">BigDecimal&lt;/span> &lt;span class="nf">getDiscount&lt;/span>&lt;span class="o">(&lt;/span>&lt;span class="n">BigDecimal&lt;/span> &lt;span class="n">total&lt;/span>&lt;span class="o">)&lt;/span> &lt;span class="o">{&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">return&lt;/span> &lt;span class="n">total&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">multiply&lt;/span>&lt;span class="o">(&lt;/span>&lt;span class="k">new&lt;/span> &lt;span class="n">BigDecimal&lt;/span>&lt;span class="o">(&lt;/span>&lt;span class="s">&amp;#34;0.1&amp;#34;&lt;/span>&lt;span class="o">)).&lt;/span>&lt;span class="na">setScale&lt;/span>&lt;span class="o">(&lt;/span>&lt;span class="mi">2&lt;/span>&lt;span class="o">,&lt;/span> &lt;span class="n">RoundingMode&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">DOWN&lt;/span>&lt;span class="o">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">return&lt;/span> &lt;span class="n">total&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">multiply&lt;/span>&lt;span class="o">(&lt;/span>&lt;span class="k">new&lt;/span> &lt;span class="n">BigDecimal&lt;/span>&lt;span class="o">(&lt;/span>&lt;span class="s">&amp;#34;0.1&amp;#34;&lt;/span>&lt;span class="o">)).&lt;/span>&lt;span class="na">setScale&lt;/span>&lt;span class="o">(&lt;/span>&lt;span class="n">2&lt;/span>&lt;span class="o">,&lt;/span> &lt;span class="n">RoundingMode&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">DOWN&lt;/span>&lt;span class="o">);&lt;/span>
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="o">}&lt;/span>
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">}&lt;/span>
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">// 满减优惠
 &lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span>&lt;span class="kd">public&lt;/span> &lt;span class="kd">class&lt;/span> &lt;span class="nc">OverDiscountStrategy&lt;/span> &lt;span class="kd">implements&lt;/span> &lt;span class="n">DiscountStrategy&lt;/span> &lt;span class="o">{&lt;/span>
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kd">public&lt;/span> &lt;span class="n">BigDecimal&lt;/span> &lt;span class="nf">getDiscount&lt;/span>&lt;span class="o">(&lt;/span>&lt;span class="n">BigDecimal&lt;/span> &lt;span class="n">total&lt;/span>&lt;span class="o">)&lt;/span> &lt;span class="o">{&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">return&lt;/span> &lt;span class="n">total&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">compareTo&lt;/span>&lt;span class="o">(&lt;/span>&lt;span class="n">BigDecimal&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">valueOf&lt;/span>&lt;span class="o">(&lt;/span>&lt;span class="mi">100&lt;/span>&lt;span class="o">))&lt;/span> &lt;span class="o">&amp;gt;=&lt;/span> &lt;span class="mi">0&lt;/span> &lt;span class="o">?&lt;/span> &lt;span class="n">BigDecimal&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">valueOf&lt;/span>&lt;span class="o">(&lt;/span>&lt;span class="mi">20&lt;/span>&lt;span class="o">)&lt;/span> &lt;span class="o">:&lt;/span> &lt;span class="n">BigDecimal&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">ZERO&lt;/span>&lt;span class="o">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">return&lt;/span> &lt;span class="n">total&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">compareTo&lt;/span>&lt;span class="o">(&lt;/span>&lt;span class="n">BigDecimal&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">valueOf&lt;/span>&lt;span class="o">(&lt;/span>&lt;span class="n">100&lt;/span>&lt;span class="o">))&lt;/span> &lt;span class="o">&amp;gt;=&lt;/span> &lt;span class="n">0&lt;/span> &lt;span class="o">?&lt;/span> &lt;span class="n">BigDecimal&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">valueOf&lt;/span>&lt;span class="o">(&lt;/span>&lt;span class="n">20&lt;/span>&lt;span class="o">)&lt;/span> &lt;span class="o">:&lt;/span> &lt;span class="n">BigDecimal&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">ZERO&lt;/span>&lt;span class="o">;&lt;/span>
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="o">}&lt;/span>
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">}&lt;/span>
 &lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
@@ -542,7 +542,7 @@ data-flex-basis="626px"
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c1">// 计算付款金额
 &lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span> &lt;span class="kd">public&lt;/span> &lt;span class="n">BigDecimal&lt;/span> &lt;span class="nf">calculatePrice&lt;/span>&lt;span class="o">(&lt;/span>&lt;span class="n">BigDecimal&lt;/span> &lt;span class="n">total&lt;/span>&lt;span class="o">)&lt;/span> &lt;span class="o">{&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">return&lt;/span> &lt;span class="n">total&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">subtract&lt;/span>&lt;span class="o">(&lt;/span>&lt;span class="k">this&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">strategy&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">getDiscount&lt;/span>&lt;span class="o">(&lt;/span>&lt;span class="n">total&lt;/span>&lt;span class="o">)).&lt;/span>&lt;span class="na">setScale&lt;/span>&lt;span class="o">(&lt;/span>&lt;span class="mi">2&lt;/span>&lt;span class="o">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">return&lt;/span> &lt;span class="n">total&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">subtract&lt;/span>&lt;span class="o">(&lt;/span>&lt;span class="k">this&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">strategy&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">getDiscount&lt;/span>&lt;span class="o">(&lt;/span>&lt;span class="n">total&lt;/span>&lt;span class="o">)).&lt;/span>&lt;span class="na">setScale&lt;/span>&lt;span class="o">(&lt;/span>&lt;span class="n">2&lt;/span>&lt;span class="o">);&lt;/span>
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="o">}&lt;/span>
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">}&lt;/span>
 &lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
@@ -562,7 +562,7 @@ data-flex-basis="626px"
 &lt;pre tabindex="0" class="chroma">&lt;code class="language-java" data-lang="java">&lt;span class="line">&lt;span class="cl">&lt;span class="c1">// 使用策略模式
 &lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span>&lt;span class="n">DiscountContext&lt;/span> &lt;span class="n">context&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="k">new&lt;/span> &lt;span class="n">DiscountContext&lt;/span>&lt;span class="o">();&lt;/span>
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="n">BigDecimal&lt;/span> &lt;span class="n">price&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">BigDecimal&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">valueOf&lt;/span>&lt;span class="o">(&lt;/span>&lt;span class="mi">100&lt;/span>&lt;span class="o">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="n">BigDecimal&lt;/span> &lt;span class="n">price&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">BigDecimal&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">valueOf&lt;/span>&lt;span class="o">(&lt;/span>&lt;span class="n">100&lt;/span>&lt;span class="o">);&lt;/span>
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">// 使用满减策略
 &lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span>&lt;span class="n">context&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">setStrategy&lt;/span>&lt;span class="o">(&lt;/span>&lt;span class="k">new&lt;/span> &lt;span class="n">OverDiscountStrategy&lt;/span>&lt;span class="o">());&lt;/span>
@@ -600,7 +600,7 @@ data-flex-basis="626px"
 >https://www.liaoxuefeng.com/wiki/1252599548343744/1281319606681634&lt;/a>&lt;/li>
 &lt;li>&lt;a class="link" href="https://www.runoob.com/design-pattern/strategy-pattern.html" target="_blank" rel="noopener"
 >https://www.runoob.com/design-pattern/strategy-pattern.html&lt;/a>&lt;/li>
-&lt;/ul></description></item><item><title>代理模式</title><link>https://blog.letout.cn/p/design-pattern/proxy/</link><pubDate>Thu, 05 Jan 2023 20:02:02 +0800</pubDate><guid>https://blog.letout.cn/p/design-pattern/proxy/</guid><description>&lt;img src="https://blog.letout.cn/p/design-pattern/proxy/proxy.png" alt="Featured image of post 代理模式" />&lt;h2 id="-介绍">📖 介绍&lt;/h2>
+&lt;/ul></description></item><item><title>代理模式</title><link>https://www.letout.cn/p/design-pattern/proxy/</link><pubDate>Thu, 05 Jan 2023 20:02:02 +0800</pubDate><guid>https://www.letout.cn/p/design-pattern/proxy/</guid><description>&lt;img src="https://www.letout.cn/p/design-pattern/proxy/proxy.png" alt="Featured image of post 代理模式" />&lt;h2 id="-介绍">📖 介绍&lt;/h2>
 &lt;p>代理模式是一种&lt;strong>结构型模式&lt;/strong>。&lt;/p>
 &lt;p>代理模式是为了方便访问某些资源，使对象类更加易用。为其他对象提供一种代理控制这个对象的访问。&lt;/p>
 &lt;p>常见的场景：&lt;/p>
@@ -622,10 +622,10 @@ data-flex-basis="626px"
 &lt;/li>
 &lt;/ul>
 &lt;h2 id="-实现方式">🎈 实现方式&lt;/h2>
-&lt;p>&lt;img src="https://blog.letout.cn/p/design-pattern/proxy/structure.png"
+&lt;p>&lt;img src="https://www.letout.cn/p/design-pattern/proxy/structure.png"
 width="1319"
 height="630"
-srcset="https://blog.letout.cn/p/design-pattern/proxy/structure_hu34461378bd86a4cce257496a3fe5af00_116540_480x0_resize_box_3.png 480w, https://blog.letout.cn/p/design-pattern/proxy/structure_hu34461378bd86a4cce257496a3fe5af00_116540_1024x0_resize_box_3.png 1024w"
+srcset="https://www.letout.cn/p/design-pattern/proxy/structure_hu34461378bd86a4cce257496a3fe5af00_116540_480x0_resize_box_3.png 480w, https://www.letout.cn/p/design-pattern/proxy/structure_hu34461378bd86a4cce257496a3fe5af00_116540_1024x0_resize_box_3.png 1024w"
 loading="lazy"
 class="gallery-image"
 data-flex-grow="209"
@@ -814,7 +814,7 @@ data-flex-basis="502px"
 >https://www.runoob.com/design-pattern/proxy-pattern.html&lt;/a>&lt;/li>
 &lt;li>&lt;a class="link" href="https://www.liaoxuefeng.com/wiki/1252599548343744/1264804593397984" target="_blank" rel="noopener"
 >https://www.liaoxuefeng.com/wiki/1252599548343744/1264804593397984&lt;/a>&lt;/li>
-&lt;/ul></description></item><item><title>单例模式</title><link>https://blog.letout.cn/p/desgin-pattern/singleton/</link><pubDate>Mon, 11 Apr 2022 18:02:02 +0800</pubDate><guid>https://blog.letout.cn/p/desgin-pattern/singleton/</guid><description>&lt;img src="https://blog.letout.cn/imgs/8.jpeg" alt="Featured image of post 单例模式" />&lt;p>单例模式所要实现的目标：保持一个类有且只有一个实例。&lt;/p>
+&lt;/ul></description></item><item><title>单例模式</title><link>https://www.letout.cn/p/desgin-pattern/singleton/</link><pubDate>Mon, 11 Apr 2022 18:02:02 +0800</pubDate><guid>https://www.letout.cn/p/desgin-pattern/singleton/</guid><description>&lt;img src="https://www.letout.cn/imgs/8.jpeg" alt="Featured image of post 单例模式" />&lt;p>单例模式所要实现的目标：保持一个类有且只有一个实例。&lt;/p>
 &lt;p>出于性能的考虑，不少单例模式都会采用延迟加载的方式。根据是否延迟创建对象，可以分为：&lt;/p>
 &lt;ul>
 &lt;li>

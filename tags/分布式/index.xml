@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>分布式 on 一层</title><link>https://blog.letout.cn/tags/%E5%88%86%E5%B8%83%E5%BC%8F/</link><description>Recent content in 分布式 on 一层</description><generator>Hugo -- gohugo.io</generator><language>zh-cn</language><lastBuildDate>Fri, 03 Mar 2023 12:14:45 +0800</lastBuildDate><atom:link href="https://blog.letout.cn/tags/%E5%88%86%E5%B8%83%E5%BC%8F/index.xml" rel="self" type="application/rss+xml"/><item><title>分布式事务</title><link>https://blog.letout.cn/p/distributed/transaction/</link><pubDate>Fri, 03 Mar 2023 12:14:45 +0800</pubDate><guid>https://blog.letout.cn/p/distributed/transaction/</guid><description>&lt;img src="https://blog.letout.cn/p/distributed/transaction/cap.webp" alt="Featured image of post 分布式事务" />&lt;h2 id="事务">事务&lt;/h2>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>分布式 on 一层</title><link>https://www.letout.cn/tags/%E5%88%86%E5%B8%83%E5%BC%8F/</link><description>Recent content in 分布式 on 一层</description><generator>Hugo -- gohugo.io</generator><language>zh-cn</language><lastBuildDate>Fri, 03 Mar 2023 12:14:45 +0800</lastBuildDate><atom:link href="https://www.letout.cn/tags/%E5%88%86%E5%B8%83%E5%BC%8F/index.xml" rel="self" type="application/rss+xml"/><item><title>分布式事务</title><link>https://www.letout.cn/p/distributed/transaction/</link><pubDate>Fri, 03 Mar 2023 12:14:45 +0800</pubDate><guid>https://www.letout.cn/p/distributed/transaction/</guid><description>&lt;img src="https://www.letout.cn/p/distributed/transaction/cap.webp" alt="Featured image of post 分布式事务" />&lt;h2 id="事务">事务&lt;/h2>
 &lt;h3 id="数据库事务">数据库事务&lt;/h3>
 &lt;p>事务（单数据库的本地事务）是指一组操作，要么全部正确执行，要么全部不执行。&lt;/p>
 &lt;p>事务通常会有 ACID 四大特性：&lt;/p>
@@ -37,10 +37,10 @@
 &lt;/li>
 &lt;/ul>
 &lt;p>🅿️ 分区容错性时分布式系统的根本，如果分区容错性不能满足，那使用分布式式系统将失去意义。&lt;/p>
-&lt;p>&lt;img src="https://blog.letout.cn/p/distributed/transaction/cap.webp"
+&lt;p>&lt;img src="https://www.letout.cn/p/distributed/transaction/cap.webp"
 width="501"
 height="460"
-srcset="https://blog.letout.cn/p/distributed/transaction/cap_hu553ea908437f51f5f9df5986bc7065cb_18394_480x0_resize_q75_h2_box_2.webp 480w, https://blog.letout.cn/p/distributed/transaction/cap_hu553ea908437f51f5f9df5986bc7065cb_18394_1024x0_resize_q75_h2_box_2.webp 1024w"
+srcset="https://www.letout.cn/p/distributed/transaction/cap_hu553ea908437f51f5f9df5986bc7065cb_18394_480x0_resize_q75_h2_box_2.webp 480w, https://www.letout.cn/p/distributed/transaction/cap_hu553ea908437f51f5f9df5986bc7065cb_18394_1024x0_resize_q75_h2_box_2.webp 1024w"
 loading="lazy"
 class="gallery-image"
 data-flex-grow="108"
@@ -107,10 +107,10 @@ data-flex-basis="261px"
 &lt;p>只要有一个 RM 失败，就会进行回滚操作；否则通知所有 RM 提交事务。提交事务后释放锁资源。&lt;/p>
 &lt;/li>
 &lt;/ul>
-&lt;p>&lt;img src="https://blog.letout.cn/p/distributed/transaction/2pc.jpg"
+&lt;p>&lt;img src="https://www.letout.cn/p/distributed/transaction/2pc.jpg"
 width="786"
 height="507"
-srcset="https://blog.letout.cn/p/distributed/transaction/2pc_hua10c08a1522e8116d339a23bf38d0da8_34919_480x0_resize_q75_box.jpg 480w, https://blog.letout.cn/p/distributed/transaction/2pc_hua10c08a1522e8116d339a23bf38d0da8_34919_1024x0_resize_q75_box.jpg 1024w"
+srcset="https://www.letout.cn/p/distributed/transaction/2pc_hua10c08a1522e8116d339a23bf38d0da8_34919_480x0_resize_q75_box.jpg 480w, https://www.letout.cn/p/distributed/transaction/2pc_hua10c08a1522e8116d339a23bf38d0da8_34919_1024x0_resize_q75_box.jpg 1024w"
 loading="lazy"
 class="gallery-image"
 data-flex-grow="155"
@@ -294,7 +294,7 @@ data-flex-basis="372px"
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nd">@GlobalTranactional&lt;/span> &lt;span class="c1">// 开启全局事务
 &lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span> &lt;span class="kd">public&lt;/span> &lt;span class="kt">void&lt;/span> &lt;span class="nf">updateAccountBalance&lt;/span>&lt;span class="o">(&lt;/span>&lt;span class="n">String&lt;/span> &lt;span class="n">accountNo&lt;/span>&lt;span class="o">,&lt;/span> &lt;span class="n">BigDecimal&lt;/span> &lt;span class="n">amount&lt;/span>&lt;span class="o">)&lt;/span> &lt;span class="o">{&lt;/span>
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c1">// 本账户扣款
-&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span> &lt;span class="n">accountInfoDao&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">updateAccountBalance&lt;/span>&lt;span class="o">(&lt;/span>&lt;span class="n">accountNo&lt;/span>&lt;span class="o">,&lt;/span> &lt;span class="o">-&lt;/span>&lt;span class="mi">1&lt;/span> &lt;span class="o">*&lt;/span> &lt;span class="n">amount&lt;/span>&lt;span class="o">);&lt;/span>
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span> &lt;span class="n">accountInfoDao&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">updateAccountBalance&lt;/span>&lt;span class="o">(&lt;/span>&lt;span class="n">accountNo&lt;/span>&lt;span class="o">,&lt;/span> &lt;span class="o">-&lt;/span>&lt;span class="n">1&lt;/span> &lt;span class="o">*&lt;/span> &lt;span class="n">amount&lt;/span>&lt;span class="o">);&lt;/span>
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c1">// 目标账户增加余额
 &lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span> &lt;span class="n">String&lt;/span> &lt;span class="n">remoteRes&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">bankClinet&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">transfer&lt;/span>&lt;span class="o">(&lt;/span>&lt;span class="n">amount&lt;/span>&lt;span class="o">);&lt;/span>
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
@@ -413,10 +413,10 @@ data-flex-basis="372px"
 &lt;/li>
 &lt;/ul>
 &lt;p>基于 TCC 实现分布式事务，需要将业务上的每一个实现逻辑拆分为 Try、Confirm、Cancel 三个部分，相对来说代码实现复杂度较高，对业务的侵入较大和业务紧耦合。&lt;/p>
-&lt;p>&lt;img src="https://blog.letout.cn/p/distributed/transaction/tcc.jpg"
+&lt;p>&lt;img src="https://www.letout.cn/p/distributed/transaction/tcc.jpg"
 width="854"
 height="712"
-srcset="https://blog.letout.cn/p/distributed/transaction/tcc_hu444177640f25c93987cac696f3941268_54943_480x0_resize_q75_box.jpg 480w, https://blog.letout.cn/p/distributed/transaction/tcc_hu444177640f25c93987cac696f3941268_54943_1024x0_resize_q75_box.jpg 1024w"
+srcset="https://www.letout.cn/p/distributed/transaction/tcc_hu444177640f25c93987cac696f3941268_54943_480x0_resize_q75_box.jpg 480w, https://www.letout.cn/p/distributed/transaction/tcc_hu444177640f25c93987cac696f3941268_54943_1024x0_resize_q75_box.jpg 1024w"
 loading="lazy"
 class="gallery-image"
 data-flex-grow="119"
@@ -447,10 +447,10 @@ data-flex-basis="287px"
 &lt;p>如果目标节点中的本地事务失败，会一直不断重试。如果时业务失败，会向源系统发起回滚。&lt;/p>
 &lt;/li>
 &lt;/ul>
-&lt;p>&lt;img src="https://blog.letout.cn/p/distributed/transaction/native-message.jpg"
+&lt;p>&lt;img src="https://www.letout.cn/p/distributed/transaction/native-message.jpg"
 width="1200"
 height="554"
-srcset="https://blog.letout.cn/p/distributed/transaction/native-message_hu24a85cf152ae3fa35fb59282832f4ac6_87554_480x0_resize_q75_box.jpg 480w, https://blog.letout.cn/p/distributed/transaction/native-message_hu24a85cf152ae3fa35fb59282832f4ac6_87554_1024x0_resize_q75_box.jpg 1024w"
+srcset="https://www.letout.cn/p/distributed/transaction/native-message_hu24a85cf152ae3fa35fb59282832f4ac6_87554_480x0_resize_q75_box.jpg 480w, https://www.letout.cn/p/distributed/transaction/native-message_hu24a85cf152ae3fa35fb59282832f4ac6_87554_1024x0_resize_q75_box.jpg 1024w"
 loading="lazy"
 class="gallery-image"
 data-flex-grow="216"

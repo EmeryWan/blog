@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>MySQL on 一层</title><link>https://blog.letout.cn/tags/mysql/</link><description>Recent content in MySQL on 一层</description><generator>Hugo -- gohugo.io</generator><language>zh-cn</language><lastBuildDate>Tue, 07 Mar 2023 18:02:02 +0800</lastBuildDate><atom:link href="https://blog.letout.cn/tags/mysql/index.xml" rel="self" type="application/rss+xml"/><item><title>InnoDB 缓冲池 Buffer Pool</title><link>https://blog.letout.cn/p/mysql/innodb/buffer-pool/</link><pubDate>Tue, 07 Mar 2023 18:02:02 +0800</pubDate><guid>https://blog.letout.cn/p/mysql/innodb/buffer-pool/</guid><description>&lt;img src="https://blog.letout.cn/p/mysql/innodb/buffer-pool/bufferpool.webp" alt="Featured image of post InnoDB 缓冲池 Buffer Pool" />&lt;h2 id="-buffer-pool">🧊 Buffer Pool&lt;/h2>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>MySQL on 一层</title><link>https://www.letout.cn/tags/mysql/</link><description>Recent content in MySQL on 一层</description><generator>Hugo -- gohugo.io</generator><language>zh-cn</language><lastBuildDate>Tue, 07 Mar 2023 18:02:02 +0800</lastBuildDate><atom:link href="https://www.letout.cn/tags/mysql/index.xml" rel="self" type="application/rss+xml"/><item><title>InnoDB 缓冲池 Buffer Pool</title><link>https://www.letout.cn/p/mysql/innodb/buffer-pool/</link><pubDate>Tue, 07 Mar 2023 18:02:02 +0800</pubDate><guid>https://www.letout.cn/p/mysql/innodb/buffer-pool/</guid><description>&lt;img src="https://www.letout.cn/p/mysql/innodb/buffer-pool/bufferpool.webp" alt="Featured image of post InnoDB 缓冲池 Buffer Pool" />&lt;h2 id="-buffer-pool">🧊 Buffer Pool&lt;/h2>
 &lt;p>MySQL 的数据是存储在磁盘中的，为了提升读写性能，InnoDB 设计了一个缓存池 Buffer Pool。&lt;/p>
 &lt;p>本质上是 InnoDB 向操作系统申请的一段连续内存空间，可以通过 &lt;code>innodb_buffer_pool_size&lt;/code> 来进行调整大小。&lt;/p>
 &lt;ul>
@@ -11,10 +11,10 @@
 &lt;/ul>
 &lt;h3 id="-结构">🧩 结构&lt;/h3>
 &lt;p>Buffer Pool 中的连续内存，会被分割成一个个的页，和 InnoDB 的页大小一样，都是 &lt;code>16KB&lt;/code>，称为缓存页。&lt;/p>
-&lt;p>&lt;img src="https://blog.letout.cn/p/mysql/innodb/buffer-pool/cache-page.webp"
+&lt;p>&lt;img src="https://www.letout.cn/p/mysql/innodb/buffer-pool/cache-page.webp"
 width="962"
 height="234"
-srcset="https://blog.letout.cn/p/mysql/innodb/buffer-pool/cache-page_hucd01fda075157d782d9171d9e071f31a_7000_480x0_resize_q75_h2_box_2.webp 480w, https://blog.letout.cn/p/mysql/innodb/buffer-pool/cache-page_hucd01fda075157d782d9171d9e071f31a_7000_1024x0_resize_q75_h2_box_2.webp 1024w"
+srcset="https://www.letout.cn/p/mysql/innodb/buffer-pool/cache-page_hucd01fda075157d782d9171d9e071f31a_7000_480x0_resize_q75_h2_box_2.webp 480w, https://www.letout.cn/p/mysql/innodb/buffer-pool/cache-page_hucd01fda075157d782d9171d9e071f31a_7000_1024x0_resize_q75_h2_box_2.webp 1024w"
 loading="lazy"
 class="gallery-image"
 data-flex-grow="411"
@@ -31,10 +31,10 @@ data-flex-basis="986px"
 &lt;li>自适应哈希索引&lt;/li>
 &lt;li>锁信息&lt;/li>
 &lt;/ul>
-&lt;p>&lt;img src="https://blog.letout.cn/p/mysql/innodb/buffer-pool/bufferpool.webp"
+&lt;p>&lt;img src="https://www.letout.cn/p/mysql/innodb/buffer-pool/bufferpool.webp"
 width="812"
 height="377"
-srcset="https://blog.letout.cn/p/mysql/innodb/buffer-pool/bufferpool_hu9753cf048aa8ef6ecf388c9b29af095f_8518_480x0_resize_q75_h2_box_2.webp 480w, https://blog.letout.cn/p/mysql/innodb/buffer-pool/bufferpool_hu9753cf048aa8ef6ecf388c9b29af095f_8518_1024x0_resize_q75_h2_box_2.webp 1024w"
+srcset="https://www.letout.cn/p/mysql/innodb/buffer-pool/bufferpool_hu9753cf048aa8ef6ecf388c9b29af095f_8518_480x0_resize_q75_h2_box_2.webp 480w, https://www.letout.cn/p/mysql/innodb/buffer-pool/bufferpool_hu9753cf048aa8ef6ecf388c9b29af095f_8518_1024x0_resize_q75_h2_box_2.webp 1024w"
 loading="lazy"
 class="gallery-image"
 data-flex-grow="215"
@@ -47,10 +47,10 @@ InnoDB 使用了许多🔗&lt;strong>链表&lt;/strong>管理 Buffer Pool 的页
 &lt;p>💡 空闲页：Buffer Pool 内存中未被使用的页。&lt;/p>
 &lt;p>为了能快速找到空闲的缓存页，使用 Free 空闲链表管理空闲页。&lt;/p>
 &lt;p>Free 链表的节点是一个个空闲页所对应的控制块。&lt;/p>
-&lt;p>&lt;img src="https://blog.letout.cn/p/mysql/innodb/buffer-pool/free-list.webp"
+&lt;p>&lt;img src="https://www.letout.cn/p/mysql/innodb/buffer-pool/free-list.webp"
 width="1217"
 height="597"
-srcset="https://blog.letout.cn/p/mysql/innodb/buffer-pool/free-list_hu2194ab0c933cdf7ef8a007d7c52bad5f_28012_480x0_resize_q75_h2_box_2.webp 480w, https://blog.letout.cn/p/mysql/innodb/buffer-pool/free-list_hu2194ab0c933cdf7ef8a007d7c52bad5f_28012_1024x0_resize_q75_h2_box_2.webp 1024w"
+srcset="https://www.letout.cn/p/mysql/innodb/buffer-pool/free-list_hu2194ab0c933cdf7ef8a007d7c52bad5f_28012_480x0_resize_q75_h2_box_2.webp 480w, https://www.letout.cn/p/mysql/innodb/buffer-pool/free-list_hu2194ab0c933cdf7ef8a007d7c52bad5f_28012_1024x0_resize_q75_h2_box_2.webp 1024w"
 loading="lazy"
 class="gallery-image"
 data-flex-grow="203"
@@ -78,10 +78,10 @@ data-flex-basis="489px"
 &lt;p>（加大数据放入 young 区的条件，加载到 old 区域的数据，停留时间超过阈值时，才有资格放到 young 区域）&lt;/p>
 &lt;/li>
 &lt;/ul>
-&lt;p>&lt;img src="https://blog.letout.cn/p/mysql/innodb/buffer-pool/lru-list.webp"
+&lt;p>&lt;img src="https://www.letout.cn/p/mysql/innodb/buffer-pool/lru-list.webp"
 width="842"
 height="212"
-srcset="https://blog.letout.cn/p/mysql/innodb/buffer-pool/lru-list_hub80bcb1068b40da49c3759e6a067b1e3_15066_480x0_resize_q75_h2_box_2.webp 480w, https://blog.letout.cn/p/mysql/innodb/buffer-pool/lru-list_hub80bcb1068b40da49c3759e6a067b1e3_15066_1024x0_resize_q75_h2_box_2.webp 1024w"
+srcset="https://www.letout.cn/p/mysql/innodb/buffer-pool/lru-list_hub80bcb1068b40da49c3759e6a067b1e3_15066_480x0_resize_q75_h2_box_2.webp 480w, https://www.letout.cn/p/mysql/innodb/buffer-pool/lru-list_hub80bcb1068b40da49c3759e6a067b1e3_15066_1024x0_resize_q75_h2_box_2.webp 1024w"
 loading="lazy"
 class="gallery-image"
 data-flex-grow="397"
@@ -112,7 +112,7 @@ data-flex-basis="953px"
 &lt;li>
 &lt;p>🎗️ 当 MySQL 主动正常关闭前&lt;/p>
 &lt;/li>
-&lt;/ul></description></item><item><title>MySQL 复制</title><link>https://blog.letout.cn/p/mysql/master-slave-replication/</link><pubDate>Thu, 02 Mar 2023 12:02:02 +0800</pubDate><guid>https://blog.letout.cn/p/mysql/master-slave-replication/</guid><description>&lt;img src="https://blog.letout.cn/p/mysql/master-slave-replication/copy.png" alt="Featured image of post MySQL 复制" />&lt;h2 id="-主从复制">📑 主从复制&lt;/h2>
+&lt;/ul></description></item><item><title>MySQL 复制</title><link>https://www.letout.cn/p/mysql/master-slave-replication/</link><pubDate>Thu, 02 Mar 2023 12:02:02 +0800</pubDate><guid>https://www.letout.cn/p/mysql/master-slave-replication/</guid><description>&lt;img src="https://www.letout.cn/p/mysql/master-slave-replication/copy.png" alt="Featured image of post MySQL 复制" />&lt;h2 id="-主从复制">📑 主从复制&lt;/h2>
 &lt;p>主从复制指主服务器（master server）上，任何修改和数据结构变更的事件，都会被写入到日志文件 &lt;code>bin log&lt;/code> 中，从服务器（slave server）读取主服务器上的日志文件中的事件变更，并在本地重放执行。&lt;/p>
 &lt;p>通过主从复制，能够提高数据库的&lt;strong>读&lt;/strong>性能。主库复制写，从库复制读。&lt;/p>
 &lt;p>并不适合来扩展写操作。例如在一主多从的架构中，写操作要被执行多次，整个系统的性能会取决于写入最慢的那个。&lt;/p>
@@ -136,10 +136,10 @@ data-flex-basis="953px"
 &lt;/li>
 &lt;/ul>
 &lt;p>这里的 IO 线程 和 SQL 线程的工作是解耦的，可以独立运行。&lt;/p>
-&lt;p>&lt;img src="https://blog.letout.cn/p/mysql/master-slave-replication/copy.png"
+&lt;p>&lt;img src="https://www.letout.cn/p/mysql/master-slave-replication/copy.png"
 width="1080"
 height="603"
-srcset="https://blog.letout.cn/p/mysql/master-slave-replication/copy_hu2815b7bcceb4bc2e593bd903d3b2a777_501311_480x0_resize_box_3.png 480w, https://blog.letout.cn/p/mysql/master-slave-replication/copy_hu2815b7bcceb4bc2e593bd903d3b2a777_501311_1024x0_resize_box_3.png 1024w"
+srcset="https://www.letout.cn/p/mysql/master-slave-replication/copy_hu2815b7bcceb4bc2e593bd903d3b2a777_501311_480x0_resize_box_3.png 480w, https://www.letout.cn/p/mysql/master-slave-replication/copy_hu2815b7bcceb4bc2e593bd903d3b2a777_501311_1024x0_resize_box_3.png 1024w"
 loading="lazy"
 class="gallery-image"
 data-flex-grow="179"
@@ -176,13 +176,13 @@ data-flex-basis="429px"
 >https://ost.51cto.com/posts/11721&lt;/a>&lt;/li>
 &lt;li>&lt;a class="link" href="https://mp.weixin.qq.com/s?__biz=MjM5ODYxMDA5OQ==&amp;amp;mid=2651961330&amp;amp;idx=1&amp;amp;sn=4bdbada3b26d4fc2fc505f7a0f2ad7c4" target="_blank" rel="noopener"
 >https://mp.weixin.qq.com/s?__biz=MjM5ODYxMDA5OQ==&amp;mid=2651961330&amp;idx=1&amp;sn=4bdbada3b26d4fc2fc505f7a0f2ad7c4&lt;/a>&lt;/li>
-&lt;/ul></description></item><item><title>MySQL 语句是怎么执行的</title><link>https://blog.letout.cn/p/mysql/how-execute/</link><pubDate>Wed, 11 Jan 2023 18:30:02 +0800</pubDate><guid>https://blog.letout.cn/p/mysql/how-execute/</guid><description>&lt;img src="https://blog.letout.cn/p/mysql/how-execute/mysql.webp" alt="Featured image of post MySQL 语句是怎么执行的" />&lt;p>MySQL 可以分为：&lt;/p>
+&lt;/ul></description></item><item><title>MySQL 语句是怎么执行的</title><link>https://www.letout.cn/p/mysql/how-execute/</link><pubDate>Wed, 11 Jan 2023 18:30:02 +0800</pubDate><guid>https://www.letout.cn/p/mysql/how-execute/</guid><description>&lt;img src="https://www.letout.cn/p/mysql/how-execute/mysql.webp" alt="Featured image of post MySQL 语句是怎么执行的" />&lt;p>MySQL 可以分为：&lt;/p>
 &lt;p>（1）Server 层：负责建立连接，分析和执行SQL&lt;/p>
 &lt;p>（2）存储引擎层：负责数据的存储和提取&lt;/p>
-&lt;p>&lt;img src="https://blog.letout.cn/p/mysql/how-execute/mysql.webp"
+&lt;p>&lt;img src="https://www.letout.cn/p/mysql/how-execute/mysql.webp"
 width="1920"
 height="1440"
-srcset="https://blog.letout.cn/p/mysql/how-execute/mysql_hu2e25f96503f96a8e12f0e1c93e28468a_180676_480x0_resize_q75_h2_box_2.webp 480w, https://blog.letout.cn/p/mysql/how-execute/mysql_hu2e25f96503f96a8e12f0e1c93e28468a_180676_1024x0_resize_q75_h2_box_2.webp 1024w"
+srcset="https://www.letout.cn/p/mysql/how-execute/mysql_hu2e25f96503f96a8e12f0e1c93e28468a_180676_480x0_resize_q75_h2_box_2.webp 480w, https://www.letout.cn/p/mysql/how-execute/mysql_hu2e25f96503f96a8e12f0e1c93e28468a_180676_1024x0_resize_q75_h2_box_2.webp 1024w"
 loading="lazy"
 class="gallery-image"
 data-flex-grow="133"
@@ -238,7 +238,7 @@ data-flex-basis="320px"
 &lt;p>存储引擎负责数据的存储和提取。&lt;/p>
 &lt;p>MySQL 存储引擎的架构模式是插件式的，支持 InnoDB、MyISAM、Memory 等多个存储引擎。可以根据需要选择合适的存储引擎。通常我们会选择使用 InnoDB 存储引擎。&lt;/p>
 &lt;p>在 InnoDB 存储引擎中，如果查询的数据在 &lt;a class="link" href="https://www.letout.cn/p/mysql/innodb/buffer-pool/" target="_blank" rel="noopener"
->BufferPool&lt;/a> 中，会直接返回；如果没有会将数据加载到内存中，在返回给客户端。&lt;/p></description></item><item><title>SQL 语句优化</title><link>https://blog.letout.cn/p/mysql/sql-optimize/</link><pubDate>Fri, 01 Jul 2022 18:02:02 +0800</pubDate><guid>https://blog.letout.cn/p/mysql/sql-optimize/</guid><description>&lt;img src="https://blog.letout.cn/imgs/20.jpeg" alt="Featured image of post SQL 语句优化" />&lt;blockquote>
+>BufferPool&lt;/a> 中，会直接返回；如果没有会将数据加载到内存中，在返回给客户端。&lt;/p></description></item><item><title>SQL 语句优化</title><link>https://www.letout.cn/p/mysql/sql-optimize/</link><pubDate>Fri, 01 Jul 2022 18:02:02 +0800</pubDate><guid>https://www.letout.cn/p/mysql/sql-optimize/</guid><description>&lt;img src="https://www.letout.cn/imgs/20.jpeg" alt="Featured image of post SQL 语句优化" />&lt;blockquote>
 &lt;p>🔥 主要思路：&lt;/p>
 &lt;ul>
 &lt;li>
@@ -427,7 +427,7 @@ data-flex-basis="320px"
 &lt;li>InnoDB引擎并不会把全部字段取出来，而是专门做了优化，不取值，服务层直接按行进行累加。&lt;/li>
 &lt;/ul>
 &lt;/li>
-&lt;/ul></description></item><item><title>InnoDB 存储引擎</title><link>https://blog.letout.cn/p/mysql/innodb/</link><pubDate>Fri, 01 Jul 2022 13:01:02 +0800</pubDate><guid>https://blog.letout.cn/p/mysql/innodb/</guid><description>&lt;img src="https://blog.letout.cn/p/mysql/innodb/innodb.webp" alt="Featured image of post InnoDB 存储引擎" />&lt;h2 id="事务">事务&lt;/h2>
+&lt;/ul></description></item><item><title>InnoDB 存储引擎</title><link>https://www.letout.cn/p/mysql/innodb/</link><pubDate>Fri, 01 Jul 2022 13:01:02 +0800</pubDate><guid>https://www.letout.cn/p/mysql/innodb/</guid><description>&lt;img src="https://www.letout.cn/p/mysql/innodb/innodb.webp" alt="Featured image of post InnoDB 存储引擎" />&lt;h2 id="事务">事务&lt;/h2>
 &lt;p>事务是一组逻辑上的数据库操作，这些操作要么全部成功，要么全部失败。&lt;/p>
 &lt;ul>
 &lt;li>
@@ -443,10 +443,10 @@ data-flex-basis="320px"
 &lt;p>&lt;code>D&lt;/code> 持久性：事务一旦提交或回滚，它对数据库中的数据的改变就是永久的。&lt;/p>
 &lt;/li>
 &lt;/ul>
-&lt;p>&lt;img src="https://blog.letout.cn/p/mysql/innodb/1.png"
+&lt;p>&lt;img src="https://www.letout.cn/p/mysql/innodb/1.png"
 width="869"
 height="333"
-srcset="https://blog.letout.cn/p/mysql/innodb/1_hu3fd49fc1a58d123f3498503f7ff7204f_68265_480x0_resize_box_3.png 480w, https://blog.letout.cn/p/mysql/innodb/1_hu3fd49fc1a58d123f3498503f7ff7204f_68265_1024x0_resize_box_3.png 1024w"
+srcset="https://www.letout.cn/p/mysql/innodb/1_hu3fd49fc1a58d123f3498503f7ff7204f_68265_480x0_resize_box_3.png 480w, https://www.letout.cn/p/mysql/innodb/1_hu3fd49fc1a58d123f3498503f7ff7204f_68265_1024x0_resize_box_3.png 1024w"
 loading="lazy"
 alt="1"
 class="gallery-image"
@@ -457,10 +457,10 @@ data-flex-basis="626px"
 &lt;h2 id="-redo-log">🔃 redo log&lt;/h2>
 &lt;p>重做日志，记录的是“某个数据页上做了什么修改”。（物理日志）&lt;/p>
 &lt;p>redo log 用来保障数据库的持久性。在一个事务中，执行增删改的操作时，InnoDB 引擎会先操作缓冲池 Buffer Pool 中的数据，如果缓冲区没有对应的数据，会通过后台线程将磁盘中的数据加载出来，存放在缓冲区中，再将缓冲池中的数据修改。&lt;/p>
-&lt;p>&lt;img src="https://blog.letout.cn/p/mysql/innodb/redolog.png"
+&lt;p>&lt;img src="https://www.letout.cn/p/mysql/innodb/redolog.png"
 width="889"
 height="359"
-srcset="https://blog.letout.cn/p/mysql/innodb/redolog_huec6805565d40a88bf7c70b51e3ee84c7_38212_480x0_resize_box_3.png 480w, https://blog.letout.cn/p/mysql/innodb/redolog_huec6805565d40a88bf7c70b51e3ee84c7_38212_1024x0_resize_box_3.png 1024w"
+srcset="https://www.letout.cn/p/mysql/innodb/redolog_huec6805565d40a88bf7c70b51e3ee84c7_38212_480x0_resize_box_3.png 480w, https://www.letout.cn/p/mysql/innodb/redolog_huec6805565d40a88bf7c70b51e3ee84c7_38212_1024x0_resize_box_3.png 1024w"
 loading="lazy"
 alt="redolog"
 class="gallery-image"
@@ -506,10 +506,10 @@ data-flex-basis="594px"
 &lt;li>undo log&lt;/li>
 &lt;li>Read View&lt;/li>
 &lt;/ul>
-&lt;p>&lt;img src="https://blog.letout.cn/p/mysql/innodb/2.png"
+&lt;p>&lt;img src="https://www.letout.cn/p/mysql/innodb/2.png"
 width="447"
 height="293"
-srcset="https://blog.letout.cn/p/mysql/innodb/2_hu6914e1ba0252a0a630b3ee48cb8867a4_30147_480x0_resize_box_3.png 480w, https://blog.letout.cn/p/mysql/innodb/2_hu6914e1ba0252a0a630b3ee48cb8867a4_30147_1024x0_resize_box_3.png 1024w"
+srcset="https://www.letout.cn/p/mysql/innodb/2_hu6914e1ba0252a0a630b3ee48cb8867a4_30147_480x0_resize_box_3.png 480w, https://www.letout.cn/p/mysql/innodb/2_hu6914e1ba0252a0a630b3ee48cb8867a4_30147_1024x0_resize_box_3.png 1024w"
 loading="lazy"
 alt="2"
 class="gallery-image"
@@ -542,10 +542,10 @@ data-flex-basis="366px"
 &lt;h3 id="-两次写-double-write">🖋️ 两次写 Double Write&lt;/h3>
 &lt;p>InnoDB 将脏页刷新到磁盘中时，突然发生宕机，只写入了一半，可能会发生数据丢失的问题。&lt;/p>
 &lt;p>InnDB 使用 Double Wirte 机制，给数据添加副本，防止数据丢失。&lt;/p>
-&lt;p>&lt;img src="https://blog.letout.cn/p/mysql/innodb/doublewrite.png"
+&lt;p>&lt;img src="https://www.letout.cn/p/mysql/innodb/doublewrite.png"
 width="1178"
 height="730"
-srcset="https://blog.letout.cn/p/mysql/innodb/doublewrite_hu9ca5738e358d4e9e6de3d859e62edb84_153884_480x0_resize_box_3.png 480w, https://blog.letout.cn/p/mysql/innodb/doublewrite_hu9ca5738e358d4e9e6de3d859e62edb84_153884_1024x0_resize_box_3.png 1024w"
+srcset="https://www.letout.cn/p/mysql/innodb/doublewrite_hu9ca5738e358d4e9e6de3d859e62edb84_153884_480x0_resize_box_3.png 480w, https://www.letout.cn/p/mysql/innodb/doublewrite_hu9ca5738e358d4e9e6de3d859e62edb84_153884_1024x0_resize_box_3.png 1024w"
 loading="lazy"
 class="gallery-image"
 data-flex-grow="161"
@@ -562,7 +562,7 @@ data-flex-basis="387px"
 &lt;h3 id="-预读机制">📖 预读机制&lt;/h3>
 &lt;p>InnoDB 会将查询页的邻近页一起读到 &lt;a class="link" href="https://www.letout.cn/p/mysql/innodb/buffer-pool/" target="_blank" rel="noopener"
 >Buffer Pool&lt;/a> 中。&lt;/p>
-&lt;p>通过改进的 LRU 链表（管理干净页 &amp;amp; 脏页的链表），解决了预读失效的问题。。&lt;/p></description></item><item><title>MySQL 中的日志</title><link>https://blog.letout.cn/p/mysql/log/</link><pubDate>Thu, 30 Jun 2022 18:02:02 +0800</pubDate><guid>https://blog.letout.cn/p/mysql/log/</guid><description>&lt;img src="https://blog.letout.cn/imgs/19.jpeg" alt="Featured image of post MySQL 中的日志" />&lt;h2 id="-server-层日志">🖥️ Server 层日志&lt;/h2>
+&lt;p>通过改进的 LRU 链表（管理干净页 &amp;amp; 脏页的链表），解决了预读失效的问题。。&lt;/p></description></item><item><title>MySQL 中的日志</title><link>https://www.letout.cn/p/mysql/log/</link><pubDate>Thu, 30 Jun 2022 18:02:02 +0800</pubDate><guid>https://www.letout.cn/p/mysql/log/</guid><description>&lt;img src="https://www.letout.cn/imgs/19.jpeg" alt="Featured image of post MySQL 中的日志" />&lt;h2 id="-server-层日志">🖥️ Server 层日志&lt;/h2>
 &lt;h3 id="错误日志">错误日志&lt;/h3>
 &lt;p>错误日志是 MySQL 中最重要的日志之一，它记录了当 mysqld 启动和停止时，以及服务器在运行过程中发生任何严重错误时的相关信息。&lt;/p>
 &lt;p>当数据库出现任何故障导致无法正常使用时，建议首先查看此日志。查看日志位置：&lt;/p>
@@ -574,10 +574,10 @@ data-flex-basis="387px"
 &lt;pre tabindex="0" class="chroma">&lt;code class="language-sql" data-lang="sql">&lt;span class="line">&lt;span class="cl">&lt;span class="k">show&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">variables&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">like&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="s1">&amp;#39;%log_error%&amp;#39;&lt;/span>&lt;span class="p">;&lt;/span>&lt;span class="w">
 &lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
 &lt;/div>
-&lt;/div>&lt;p>&lt;img src="https://blog.letout.cn/p/mysql/log/errorlog.png"
+&lt;/div>&lt;p>&lt;img src="https://www.letout.cn/p/mysql/log/errorlog.png"
 width="669"
 height="214"
-srcset="https://blog.letout.cn/p/mysql/log/errorlog_huaf2aa946fc0c9a4be25a1e7ae77fcd38_27013_480x0_resize_box_3.png 480w, https://blog.letout.cn/p/mysql/log/errorlog_huaf2aa946fc0c9a4be25a1e7ae77fcd38_27013_1024x0_resize_box_3.png 1024w"
+srcset="https://www.letout.cn/p/mysql/log/errorlog_huaf2aa946fc0c9a4be25a1e7ae77fcd38_27013_480x0_resize_box_3.png 480w, https://www.letout.cn/p/mysql/log/errorlog_huaf2aa946fc0c9a4be25a1e7ae77fcd38_27013_1024x0_resize_box_3.png 1024w"
 loading="lazy"
 alt="errorlog"
 class="gallery-image"
@@ -599,13 +599,13 @@ data-flex-basis="750px"
 &lt;/span>&lt;span class="lnt">7
 &lt;/span>&lt;/code>&lt;/pre>&lt;/td>
 &lt;td class="lntd">
-&lt;pre tabindex="0" class="chroma">&lt;code class="language-fallback" data-lang="fallback">&lt;span class="line">&lt;span class="cl"># 该选项用来开启查询日志
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"># 可选值 0 关闭 1 开启
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">general_log=1
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-conf" data-lang="conf">&lt;span class="line">&lt;span class="cl">&lt;span class="c"># 该选项用来开启查询日志
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c"># 可选值 0 关闭 1 开启
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c">&lt;/span>&lt;span class="nv">general_log&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="nv">1&lt;/span>
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"># 设置日志的文件名
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"># 如果没有指定，默认的文件名为 host_name.log
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">general_log_file=mysql_query.log
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c"># 设置日志的文件名
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c"># 如果没有指定，默认的文件名为 host_name.log
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c">&lt;/span>&lt;span class="nv">general_log_file&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="nv">mysql_query.log&lt;/span>
 &lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
 &lt;/div>
 &lt;/div>&lt;p>开启了查询日志之后，/var/lib/mysql/ 目录下就会出现 mysql_query.log 文件。&lt;/p>
@@ -627,11 +627,11 @@ data-flex-basis="750px"
 &lt;/span>&lt;span class="lnt">5
 &lt;/span>&lt;/code>&lt;/pre>&lt;/td>
 &lt;td class="lntd">
-&lt;pre tabindex="0" class="chroma">&lt;code class="language-fallback" data-lang="fallback">&lt;span class="line">&lt;span class="cl"># 慢查询日志
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">slow_query_log=1
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-conf" data-lang="conf">&lt;span class="line">&lt;span class="cl">&lt;span class="c"># 慢查询日志
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c">&lt;/span>&lt;span class="nv">slow_query_log&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="nv">1&lt;/span>
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"># 执行时间参数
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">long_query_time=2
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c"># 执行时间参数
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c">&lt;/span>&lt;span class="nv">long_query_time&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="nv">2&lt;/span>
 &lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
 &lt;/div>
 &lt;/div>&lt;p>默认情况下，不会记录管理语句，也不会记录不使用索引进行查找的查询。&lt;/p>
@@ -644,11 +644,11 @@ data-flex-basis="750px"
 &lt;/span>&lt;span class="lnt">5
 &lt;/span>&lt;/code>&lt;/pre>&lt;/td>
 &lt;td class="lntd">
-&lt;pre tabindex="0" class="chroma">&lt;code class="language-fallback" data-lang="fallback">&lt;span class="line">&lt;span class="cl"># 记录执行较慢的管理语句
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">log_slow_admin_statements=1
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-conf" data-lang="conf">&lt;span class="line">&lt;span class="cl">&lt;span class="c"># 记录执行较慢的管理语句
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c">&lt;/span>&lt;span class="nv">log_slow_admin_statements&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="nv">1&lt;/span>
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"># 记录执行较慢的未使用索引的语句
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">log_queries_not_using_indexes= 1
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c"># 记录执行较慢的未使用索引的语句
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c">&lt;/span>&lt;span class="nv">log_queries_not_using_indexes&lt;/span>&lt;span class="o">=&lt;/span> &lt;span class="nv">1&lt;/span>
 &lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
 &lt;/div>
 &lt;/div>&lt;h3 id="-bin-log">🔢 bin log&lt;/h3>
@@ -667,10 +667,10 @@ data-flex-basis="750px"
 &lt;pre tabindex="0" class="chroma">&lt;code class="language-sql" data-lang="sql">&lt;span class="line">&lt;span class="cl">&lt;span class="k">show&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">variables&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">like&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="s1">&amp;#39;%log_bin%&amp;#39;&lt;/span>&lt;span class="p">;&lt;/span>&lt;span class="w">
 &lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
 &lt;/div>
-&lt;/div>&lt;p>&lt;img src="https://blog.letout.cn/p/mysql/log/binlog.png"
+&lt;/div>&lt;p>&lt;img src="https://www.letout.cn/p/mysql/log/binlog.png"
 width="602"
 height="240"
-srcset="https://blog.letout.cn/p/mysql/log/binlog_hue4b3570af35eb515872cd8390aac573d_28397_480x0_resize_box_3.png 480w, https://blog.letout.cn/p/mysql/log/binlog_hue4b3570af35eb515872cd8390aac573d_28397_1024x0_resize_box_3.png 1024w"
+srcset="https://www.letout.cn/p/mysql/log/binlog_hue4b3570af35eb515872cd8390aac573d_28397_480x0_resize_box_3.png 480w, https://www.letout.cn/p/mysql/log/binlog_hue4b3570af35eb515872cd8390aac573d_28397_1024x0_resize_box_3.png 1024w"
 loading="lazy"
 alt="binlog"
 class="gallery-image"
@@ -722,10 +722,10 @@ data-flex-basis="602px"
 &lt;pre tabindex="0" class="chroma">&lt;code class="language-sql" data-lang="sql">&lt;span class="line">&lt;span class="cl">&lt;span class="k">show&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">variables&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">like&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="s1">&amp;#39;%binlog_format%&amp;#39;&lt;/span>&lt;span class="p">;&lt;/span>&lt;span class="w">
 &lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
 &lt;/div>
-&lt;/div>&lt;p>&lt;img src="https://blog.letout.cn/p/mysql/log/binlogformat.png"
+&lt;/div>&lt;p>&lt;img src="https://www.letout.cn/p/mysql/log/binlogformat.png"
 width="432"
 height="156"
-srcset="https://blog.letout.cn/p/mysql/log/binlogformat_hu025aaab383e907dcebf622698b084bf9_13882_480x0_resize_box_3.png 480w, https://blog.letout.cn/p/mysql/log/binlogformat_hu025aaab383e907dcebf622698b084bf9_13882_1024x0_resize_box_3.png 1024w"
+srcset="https://www.letout.cn/p/mysql/log/binlogformat_hu025aaab383e907dcebf622698b084bf9_13882_480x0_resize_box_3.png 480w, https://www.letout.cn/p/mysql/log/binlogformat_hu025aaab383e907dcebf622698b084bf9_13882_1024x0_resize_box_3.png 1024w"
 loading="lazy"
 alt="binlogformat"
 class="gallery-image"
@@ -784,10 +784,10 @@ data-flex-basis="664px"
 &lt;pre tabindex="0" class="chroma">&lt;code class="language-sql" data-lang="sql">&lt;span class="line">&lt;span class="cl">&lt;span class="k">show&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">variables&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">like&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="s1">&amp;#39;%binlog_expire_logs_seconds%&amp;#39;&lt;/span>&lt;span class="p">;&lt;/span>&lt;span class="w">
 &lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
 &lt;/div>
-&lt;/div>&lt;p>&lt;img src="https://blog.letout.cn/p/mysql/log/binlogexpire.png"
+&lt;/div>&lt;p>&lt;img src="https://www.letout.cn/p/mysql/log/binlogexpire.png"
 width="541"
 height="153"
-srcset="https://blog.letout.cn/p/mysql/log/binlogexpire_hua71c1465b703f02a37880ff6dd450f1c_15632_480x0_resize_box_3.png 480w, https://blog.letout.cn/p/mysql/log/binlogexpire_hua71c1465b703f02a37880ff6dd450f1c_15632_1024x0_resize_box_3.png 1024w"
+srcset="https://www.letout.cn/p/mysql/log/binlogexpire_hua71c1465b703f02a37880ff6dd450f1c_15632_480x0_resize_box_3.png 480w, https://www.letout.cn/p/mysql/log/binlogexpire_hua71c1465b703f02a37880ff6dd450f1c_15632_1024x0_resize_box_3.png 1024w"
 loading="lazy"
 alt="binlogexpire"
 class="gallery-image"
@@ -803,10 +803,10 @@ data-flex-basis="848px"
 &lt;h4 id="-redo-log-循环写">🔃 redo log 循环写&lt;/h4>
 &lt;p>redo log 是为了防止 Buffer Pool 中的脏页丢失而设计的。当随着服务的运行，Buffer Pool 中的脏页刷新到了磁盘中，redo log 中的记录就没有用了，可以擦除旧记录。&lt;/p>
 &lt;p>所以 redo log 采用了循环写的方式，数据写到末尾又会回到文件的开头，新数据可以覆盖无用的旧数据。&lt;/p>
-&lt;p>&lt;img src="https://blog.letout.cn/p/mysql/log/redo-log.webp"
+&lt;p>&lt;img src="https://www.letout.cn/p/mysql/log/redo-log.webp"
 width="1362"
 height="906"
-srcset="https://blog.letout.cn/p/mysql/log/redo-log_hud436e5fcec2bf61353c634ad67370294_39572_480x0_resize_q75_h2_box_2.webp 480w, https://blog.letout.cn/p/mysql/log/redo-log_hud436e5fcec2bf61353c634ad67370294_39572_1024x0_resize_q75_h2_box_2.webp 1024w"
+srcset="https://www.letout.cn/p/mysql/log/redo-log_hud436e5fcec2bf61353c634ad67370294_39572_480x0_resize_q75_h2_box_2.webp 480w, https://www.letout.cn/p/mysql/log/redo-log_hud436e5fcec2bf61353c634ad67370294_39572_1024x0_resize_q75_h2_box_2.webp 1024w"
 loading="lazy"
 class="gallery-image"
 data-flex-grow="150"
@@ -844,10 +844,10 @@ data-flex-basis="360px"
 &lt;p>将 redo log 写入拆成了两个步骤：prepare 和 commit，中间再穿插写入 bin log。&lt;/p>
 &lt;p>&lt;code>redo log prepare -&amp;gt; bin log -&amp;gt; redo log commit&lt;/code>&lt;/p>
 &lt;p>当 bin log 成功持久化到磁盘，就被认为事务已经执行成功（即使 redo log 是 prepare 也没有关系）。&lt;/p>
-&lt;p>&lt;img src="https://blog.letout.cn/p/mysql/log/prepare-commit.png"
+&lt;p>&lt;img src="https://www.letout.cn/p/mysql/log/prepare-commit.png"
 width="887"
 height="859"
-srcset="https://blog.letout.cn/p/mysql/log/prepare-commit_hu761b281e24776a109dc5986da4421988_282489_480x0_resize_box_3.png 480w, https://blog.letout.cn/p/mysql/log/prepare-commit_hu761b281e24776a109dc5986da4421988_282489_1024x0_resize_box_3.png 1024w"
+srcset="https://www.letout.cn/p/mysql/log/prepare-commit_hu761b281e24776a109dc5986da4421988_282489_480x0_resize_box_3.png 480w, https://www.letout.cn/p/mysql/log/prepare-commit_hu761b281e24776a109dc5986da4421988_282489_1024x0_resize_box_3.png 1024w"
 loading="lazy"
 class="gallery-image"
 data-flex-grow="103"
@@ -892,15 +892,15 @@ data-flex-basis="247px"
 &lt;p>回滚指针可以将 undo log 串连成一个链表，这个链表称为版本链。&lt;/p>
 &lt;/li>
 &lt;/ul>
-&lt;p>&lt;img src="https://blog.letout.cn/p/mysql/log/version-link.webp"
+&lt;p>&lt;img src="https://www.letout.cn/p/mysql/log/version-link.webp"
 width="1140"
 height="591"
-srcset="https://blog.letout.cn/p/mysql/log/version-link_hu0442ac56d20b027197f4981105a2d120_16904_480x0_resize_q75_h2_box_2.webp 480w, https://blog.letout.cn/p/mysql/log/version-link_hu0442ac56d20b027197f4981105a2d120_16904_1024x0_resize_q75_h2_box_2.webp 1024w"
+srcset="https://www.letout.cn/p/mysql/log/version-link_hu0442ac56d20b027197f4981105a2d120_16904_480x0_resize_q75_h2_box_2.webp 480w, https://www.letout.cn/p/mysql/log/version-link_hu0442ac56d20b027197f4981105a2d120_16904_1024x0_resize_q75_h2_box_2.webp 1024w"
 loading="lazy"
 class="gallery-image"
 data-flex-grow="192"
 data-flex-basis="462px"
->&lt;/p></description></item><item><title>MySQL 索引</title><link>https://blog.letout.cn/p/mysql/index/</link><pubDate>Thu, 30 Jun 2022 14:02:02 +0800</pubDate><guid>https://blog.letout.cn/p/mysql/index/</guid><description>&lt;img src="https://blog.letout.cn/imgs/15.jpeg" alt="Featured image of post MySQL 索引" />&lt;h2 id="索引">索引&lt;/h2>
+>&lt;/p></description></item><item><title>MySQL 索引</title><link>https://www.letout.cn/p/mysql/index/</link><pubDate>Thu, 30 Jun 2022 14:02:02 +0800</pubDate><guid>https://www.letout.cn/p/mysql/index/</guid><description>&lt;img src="https://www.letout.cn/imgs/15.jpeg" alt="Featured image of post MySQL 索引" />&lt;h2 id="索引">索引&lt;/h2>
 &lt;p>索引（index）是帮助 MySQL 高效获取数据的数据结构，提高查询效率。&lt;/p>
 &lt;ul>
 &lt;li>
@@ -1039,10 +1039,10 @@ data-flex-basis="462px"
 &lt;p>更新聚簇索引列的代价很高。&lt;/p>
 &lt;/li>
 &lt;/ul>
-&lt;p>&lt;img src="https://blog.letout.cn/p/mysql/index/index8.png"
+&lt;p>&lt;img src="https://www.letout.cn/p/mysql/index/index8.png"
 width="722"
 height="369"
-srcset="https://blog.letout.cn/p/mysql/index/index8_hu9d45f79d8b338c019791de22ea52eb90_62479_480x0_resize_box_3.png 480w, https://blog.letout.cn/p/mysql/index/index8_hu9d45f79d8b338c019791de22ea52eb90_62479_1024x0_resize_box_3.png 1024w"
+srcset="https://www.letout.cn/p/mysql/index/index8_hu9d45f79d8b338c019791de22ea52eb90_62479_480x0_resize_box_3.png 480w, https://www.letout.cn/p/mysql/index/index8_hu9d45f79d8b338c019791de22ea52eb90_62479_1024x0_resize_box_3.png 1024w"
 loading="lazy"
 alt="index8"
 class="gallery-image"
@@ -1051,10 +1051,10 @@ data-flex-basis="469px"
 >&lt;/p>
 &lt;h3 id="非聚簇索引二级索引">非聚簇索引（二级索引）&lt;/h3>
 &lt;p>将数据与索引分开存储，索引结构的叶子节点关联的是对应的主键。&lt;/p>
-&lt;p>&lt;img src="https://blog.letout.cn/p/mysql/index/clustering-index.png"
+&lt;p>&lt;img src="https://www.letout.cn/p/mysql/index/clustering-index.png"
 width="840"
 height="571"
-srcset="https://blog.letout.cn/p/mysql/index/clustering-index_hub32172b742ab96d724c643b42699b935_232051_480x0_resize_box_3.png 480w, https://blog.letout.cn/p/mysql/index/clustering-index_hub32172b742ab96d724c643b42699b935_232051_1024x0_resize_box_3.png 1024w"
+srcset="https://www.letout.cn/p/mysql/index/clustering-index_hub32172b742ab96d724c643b42699b935_232051_480x0_resize_box_3.png 480w, https://www.letout.cn/p/mysql/index/clustering-index_hub32172b742ab96d724c643b42699b935_232051_1024x0_resize_box_3.png 1024w"
 loading="lazy"
 alt="clustering-index"
 class="gallery-image"
@@ -1064,10 +1064,10 @@ data-flex-basis="353px"
 &lt;ul>
 &lt;li>二级索引访问需要两次索引查找，要回表。&lt;/li>
 &lt;/ul>
-&lt;p>&lt;img src="https://blog.letout.cn/p/mysql/index/index9.png"
+&lt;p>&lt;img src="https://www.letout.cn/p/mysql/index/index9.png"
 width="727"
 height="389"
-srcset="https://blog.letout.cn/p/mysql/index/index9_hua49cf0193b83cd4f61e5b4747229532b_46178_480x0_resize_box_3.png 480w, https://blog.letout.cn/p/mysql/index/index9_hua49cf0193b83cd4f61e5b4747229532b_46178_1024x0_resize_box_3.png 1024w"
+srcset="https://www.letout.cn/p/mysql/index/index9_hua49cf0193b83cd4f61e5b4747229532b_46178_480x0_resize_box_3.png 480w, https://www.letout.cn/p/mysql/index/index9_hua49cf0193b83cd4f61e5b4747229532b_46178_1024x0_resize_box_3.png 1024w"
 loading="lazy"
 alt="index9"
 class="gallery-image"
@@ -1091,10 +1091,10 @@ data-flex-basis="448px"
 &lt;p>所有的叶子结点都位于同一层，叶节点具有相同的深度，叶节点之间没有指针连接。&lt;/p>
 &lt;/li>
 &lt;/ul>
-&lt;p>&lt;img src="https://blog.letout.cn/p/mysql/index/BTree.png"
+&lt;p>&lt;img src="https://www.letout.cn/p/mysql/index/BTree.png"
 width="824"
 height="496"
-srcset="https://blog.letout.cn/p/mysql/index/BTree_hu5a2ea9e01a7974b484f27a03994c1eb9_162577_480x0_resize_box_3.png 480w, https://blog.letout.cn/p/mysql/index/BTree_hu5a2ea9e01a7974b484f27a03994c1eb9_162577_1024x0_resize_box_3.png 1024w"
+srcset="https://www.letout.cn/p/mysql/index/BTree_hu5a2ea9e01a7974b484f27a03994c1eb9_162577_480x0_resize_box_3.png 480w, https://www.letout.cn/p/mysql/index/BTree_hu5a2ea9e01a7974b484f27a03994c1eb9_162577_1024x0_resize_box_3.png 1024w"
 loading="lazy"
 alt="BTree"
 class="gallery-image"
@@ -1114,10 +1114,10 @@ data-flex-basis="398px"
 &lt;p>叶子节点保存了父节点所有关键字记录的指针。&lt;/p>
 &lt;/li>
 &lt;/ul>
-&lt;p>&lt;img src="https://blog.letout.cn/p/mysql/index/BTree2.png"
+&lt;p>&lt;img src="https://www.letout.cn/p/mysql/index/BTree2.png"
 width="726"
 height="486"
-srcset="https://blog.letout.cn/p/mysql/index/BTree2_hu9d51150ef65d39ad05b8ca626e16e349_124398_480x0_resize_box_3.png 480w, https://blog.letout.cn/p/mysql/index/BTree2_hu9d51150ef65d39ad05b8ca626e16e349_124398_1024x0_resize_box_3.png 1024w"
+srcset="https://www.letout.cn/p/mysql/index/BTree2_hu9d51150ef65d39ad05b8ca626e16e349_124398_480x0_resize_box_3.png 480w, https://www.letout.cn/p/mysql/index/BTree2_hu9d51150ef65d39ad05b8ca626e16e349_124398_1024x0_resize_box_3.png 1024w"
 loading="lazy"
 alt="B&amp;#43;Tree"
 class="gallery-image"
@@ -1142,10 +1142,10 @@ data-flex-basis="358px"
 &lt;p>数据库中，B+ 树的高度一般都在 2~4 层。由于 MySQL 的 INNODB 引擎在设计时是将 B+ 树的根节点常驻内存的，因此在查找某一键值的行记录时，最多只需要 1~3 次磁盘IO。&lt;/p>
 &lt;h3 id="hash">Hash&lt;/h3>
 &lt;p>支持 hash 索引的是 Memory 存储引擎。采用一定的 hash 算法，将键值换算成新的 hash 值，映射到对应的槽位上，然后存储在 hash 表中。&lt;/p>
-&lt;p>&lt;img src="https://blog.letout.cn/p/mysql/index/hash.png"
+&lt;p>&lt;img src="https://www.letout.cn/p/mysql/index/hash.png"
 width="551"
 height="297"
-srcset="https://blog.letout.cn/p/mysql/index/hash_hu44e081159408b7a12e5ef78d4b9f0b5d_44702_480x0_resize_box_3.png 480w, https://blog.letout.cn/p/mysql/index/hash_hu44e081159408b7a12e5ef78d4b9f0b5d_44702_1024x0_resize_box_3.png 1024w"
+srcset="https://www.letout.cn/p/mysql/index/hash_hu44e081159408b7a12e5ef78d4b9f0b5d_44702_480x0_resize_box_3.png 480w, https://www.letout.cn/p/mysql/index/hash_hu44e081159408b7a12e5ef78d4b9f0b5d_44702_1024x0_resize_box_3.png 1024w"
 loading="lazy"
 alt="hash"
 class="gallery-image"
@@ -1298,10 +1298,10 @@ data-flex-basis="445px"
 &lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="k">where&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">emp_no&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">+&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="mi">1&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="mi">100003&lt;/span>&lt;span class="w">
 &lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
 &lt;/div>
-&lt;/div>&lt;p>&lt;img src="https://blog.letout.cn/p/mysql/index/index1.png"
+&lt;/div>&lt;p>&lt;img src="https://www.letout.cn/p/mysql/index/index1.png"
 width="1185"
 height="157"
-srcset="https://blog.letout.cn/p/mysql/index/index1_huaa761d032e691cca90bef5eef1dadb87_81724_480x0_resize_box_3.png 480w, https://blog.letout.cn/p/mysql/index/index1_huaa761d032e691cca90bef5eef1dadb87_81724_1024x0_resize_box_3.png 1024w"
+srcset="https://www.letout.cn/p/mysql/index/index1_huaa761d032e691cca90bef5eef1dadb87_81724_480x0_resize_box_3.png 480w, https://www.letout.cn/p/mysql/index/index1_huaa761d032e691cca90bef5eef1dadb87_81724_1024x0_resize_box_3.png 1024w"
 loading="lazy"
 alt="1"
 class="gallery-image"
@@ -1346,10 +1346,10 @@ data-flex-basis="1811px"
 &lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">-- 注意 like 索引失效的情况
 &lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
 &lt;/div>
-&lt;/div>&lt;p>&lt;img src="https://blog.letout.cn/p/mysql/index/index2.png"
+&lt;/div>&lt;p>&lt;img src="https://www.letout.cn/p/mysql/index/index2.png"
 width="1169"
 height="154"
-srcset="https://blog.letout.cn/p/mysql/index/index2_hu58e272ce7b5bb61c6085e6a94f631f41_86327_480x0_resize_box_3.png 480w, https://blog.letout.cn/p/mysql/index/index2_hu58e272ce7b5bb61c6085e6a94f631f41_86327_1024x0_resize_box_3.png 1024w"
+srcset="https://www.letout.cn/p/mysql/index/index2_hu58e272ce7b5bb61c6085e6a94f631f41_86327_480x0_resize_box_3.png 480w, https://www.letout.cn/p/mysql/index/index2_hu58e272ce7b5bb61c6085e6a94f631f41_86327_1024x0_resize_box_3.png 1024w"
 loading="lazy"
 alt="2"
 class="gallery-image"
@@ -1396,10 +1396,10 @@ data-flex-basis="1821px"
 &lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">-- index(fitst_name)
 &lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
 &lt;/div>
-&lt;/div>&lt;p>&lt;img src="https://blog.letout.cn/p/mysql/index/index3.png"
+&lt;/div>&lt;p>&lt;img src="https://www.letout.cn/p/mysql/index/index3.png"
 width="1148"
 height="176"
-srcset="https://blog.letout.cn/p/mysql/index/index3_hua5c1e2b296fd025c6e1f6de1e5790543_84429_480x0_resize_box_3.png 480w, https://blog.letout.cn/p/mysql/index/index3_hua5c1e2b296fd025c6e1f6de1e5790543_84429_1024x0_resize_box_3.png 1024w"
+srcset="https://www.letout.cn/p/mysql/index/index3_hua5c1e2b296fd025c6e1f6de1e5790543_84429_480x0_resize_box_3.png 480w, https://www.letout.cn/p/mysql/index/index3_hua5c1e2b296fd025c6e1f6de1e5790543_84429_1024x0_resize_box_3.png 1024w"
 loading="lazy"
 alt="3"
 class="gallery-image"
@@ -1408,10 +1408,10 @@ data-flex-basis="1565px"
 >&lt;/p>
 &lt;p>解决：根据实际业务，添加相应的索引。&lt;/p>
 &lt;p>添加索引后，避免了全表扫描。&lt;/p>
-&lt;p>&lt;img src="https://blog.letout.cn/p/mysql/index/index4.png"
+&lt;p>&lt;img src="https://www.letout.cn/p/mysql/index/index4.png"
 width="1129"
 height="139"
-srcset="https://blog.letout.cn/p/mysql/index/index4_hu903a3bbf3d6eb2ece40fc0c15484c985_86767_480x0_resize_box_3.png 480w, https://blog.letout.cn/p/mysql/index/index4_hu903a3bbf3d6eb2ece40fc0c15484c985_86767_1024x0_resize_box_3.png 1024w"
+srcset="https://www.letout.cn/p/mysql/index/index4_hu903a3bbf3d6eb2ece40fc0c15484c985_86767_480x0_resize_box_3.png 480w, https://www.letout.cn/p/mysql/index/index4_hu903a3bbf3d6eb2ece40fc0c15484c985_86767_1024x0_resize_box_3.png 1024w"
 loading="lazy"
 alt="4"
 class="gallery-image"
@@ -1433,10 +1433,10 @@ data-flex-basis="1949px"
 &lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="w">&lt;/span>&lt;span class="c1">-- index(last_name, first_name)
 &lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
 &lt;/div>
-&lt;/div>&lt;p>&lt;img src="https://blog.letout.cn/p/mysql/index/index5.png"
+&lt;/div>&lt;p>&lt;img src="https://www.letout.cn/p/mysql/index/index5.png"
 width="1156"
 height="155"
-srcset="https://blog.letout.cn/p/mysql/index/index5_huc69773c1cc30429ec167298f8192f5a8_78720_480x0_resize_box_3.png 480w, https://blog.letout.cn/p/mysql/index/index5_huc69773c1cc30429ec167298f8192f5a8_78720_1024x0_resize_box_3.png 1024w"
+srcset="https://www.letout.cn/p/mysql/index/index5_huc69773c1cc30429ec167298f8192f5a8_78720_480x0_resize_box_3.png 480w, https://www.letout.cn/p/mysql/index/index5_huc69773c1cc30429ec167298f8192f5a8_78720_1024x0_resize_box_3.png 1024w"
 loading="lazy"
 alt="5"
 class="gallery-image"
@@ -1459,10 +1459,10 @@ data-flex-basis="1789px"
 &lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">-- index(first_name, last_name)
 &lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
 &lt;/div>
-&lt;/div>&lt;p>&lt;img src="https://blog.letout.cn/p/mysql/index/index6.png"
+&lt;/div>&lt;p>&lt;img src="https://www.letout.cn/p/mysql/index/index6.png"
 width="1144"
 height="179"
-srcset="https://blog.letout.cn/p/mysql/index/index6_huc94bdeb83f55eebd5e2d4f615313b023_79724_480x0_resize_box_3.png 480w, https://blog.letout.cn/p/mysql/index/index6_huc94bdeb83f55eebd5e2d4f615313b023_79724_1024x0_resize_box_3.png 1024w"
+srcset="https://www.letout.cn/p/mysql/index/index6_huc94bdeb83f55eebd5e2d4f615313b023_79724_480x0_resize_box_3.png 480w, https://www.letout.cn/p/mysql/index/index6_huc94bdeb83f55eebd5e2d4f615313b023_79724_1024x0_resize_box_3.png 1024w"
 loading="lazy"
 alt="6"
 class="gallery-image"
@@ -1526,10 +1526,10 @@ data-flex-basis="1533px"
 &lt;p>MySQL 官方建议尽量把字段定义为 &lt;code>NOT NULL&lt;/code>&lt;/p>
 &lt;/li>
 &lt;/ul>
-&lt;p>&lt;img src="https://blog.letout.cn/p/mysql/index/index7.png"
+&lt;p>&lt;img src="https://www.letout.cn/p/mysql/index/index7.png"
 width="821"
 height="497"
-srcset="https://blog.letout.cn/p/mysql/index/index7_hu4d7b4705c5cf93f7dc141b75d9f23067_225180_480x0_resize_box_3.png 480w, https://blog.letout.cn/p/mysql/index/index7_hu4d7b4705c5cf93f7dc141b75d9f23067_225180_1024x0_resize_box_3.png 1024w"
+srcset="https://www.letout.cn/p/mysql/index/index7_hu4d7b4705c5cf93f7dc141b75d9f23067_225180_480x0_resize_box_3.png 480w, https://www.letout.cn/p/mysql/index/index7_hu4d7b4705c5cf93f7dc141b75d9f23067_225180_1024x0_resize_box_3.png 1024w"
 loading="lazy"
 alt="7"
 class="gallery-image"
@@ -1661,7 +1661,7 @@ data-flex-basis="396px"
 &lt;ul>
 &lt;li>&lt;a class="link" href="https://juejin.cn/post/6936032090546765837" target="_blank" rel="noopener"
 >https://juejin.cn/post/6936032090546765837&lt;/a>&lt;/li>
-&lt;/ul></description></item><item><title>数据库基础总结</title><link>https://blog.letout.cn/p/mysql/sql-base/</link><pubDate>Wed, 01 Jun 2022 18:02:02 +0800</pubDate><guid>https://blog.letout.cn/p/mysql/sql-base/</guid><description>&lt;img src="https://blog.letout.cn/imgs/29.jpeg" alt="Featured image of post 数据库基础总结" />&lt;h2 id="创建数据库">创建数据库&lt;/h2>
+&lt;/ul></description></item><item><title>数据库基础总结</title><link>https://www.letout.cn/p/mysql/sql-base/</link><pubDate>Wed, 01 Jun 2022 18:02:02 +0800</pubDate><guid>https://www.letout.cn/p/mysql/sql-base/</guid><description>&lt;img src="https://www.letout.cn/imgs/29.jpeg" alt="Featured image of post 数据库基础总结" />&lt;h2 id="创建数据库">创建数据库&lt;/h2>
 &lt;div class="highlight">&lt;div class="chroma">
 &lt;table class="lntable">&lt;tr>&lt;td class="lntd">
 &lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
@@ -1918,10 +1918,10 @@ data-flex-basis="396px"
 &lt;/div>
 &lt;/div>&lt;h2 id="连接">连接&lt;/h2>
 &lt;p>把两个或多个表的行结合起来&lt;/p>
-&lt;p>&lt;img src="https://blog.letout.cn/p/mysql/sql-base/sql-join.png"
+&lt;p>&lt;img src="https://www.letout.cn/p/mysql/sql-base/sql-join.png"
 width="966"
 height="760"
-srcset="https://blog.letout.cn/p/mysql/sql-base/sql-join_hu7ef284e13e9cf28fd7f9189c5de87613_174040_480x0_resize_box_3.png 480w, https://blog.letout.cn/p/mysql/sql-base/sql-join_hu7ef284e13e9cf28fd7f9189c5de87613_174040_1024x0_resize_box_3.png 1024w"
+srcset="https://www.letout.cn/p/mysql/sql-base/sql-join_hu7ef284e13e9cf28fd7f9189c5de87613_174040_480x0_resize_box_3.png 480w, https://www.letout.cn/p/mysql/sql-base/sql-join_hu7ef284e13e9cf28fd7f9189c5de87613_174040_1024x0_resize_box_3.png 1024w"
 loading="lazy"
 alt="sql-join"
 class="gallery-image"

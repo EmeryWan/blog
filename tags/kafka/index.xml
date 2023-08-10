@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Kafka on 一层</title><link>https://blog.letout.cn/tags/kafka/</link><description>Recent content in Kafka on 一层</description><generator>Hugo -- gohugo.io</generator><language>zh-cn</language><lastBuildDate>Fri, 31 Mar 2023 08:08:08 +0800</lastBuildDate><atom:link href="https://blog.letout.cn/tags/kafka/index.xml" rel="self" type="application/rss+xml"/><item><title>深入 Kafka</title><link>https://blog.letout.cn/p/kafka/more/</link><pubDate>Fri, 31 Mar 2023 08:08:08 +0800</pubDate><guid>https://blog.letout.cn/p/kafka/more/</guid><description>&lt;img src="https://blog.letout.cn/p/kafka/more/kafka.webp" alt="Featured image of post 深入 Kafka" />&lt;h2 id="-深入-kafa">🤿 深入 Kafa&lt;/h2>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Kafka on 一层</title><link>https://www.letout.cn/tags/kafka/</link><description>Recent content in Kafka on 一层</description><generator>Hugo -- gohugo.io</generator><language>zh-cn</language><lastBuildDate>Fri, 31 Mar 2023 08:08:08 +0800</lastBuildDate><atom:link href="https://www.letout.cn/tags/kafka/index.xml" rel="self" type="application/rss+xml"/><item><title>深入 Kafka</title><link>https://www.letout.cn/p/kafka/more/</link><pubDate>Fri, 31 Mar 2023 08:08:08 +0800</pubDate><guid>https://www.letout.cn/p/kafka/more/</guid><description>&lt;img src="https://www.letout.cn/p/kafka/more/kafka.webp" alt="Featured image of post 深入 Kafka" />&lt;h2 id="-深入-kafa">🤿 深入 Kafa&lt;/h2>
 &lt;h3 id="-集群与控制器">🛩️ 集群与控制器&lt;/h3>
 &lt;p>Kafka 使用 Zookeeper 来维护集群成员的信息，每个 Broker 都有一个唯一标识符（可以在配置中指定或随机生成），在 Broker 启动时，通过创建临时节点将自己的 ID 注册到 Zookeeper。&lt;/p>
 &lt;p>控制器本身就是一个 Broker，复制分区领导的选举工作。集群的第一个启动 Broker 通过在 Zookeeper 中创建一个 /controller 临时节点让自己成为控制器，其他 Broker 启动时再尝试创建，会收到节点已经存在异常，会在控制器节点上创建 Zookeeper watch 对象，接受节点变更通知，确保集群中只会有一个控制器存在。&lt;/p>
@@ -18,10 +18,10 @@
 &lt;h3 id="-处理请求">🛫 处理请求&lt;/h3>
 &lt;p>Broker 处理客户端的请求并做出响应，会按照请求达到的顺序进行处理，这种「顺序性保证让 Kafka 具备了消息队列的特性。」&lt;/p>
 &lt;p>Broker 会在它所监听的每一个端口上运行一个 &lt;code>Acceptor&lt;/code> 线程，监听到达的连接（IO多路复用）；当请求达到时，会利用 n 个 &lt;code>Processor&lt;/code> 线程进行处理，复制从客户端获取请求消息，并放入请求队列；放入请求队列的消息，会有 m 个 &lt;code>Handler&lt;/code> 线程进行处理。&lt;/p>
-&lt;p>&lt;img src="https://blog.letout.cn/p/kafka/more/thread.png"
+&lt;p>&lt;img src="https://www.letout.cn/p/kafka/more/thread.png"
 width="856"
 height="299"
-srcset="https://blog.letout.cn/p/kafka/more/thread_hua0b819faaccb7b1eb257047290f83afd_30393_480x0_resize_box_3.png 480w, https://blog.letout.cn/p/kafka/more/thread_hua0b819faaccb7b1eb257047290f83afd_30393_1024x0_resize_box_3.png 1024w"
+srcset="https://www.letout.cn/p/kafka/more/thread_hua0b819faaccb7b1eb257047290f83afd_30393_480x0_resize_box_3.png 480w, https://www.letout.cn/p/kafka/more/thread_hua0b819faaccb7b1eb257047290f83afd_30393_1024x0_resize_box_3.png 1024w"
 loading="lazy"
 class="gallery-image"
 data-flex-grow="286"
@@ -62,10 +62,10 @@ data-flex-basis="687px"
 &lt;p>文件格式&lt;/p>
 &lt;p>Kafka 把消息和偏移量保存在文件里，保存在磁盘上的数据格式与从生产者发送来或发送给消费者的数据格式是一样的，Kafka 不会进行处理。&lt;/p>
 &lt;p>生产者发送的是被压缩过的消息，同一个批次的消息会被压缩在一起，发送给 Broker，然后 Broker 再发送给消费者。&lt;/p>
-&lt;p>&lt;img src="https://blog.letout.cn/p/kafka/more/message.png"
+&lt;p>&lt;img src="https://www.letout.cn/p/kafka/more/message.png"
 width="897"
 height="349"
-srcset="https://blog.letout.cn/p/kafka/more/message_hu5179d63639435460e9b73156324f1016_483489_480x0_resize_box_3.png 480w, https://blog.letout.cn/p/kafka/more/message_hu5179d63639435460e9b73156324f1016_483489_1024x0_resize_box_3.png 1024w"
+srcset="https://www.letout.cn/p/kafka/more/message_hu5179d63639435460e9b73156324f1016_483489_480x0_resize_box_3.png 480w, https://www.letout.cn/p/kafka/more/message_hu5179d63639435460e9b73156324f1016_483489_1024x0_resize_box_3.png 1024w"
 loading="lazy"
 class="gallery-image"
 data-flex-grow="257"
@@ -200,7 +200,7 @@ Kafka 可以再以下方面作出保证：&lt;/p>
 &lt;p>📐 长时间处理消息&lt;/p>
 &lt;p>有时处理数据需要很长的时间。「即使不想获取更多的数据，也要保持轮询，这样客户端才能向 Broker 发送心跳。」&lt;/p>
 &lt;/li>
-&lt;/ul></description></item><item><title>Kafka 操作（Doing）</title><link>https://blog.letout.cn/p/kafka/operation/</link><pubDate>Sun, 26 Mar 2023 08:08:08 +0800</pubDate><guid>https://blog.letout.cn/p/kafka/operation/</guid><description>&lt;img src="https://blog.letout.cn/p/kafka/operation/1.png" alt="Featured image of post Kafka 操作（Doing）" />&lt;h2 id="命令行工具">命令行工具&lt;/h2>
+&lt;/ul></description></item><item><title>Kafka 操作（Doing）</title><link>https://www.letout.cn/p/kafka/operation/</link><pubDate>Sun, 26 Mar 2023 08:08:08 +0800</pubDate><guid>https://www.letout.cn/p/kafka/operation/</guid><description>&lt;img src="https://www.letout.cn/p/kafka/operation/1.png" alt="Featured image of post Kafka 操作（Doing）" />&lt;h2 id="命令行工具">命令行工具&lt;/h2>
 &lt;p>Kafka 提供了一些基于脚本的命名行工具 &lt;code>${dir}/bin/xxx.sh&lt;/code>，用于管理集群。这些管理通过 Java 类实现，通过脚本调用。&lt;/p>
 &lt;div class="highlight">&lt;div class="chroma">
 &lt;table class="lntable">&lt;tr>&lt;td class="lntd">
@@ -333,10 +333,10 @@ Kafka 可以再以下方面作出保证：&lt;/p>
 &lt;/ul>
 &lt;/li>
 &lt;/ul>
-&lt;p>&lt;img src="https://blog.letout.cn/p/kafka/operation/producer.webp"
+&lt;p>&lt;img src="https://www.letout.cn/p/kafka/operation/producer.webp"
 width="780"
 height="678"
-srcset="https://blog.letout.cn/p/kafka/operation/producer_huebfba9d061e763283d9c37fc8487b94d_24528_480x0_resize_q75_h2_box_2.webp 480w, https://blog.letout.cn/p/kafka/operation/producer_huebfba9d061e763283d9c37fc8487b94d_24528_1024x0_resize_q75_h2_box_2.webp 1024w"
+srcset="https://www.letout.cn/p/kafka/operation/producer_huebfba9d061e763283d9c37fc8487b94d_24528_480x0_resize_q75_h2_box_2.webp 480w, https://www.letout.cn/p/kafka/operation/producer_huebfba9d061e763283d9c37fc8487b94d_24528_1024x0_resize_q75_h2_box_2.webp 1024w"
 loading="lazy"
 class="gallery-image"
 data-flex-grow="115"
@@ -534,7 +534,7 @@ data-flex-basis="276px"
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="o">}&lt;/span>
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c1">// 其它记录被散列到其他分区
-&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span> &lt;span class="k">return&lt;/span> &lt;span class="o">((&lt;/span>&lt;span class="n">Math&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">abs&lt;/span>&lt;span class="o">(&lt;/span>&lt;span class="n">Utils&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">murmur2&lt;/span>&lt;span class="o">(&lt;/span>&lt;span class="n">keyBytes&lt;/span>&lt;span class="o">)))&lt;/span> &lt;span class="o">%&lt;/span> &lt;span class="o">(&lt;/span>&lt;span class="n">numPartitions&lt;/span> &lt;span class="o">-&lt;/span> &lt;span class="mi">1&lt;/span>&lt;span class="o">));&lt;/span>
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span> &lt;span class="k">return&lt;/span> &lt;span class="o">((&lt;/span>&lt;span class="n">Math&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">abs&lt;/span>&lt;span class="o">(&lt;/span>&lt;span class="n">Utils&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">murmur2&lt;/span>&lt;span class="o">(&lt;/span>&lt;span class="n">keyBytes&lt;/span>&lt;span class="o">)))&lt;/span> &lt;span class="o">%&lt;/span> &lt;span class="o">(&lt;/span>&lt;span class="n">numPartitions&lt;/span> &lt;span class="o">-&lt;/span> &lt;span class="n">1&lt;/span>&lt;span class="o">));&lt;/span>
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="o">}&lt;/span>
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kt">void&lt;/span> &lt;span class="nf">close&lt;/span>&lt;span class="o">()&lt;/span> &lt;span class="o">{&lt;/span> &lt;span class="o">}&lt;/span>
@@ -594,7 +594,7 @@ data-flex-basis="276px"
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">// 轮询
 &lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span>&lt;span class="k">while&lt;/span>&lt;span class="o">(&lt;/span>&lt;span class="kc">true&lt;/span>&lt;span class="o">){&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">ConsumerRecords&lt;/span>&lt;span class="o">&amp;lt;&lt;/span>&lt;span class="n">String&lt;/span>&lt;span class="o">,&lt;/span> &lt;span class="n">String&lt;/span>&lt;span class="o">&amp;gt;&lt;/span> &lt;span class="n">records&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">consumer&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">poll&lt;/span>&lt;span class="o">(&lt;/span>&lt;span class="n">Duration&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">ofMillis&lt;/span>&lt;span class="o">(&lt;/span>&lt;span class="mi">100&lt;/span>&lt;span class="o">));&lt;/span> &lt;span class="c1">// 100 -&amp;gt; 超时时间
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">ConsumerRecords&lt;/span>&lt;span class="o">&amp;lt;&lt;/span>&lt;span class="n">String&lt;/span>&lt;span class="o">,&lt;/span> &lt;span class="n">String&lt;/span>&lt;span class="o">&amp;gt;&lt;/span> &lt;span class="n">records&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">consumer&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">poll&lt;/span>&lt;span class="o">(&lt;/span>&lt;span class="n">Duration&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">ofMillis&lt;/span>&lt;span class="o">(&lt;/span>&lt;span class="n">100&lt;/span>&lt;span class="o">));&lt;/span> &lt;span class="c1">// 100 -&amp;gt; 超时时间
 &lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span>
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">for&lt;/span> &lt;span class="o">(&lt;/span>&lt;span class="n">ConsumerRecord&lt;/span>&lt;span class="o">&amp;lt;&lt;/span>&lt;span class="n">String&lt;/span>&lt;span class="o">,&lt;/span> &lt;span class="n">String&lt;/span>&lt;span class="o">&amp;gt;&lt;/span> &lt;span class="n">record&lt;/span> &lt;span class="o">:&lt;/span> &lt;span class="n">records&lt;/span>&lt;span class="o">){&lt;/span>
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c1">// 业务处理
@@ -613,10 +613,10 @@ data-flex-basis="276px"
 &lt;ul>
 &lt;li>如果提交的 offset「小于」客户端处理的最后一个消息偏移量，那么「两个偏移量之间的消息会被重复处理」&lt;/li>
 &lt;/ul>
-&lt;p>&lt;img src="https://blog.letout.cn/p/kafka/operation/offset1.png"
+&lt;p>&lt;img src="https://www.letout.cn/p/kafka/operation/offset1.png"
 width="978"
 height="422"
-srcset="https://blog.letout.cn/p/kafka/operation/offset1_hu7de55e7adbd4de02cc42f3a04ca7fa88_35082_480x0_resize_box_3.png 480w, https://blog.letout.cn/p/kafka/operation/offset1_hu7de55e7adbd4de02cc42f3a04ca7fa88_35082_1024x0_resize_box_3.png 1024w"
+srcset="https://www.letout.cn/p/kafka/operation/offset1_hu7de55e7adbd4de02cc42f3a04ca7fa88_35082_480x0_resize_box_3.png 480w, https://www.letout.cn/p/kafka/operation/offset1_hu7de55e7adbd4de02cc42f3a04ca7fa88_35082_1024x0_resize_box_3.png 1024w"
 loading="lazy"
 class="gallery-image"
 data-flex-grow="231"
@@ -625,10 +625,10 @@ data-flex-basis="556px"
 &lt;ul>
 &lt;li>如果提交的 offset「大于」客户端处理的最后一个消息偏移量，那么「两个偏移量之间的消息会丢失」&lt;/li>
 &lt;/ul>
-&lt;p>&lt;img src="https://blog.letout.cn/p/kafka/operation/offset2.png"
+&lt;p>&lt;img src="https://www.letout.cn/p/kafka/operation/offset2.png"
 width="979"
 height="485"
-srcset="https://blog.letout.cn/p/kafka/operation/offset2_hu389bebeaa08efdc7ddfc7a71cffd3a76_34010_480x0_resize_box_3.png 480w, https://blog.letout.cn/p/kafka/operation/offset2_hu389bebeaa08efdc7ddfc7a71cffd3a76_34010_1024x0_resize_box_3.png 1024w"
+srcset="https://www.letout.cn/p/kafka/operation/offset2_hu389bebeaa08efdc7ddfc7a71cffd3a76_34010_480x0_resize_box_3.png 480w, https://www.letout.cn/p/kafka/operation/offset2_hu389bebeaa08efdc7ddfc7a71cffd3a76_34010_1024x0_resize_box_3.png 1024w"
 loading="lazy"
 class="gallery-image"
 data-flex-grow="201"
@@ -660,7 +660,7 @@ data-flex-basis="484px"
 &lt;/span>&lt;/code>&lt;/pre>&lt;/td>
 &lt;td class="lntd">
 &lt;pre tabindex="0" class="chroma">&lt;code class="language-java" data-lang="java">&lt;span class="line">&lt;span class="cl">&lt;span class="k">while&lt;/span> &lt;span class="o">(&lt;/span>&lt;span class="kc">true&lt;/span>&lt;span class="o">)&lt;/span> &lt;span class="o">{&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">ConsumerRecords&lt;/span>&lt;span class="o">&amp;lt;&lt;/span>&lt;span class="n">String&lt;/span>&lt;span class="o">,&lt;/span> &lt;span class="n">String&lt;/span>&lt;span class="o">&amp;gt;&lt;/span> &lt;span class="n">records&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">consumer&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">poll&lt;/span>&lt;span class="o">(&lt;/span>&lt;span class="mi">100&lt;/span>&lt;span class="o">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">ConsumerRecords&lt;/span>&lt;span class="o">&amp;lt;&lt;/span>&lt;span class="n">String&lt;/span>&lt;span class="o">,&lt;/span> &lt;span class="n">String&lt;/span>&lt;span class="o">&amp;gt;&lt;/span> &lt;span class="n">records&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">consumer&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">poll&lt;/span>&lt;span class="o">(&lt;/span>&lt;span class="n">100&lt;/span>&lt;span class="o">);&lt;/span>
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">for&lt;/span> &lt;span class="o">(&lt;/span>&lt;span class="n">ConsumerRecord&lt;/span>&lt;span class="o">&amp;lt;&lt;/span>&lt;span class="n">String&lt;/span>&lt;span class="o">,&lt;/span> &lt;span class="n">String&lt;/span>&lt;span class="o">&amp;gt;&lt;/span> &lt;span class="n">record&lt;/span> &lt;span class="o">:&lt;/span> &lt;span class="n">records&lt;/span>&lt;span class="o">)&lt;/span> &lt;span class="o">{&lt;/span>
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c1">// ...
 &lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span> &lt;span class="c1">// 处理业务
@@ -778,16 +778,16 @@ data-flex-basis="484px"
 &lt;/span>&lt;/code>&lt;/pre>&lt;/td>
 &lt;td class="lntd">
 &lt;pre tabindex="0" class="chroma">&lt;code class="language-java" data-lang="java">&lt;span class="line">&lt;span class="cl">&lt;span class="kd">private&lt;/span> &lt;span class="n">Map&lt;/span>&lt;span class="o">&amp;lt;&lt;/span>&lt;span class="n">TopicPartition&lt;/span>&lt;span class="o">,&lt;/span> &lt;span class="n">OffsetAndMetadata&lt;/span>&lt;span class="o">&amp;gt;&lt;/span> &lt;span class="n">currentOffsets&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="k">new&lt;/span> &lt;span class="n">HashMap&lt;/span>&lt;span class="o">&amp;lt;&amp;gt;();&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="kt">int&lt;/span> &lt;span class="n">count&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="mi">0&lt;/span>&lt;span class="o">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="kt">int&lt;/span> &lt;span class="n">count&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">0&lt;/span>&lt;span class="o">;&lt;/span>
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="k">while&lt;/span> &lt;span class="o">(&lt;/span>&lt;span class="kc">true&lt;/span>&lt;span class="o">)&lt;/span> &lt;span class="o">{&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">ConsumerRecords&lt;/span>&lt;span class="o">&amp;lt;&lt;/span>&lt;span class="n">String&lt;/span>&lt;span class="o">,&lt;/span> &lt;span class="n">String&lt;/span>&lt;span class="o">&amp;gt;&lt;/span> &lt;span class="n">records&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">consumer&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">poll&lt;/span>&lt;span class="o">(&lt;/span>&lt;span class="mi">100&lt;/span>&lt;span class="o">);&lt;/span> &lt;span class="c1">// 假设每个批次 10000 条数据
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">ConsumerRecords&lt;/span>&lt;span class="o">&amp;lt;&lt;/span>&lt;span class="n">String&lt;/span>&lt;span class="o">,&lt;/span> &lt;span class="n">String&lt;/span>&lt;span class="o">&amp;gt;&lt;/span> &lt;span class="n">records&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">consumer&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">poll&lt;/span>&lt;span class="o">(&lt;/span>&lt;span class="n">100&lt;/span>&lt;span class="o">);&lt;/span> &lt;span class="c1">// 假设每个批次 10000 条数据
 &lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span> &lt;span class="k">for&lt;/span> &lt;span class="o">(&lt;/span>&lt;span class="n">ConsumerRecord&lt;/span>&lt;span class="o">&amp;lt;&lt;/span>&lt;span class="n">String&lt;/span>&lt;span class="o">,&lt;/span> &lt;span class="n">String&lt;/span>&lt;span class="o">&amp;gt;&lt;/span> &lt;span class="n">record&lt;/span> &lt;span class="o">:&lt;/span> &lt;span class="n">records&lt;/span>&lt;span class="o">)&lt;/span> &lt;span class="o">{&lt;/span>
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c1">// 业务处理
 &lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span> &lt;span class="c1">// ...
 &lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">currentOffsets&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">put&lt;/span>&lt;span class="o">(&lt;/span>&lt;span class="k">new&lt;/span> &lt;span class="n">TopicPartition&lt;/span>&lt;span class="o">(&lt;/span>&lt;span class="n">record&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">topic&lt;/span>&lt;span class="o">(),&lt;/span> &lt;span class="n">record&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">partition&lt;/span>&lt;span class="o">()),&lt;/span> &lt;span class="k">new&lt;/span> &lt;span class="n">OffsetAndMetadata&lt;/span>&lt;span class="o">(&lt;/span>&lt;span class="n">record&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">offset&lt;/span>&lt;span class="o">()&lt;/span> &lt;span class="o">+&lt;/span> &lt;span class="mi">1&lt;/span>&lt;span class="o">,&lt;/span> &lt;span class="s">&amp;#34;no metadata&amp;#34;&lt;/span>&lt;span class="o">));&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">if&lt;/span> &lt;span class="o">(&lt;/span>&lt;span class="n">count&lt;/span> &lt;span class="o">%&lt;/span> &lt;span class="mi">1000&lt;/span> &lt;span class="o">==&lt;/span> &lt;span class="mi">0&lt;/span>&lt;span class="o">)&lt;/span> &lt;span class="o">{&lt;/span> &lt;span class="c1">// 在每个批次中，没处理 1000 条数据提交一次 offset
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">currentOffsets&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">put&lt;/span>&lt;span class="o">(&lt;/span>&lt;span class="k">new&lt;/span> &lt;span class="n">TopicPartition&lt;/span>&lt;span class="o">(&lt;/span>&lt;span class="n">record&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">topic&lt;/span>&lt;span class="o">(),&lt;/span> &lt;span class="n">record&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">partition&lt;/span>&lt;span class="o">()),&lt;/span> &lt;span class="k">new&lt;/span> &lt;span class="n">OffsetAndMetadata&lt;/span>&lt;span class="o">(&lt;/span>&lt;span class="n">record&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">offset&lt;/span>&lt;span class="o">()&lt;/span> &lt;span class="o">+&lt;/span> &lt;span class="n">1&lt;/span>&lt;span class="o">,&lt;/span> &lt;span class="s">&amp;#34;no metadata&amp;#34;&lt;/span>&lt;span class="o">));&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">if&lt;/span> &lt;span class="o">(&lt;/span>&lt;span class="n">count&lt;/span> &lt;span class="o">%&lt;/span> &lt;span class="n">1000&lt;/span> &lt;span class="o">==&lt;/span> &lt;span class="n">0&lt;/span>&lt;span class="o">)&lt;/span> &lt;span class="o">{&lt;/span> &lt;span class="c1">// 在每个批次中，没处理 1000 条数据提交一次 offset
 &lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span> &lt;span class="n">consumer&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">commitAsync&lt;/span>&lt;span class="o">(&lt;/span>&lt;span class="n">currentOffsets&lt;/span>&lt;span class="o">,&lt;/span> &lt;span class="kc">null&lt;/span>&lt;span class="o">);&lt;/span>
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="o">}&lt;/span>
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">count&lt;/span>&lt;span class="o">++;&lt;/span>
@@ -817,17 +817,17 @@ data-flex-basis="484px"
 &lt;/div>&lt;p>比如在一些业务中，对所有的操作都要进行处理，不能丢失消息，处理消失后要将结果记录到数据库、NoSQL 存储引擎等地方，需要将「保存记录」「偏移量」放在一个原子操作里完成，要么全部成功，要么全部失败。可以将记录和偏移量都保存在数据库中，用一个事务操作，保证原子性。当消费者分配新分区时，就可以使用 &lt;code>seek()&lt;/code> 查找保存在数据库中的指定offet了，不会丢失数据和重复处理。&lt;/p>
 &lt;h2 id="-connect">🖇️ Connect&lt;/h2>
 &lt;h2 id="-stream">💦 Stream&lt;/h2>
-&lt;!-- raw HTML omitted --></description></item><item><title>Kafka</title><link>https://blog.letout.cn/p/kafka/</link><pubDate>Sat, 04 Mar 2023 11:14:45 +0800</pubDate><guid>https://blog.letout.cn/p/kafka/</guid><description>&lt;img src="https://blog.letout.cn/p/kafka/kafka.webp" alt="Featured image of post Kafka" />&lt;blockquote>
+&lt;!-- raw HTML omitted --></description></item><item><title>Kafka</title><link>https://www.letout.cn/p/kafka/</link><pubDate>Sat, 04 Mar 2023 11:14:45 +0800</pubDate><guid>https://www.letout.cn/p/kafka/</guid><description>&lt;img src="https://www.letout.cn/p/kafka/kafka.webp" alt="Featured image of post Kafka" />&lt;blockquote>
 &lt;p>Apache Kafka is an open-source distributed event streaming platform.&lt;/p>
 &lt;p>Kafka 是一个开源的分布式事件流平台。&lt;/p>
 &lt;/blockquote>
 &lt;h2 id="-基本概念">📑 基本概念&lt;/h2>
 &lt;h3 id="productor--consumer">Productor &amp;amp; Consumer&lt;/h3>
 &lt;p>把消息放到队列里面的叫「生产者」；从队列中消费消息的叫「消费者」。&lt;/p>
-&lt;p>&lt;img src="https://blog.letout.cn/p/kafka/productor-consumer.png"
+&lt;p>&lt;img src="https://www.letout.cn/p/kafka/productor-consumer.png"
 width="1482"
 height="182"
-srcset="https://blog.letout.cn/p/kafka/productor-consumer_hu2c5c2f226caa4e26dde9bd9923036917_30803_480x0_resize_box_3.png 480w, https://blog.letout.cn/p/kafka/productor-consumer_hu2c5c2f226caa4e26dde9bd9923036917_30803_1024x0_resize_box_3.png 1024w"
+srcset="https://www.letout.cn/p/kafka/productor-consumer_hu2c5c2f226caa4e26dde9bd9923036917_30803_480x0_resize_box_3.png 480w, https://www.letout.cn/p/kafka/productor-consumer_hu2c5c2f226caa4e26dde9bd9923036917_30803_1024x0_resize_box_3.png 1024w"
 loading="lazy"
 class="gallery-image"
 data-flex-grow="814"
@@ -837,10 +837,10 @@ data-flex-basis="1954px"
 &lt;p>Producer 将消息发送到特定的主题 &lt;code>Topic&lt;/code>，Consumer 通过订阅特定的主题 &lt;code>Topic&lt;/code> 来消费消息。&lt;/p>
 &lt;p>并非所有的消费者都想要全部的消息，消费者只对自己感兴趣的 Topic 进行订阅，从指定的 Topic 来获取消息。
 这个发送问题由 生产者 &lt;code>Product&lt;/code> 来解决，生产者在发送消息时，对消息进行逻辑上的分类，将消息发送到指定的 &lt;code>Topic&lt;/code>。（发布-订阅模型）&lt;/p>
-&lt;p>&lt;img src="https://blog.letout.cn/p/kafka/topic.png"
+&lt;p>&lt;img src="https://www.letout.cn/p/kafka/topic.png"
 width="1702"
 height="464"
-srcset="https://blog.letout.cn/p/kafka/topic_huc74fa2ac18b398764e9e6113e92396e7_102693_480x0_resize_box_3.png 480w, https://blog.letout.cn/p/kafka/topic_huc74fa2ac18b398764e9e6113e92396e7_102693_1024x0_resize_box_3.png 1024w"
+srcset="https://www.letout.cn/p/kafka/topic_huc74fa2ac18b398764e9e6113e92396e7_102693_480x0_resize_box_3.png 480w, https://www.letout.cn/p/kafka/topic_huc74fa2ac18b398764e9e6113e92396e7_102693_1024x0_resize_box_3.png 1024w"
 loading="lazy"
 class="gallery-image"
 data-flex-grow="366"
@@ -853,10 +853,10 @@ Kafka 将所有的消息进行持久化存储，让消费者各取所需，想�
 &lt;p>Kafka 将消息以消息日志的方式追加写在磁盘中（顺序磁盘 IO）。&lt;/p>
 &lt;p>&lt;code>offset&lt;/code> 表示了消费者的消费进度。每一条消息都会根据时间先后顺序有一个递增的序号，用 offset 来表示消费者的消费进度到哪了，每个消费者会都有自己的 offset。&lt;/p>
 &lt;p>每次消费消息的时候，都要提交这个 &lt;code>offset&lt;/code>，Kafka 可以选择「自动提交」或者「手动提交」。&lt;/p>
-&lt;p>&lt;img src="https://blog.letout.cn/p/kafka/offset.png"
+&lt;p>&lt;img src="https://www.letout.cn/p/kafka/offset.png"
 width="1702"
 height="882"
-srcset="https://blog.letout.cn/p/kafka/offset_hub631ed3146c750d7a1db077a25e92c8f_157136_480x0_resize_box_3.png 480w, https://blog.letout.cn/p/kafka/offset_hub631ed3146c750d7a1db077a25e92c8f_157136_1024x0_resize_box_3.png 1024w"
+srcset="https://www.letout.cn/p/kafka/offset_hub631ed3146c750d7a1db077a25e92c8f_157136_480x0_resize_box_3.png 480w, https://www.letout.cn/p/kafka/offset_hub631ed3146c750d7a1db077a25e92c8f_157136_1024x0_resize_box_3.png 1024w"
 loading="lazy"
 class="gallery-image"
 data-flex-grow="192"
@@ -874,10 +874,10 @@ data-flex-basis="463px"
 &lt;/li>
 &lt;/ul>
 &lt;p>在 Kafka 中，同样采取了水平拆分的方案，将拆分后的数据子集称为 &lt;code>Partition&lt;/code> 分区。各个分区的数据集合即为全量数据。&lt;/p>
-&lt;p>&lt;img src="https://blog.letout.cn/p/kafka/partition.png"
+&lt;p>&lt;img src="https://www.letout.cn/p/kafka/partition.png"
 width="1902"
 height="862"
-srcset="https://blog.letout.cn/p/kafka/partition_hu6f8e653e05b83b30cced1268a2afdec4_169756_480x0_resize_box_3.png 480w, https://blog.letout.cn/p/kafka/partition_hu6f8e653e05b83b30cced1268a2afdec4_169756_1024x0_resize_box_3.png 1024w"
+srcset="https://www.letout.cn/p/kafka/partition_hu6f8e653e05b83b30cced1268a2afdec4_169756_480x0_resize_box_3.png 480w, https://www.letout.cn/p/kafka/partition_hu6f8e653e05b83b30cced1268a2afdec4_169756_1024x0_resize_box_3.png 1024w"
 loading="lazy"
 class="gallery-image"
 data-flex-grow="220"
@@ -889,10 +889,10 @@ data-flex-basis="529px"
 &lt;p>一台 Kafka 服务器被称为 &lt;code>Broker&lt;/code>，Kafka 集群由多台 Kafka 服务器组成。&lt;/p>
 &lt;p>Kafka 是「天然分布式」的。&lt;/p>
 &lt;p>一个 &lt;code>Topic&lt;/code> 会被分为多个 &lt;code>Partition&lt;/code>，这些 Partition 会分布在不同的 &lt;code>Broker&lt;/code> 中。&lt;/p>
-&lt;p>&lt;img src="https://blog.letout.cn/p/kafka/broker.png"
+&lt;p>&lt;img src="https://www.letout.cn/p/kafka/broker.png"
 width="2744"
 height="1204"
-srcset="https://blog.letout.cn/p/kafka/broker_huddafab0296be063dc2cfa60773db7d44_193217_480x0_resize_box_3.png 480w, https://blog.letout.cn/p/kafka/broker_huddafab0296be063dc2cfa60773db7d44_193217_1024x0_resize_box_3.png 1024w"
+srcset="https://www.letout.cn/p/kafka/broker_huddafab0296be063dc2cfa60773db7d44_193217_480x0_resize_box_3.png 480w, https://www.letout.cn/p/kafka/broker_huddafab0296be063dc2cfa60773db7d44_193217_1024x0_resize_box_3.png 1024w"
 loading="lazy"
 class="gallery-image"
 data-flex-grow="227"
@@ -909,10 +909,10 @@ data-flex-basis="546px"
 &lt;li>&lt;code>follower&lt;/code> 副本负责同步消息，只负责待命&lt;/li>
 &lt;/ul>
 &lt;p>当 leader 副本发送故障时，选举 follower 副本成为新的 leader 对外提供服务。&lt;/p>
-&lt;p>&lt;img src="https://blog.letout.cn/p/kafka/leader_follwer.png"
+&lt;p>&lt;img src="https://www.letout.cn/p/kafka/leader_follwer.png"
 width="1642"
 height="982"
-srcset="https://blog.letout.cn/p/kafka/leader_follwer_hud0b2c7f759aaa7a9577276a758bf8076_131159_480x0_resize_box_3.png 480w, https://blog.letout.cn/p/kafka/leader_follwer_hud0b2c7f759aaa7a9577276a758bf8076_131159_1024x0_resize_box_3.png 1024w"
+srcset="https://www.letout.cn/p/kafka/leader_follwer_hud0b2c7f759aaa7a9577276a758bf8076_131159_480x0_resize_box_3.png 480w, https://www.letout.cn/p/kafka/leader_follwer_hud0b2c7f759aaa7a9577276a758bf8076_131159_1024x0_resize_box_3.png 1024w"
 loading="lazy"
 class="gallery-image"
 data-flex-grow="167"
@@ -921,10 +921,10 @@ data-flex-basis="401px"
 &lt;h3 id="consumer-group">Consumer Group&lt;/h3>
 &lt;p>Kafka 是个高并发的系统，消息的拉取同样是并行的，多个消费者去消费 Topic 消息。&lt;/p>
 &lt;p>Kafka 引入了消费者组 &lt;code>Consumer Group&lt;/code> 的概念，每一个消费者都有一个对应的消费者组。组间进行广播消费，组内进行集群消费。同时限定：「每个 Partition 只能由消费者组中的一个消费者进行消费」。&lt;/p>
-&lt;p>&lt;img src="https://blog.letout.cn/p/kafka/consumer_group.png"
+&lt;p>&lt;img src="https://www.letout.cn/p/kafka/consumer_group.png"
 width="1952"
 height="1378"
-srcset="https://blog.letout.cn/p/kafka/consumer_group_hu7674cf08adee570cc4acecde56b2e047_315635_480x0_resize_box_3.png 480w, https://blog.letout.cn/p/kafka/consumer_group_hu7674cf08adee570cc4acecde56b2e047_315635_1024x0_resize_box_3.png 1024w"
+srcset="https://www.letout.cn/p/kafka/consumer_group_hu7674cf08adee570cc4acecde56b2e047_315635_480x0_resize_box_3.png 480w, https://www.letout.cn/p/kafka/consumer_group_hu7674cf08adee570cc4acecde56b2e047_315635_1024x0_resize_box_3.png 1024w"
 loading="lazy"
 class="gallery-image"
 data-flex-grow="141"
@@ -950,20 +950,20 @@ data-flex-basis="339px"
 查询时，先根据 offset 找到日志文件的偏移量，即可快速读取到日志消息。&lt;/p>
 &lt;p>为了避免哈希索引常驻内存消耗过多空间的问题，将消息划分为若干个块 block，每个索引需要定位 block 块中的第一条消息的 offset 即可（稀疏索引），
 然后在 block 中顺序查找。&lt;/p>
-&lt;p>&lt;img src="https://blog.letout.cn/p/kafka/hash.png"
+&lt;p>&lt;img src="https://www.letout.cn/p/kafka/hash.png"
 width="702"
 height="486"
-srcset="https://blog.letout.cn/p/kafka/hash_hu74f0171d0dcbf8a19203c6a91442ff0f_91411_480x0_resize_box_3.png 480w, https://blog.letout.cn/p/kafka/hash_hu74f0171d0dcbf8a19203c6a91442ff0f_91411_1024x0_resize_box_3.png 1024w"
+srcset="https://www.letout.cn/p/kafka/hash_hu74f0171d0dcbf8a19203c6a91442ff0f_91411_480x0_resize_box_3.png 480w, https://www.letout.cn/p/kafka/hash_hu74f0171d0dcbf8a19203c6a91442ff0f_91411_1024x0_resize_box_3.png 1024w"
 loading="lazy"
 class="gallery-image"
 data-flex-grow="144"
 data-flex-basis="346px"
 >&lt;/p>
 &lt;h2 id="-kafka-的高性能">🔥 Kafka 的高性能&lt;/h2>
-&lt;p>&lt;img src="https://blog.letout.cn/p/kafka/performance.png"
+&lt;p>&lt;img src="https://www.letout.cn/p/kafka/performance.png"
 width="725"
 height="662"
-srcset="https://blog.letout.cn/p/kafka/performance_hu3423f3489c82f749f8bb253d443fb73a_35239_480x0_resize_box_3.png 480w, https://blog.letout.cn/p/kafka/performance_hu3423f3489c82f749f8bb253d443fb73a_35239_1024x0_resize_box_3.png 1024w"
+srcset="https://www.letout.cn/p/kafka/performance_hu3423f3489c82f749f8bb253d443fb73a_35239_480x0_resize_box_3.png 480w, https://www.letout.cn/p/kafka/performance_hu3423f3489c82f749f8bb253d443fb73a_35239_1024x0_resize_box_3.png 1024w"
 loading="lazy"
 class="gallery-image"
 data-flex-grow="109"

@@ -1,10 +1,10 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>CUDA on 一层</title><link>https://blog.letout.cn/tags/cuda/</link><description>Recent content in CUDA on 一层</description><generator>Hugo -- gohugo.io</generator><language>zh-cn</language><lastBuildDate>Mon, 02 May 2022 02:02:02 +0800</lastBuildDate><atom:link href="https://blog.letout.cn/tags/cuda/index.xml" rel="self" type="application/rss+xml"/><item><title>在 Ubuntu 中搭建 CUDA 环境</title><link>https://blog.letout.cn/p/cuda/</link><pubDate>Mon, 02 May 2022 02:02:02 +0800</pubDate><guid>https://blog.letout.cn/p/cuda/</guid><description>&lt;img src="https://blog.letout.cn/imgs/11.jpeg" alt="Featured image of post 在 Ubuntu 中搭建 CUDA 环境" />&lt;h2 id="nvdia-驱动">Nvdia 驱动&lt;/h2>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>CUDA on 一层</title><link>https://www.letout.cn/tags/cuda/</link><description>Recent content in CUDA on 一层</description><generator>Hugo -- gohugo.io</generator><language>zh-cn</language><lastBuildDate>Mon, 02 May 2022 02:02:02 +0800</lastBuildDate><atom:link href="https://www.letout.cn/tags/cuda/index.xml" rel="self" type="application/rss+xml"/><item><title>在 Ubuntu 中搭建 CUDA 环境</title><link>https://www.letout.cn/p/cuda/</link><pubDate>Mon, 02 May 2022 02:02:02 +0800</pubDate><guid>https://www.letout.cn/p/cuda/</guid><description>&lt;img src="https://www.letout.cn/imgs/11.jpeg" alt="Featured image of post 在 Ubuntu 中搭建 CUDA 环境" />&lt;h2 id="nvdia-驱动">Nvdia 驱动&lt;/h2>
 &lt;p>首先，请确保在系统中安装了英伟达显卡驱动，可以使用 &lt;code>nvidia-msi&lt;/code> 命令查看显卡对应信息。&lt;/p>
-&lt;p>如果没有安装驱动，可以参考该章节。&lt;a class="link" href="https://blog.letout.cn/guide/prepare/driver.html" >传送门➡️&lt;/a>&lt;/p>
-&lt;p>&lt;img src="https://blog.letout.cn/p/cuda/nvidia-msi.png"
+&lt;p>如果没有安装驱动，可以参考该章节。&lt;a class="link" href="https://www.letout.cn/guide/prepare/driver.html" >传送门➡️&lt;/a>&lt;/p>
+&lt;p>&lt;img src="https://www.letout.cn/p/cuda/nvidia-msi.png"
 width="734"
 height="512"
-srcset="https://blog.letout.cn/p/cuda/nvidia-msi_hu25fedbd9e105d28334236f2eb0bd81d5_56804_480x0_resize_box_3.png 480w, https://blog.letout.cn/p/cuda/nvidia-msi_hu25fedbd9e105d28334236f2eb0bd81d5_56804_1024x0_resize_box_3.png 1024w"
+srcset="https://www.letout.cn/p/cuda/nvidia-msi_hu25fedbd9e105d28334236f2eb0bd81d5_56804_480x0_resize_box_3.png 480w, https://www.letout.cn/p/cuda/nvidia-msi_hu25fedbd9e105d28334236f2eb0bd81d5_56804_1024x0_resize_box_3.png 1024w"
 loading="lazy"
 alt="nvidia-msi"
 class="gallery-image"
@@ -12,10 +12,10 @@ data-flex-grow="143"
 data-flex-basis="344px"
 >&lt;/p>
 &lt;p>推荐使用系统自带软件 &lt;code>软件和更新&lt;/code> 安装显卡驱动。打开应用后，点击 &lt;code>附加驱动&lt;/code> 选项，会对所有可选的附加驱动进行搜索。&lt;/p>
-&lt;p>&lt;img src="https://blog.letout.cn/p/cuda/nvidia-install.png"
+&lt;p>&lt;img src="https://www.letout.cn/p/cuda/nvidia-install.png"
 width="877"
 height="500"
-srcset="https://blog.letout.cn/p/cuda/nvidia-install_hud8377b5c2eaf750be9838eb34291d82b_111878_480x0_resize_box_3.png 480w, https://blog.letout.cn/p/cuda/nvidia-install_hud8377b5c2eaf750be9838eb34291d82b_111878_1024x0_resize_box_3.png 1024w"
+srcset="https://www.letout.cn/p/cuda/nvidia-install_hud8377b5c2eaf750be9838eb34291d82b_111878_480x0_resize_box_3.png 480w, https://www.letout.cn/p/cuda/nvidia-install_hud8377b5c2eaf750be9838eb34291d82b_111878_1024x0_resize_box_3.png 1024w"
 loading="lazy"
 alt="nvidia-install"
 class="gallery-image"
@@ -27,10 +27,10 @@ data-flex-basis="420px"
 &lt;h2 id="cuda">CUDA&lt;/h2>
 &lt;p>你可以在 &lt;a class="link" href="https://docs.nvidia.com/cuda/cuda-toolkit-release-notes/index.html" target="_blank" rel="noopener"
 >这里&lt;/a> 看到显卡驱动版本与 CUDA 版本的对应关系。&lt;/p>
-&lt;p>&lt;img src="https://blog.letout.cn/p/cuda/cuda.png"
+&lt;p>&lt;img src="https://www.letout.cn/p/cuda/cuda.png"
 width="1540"
 height="358"
-srcset="https://blog.letout.cn/p/cuda/cuda_hu06d82653b392e263a912d34e822f7d1a_74559_480x0_resize_box_3.png 480w, https://blog.letout.cn/p/cuda/cuda_hu06d82653b392e263a912d34e822f7d1a_74559_1024x0_resize_box_3.png 1024w"
+srcset="https://www.letout.cn/p/cuda/cuda_hu06d82653b392e263a912d34e822f7d1a_74559_480x0_resize_box_3.png 480w, https://www.letout.cn/p/cuda/cuda_hu06d82653b392e263a912d34e822f7d1a_74559_1024x0_resize_box_3.png 1024w"
 loading="lazy"
 alt="cuda"
 class="gallery-image"
@@ -41,10 +41,10 @@ data-flex-basis="1032px"
 &lt;p>之后，可在官网 &lt;a class="link" href="https://developer.nvidia.com/cuda-toolkit-archive" target="_blank" rel="noopener"
 >该页面&lt;/a> 中，选择对应的 CUDA Toolkit。&lt;/p>
 &lt;p>可根据当前系统环境，选择对应的下载选项（推荐下载 &lt;code>.drunfile&lt;/code>，&lt;code>.deb&lt;/code> 会覆盖系统安装的显卡驱动）：&lt;/p>
-&lt;p>&lt;img src="https://blog.letout.cn/p/cuda/cuda-platform.png"
+&lt;p>&lt;img src="https://www.letout.cn/p/cuda/cuda-platform.png"
 width="2506"
 height="894"
-srcset="https://blog.letout.cn/p/cuda/cuda-platform_hu9bf542e30b48a580f041a55f80ab65bc_245327_480x0_resize_box_3.png 480w, https://blog.letout.cn/p/cuda/cuda-platform_hu9bf542e30b48a580f041a55f80ab65bc_245327_1024x0_resize_box_3.png 1024w"
+srcset="https://www.letout.cn/p/cuda/cuda-platform_hu9bf542e30b48a580f041a55f80ab65bc_245327_480x0_resize_box_3.png 480w, https://www.letout.cn/p/cuda/cuda-platform_hu9bf542e30b48a580f041a55f80ab65bc_245327_1024x0_resize_box_3.png 1024w"
 loading="lazy"
 alt="cuda-platform"
 class="gallery-image"
@@ -69,10 +69,10 @@ data-flex-basis="672px"
 &lt;/div>&lt;p>::: warning 警告 🚧
 注意：在安装过程中，请取消勾选安装驱动选项。
 :::&lt;/p>
-&lt;p>&lt;img src="https://blog.letout.cn/p/cuda/cuda-install.png"
+&lt;p>&lt;img src="https://www.letout.cn/p/cuda/cuda-install.png"
 width="734"
 height="476"
-srcset="https://blog.letout.cn/p/cuda/cuda-install_hu423287ac940ffb3bc75497440c5c47d7_30663_480x0_resize_box_3.png 480w, https://blog.letout.cn/p/cuda/cuda-install_hu423287ac940ffb3bc75497440c5c47d7_30663_1024x0_resize_box_3.png 1024w"
+srcset="https://www.letout.cn/p/cuda/cuda-install_hu423287ac940ffb3bc75497440c5c47d7_30663_480x0_resize_box_3.png 480w, https://www.letout.cn/p/cuda/cuda-install_hu423287ac940ffb3bc75497440c5c47d7_30663_1024x0_resize_box_3.png 1024w"
 loading="lazy"
 alt="cuda-install"
 class="gallery-image"
@@ -96,10 +96,10 @@ data-flex-basis="370px"
 &lt;p>你可以在官网 &lt;a class="link" href="https://developer.nvidia.com/rdp/cudnn-download" target="_blank" rel="noopener"
 >此链接&lt;/a> 下载 CUDNN，需要注册开发者账号，可能还需要一个“良好的网络环境”。&lt;/p>
 &lt;p>选择与 CUDA 相对应用的 cuDNN，推荐下载压缩包格式。&lt;/p>
-&lt;p>&lt;img src="https://blog.letout.cn/p/cuda/cudnn.png"
+&lt;p>&lt;img src="https://www.letout.cn/p/cuda/cudnn.png"
 width="2228"
 height="1498"
-srcset="https://blog.letout.cn/p/cuda/cudnn_hu2d2e598f2ebb22e3f94073a6174ea5e2_332327_480x0_resize_box_3.png 480w, https://blog.letout.cn/p/cuda/cudnn_hu2d2e598f2ebb22e3f94073a6174ea5e2_332327_1024x0_resize_box_3.png 1024w"
+srcset="https://www.letout.cn/p/cuda/cudnn_hu2d2e598f2ebb22e3f94073a6174ea5e2_332327_480x0_resize_box_3.png 480w, https://www.letout.cn/p/cuda/cudnn_hu2d2e598f2ebb22e3f94073a6174ea5e2_332327_1024x0_resize_box_3.png 1024w"
 loading="lazy"
 alt="cudnn"
 class="gallery-image"

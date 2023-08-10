@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Redis on 一层</title><link>https://blog.letout.cn/tags/redis/</link><description>Recent content in Redis on 一层</description><generator>Hugo -- gohugo.io</generator><language>zh-cn</language><lastBuildDate>Wed, 01 Mar 2023 18:52:45 +0800</lastBuildDate><atom:link href="https://blog.letout.cn/tags/redis/index.xml" rel="self" type="application/rss+xml"/><item><title>Redis 复制</title><link>https://blog.letout.cn/p/redis/replication/</link><pubDate>Wed, 01 Mar 2023 18:52:45 +0800</pubDate><guid>https://blog.letout.cn/p/redis/replication/</guid><description>&lt;img src="https://blog.letout.cn/p/redis/replication/replication.png" alt="Featured image of post Redis 复制" />&lt;h2 id="建立复制">建立复制&lt;/h2>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Redis on 一层</title><link>https://www.letout.cn/tags/redis/</link><description>Recent content in Redis on 一层</description><generator>Hugo -- gohugo.io</generator><language>zh-cn</language><lastBuildDate>Wed, 01 Mar 2023 18:52:45 +0800</lastBuildDate><atom:link href="https://www.letout.cn/tags/redis/index.xml" rel="self" type="application/rss+xml"/><item><title>Redis 复制</title><link>https://www.letout.cn/p/redis/replication/</link><pubDate>Wed, 01 Mar 2023 18:52:45 +0800</pubDate><guid>https://www.letout.cn/p/redis/replication/</guid><description>&lt;img src="https://www.letout.cn/p/redis/replication/replication.png" alt="Featured image of post Redis 复制" />&lt;h2 id="建立复制">建立复制&lt;/h2>
 &lt;p>参与复制的 Redis 实例被划分为：&lt;/p>
 &lt;ul>
 &lt;li>主节点 &lt;code>master&lt;/code>&lt;/li>
@@ -7,10 +7,10 @@
 &lt;p>一个主节点可以有多个从节点，数据的复制是单向的 &lt;code>master -&amp;gt; slave&lt;/code>。&lt;/p>
 &lt;p>通过主从复制，可以实现「读写分离」，主服务器负责「写」操作，从服务器负责「读」操作。&lt;/p>
 &lt;p>同时，从节点也可以作为主节点的备份。&lt;/p>
-&lt;p>&lt;img src="https://blog.letout.cn/p/redis/replication/read-write.png"
+&lt;p>&lt;img src="https://www.letout.cn/p/redis/replication/read-write.png"
 width="902"
 height="422"
-srcset="https://blog.letout.cn/p/redis/replication/read-write_huc9c3964624999041f81d0c7b2328e956_42565_480x0_resize_box_3.png 480w, https://blog.letout.cn/p/redis/replication/read-write_huc9c3964624999041f81d0c7b2328e956_42565_1024x0_resize_box_3.png 1024w"
+srcset="https://www.letout.cn/p/redis/replication/read-write_huc9c3964624999041f81d0c7b2328e956_42565_480x0_resize_box_3.png 480w, https://www.letout.cn/p/redis/replication/read-write_huc9c3964624999041f81d0c7b2328e956_42565_1024x0_resize_box_3.png 1024w"
 loading="lazy"
 class="gallery-image"
 data-flex-grow="213"
@@ -138,10 +138,10 @@ data-flex-basis="512px"
 &lt;p>为了达到高可用，提供了哨兵模式 &lt;code>Redis Sentinel&lt;/code> 解决这个问题，自动完成故障发现和故障转移。&lt;/p>
 &lt;p>在哨兵模式下，相比于复制模式，只是多了 Sentinel 节点，主从模式下的 Redis 节点没有任何特殊处理。
 其中，Sentinel 节点本质上是特殊的 Redis 节点，只是不会存储数据，只支持部分命令。&lt;/p>
-&lt;p>&lt;img src="https://blog.letout.cn/p/redis/replication/sentinel.png"
+&lt;p>&lt;img src="https://www.letout.cn/p/redis/replication/sentinel.png"
 width="545"
 height="732"
-srcset="https://blog.letout.cn/p/redis/replication/sentinel_hu9ca24b6840f6afec965ea3fe9eb87fe5_297258_480x0_resize_box_3.png 480w, https://blog.letout.cn/p/redis/replication/sentinel_hu9ca24b6840f6afec965ea3fe9eb87fe5_297258_1024x0_resize_box_3.png 1024w"
+srcset="https://www.letout.cn/p/redis/replication/sentinel_hu9ca24b6840f6afec965ea3fe9eb87fe5_297258_480x0_resize_box_3.png 480w, https://www.letout.cn/p/redis/replication/sentinel_hu9ca24b6840f6afec965ea3fe9eb87fe5_297258_1024x0_resize_box_3.png 1024w"
 loading="lazy"
 class="gallery-image"
 data-flex-grow="74"
@@ -236,12 +236,12 @@ data-flex-basis="178px"
 &lt;li>&lt;a class="link" href="https://segmentfault.com/a/1190000039766545" target="_blank" rel="noopener"
 >https://segmentfault.com/a/1190000039766545&lt;/a>&lt;/li>
 &lt;li>Redis 开发于运维&lt;/li>
-&lt;/ul></description></item><item><title>Redis 缓存问题</title><link>https://blog.letout.cn/p/redis/cache-problem/</link><pubDate>Wed, 11 Jan 2023 01:52:45 +0800</pubDate><guid>https://blog.letout.cn/p/redis/cache-problem/</guid><description>&lt;img src="https://blog.letout.cn/p/redis/cache-problem/cache.png" alt="Featured image of post Redis 缓存问题" />&lt;h2 id="-缓存雪崩">🌨️ 缓存雪崩&lt;/h2>
+&lt;/ul></description></item><item><title>Redis 缓存问题</title><link>https://www.letout.cn/p/redis/cache-problem/</link><pubDate>Wed, 11 Jan 2023 01:52:45 +0800</pubDate><guid>https://www.letout.cn/p/redis/cache-problem/</guid><description>&lt;img src="https://www.letout.cn/p/redis/cache-problem/cache.png" alt="Featured image of post Redis 缓存问题" />&lt;h2 id="-缓存雪崩">🌨️ 缓存雪崩&lt;/h2>
 &lt;p>为了保证缓存中数据与数据库中的数据的一致性，通常 Redis 中数据会设置过期时间。如果（1）缓存层在同一时间有大量数据失效，或者 （2）Redis 由于某些情况宕机，导致所有请求全部访问数据库，造成数据库宕机。&lt;/p>
-&lt;p>&lt;img src="https://blog.letout.cn/p/redis/cache-problem/1.png"
+&lt;p>&lt;img src="https://www.letout.cn/p/redis/cache-problem/1.png"
 width="1080"
 height="660"
-srcset="https://blog.letout.cn/p/redis/cache-problem/1_huab116a381b3e5ca6aaa694e3ae424f2c_109299_480x0_resize_box_3.png 480w, https://blog.letout.cn/p/redis/cache-problem/1_huab116a381b3e5ca6aaa694e3ae424f2c_109299_1024x0_resize_box_3.png 1024w"
+srcset="https://www.letout.cn/p/redis/cache-problem/1_huab116a381b3e5ca6aaa694e3ae424f2c_109299_480x0_resize_box_3.png 480w, https://www.letout.cn/p/redis/cache-problem/1_huab116a381b3e5ca6aaa694e3ae424f2c_109299_1024x0_resize_box_3.png 1024w"
 loading="lazy"
 class="gallery-image"
 data-flex-grow="163"
@@ -274,10 +274,10 @@ data-flex-basis="392px"
 &lt;/ul>
 &lt;h2 id="-缓存击穿">⚡ 缓存击穿&lt;/h2>
 &lt;p>缓存中某个热点 Key 数据过期了，此时有大量请求访问该数据，导这些请求全部都落到了数据库上，导致数据库宕机。&lt;/p>
-&lt;p>&lt;img src="https://blog.letout.cn/p/redis/cache-problem/2.png"
+&lt;p>&lt;img src="https://www.letout.cn/p/redis/cache-problem/2.png"
 width="707"
 height="836"
-srcset="https://blog.letout.cn/p/redis/cache-problem/2_hu4d851393f6ce96ed0f1e6e1059c88231_81241_480x0_resize_box_3.png 480w, https://blog.letout.cn/p/redis/cache-problem/2_hu4d851393f6ce96ed0f1e6e1059c88231_81241_1024x0_resize_box_3.png 1024w"
+srcset="https://www.letout.cn/p/redis/cache-problem/2_hu4d851393f6ce96ed0f1e6e1059c88231_81241_480x0_resize_box_3.png 480w, https://www.letout.cn/p/redis/cache-problem/2_hu4d851393f6ce96ed0f1e6e1059c88231_81241_1024x0_resize_box_3.png 1024w"
 loading="lazy"
 class="gallery-image"
 data-flex-grow="84"
@@ -296,10 +296,10 @@ data-flex-basis="202px"
 &lt;h2 id="-缓存穿透">🌪️ 缓存穿透&lt;/h2>
 &lt;p>请求的数据既不存在于缓存中，也不存在于数据库中，有大量这样的请求，不会命中缓存，直接访问数据库，导致数据库压力非常大。&lt;/p>
 &lt;p>可能是由于（1）业务误操作 或 （2）黑客的故意攻击&lt;/p>
-&lt;p>&lt;img src="https://blog.letout.cn/p/redis/cache-problem/3.png"
+&lt;p>&lt;img src="https://www.letout.cn/p/redis/cache-problem/3.png"
 width="576"
 height="836"
-srcset="https://blog.letout.cn/p/redis/cache-problem/3_hua47220c88eca814bf161e3c4ed6c3627_76648_480x0_resize_box_3.png 480w, https://blog.letout.cn/p/redis/cache-problem/3_hua47220c88eca814bf161e3c4ed6c3627_76648_1024x0_resize_box_3.png 1024w"
+srcset="https://www.letout.cn/p/redis/cache-problem/3_hua47220c88eca814bf161e3c4ed6c3627_76648_480x0_resize_box_3.png 480w, https://www.letout.cn/p/redis/cache-problem/3_hua47220c88eca814bf161e3c4ed6c3627_76648_1024x0_resize_box_3.png 1024w"
 loading="lazy"
 class="gallery-image"
 data-flex-grow="68"
@@ -336,20 +336,20 @@ data-flex-basis="165px"
 &lt;h2 id="-缓存一致性">🎏 缓存一致性&lt;/h2>
 &lt;h3 id="更新">更新&lt;/h3>
 &lt;h4 id="-先更新数据库再更新缓存">❌ 先更新数据库，再更新缓存&lt;/h4>
-&lt;p>&lt;img src="https://blog.letout.cn/p/redis/cache-problem/11.png"
+&lt;p>&lt;img src="https://www.letout.cn/p/redis/cache-problem/11.png"
 width="893"
 height="618"
-srcset="https://blog.letout.cn/p/redis/cache-problem/11_hu0a23dc2cab9bf3c3bb634fe5cae7e5fa_53493_480x0_resize_box_3.png 480w, https://blog.letout.cn/p/redis/cache-problem/11_hu0a23dc2cab9bf3c3bb634fe5cae7e5fa_53493_1024x0_resize_box_3.png 1024w"
+srcset="https://www.letout.cn/p/redis/cache-problem/11_hu0a23dc2cab9bf3c3bb634fe5cae7e5fa_53493_480x0_resize_box_3.png 480w, https://www.letout.cn/p/redis/cache-problem/11_hu0a23dc2cab9bf3c3bb634fe5cae7e5fa_53493_1024x0_resize_box_3.png 1024w"
 loading="lazy"
 class="gallery-image"
 data-flex-grow="144"
 data-flex-basis="346px"
 >&lt;/p>
 &lt;h4 id="-先更新缓存再更新数据库">❌ 先更新缓存，再更新数据库&lt;/h4>
-&lt;p>&lt;img src="https://blog.letout.cn/p/redis/cache-problem/12.png"
+&lt;p>&lt;img src="https://www.letout.cn/p/redis/cache-problem/12.png"
 width="903"
 height="498"
-srcset="https://blog.letout.cn/p/redis/cache-problem/12_hub4cf2089e272e09419483674cc55ccc3_51215_480x0_resize_box_3.png 480w, https://blog.letout.cn/p/redis/cache-problem/12_hub4cf2089e272e09419483674cc55ccc3_51215_1024x0_resize_box_3.png 1024w"
+srcset="https://www.letout.cn/p/redis/cache-problem/12_hub4cf2089e272e09419483674cc55ccc3_51215_480x0_resize_box_3.png 480w, https://www.letout.cn/p/redis/cache-problem/12_hub4cf2089e272e09419483674cc55ccc3_51215_1024x0_resize_box_3.png 1024w"
 loading="lazy"
 class="gallery-image"
 data-flex-grow="181"
@@ -357,10 +357,10 @@ data-flex-basis="435px"
 >&lt;/p>
 &lt;h3 id="删除">删除&lt;/h3>
 &lt;h4 id="-先删除缓存再更新数据库">❓ 先删除缓存，再更新数据库&lt;/h4>
-&lt;p>&lt;img src="https://blog.letout.cn/p/redis/cache-problem/13.png"
+&lt;p>&lt;img src="https://www.letout.cn/p/redis/cache-problem/13.png"
 width="903"
 height="618"
-srcset="https://blog.letout.cn/p/redis/cache-problem/13_hu6883dd3e3299a5dfe5e375db77067d03_50514_480x0_resize_box_3.png 480w, https://blog.letout.cn/p/redis/cache-problem/13_hu6883dd3e3299a5dfe5e375db77067d03_50514_1024x0_resize_box_3.png 1024w"
+srcset="https://www.letout.cn/p/redis/cache-problem/13_hu6883dd3e3299a5dfe5e375db77067d03_50514_480x0_resize_box_3.png 480w, https://www.letout.cn/p/redis/cache-problem/13_hu6883dd3e3299a5dfe5e375db77067d03_50514_1024x0_resize_box_3.png 1024w"
 loading="lazy"
 class="gallery-image"
 data-flex-grow="146"
@@ -369,10 +369,10 @@ data-flex-basis="350px"
 &lt;p>可以考虑延迟双删。在更新完数据库后，延迟一段时间再删除一次缓存。&lt;/p>
 &lt;h4 id="-先更新数据库再删除缓存">⭕ 先更新数据库，再删除缓存&lt;/h4>
 &lt;p>在实际中，出现的概率非常低。缓存的写入要远远快于数据库的写入。&lt;/p>
-&lt;p>&lt;img src="https://blog.letout.cn/p/redis/cache-problem/14.png"
+&lt;p>&lt;img src="https://www.letout.cn/p/redis/cache-problem/14.png"
 width="1080"
 height="660"
-srcset="https://blog.letout.cn/p/redis/cache-problem/14_huab116a381b3e5ca6aaa694e3ae424f2c_109299_480x0_resize_box_3.png 480w, https://blog.letout.cn/p/redis/cache-problem/14_huab116a381b3e5ca6aaa694e3ae424f2c_109299_1024x0_resize_box_3.png 1024w"
+srcset="https://www.letout.cn/p/redis/cache-problem/14_huab116a381b3e5ca6aaa694e3ae424f2c_109299_480x0_resize_box_3.png 480w, https://www.letout.cn/p/redis/cache-problem/14_huab116a381b3e5ca6aaa694e3ae424f2c_109299_1024x0_resize_box_3.png 1024w"
 loading="lazy"
 class="gallery-image"
 data-flex-grow="163"
@@ -390,7 +390,7 @@ data-flex-basis="392px"
 &lt;li>&lt;a class="link" href="https://xiaolincoding.com/redis/" target="_blank" rel="noopener"
 >https://xiaolincoding.com/redis/&lt;/a>&lt;/li>
 &lt;li>Redis 开发与运维&lt;/li>
-&lt;/ul></description></item><item><title>Redis 持久化</title><link>https://blog.letout.cn/p/redis/persistence/</link><pubDate>Fri, 06 Jan 2023 22:07:45 +0800</pubDate><guid>https://blog.letout.cn/p/redis/persistence/</guid><description>&lt;img src="https://blog.letout.cn/p/redis/persistence/cow.png" alt="Featured image of post Redis 持久化" />&lt;h2 id="保障数据不丢失">保障数据不丢失&lt;/h2>
+&lt;/ul></description></item><item><title>Redis 持久化</title><link>https://www.letout.cn/p/redis/persistence/</link><pubDate>Fri, 06 Jan 2023 22:07:45 +0800</pubDate><guid>https://www.letout.cn/p/redis/persistence/</guid><description>&lt;img src="https://www.letout.cn/p/redis/persistence/cow.png" alt="Featured image of post Redis 持久化" />&lt;h2 id="保障数据不丢失">保障数据不丢失&lt;/h2>
 &lt;p>Redis 的读写操作都是在内存中，为了保证内存中的数据不会丢失，Redis 实现了数据持久化的机制，把数据存储到磁盘，这样在 Redis 重启就能够从磁盘中恢复原有的数据。&lt;/p>
 &lt;ul>
 &lt;li>RDB 快照&lt;/li>
@@ -416,8 +416,8 @@ data-flex-basis="392px"
 &lt;/span>&lt;span class="lnt">2
 &lt;/span>&lt;/code>&lt;/pre>&lt;/td>
 &lt;td class="lntd">
-&lt;pre tabindex="0" class="chroma">&lt;code class="language-fallback" data-lang="fallback">&lt;span class="line">&lt;span class="cl"># 300 秒之内，对数据库至少执行了 10 次操作
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">save 300 10
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-conf" data-lang="conf">&lt;span class="line">&lt;span class="cl">&lt;span class="c"># 300 秒之内，对数据库至少执行了 10 次操作
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c">&lt;/span>&lt;span class="nv">save&lt;/span> &lt;span class="nv">300&lt;/span> &lt;span class="nv">10&lt;/span>
 &lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
 &lt;/div>
 &lt;/div>&lt;ul>
@@ -430,10 +430,10 @@ data-flex-basis="392px"
 &lt;/ul>
 &lt;h3 id="实现方式">实现方式&lt;/h3>
 &lt;p>执行 bgsave 命令的时候，会通过 fork() 创建子进程，复制父进程的页表，此时子进程和父进程共享同一片内存数据，bgsave 子进程会把该副本数据写入 RDB 文件。&lt;/p>
-&lt;p>&lt;img src="https://blog.letout.cn/p/redis/persistence/cow.png"
+&lt;p>&lt;img src="https://www.letout.cn/p/redis/persistence/cow.png"
 width="969"
 height="707"
-srcset="https://blog.letout.cn/p/redis/persistence/cow_huef7edcdd3c38f136e9d4b420711ff934_42621_480x0_resize_box_3.png 480w, https://blog.letout.cn/p/redis/persistence/cow_huef7edcdd3c38f136e9d4b420711ff934_42621_1024x0_resize_box_3.png 1024w"
+srcset="https://www.letout.cn/p/redis/persistence/cow_huef7edcdd3c38f136e9d4b420711ff934_42621_480x0_resize_box_3.png 480w, https://www.letout.cn/p/redis/persistence/cow_huef7edcdd3c38f136e9d4b420711ff934_42621_1024x0_resize_box_3.png 1024w"
 loading="lazy"
 class="gallery-image"
 data-flex-grow="137"
@@ -493,10 +493,10 @@ data-flex-basis="328px"
 &lt;h4 id="实现方式-1">实现方式&lt;/h4>
 &lt;p>通过 fork 后台子进程完成。使用 COW 技术，共享物理内存。&lt;/p>
 &lt;p>在重写期间，依旧可以执行命令，写命令会同时保存在（1）AOF 缓存区 和 （2）AOF 重写缓存区。&lt;/p>
-&lt;p>&lt;img src="https://blog.letout.cn/p/redis/persistence/aof.png"
+&lt;p>&lt;img src="https://www.letout.cn/p/redis/persistence/aof.png"
 width="940"
 height="1014"
-srcset="https://blog.letout.cn/p/redis/persistence/aof_huf07c02c53918ac63e75c29803edc1708_212356_480x0_resize_box_3.png 480w, https://blog.letout.cn/p/redis/persistence/aof_huf07c02c53918ac63e75c29803edc1708_212356_1024x0_resize_box_3.png 1024w"
+srcset="https://www.letout.cn/p/redis/persistence/aof_huf07c02c53918ac63e75c29803edc1708_212356_480x0_resize_box_3.png 480w, https://www.letout.cn/p/redis/persistence/aof_huf07c02c53918ac63e75c29803edc1708_212356_1024x0_resize_box_3.png 1024w"
 loading="lazy"
 class="gallery-image"
 data-flex-grow="92"
@@ -511,16 +511,16 @@ data-flex-basis="222px"
 &lt;li>主线程处理的操作命令会被记录在重写缓冲区里，重写缓冲区里的增量命令会以 AOF 方式写入到 AOF 文件，&lt;/li>
 &lt;li>写入完成后通知主进程将新的含有 RDB 格式和 AOF 格式的 AOF 文件替换旧的的 AOF 文件。&lt;/li>
 &lt;/ul>
-&lt;p>&lt;img src="https://blog.letout.cn/p/redis/persistence/mix.jpg"
+&lt;p>&lt;img src="https://www.letout.cn/p/redis/persistence/mix.jpg"
 width="325"
 height="356"
-srcset="https://blog.letout.cn/p/redis/persistence/mix_huce3a57336b77bba5760b97f3c77136cb_10330_480x0_resize_q75_box.jpg 480w, https://blog.letout.cn/p/redis/persistence/mix_huce3a57336b77bba5760b97f3c77136cb_10330_1024x0_resize_q75_box.jpg 1024w"
+srcset="https://www.letout.cn/p/redis/persistence/mix_huce3a57336b77bba5760b97f3c77136cb_10330_480x0_resize_q75_box.jpg 480w, https://www.letout.cn/p/redis/persistence/mix_huce3a57336b77bba5760b97f3c77136cb_10330_1024x0_resize_q75_box.jpg 1024w"
 loading="lazy"
 class="gallery-image"
 data-flex-grow="91"
 data-flex-basis="219px"
 >&lt;/p>
-&lt;p>使用了混合持久化，AOF 文件的前半部分是 RDB 格式的全量数据，后半部分是 AOF 格式的增量数据。&lt;/p></description></item><item><title>Redis 常见数据结构</title><link>https://blog.letout.cn/p/redis/data-struct/</link><pubDate>Wed, 01 Jun 2022 01:52:45 +0800</pubDate><guid>https://blog.letout.cn/p/redis/data-struct/</guid><description>&lt;img src="https://blog.letout.cn/p/redis/data-struct/redis.jpg" alt="Featured image of post Redis 常见数据结构" />&lt;p>Redis 提供了丰富的数据类型，常见的有五种：&lt;/p>
+&lt;p>使用了混合持久化，AOF 文件的前半部分是 RDB 格式的全量数据，后半部分是 AOF 格式的增量数据。&lt;/p></description></item><item><title>Redis 常见数据结构</title><link>https://www.letout.cn/p/redis/data-struct/</link><pubDate>Wed, 01 Jun 2022 01:52:45 +0800</pubDate><guid>https://www.letout.cn/p/redis/data-struct/</guid><description>&lt;img src="https://www.letout.cn/p/redis/data-struct/redis.jpg" alt="Featured image of post Redis 常见数据结构" />&lt;p>Redis 提供了丰富的数据类型，常见的有五种：&lt;/p>
 &lt;ul>
 &lt;li>String 字符串&lt;/li>
 &lt;li>List 列表&lt;/li>
@@ -539,10 +539,10 @@ data-flex-basis="219px"
 >在线 Redis 体验 → https://try.redis.io/&lt;/a>&lt;/p>
 &lt;h2 id="-string">🦮 String&lt;/h2>
 &lt;p>String 是最基本的 &lt;code>key-value&lt;/code> 结构。&lt;code>key&lt;/code> 是唯一标识（可以是字符串、数字），&lt;code>value&lt;/code> 是具体的值（最长可以容纳 521M）。&lt;/p>
-&lt;p>&lt;img src="https://blog.letout.cn/p/redis/data-struct/string.webp"
+&lt;p>&lt;img src="https://www.letout.cn/p/redis/data-struct/string.webp"
 width="1698"
 height="724"
-srcset="https://blog.letout.cn/p/redis/data-struct/string_hu6be3934e7d6496236c063d8dd99c676c_31658_480x0_resize_q75_h2_box_2.webp 480w, https://blog.letout.cn/p/redis/data-struct/string_hu6be3934e7d6496236c063d8dd99c676c_31658_1024x0_resize_q75_h2_box_2.webp 1024w"
+srcset="https://www.letout.cn/p/redis/data-struct/string_hu6be3934e7d6496236c063d8dd99c676c_31658_480x0_resize_q75_h2_box_2.webp 480w, https://www.letout.cn/p/redis/data-struct/string_hu6be3934e7d6496236c063d8dd99c676c_31658_1024x0_resize_q75_h2_box_2.webp 1024w"
 loading="lazy"
 class="gallery-image"
 data-flex-grow="234"
@@ -761,10 +761,10 @@ data-flex-basis="562px"
 &lt;/ul>
 &lt;p>Session 保存在服务端，通常用于保存用户的会话状态（登录）。&lt;/p>
 &lt;p>在分布式系统中，用户多次请求不一定都在同一台服务器中，我们可以借助 Redis 对 Session 信息进行统一的存储和管理，服务器都去同一个 Redis 获取相关的 Session 信息，这样就解决了分布式系统下 Session 存储的问题。&lt;/p>
-&lt;p>&lt;img src="https://blog.letout.cn/p/redis/data-struct/session.webp"
+&lt;p>&lt;img src="https://www.letout.cn/p/redis/data-struct/session.webp"
 width="473"
 height="412"
-srcset="https://blog.letout.cn/p/redis/data-struct/session_hua9fef675509e88be48c6a316850a3976_17592_480x0_resize_q75_h2_box_2.webp 480w, https://blog.letout.cn/p/redis/data-struct/session_hua9fef675509e88be48c6a316850a3976_17592_1024x0_resize_q75_h2_box_2.webp 1024w"
+srcset="https://www.letout.cn/p/redis/data-struct/session_hua9fef675509e88be48c6a316850a3976_17592_480x0_resize_q75_h2_box_2.webp 480w, https://www.letout.cn/p/redis/data-struct/session_hua9fef675509e88be48c6a316850a3976_17592_1024x0_resize_q75_h2_box_2.webp 1024w"
 loading="lazy"
 class="gallery-image"
 data-flex-grow="114"
@@ -773,10 +773,10 @@ data-flex-basis="275px"
 &lt;h2 id="-list">🐅 List&lt;/h2>
 &lt;p>List 是简单的字符串列表，按照插入顺序排序，可以从头部或尾部向 List 中添加元素。最大长度为 &lt;code>2^32 - 1&lt;/code>。&lt;/p>
 &lt;h3 id="-常用命令-1">🎗️ 常用命令&lt;/h3>
-&lt;p>&lt;img src="https://blog.letout.cn/p/redis/data-struct/list.webp"
+&lt;p>&lt;img src="https://www.letout.cn/p/redis/data-struct/list.webp"
 width="1936"
 height="684"
-srcset="https://blog.letout.cn/p/redis/data-struct/list_huc892bbfdf91688e9656244dd3482dcd2_21712_480x0_resize_q75_h2_box_2.webp 480w, https://blog.letout.cn/p/redis/data-struct/list_huc892bbfdf91688e9656244dd3482dcd2_21712_1024x0_resize_q75_h2_box_2.webp 1024w"
+srcset="https://www.letout.cn/p/redis/data-struct/list_huc892bbfdf91688e9656244dd3482dcd2_21712_480x0_resize_q75_h2_box_2.webp 480w, https://www.letout.cn/p/redis/data-struct/list_huc892bbfdf91688e9656244dd3482dcd2_21712_1024x0_resize_q75_h2_box_2.webp 1024w"
 loading="lazy"
 class="gallery-image"
 data-flex-grow="283"
@@ -848,10 +848,10 @@ data-flex-basis="679px"
 &lt;ul>
 &lt;li>📐 消息队列&lt;/li>
 &lt;/ul>
-&lt;p>&lt;img src="https://blog.letout.cn/p/redis/data-struct/list-mq.webp"
+&lt;p>&lt;img src="https://www.letout.cn/p/redis/data-struct/list-mq.webp"
 width="1642"
 height="374"
-srcset="https://blog.letout.cn/p/redis/data-struct/list-mq_hu84909a50c09ec905badb1edece873c1a_26948_480x0_resize_q75_h2_box_2.webp 480w, https://blog.letout.cn/p/redis/data-struct/list-mq_hu84909a50c09ec905badb1edece873c1a_26948_1024x0_resize_q75_h2_box_2.webp 1024w"
+srcset="https://www.letout.cn/p/redis/data-struct/list-mq_hu84909a50c09ec905badb1edece873c1a_26948_480x0_resize_q75_h2_box_2.webp 480w, https://www.letout.cn/p/redis/data-struct/list-mq_hu84909a50c09ec905badb1edece873c1a_26948_1024x0_resize_q75_h2_box_2.webp 1024w"
 loading="lazy"
 class="gallery-image"
 data-flex-grow="439"
@@ -859,10 +859,10 @@ data-flex-basis="1053px"
 >&lt;/p>
 &lt;h2 id="-hash">🦛 Hash&lt;/h2>
 &lt;p>Hash 是一个键值对的集合 &lt;code>key-value&lt;/code>，特别适合存储对象。&lt;/p>
-&lt;p>&lt;img src="https://blog.letout.cn/p/redis/data-struct/hash.webp"
+&lt;p>&lt;img src="https://www.letout.cn/p/redis/data-struct/hash.webp"
 width="1240"
 height="888"
-srcset="https://blog.letout.cn/p/redis/data-struct/hash_hu502a0c0c4b1bff1d1b5a1b9e04992920_41732_480x0_resize_q75_h2_box_2.webp 480w, https://blog.letout.cn/p/redis/data-struct/hash_hu502a0c0c4b1bff1d1b5a1b9e04992920_41732_1024x0_resize_q75_h2_box_2.webp 1024w"
+srcset="https://www.letout.cn/p/redis/data-struct/hash_hu502a0c0c4b1bff1d1b5a1b9e04992920_41732_480x0_resize_q75_h2_box_2.webp 480w, https://www.letout.cn/p/redis/data-struct/hash_hu502a0c0c4b1bff1d1b5a1b9e04992920_41732_1024x0_resize_q75_h2_box_2.webp 1024w"
 loading="lazy"
 class="gallery-image"
 data-flex-grow="139"
@@ -933,10 +933,10 @@ data-flex-basis="335px"
 &lt;ul>
 &lt;li>📐 缓存对象&lt;/li>
 &lt;/ul>
-&lt;p>&lt;img src="https://blog.letout.cn/p/redis/data-struct/hash-object.webp"
+&lt;p>&lt;img src="https://www.letout.cn/p/redis/data-struct/hash-object.webp"
 width="1192"
 height="840"
-srcset="https://blog.letout.cn/p/redis/data-struct/hash-object_huacd74159ecd6ae063f912243dd43d93b_31326_480x0_resize_q75_h2_box_2.webp 480w, https://blog.letout.cn/p/redis/data-struct/hash-object_huacd74159ecd6ae063f912243dd43d93b_31326_1024x0_resize_q75_h2_box_2.webp 1024w"
+srcset="https://www.letout.cn/p/redis/data-struct/hash-object_huacd74159ecd6ae063f912243dd43d93b_31326_480x0_resize_q75_h2_box_2.webp 480w, https://www.letout.cn/p/redis/data-struct/hash-object_huacd74159ecd6ae063f912243dd43d93b_31326_1024x0_resize_q75_h2_box_2.webp 1024w"
 loading="lazy"
 class="gallery-image"
 data-flex-grow="141"
@@ -1004,10 +1004,10 @@ data-flex-basis="340px"
 &lt;h2 id="-set">🐑 Set&lt;/h2>
 &lt;p>Set 是一个无序并唯一的集合（存储顺序不会按照插入的先后顺序进行存储）。&lt;/p>
 &lt;p>集合中最多可以存储 &lt;code>2^32 - 1&lt;/code> 个元素，除增删改查外，还支持多个集合的交集、并集和差集。&lt;/p>
-&lt;p>&lt;img src="https://blog.letout.cn/p/redis/data-struct/set.webp"
+&lt;p>&lt;img src="https://www.letout.cn/p/redis/data-struct/set.webp"
 width="1268"
 height="654"
-srcset="https://blog.letout.cn/p/redis/data-struct/set_hu834a88f1bdb5e75fecc5121b1cadeb66_29462_480x0_resize_q75_h2_box_2.webp 480w, https://blog.letout.cn/p/redis/data-struct/set_hu834a88f1bdb5e75fecc5121b1cadeb66_29462_1024x0_resize_q75_h2_box_2.webp 1024w"
+srcset="https://www.letout.cn/p/redis/data-struct/set_hu834a88f1bdb5e75fecc5121b1cadeb66_29462_480x0_resize_q75_h2_box_2.webp 480w, https://www.letout.cn/p/redis/data-struct/set_hu834a88f1bdb5e75fecc5121b1cadeb66_29462_1024x0_resize_q75_h2_box_2.webp 1024w"
 loading="lazy"
 class="gallery-image"
 data-flex-grow="193"
@@ -1235,10 +1235,10 @@ data-flex-basis="465px"
 &lt;p>Zset（有序集合，从小到大） 相比于 Set 类型多了一个排序分值 socre。&lt;/p>
 &lt;p>对于有序集合 ZSet 来说，每个存储的元素由两个值组成，一个是有序集合的元素值，一个是排序值。&lt;/p>
 &lt;p>Zset 中元素不能重复，分数值可以重复，并且可以排序。&lt;/p>
-&lt;p>&lt;img src="https://blog.letout.cn/p/redis/data-struct/zset.webp"
+&lt;p>&lt;img src="https://www.letout.cn/p/redis/data-struct/zset.webp"
 width="1226"
 height="616"
-srcset="https://blog.letout.cn/p/redis/data-struct/zset_hudfba1ba2f4862e7afd7997bee0d59f08_21828_480x0_resize_q75_h2_box_2.webp 480w, https://blog.letout.cn/p/redis/data-struct/zset_hudfba1ba2f4862e7afd7997bee0d59f08_21828_1024x0_resize_q75_h2_box_2.webp 1024w"
+srcset="https://www.letout.cn/p/redis/data-struct/zset_hudfba1ba2f4862e7afd7997bee0d59f08_21828_480x0_resize_q75_h2_box_2.webp 480w, https://www.letout.cn/p/redis/data-struct/zset_hudfba1ba2f4862e7afd7997bee0d59f08_21828_1024x0_resize_q75_h2_box_2.webp 1024w"
 loading="lazy"
 class="gallery-image"
 data-flex-grow="199"
@@ -1354,7 +1354,7 @@ data-flex-basis="477px"
 &lt;ul>
 &lt;li>&lt;a class="link" href="https://xiaolincoding.com/redis/data_struct/command.html" target="_blank" rel="noopener"
 >https://xiaolincoding.com/redis/data_struct/command.html&lt;/a>&lt;/li>
-&lt;/ul></description></item><item><title>使用 Redis 实现分布式锁</title><link>https://blog.letout.cn/p/distributed/lock/redis/</link><pubDate>Wed, 11 May 2022 12:14:45 +0800</pubDate><guid>https://blog.letout.cn/p/distributed/lock/redis/</guid><description>&lt;img src="https://blog.letout.cn/imgs/1.jpeg" alt="Featured image of post 使用 Redis 实现分布式锁" />&lt;h2 id="redis-nx-实现">Redis NX 实现&lt;/h2>
+&lt;/ul></description></item><item><title>使用 Redis 实现分布式锁</title><link>https://www.letout.cn/p/distributed/lock/redis/</link><pubDate>Wed, 11 May 2022 12:14:45 +0800</pubDate><guid>https://www.letout.cn/p/distributed/lock/redis/</guid><description>&lt;img src="https://www.letout.cn/imgs/1.jpeg" alt="Featured image of post 使用 Redis 实现分布式锁" />&lt;h2 id="redis-nx-实现">Redis NX 实现&lt;/h2>
 &lt;p>利用 NX 的&lt;strong>原子性&lt;/strong>，多个线程并发时，只有一个线程可以设置成功，设置成功即获取了锁。&lt;/p>
 &lt;p>&lt;strong>如果没有获取锁，不会阻塞当前方法，直接跳过任务。&lt;/strong>&lt;/p>
 &lt;h3 id="获取锁">获取锁&lt;/h3>
@@ -1470,7 +1470,7 @@ data-flex-basis="477px"
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c1">// 获取分布式锁
 &lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span> &lt;span class="n">Boolean&lt;/span> &lt;span class="n">lock&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">redisTemplate&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">execute&lt;/span>&lt;span class="o">((&lt;/span>&lt;span class="n">RedisCallback&lt;/span>&lt;span class="o">&amp;lt;&lt;/span>&lt;span class="n">Boolean&lt;/span>&lt;span class="o">&amp;gt;)&lt;/span> &lt;span class="n">redisConnection&lt;/span> &lt;span class="o">-&amp;gt;&lt;/span> &lt;span class="o">{&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">Expiration&lt;/span> &lt;span class="n">expiration&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">Expiration&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">seconds&lt;/span>&lt;span class="o">(&lt;/span>&lt;span class="mi">30&lt;/span>&lt;span class="o">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">Expiration&lt;/span> &lt;span class="n">expiration&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">Expiration&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">seconds&lt;/span>&lt;span class="o">(&lt;/span>&lt;span class="n">30&lt;/span>&lt;span class="o">);&lt;/span>
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c1">// NX
 &lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span> &lt;span class="n">RedisStringCommands&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">SetOption&lt;/span> &lt;span class="n">setOption&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">RedisStringCommands&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">SetOption&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">ifAbsent&lt;/span>&lt;span class="o">();&lt;/span>
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c1">// 需要使用 redisTemplate 中的序列化器
@@ -1483,7 +1483,7 @@ data-flex-basis="477px"
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">if&lt;/span> &lt;span class="o">(&lt;/span>&lt;span class="n">lock&lt;/span>&lt;span class="o">)&lt;/span> &lt;span class="o">{&lt;/span> &lt;span class="c1">// 获取到了锁
 &lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span> &lt;span class="n">log&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">info&lt;/span>&lt;span class="o">(&lt;/span>&lt;span class="s">&amp;#34;获取到了锁&amp;#34;&lt;/span>&lt;span class="o">);&lt;/span>
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">try&lt;/span> &lt;span class="o">{&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">TimeUnit&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">SECONDS&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">sleep&lt;/span>&lt;span class="o">(&lt;/span>&lt;span class="mi">15&lt;/span>&lt;span class="o">);&lt;/span> &lt;span class="c1">// 模拟业务处理
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">TimeUnit&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">SECONDS&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">sleep&lt;/span>&lt;span class="o">(&lt;/span>&lt;span class="n">15&lt;/span>&lt;span class="o">);&lt;/span> &lt;span class="c1">// 模拟业务处理
 &lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span> &lt;span class="o">}&lt;/span> &lt;span class="k">catch&lt;/span> &lt;span class="o">(&lt;/span>&lt;span class="n">InterruptedException&lt;/span> &lt;span class="n">e&lt;/span>&lt;span class="o">)&lt;/span> &lt;span class="o">{&lt;/span>
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">e&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">printStackTrace&lt;/span>&lt;span class="o">();&lt;/span>
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="o">}&lt;/span> &lt;span class="k">finally&lt;/span> &lt;span class="o">{&lt;/span>
@@ -1679,10 +1679,10 @@ data-flex-basis="477px"
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">RLock&lt;/span> &lt;span class="n">lock&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">redissonClient&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">getLock&lt;/span>&lt;span class="o">(&lt;/span>&lt;span class="n">key&lt;/span>&lt;span class="o">);&lt;/span>
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c1">// 锁超时时间，如果未获得锁，会阻塞等待获取到锁（-1 表示没有超时时间）
-&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span> &lt;span class="n">lock&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">lock&lt;/span>&lt;span class="o">(&lt;/span>&lt;span class="mi">30&lt;/span>&lt;span class="o">,&lt;/span> &lt;span class="n">TimeUnit&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">SECONDS&lt;/span>&lt;span class="o">);&lt;/span>
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span> &lt;span class="n">lock&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">lock&lt;/span>&lt;span class="o">(&lt;/span>&lt;span class="n">30&lt;/span>&lt;span class="o">,&lt;/span> &lt;span class="n">TimeUnit&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">SECONDS&lt;/span>&lt;span class="o">);&lt;/span>
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">log&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">info&lt;/span>&lt;span class="o">(&lt;/span>&lt;span class="s">&amp;#34;获取锁&amp;#34;&lt;/span>&lt;span class="o">);&lt;/span>
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">try&lt;/span> &lt;span class="o">{&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">TimeUnit&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">SECONDS&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">sleep&lt;/span>&lt;span class="o">(&lt;/span>&lt;span class="mi">10&lt;/span>&lt;span class="o">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">TimeUnit&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">SECONDS&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">sleep&lt;/span>&lt;span class="o">(&lt;/span>&lt;span class="n">10&lt;/span>&lt;span class="o">);&lt;/span>
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="o">}&lt;/span> &lt;span class="k">catch&lt;/span> &lt;span class="o">(&lt;/span>&lt;span class="n">InterruptedException&lt;/span> &lt;span class="n">e&lt;/span>&lt;span class="o">)&lt;/span> &lt;span class="o">{&lt;/span>
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">e&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="na">printStackTrace&lt;/span>&lt;span class="o">();&lt;/span>
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="o">}&lt;/span> &lt;span class="k">finally&lt;/span> &lt;span class="o">{&lt;/span>

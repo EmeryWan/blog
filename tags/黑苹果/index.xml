@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>黑苹果 on 一层</title><link>https://blog.letout.cn/tags/%E9%BB%91%E8%8B%B9%E6%9E%9C/</link><description>Recent content in 黑苹果 on 一层</description><generator>Hugo -- gohugo.io</generator><language>zh-cn</language><lastBuildDate>Thu, 27 Feb 2020 21:14:45 +0800</lastBuildDate><atom:link href="https://blog.letout.cn/tags/%E9%BB%91%E8%8B%B9%E6%9E%9C/index.xml" rel="self" type="application/rss+xml"/><item><title>雷蛇 灵刃 15 标准版 2018 黑苹果</title><link>https://blog.letout.cn/p/razer-blade-base-hackintosh/</link><pubDate>Thu, 27 Feb 2020 21:14:45 +0800</pubDate><guid>https://blog.letout.cn/p/razer-blade-base-hackintosh/</guid><description>&lt;p>&lt;strong>警告：该教程仅为个人记录，该笔记本安装涉及解锁BIOS，存在一定风险，如您使用该教程对计算机进行更改，所造成的的任何后果我概不负责。&lt;/strong>&lt;/p>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>黑苹果 on 一层</title><link>https://www.letout.cn/tags/%E9%BB%91%E8%8B%B9%E6%9E%9C/</link><description>Recent content in 黑苹果 on 一层</description><generator>Hugo -- gohugo.io</generator><language>zh-cn</language><lastBuildDate>Thu, 27 Feb 2020 21:14:45 +0800</lastBuildDate><atom:link href="https://www.letout.cn/tags/%E9%BB%91%E8%8B%B9%E6%9E%9C/index.xml" rel="self" type="application/rss+xml"/><item><title>雷蛇 灵刃 15 标准版 2018 黑苹果</title><link>https://www.letout.cn/p/razer-blade-base-hackintosh/</link><pubDate>Thu, 27 Feb 2020 21:14:45 +0800</pubDate><guid>https://www.letout.cn/p/razer-blade-base-hackintosh/</guid><description>&lt;p>&lt;strong>警告：该教程仅为个人记录，该笔记本安装涉及解锁BIOS，存在一定风险，如您使用该教程对计算机进行更改，所造成的的任何后果我概不负责。&lt;/strong>&lt;/p>
 &lt;h1 id="写在最前">写在最前&lt;/h1>
 &lt;ul>
 &lt;li>
@@ -124,10 +124,10 @@
 &lt;/tbody>
 &lt;/table>
 &lt;h2 id="2-安装结果">[2] 安装结果&lt;/h2>
-&lt;p>&lt;img src="https://blog.letout.cn/p/razer-blade-base-hackintosh/2-1.png"
+&lt;p>&lt;img src="https://www.letout.cn/p/razer-blade-base-hackintosh/2-1.png"
 width="586"
 height="353"
-srcset="https://blog.letout.cn/p/razer-blade-base-hackintosh/2-1_hu2b7930256d93d7df669e002f0ee8a5ea_76515_480x0_resize_box_3.png 480w, https://blog.letout.cn/p/razer-blade-base-hackintosh/2-1_hu2b7930256d93d7df669e002f0ee8a5ea_76515_1024x0_resize_box_3.png 1024w"
+srcset="https://www.letout.cn/p/razer-blade-base-hackintosh/2-1_hu2b7930256d93d7df669e002f0ee8a5ea_76515_480x0_resize_box_3.png 480w, https://www.letout.cn/p/razer-blade-base-hackintosh/2-1_hu2b7930256d93d7df669e002f0ee8a5ea_76515_1024x0_resize_box_3.png 1024w"
 loading="lazy"
 alt="2-1"
 class="gallery-image"
@@ -145,10 +145,10 @@ data-flex-basis="398px"
 &lt;/li>
 &lt;li>
 &lt;p>输出设备默认识别到了扬声器和耳机（即使未插入耳机），无法自动切换，需手动切换。&lt;/p>
-&lt;p>&lt;img src="https://blog.letout.cn/p/razer-blade-base-hackintosh/2-2.png"
+&lt;p>&lt;img src="https://www.letout.cn/p/razer-blade-base-hackintosh/2-2.png"
 width="294"
 height="170"
-srcset="https://blog.letout.cn/p/razer-blade-base-hackintosh/2-2_hubc4478c282b951d1ef6fe2ce5f964b3d_36544_480x0_resize_box_3.png 480w, https://blog.letout.cn/p/razer-blade-base-hackintosh/2-2_hubc4478c282b951d1ef6fe2ce5f964b3d_36544_1024x0_resize_box_3.png 1024w"
+srcset="https://www.letout.cn/p/razer-blade-base-hackintosh/2-2_hubc4478c282b951d1ef6fe2ce5f964b3d_36544_480x0_resize_box_3.png 480w, https://www.letout.cn/p/razer-blade-base-hackintosh/2-2_hubc4478c282b951d1ef6fe2ce5f964b3d_36544_1024x0_resize_box_3.png 1024w"
 loading="lazy"
 alt="2-2"
 class="gallery-image"
@@ -161,10 +161,10 @@ data-flex-basis="415px"
 &lt;p>今天本来想根据 &lt;a class="link" href="https://blog.daliansky.net/Use-AppleALC-sound-card-to-drive-the-correct-posture-of-AppleHDA.html" target="_blank" rel="noopener"
 >这篇文章&lt;/a> 尝试自己定制一下 &lt;code>AppleALC&lt;/code> ，当我把有效节点和路径弄完之后，准备下载 &lt;a class="link" href="https://github.com/acidanthera/AppleALC/releases" target="_blank" rel="noopener"
 >AppleALC-DEBUG&lt;/a> 编译的时候，没想到最新版本已经添加了这个笔记本的 &lt;code>layout-id:23&lt;/code>。&lt;/p>
-&lt;p>&lt;img src="https://blog.letout.cn/p/razer-blade-base-hackintosh/2-3.png"
+&lt;p>&lt;img src="https://www.letout.cn/p/razer-blade-base-hackintosh/2-3.png"
 width="873"
 height="546"
-srcset="https://blog.letout.cn/p/razer-blade-base-hackintosh/2-3_huecb3588f2c0bb9ac90822e9e02e3e4ec_119856_480x0_resize_box_3.png 480w, https://blog.letout.cn/p/razer-blade-base-hackintosh/2-3_huecb3588f2c0bb9ac90822e9e02e3e4ec_119856_1024x0_resize_box_3.png 1024w"
+srcset="https://www.letout.cn/p/razer-blade-base-hackintosh/2-3_huecb3588f2c0bb9ac90822e9e02e3e4ec_119856_480x0_resize_box_3.png 480w, https://www.letout.cn/p/razer-blade-base-hackintosh/2-3_huecb3588f2c0bb9ac90822e9e02e3e4ec_119856_1024x0_resize_box_3.png 1024w"
 loading="lazy"
 alt="2-3"
 class="gallery-image"
@@ -172,10 +172,10 @@ data-flex-grow="159"
 data-flex-basis="383px"
 >&lt;/p>
 &lt;p>请按照如图修改，保存后重启。我的电脑耳机麦克风无法识别（我在 Ubuntu 下也无法找到耳机麦克风的有效节点信息）&lt;/p>
-&lt;p>&lt;img src="https://blog.letout.cn/p/razer-blade-base-hackintosh/2-4.png"
+&lt;p>&lt;img src="https://www.letout.cn/p/razer-blade-base-hackintosh/2-4.png"
 width="1279"
 height="678"
-srcset="https://blog.letout.cn/p/razer-blade-base-hackintosh/2-4_hud4d6f2c40445a0b958e52be6265bd97d_161259_480x0_resize_box_3.png 480w, https://blog.letout.cn/p/razer-blade-base-hackintosh/2-4_hud4d6f2c40445a0b958e52be6265bd97d_161259_1024x0_resize_box_3.png 1024w"
+srcset="https://www.letout.cn/p/razer-blade-base-hackintosh/2-4_hud4d6f2c40445a0b958e52be6265bd97d_161259_480x0_resize_box_3.png 480w, https://www.letout.cn/p/razer-blade-base-hackintosh/2-4_hud4d6f2c40445a0b958e52be6265bd97d_161259_1024x0_resize_box_3.png 1024w"
 loading="lazy"
 alt="2-4"
 class="gallery-image"
@@ -184,10 +184,10 @@ data-flex-basis="452px"
 >&lt;/p>
 &lt;p>添加 type-c 输出 4k，只能支持到最高 30Hz，输出 60Hz 会直接黑屏。可以安装一个 &lt;a class="link" href="https://github.com/avibrazil/RDM" target="_blank" rel="noopener"
 >RDM&lt;/a> 进行管理。&lt;/p>
-&lt;p>&lt;img src="https://blog.letout.cn/p/razer-blade-base-hackintosh/2-5.png"
+&lt;p>&lt;img src="https://www.letout.cn/p/razer-blade-base-hackintosh/2-5.png"
 width="1316"
 height="696"
-srcset="https://blog.letout.cn/p/razer-blade-base-hackintosh/2-5_hu390d568d81002677c5e0774860cb2cfd_174773_480x0_resize_box_3.png 480w, https://blog.letout.cn/p/razer-blade-base-hackintosh/2-5_hu390d568d81002677c5e0774860cb2cfd_174773_1024x0_resize_box_3.png 1024w"
+srcset="https://www.letout.cn/p/razer-blade-base-hackintosh/2-5_hu390d568d81002677c5e0774860cb2cfd_174773_480x0_resize_box_3.png 480w, https://www.letout.cn/p/razer-blade-base-hackintosh/2-5_hu390d568d81002677c5e0774860cb2cfd_174773_1024x0_resize_box_3.png 1024w"
 loading="lazy"
 alt="2-5"
 class="gallery-image"
@@ -203,10 +203,10 @@ data-flex-basis="453px"
 &lt;h3 id="3-1-提取本机-bios">[3-1] 提取本机 BIOS&lt;/h3>
 &lt;p>&lt;strong>注意备份好。&lt;/strong>&lt;/p>
 &lt;p>打开 &lt;code>AFUWINGUI.exe&lt;/code>，点击 Save 按钮，导出本机当前 BIOS 。&lt;/p>
-&lt;p>&lt;img src="https://blog.letout.cn/p/razer-blade-base-hackintosh/3-1.png"
+&lt;p>&lt;img src="https://www.letout.cn/p/razer-blade-base-hackintosh/3-1.png"
 width="625"
 height="463"
-srcset="https://blog.letout.cn/p/razer-blade-base-hackintosh/3-1_hu2b3b289386be70a81cfc03a2fd4a6ba9_25755_480x0_resize_box_3.png 480w, https://blog.letout.cn/p/razer-blade-base-hackintosh/3-1_hu2b3b289386be70a81cfc03a2fd4a6ba9_25755_1024x0_resize_box_3.png 1024w"
+srcset="https://www.letout.cn/p/razer-blade-base-hackintosh/3-1_hu2b3b289386be70a81cfc03a2fd4a6ba9_25755_480x0_resize_box_3.png 480w, https://www.letout.cn/p/razer-blade-base-hackintosh/3-1_hu2b3b289386be70a81cfc03a2fd4a6ba9_25755_1024x0_resize_box_3.png 1024w"
 loading="lazy"
 alt="3-1"
 class="gallery-image"
@@ -218,20 +218,20 @@ data-flex-basis="323px"
 &lt;li>打开 &lt;code>AMIBCP.exe&lt;/code> ，点击 File -&amp;gt; open 打开导出的 BIOS。&lt;/li>
 &lt;li>如图，在左侧选择 / -&amp;gt; Setup -&amp;gt; Chipset，将左侧的 &lt;code>System Agent Configuration&lt;/code> 的 Access 由 Default 修改为 USER&lt;/li>
 &lt;/ul>
-&lt;p>&lt;img src="https://blog.letout.cn/p/razer-blade-base-hackintosh/3-2.png"
+&lt;p>&lt;img src="https://www.letout.cn/p/razer-blade-base-hackintosh/3-2.png"
 width="1073"
 height="752"
-srcset="https://blog.letout.cn/p/razer-blade-base-hackintosh/3-2_hu504742517ec89fe4fa26edd955452484_46678_480x0_resize_box_3.png 480w, https://blog.letout.cn/p/razer-blade-base-hackintosh/3-2_hu504742517ec89fe4fa26edd955452484_46678_1024x0_resize_box_3.png 1024w"
+srcset="https://www.letout.cn/p/razer-blade-base-hackintosh/3-2_hu504742517ec89fe4fa26edd955452484_46678_480x0_resize_box_3.png 480w, https://www.letout.cn/p/razer-blade-base-hackintosh/3-2_hu504742517ec89fe4fa26edd955452484_46678_1024x0_resize_box_3.png 1024w"
 loading="lazy"
 alt="3-2"
 class="gallery-image"
 data-flex-grow="142"
 data-flex-basis="342px"
 >&lt;/p>
-&lt;p>&lt;img src="https://blog.letout.cn/p/razer-blade-base-hackintosh/3-3.png"
+&lt;p>&lt;img src="https://www.letout.cn/p/razer-blade-base-hackintosh/3-3.png"
 width="981"
 height="234"
-srcset="https://blog.letout.cn/p/razer-blade-base-hackintosh/3-3_hu384a5070e96805721cfad18ac4b9c8d8_22227_480x0_resize_box_3.png 480w, https://blog.letout.cn/p/razer-blade-base-hackintosh/3-3_hu384a5070e96805721cfad18ac4b9c8d8_22227_1024x0_resize_box_3.png 1024w"
+srcset="https://www.letout.cn/p/razer-blade-base-hackintosh/3-3_hu384a5070e96805721cfad18ac4b9c8d8_22227_480x0_resize_box_3.png 480w, https://www.letout.cn/p/razer-blade-base-hackintosh/3-3_hu384a5070e96805721cfad18ac4b9c8d8_22227_1024x0_resize_box_3.png 1024w"
 loading="lazy"
 alt="3-3"
 class="gallery-image"
@@ -246,10 +246,10 @@ data-flex-basis="1006px"
 &lt;ul>
 &lt;li>
 &lt;p>重新打开 AFUWINGUI.exe，点击 Open 打开刚刚修改后的 BIOS。&lt;/p>
-&lt;p>&lt;img src="https://blog.letout.cn/p/razer-blade-base-hackintosh/3-4.png"
+&lt;p>&lt;img src="https://www.letout.cn/p/razer-blade-base-hackintosh/3-4.png"
 width="625"
 height="463"
-srcset="https://blog.letout.cn/p/razer-blade-base-hackintosh/3-4_hu3d9923cc8e5f7434310ba01f6dc9c068_25929_480x0_resize_box_3.png 480w, https://blog.letout.cn/p/razer-blade-base-hackintosh/3-4_hu3d9923cc8e5f7434310ba01f6dc9c068_25929_1024x0_resize_box_3.png 1024w"
+srcset="https://www.letout.cn/p/razer-blade-base-hackintosh/3-4_hu3d9923cc8e5f7434310ba01f6dc9c068_25929_480x0_resize_box_3.png 480w, https://www.letout.cn/p/razer-blade-base-hackintosh/3-4_hu3d9923cc8e5f7434310ba01f6dc9c068_25929_1024x0_resize_box_3.png 1024w"
 loading="lazy"
 alt="3-4"
 class="gallery-image"
@@ -261,10 +261,10 @@ data-flex-basis="323px"
 &lt;p>尽可能的退出其他程序，尽量保持后台干净，再点击 Flash 刷入新的 BIOS。&lt;/p>
 &lt;/li>
 &lt;/ul>
-&lt;p>&lt;img src="https://blog.letout.cn/p/razer-blade-base-hackintosh/3-5.png"
+&lt;p>&lt;img src="https://www.letout.cn/p/razer-blade-base-hackintosh/3-5.png"
 width="625"
 height="463"
-srcset="https://blog.letout.cn/p/razer-blade-base-hackintosh/3-5_hu3d9923cc8e5f7434310ba01f6dc9c068_27476_480x0_resize_box_3.png 480w, https://blog.letout.cn/p/razer-blade-base-hackintosh/3-5_hu3d9923cc8e5f7434310ba01f6dc9c068_27476_1024x0_resize_box_3.png 1024w"
+srcset="https://www.letout.cn/p/razer-blade-base-hackintosh/3-5_hu3d9923cc8e5f7434310ba01f6dc9c068_27476_480x0_resize_box_3.png 480w, https://www.letout.cn/p/razer-blade-base-hackintosh/3-5_hu3d9923cc8e5f7434310ba01f6dc9c068_27476_1024x0_resize_box_3.png 1024w"
 loading="lazy"
 alt="3-5"
 class="gallery-image"
@@ -348,10 +348,10 @@ data-flex-basis="323px"
 &lt;h3 id="6-1-准备修补">[6-1] 准备修补&lt;/h3>
 &lt;p>[6-1-1]&lt;/p>
 &lt;p>开机在 Clover 引导界面中按 &lt;code>F4&lt;/code>，所需文件会加载到 &lt;code>EFI/Clover/ACPI/origin&lt;/code> 中。通过 Clover Configurator 挂载启动的 EFI（通过U盘启动就挂载U盘）。&lt;/p>
-&lt;p>&lt;img src="https://blog.letout.cn/p/razer-blade-base-hackintosh/6-1.png"
+&lt;p>&lt;img src="https://www.letout.cn/p/razer-blade-base-hackintosh/6-1.png"
 width="1279"
 height="678"
-srcset="https://blog.letout.cn/p/razer-blade-base-hackintosh/6-1_hu144b08cce4e790f431926a2da7d31c39_187647_480x0_resize_box_3.png 480w, https://blog.letout.cn/p/razer-blade-base-hackintosh/6-1_hu144b08cce4e790f431926a2da7d31c39_187647_1024x0_resize_box_3.png 1024w"
+srcset="https://www.letout.cn/p/razer-blade-base-hackintosh/6-1_hu144b08cce4e790f431926a2da7d31c39_187647_480x0_resize_box_3.png 480w, https://www.letout.cn/p/razer-blade-base-hackintosh/6-1_hu144b08cce4e790f431926a2da7d31c39_187647_1024x0_resize_box_3.png 1024w"
 loading="lazy"
 alt="6-1"
 class="gallery-image"
@@ -378,10 +378,10 @@ data-flex-basis="452px"
 &lt;p>打开 origin，使用 &lt;code>MaciASL&lt;/code> 打开生成的 &lt;strong>DSDT.dsl&lt;/strong> 文件。点击 Compile，确保没有错误。（默认应该没有 error，但有很多 warning，warning 不必关系，若有 error 请将 error 处代码注释或删除）&lt;/p>
 &lt;p>[6-1-5]&lt;/p>
 &lt;p>确保没有 errors 后，点击 Patch。&lt;/p>
-&lt;p>&lt;img src="https://blog.letout.cn/p/razer-blade-base-hackintosh/6-2.png"
+&lt;p>&lt;img src="https://www.letout.cn/p/razer-blade-base-hackintosh/6-2.png"
 width="1025"
 height="725"
-srcset="https://blog.letout.cn/p/razer-blade-base-hackintosh/6-2_hu66c83b6f1d65cd60613cc338a3dbc89f_356101_480x0_resize_box_3.png 480w, https://blog.letout.cn/p/razer-blade-base-hackintosh/6-2_hu66c83b6f1d65cd60613cc338a3dbc89f_356101_1024x0_resize_box_3.png 1024w"
+srcset="https://www.letout.cn/p/razer-blade-base-hackintosh/6-2_hu66c83b6f1d65cd60613cc338a3dbc89f_356101_480x0_resize_box_3.png 480w, https://www.letout.cn/p/razer-blade-base-hackintosh/6-2_hu66c83b6f1d65cd60613cc338a3dbc89f_356101_1024x0_resize_box_3.png 1024w"
 loading="lazy"
 alt="6-2"
 class="gallery-image"
@@ -392,10 +392,10 @@ data-flex-basis="339px"
 &lt;p>[1] 在弹窗的左侧点击 &lt;code>_RehabMan Laptop/[bat]Razer Blade (2014)&lt;/code> ，等待右侧进行匹配后点击 Apply。&lt;/p>
 &lt;p>如果网络不好的话可能无法加载（github），请切换到合适的网络，或访问 &lt;a class="link" href="https://github.com/RehabMan/Laptop-DSDT-Patch/blob/master/battery/battery_Razer-Blade-2014.txt" target="_blank" rel="noopener"
 >这里&lt;/a>，或复制以下代码。&lt;/p>
-&lt;p>&lt;img src="https://blog.letout.cn/p/razer-blade-base-hackintosh/6-3.png"
+&lt;p>&lt;img src="https://www.letout.cn/p/razer-blade-base-hackintosh/6-3.png"
 width="1025"
 height="725"
-srcset="https://blog.letout.cn/p/razer-blade-base-hackintosh/6-3_hu7d9acb8df49ac7ec09c34c4f5acd4d1b_432072_480x0_resize_box_3.png 480w, https://blog.letout.cn/p/razer-blade-base-hackintosh/6-3_hu7d9acb8df49ac7ec09c34c4f5acd4d1b_432072_1024x0_resize_box_3.png 1024w"
+srcset="https://www.letout.cn/p/razer-blade-base-hackintosh/6-3_hu7d9acb8df49ac7ec09c34c4f5acd4d1b_432072_480x0_resize_box_3.png 480w, https://www.letout.cn/p/razer-blade-base-hackintosh/6-3_hu7d9acb8df49ac7ec09c34c4f5acd4d1b_432072_1024x0_resize_box_3.png 1024w"
 loading="lazy"
 alt="6-3"
 class="gallery-image"
@@ -631,10 +631,10 @@ data-flex-basis="339px"
 &lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
 &lt;/div>
 &lt;/div>&lt;p>[6-4-2] 按 command + F 搜索 &lt;code>Device (ALSD)&lt;/code>，找到如图代码，将其替换为以下代码。&lt;/p>
-&lt;p>&lt;img src="https://blog.letout.cn/p/razer-blade-base-hackintosh/6-4.png"
+&lt;p>&lt;img src="https://www.letout.cn/p/razer-blade-base-hackintosh/6-4.png"
 width="1025"
 height="725"
-srcset="https://blog.letout.cn/p/razer-blade-base-hackintosh/6-4_hub68a8a966914faccc2fa404696284489_152896_480x0_resize_box_3.png 480w, https://blog.letout.cn/p/razer-blade-base-hackintosh/6-4_hub68a8a966914faccc2fa404696284489_152896_1024x0_resize_box_3.png 1024w"
+srcset="https://www.letout.cn/p/razer-blade-base-hackintosh/6-4_hub68a8a966914faccc2fa404696284489_152896_480x0_resize_box_3.png 480w, https://www.letout.cn/p/razer-blade-base-hackintosh/6-4_hub68a8a966914faccc2fa404696284489_152896_1024x0_resize_box_3.png 1024w"
 loading="lazy"
 alt="6-4"
 class="gallery-image"
@@ -667,10 +667,10 @@ data-flex-basis="339px"
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">}
 &lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
 &lt;/div>
-&lt;/div>&lt;p>&lt;img src="https://blog.letout.cn/p/razer-blade-base-hackintosh/6-5.png"
+&lt;/div>&lt;p>&lt;img src="https://www.letout.cn/p/razer-blade-base-hackintosh/6-5.png"
 width="1025"
 height="725"
-srcset="https://blog.letout.cn/p/razer-blade-base-hackintosh/6-5_hub980ce45be6280fc8a0a8de2a9044e65_256600_480x0_resize_box_3.png 480w, https://blog.letout.cn/p/razer-blade-base-hackintosh/6-5_hub980ce45be6280fc8a0a8de2a9044e65_256600_1024x0_resize_box_3.png 1024w"
+srcset="https://www.letout.cn/p/razer-blade-base-hackintosh/6-5_hub980ce45be6280fc8a0a8de2a9044e65_256600_480x0_resize_box_3.png 480w, https://www.letout.cn/p/razer-blade-base-hackintosh/6-5_hub980ce45be6280fc8a0a8de2a9044e65_256600_1024x0_resize_box_3.png 1024w"
 loading="lazy"
 alt="6-5"
 class="gallery-image"
@@ -682,10 +682,10 @@ data-flex-basis="339px"
 &lt;h4 id="6-3-1-标准版">[6-3-1] 标准版&lt;/h4>
 &lt;p>[6-3-1-1]&lt;/p>
 &lt;p>继续搜索 &lt;code>SSCN&lt;/code>。找到 Scope 为 &lt;code>_SB.PCI0.I2C0&lt;/code> 下的 SSCN 方法。复制 SSCN 与 FMCN（在 SSCN 下方）这 两个方法。并将这两个方法如图重命名（也可选择删除）。&lt;/p>
-&lt;p>&lt;img src="https://blog.letout.cn/p/razer-blade-base-hackintosh/6-6.png"
+&lt;p>&lt;img src="https://www.letout.cn/p/razer-blade-base-hackintosh/6-6.png"
 width="1025"
 height="725"
-srcset="https://blog.letout.cn/p/razer-blade-base-hackintosh/6-6_hu7d9acb8df49ac7ec09c34c4f5acd4d1b_280587_480x0_resize_box_3.png 480w, https://blog.letout.cn/p/razer-blade-base-hackintosh/6-6_hu7d9acb8df49ac7ec09c34c4f5acd4d1b_280587_1024x0_resize_box_3.png 1024w"
+srcset="https://www.letout.cn/p/razer-blade-base-hackintosh/6-6_hu7d9acb8df49ac7ec09c34c4f5acd4d1b_280587_480x0_resize_box_3.png 480w, https://www.letout.cn/p/razer-blade-base-hackintosh/6-6_hu7d9acb8df49ac7ec09c34c4f5acd4d1b_280587_1024x0_resize_box_3.png 1024w"
 loading="lazy"
 alt="6-6"
 class="gallery-image"
@@ -693,10 +693,10 @@ data-flex-grow="141"
 data-flex-basis="339px"
 >&lt;/p>
 &lt;p>重命名为：&lt;/p>
-&lt;p>&lt;img src="https://blog.letout.cn/p/razer-blade-base-hackintosh/6-7.png"
+&lt;p>&lt;img src="https://www.letout.cn/p/razer-blade-base-hackintosh/6-7.png"
 width="1025"
 height="725"
-srcset="https://blog.letout.cn/p/razer-blade-base-hackintosh/6-7_hu3f7d5d77e0868263a4b670cd80a4de9e_282582_480x0_resize_box_3.png 480w, https://blog.letout.cn/p/razer-blade-base-hackintosh/6-7_hu3f7d5d77e0868263a4b670cd80a4de9e_282582_1024x0_resize_box_3.png 1024w"
+srcset="https://www.letout.cn/p/razer-blade-base-hackintosh/6-7_hu3f7d5d77e0868263a4b670cd80a4de9e_282582_480x0_resize_box_3.png 480w, https://www.letout.cn/p/razer-blade-base-hackintosh/6-7_hu3f7d5d77e0868263a4b670cd80a4de9e_282582_1024x0_resize_box_3.png 1024w"
 loading="lazy"
 alt="6-7"
 class="gallery-image"
@@ -705,20 +705,20 @@ data-flex-basis="339px"
 >&lt;/p>
 &lt;p>[6-3-1-3]&lt;/p>
 &lt;p>搜索 TPD0。将之前剪切的两个方法放到 &lt;code>_INI&lt;/code> 方法后。&lt;/p>
-&lt;p>&lt;img src="https://blog.letout.cn/p/razer-blade-base-hackintosh/6-8.png"
+&lt;p>&lt;img src="https://www.letout.cn/p/razer-blade-base-hackintosh/6-8.png"
 width="1025"
 height="725"
-srcset="https://blog.letout.cn/p/razer-blade-base-hackintosh/6-8_hu7d9acb8df49ac7ec09c34c4f5acd4d1b_154135_480x0_resize_box_3.png 480w, https://blog.letout.cn/p/razer-blade-base-hackintosh/6-8_hu7d9acb8df49ac7ec09c34c4f5acd4d1b_154135_1024x0_resize_box_3.png 1024w"
+srcset="https://www.letout.cn/p/razer-blade-base-hackintosh/6-8_hu7d9acb8df49ac7ec09c34c4f5acd4d1b_154135_480x0_resize_box_3.png 480w, https://www.letout.cn/p/razer-blade-base-hackintosh/6-8_hu7d9acb8df49ac7ec09c34c4f5acd4d1b_154135_1024x0_resize_box_3.png 1024w"
 loading="lazy"
 alt="6-8"
 class="gallery-image"
 data-flex-grow="141"
 data-flex-basis="339px"
 >&lt;/p>
-&lt;p>&lt;img src="https://blog.letout.cn/p/razer-blade-base-hackintosh/6-9.png"
+&lt;p>&lt;img src="https://www.letout.cn/p/razer-blade-base-hackintosh/6-9.png"
 width="1025"
 height="725"
-srcset="https://blog.letout.cn/p/razer-blade-base-hackintosh/6-9_hu7d9acb8df49ac7ec09c34c4f5acd4d1b_286656_480x0_resize_box_3.png 480w, https://blog.letout.cn/p/razer-blade-base-hackintosh/6-9_hu7d9acb8df49ac7ec09c34c4f5acd4d1b_286656_1024x0_resize_box_3.png 1024w"
+srcset="https://www.letout.cn/p/razer-blade-base-hackintosh/6-9_hu7d9acb8df49ac7ec09c34c4f5acd4d1b_286656_480x0_resize_box_3.png 480w, https://www.letout.cn/p/razer-blade-base-hackintosh/6-9_hu7d9acb8df49ac7ec09c34c4f5acd4d1b_286656_1024x0_resize_box_3.png 1024w"
 loading="lazy"
 alt="6-9"
 class="gallery-image"
@@ -727,10 +727,10 @@ data-flex-basis="339px"
 >&lt;/p>
 &lt;p>[6-3-1-4]&lt;/p>
 &lt;p>向下找到如下代码。&lt;/p>
-&lt;p>&lt;img src="https://blog.letout.cn/p/razer-blade-base-hackintosh/6-10.png"
+&lt;p>&lt;img src="https://www.letout.cn/p/razer-blade-base-hackintosh/6-10.png"
 width="1025"
 height="725"
-srcset="https://blog.letout.cn/p/razer-blade-base-hackintosh/6-10_hu23d7821cfcc16e2238565e92d2428825_290461_480x0_resize_box_3.png 480w, https://blog.letout.cn/p/razer-blade-base-hackintosh/6-10_hu23d7821cfcc16e2238565e92d2428825_290461_1024x0_resize_box_3.png 1024w"
+srcset="https://www.letout.cn/p/razer-blade-base-hackintosh/6-10_hu23d7821cfcc16e2238565e92d2428825_290461_480x0_resize_box_3.png 480w, https://www.letout.cn/p/razer-blade-base-hackintosh/6-10_hu23d7821cfcc16e2238565e92d2428825_290461_1024x0_resize_box_3.png 1024w"
 loading="lazy"
 alt="6-10"
 class="gallery-image"
@@ -738,10 +738,10 @@ data-flex-grow="141"
 data-flex-basis="339px"
 >&lt;/p>
 &lt;p>将其更改为如图。&lt;/p>
-&lt;p>&lt;img src="https://blog.letout.cn/p/razer-blade-base-hackintosh/6-11.png"
+&lt;p>&lt;img src="https://www.letout.cn/p/razer-blade-base-hackintosh/6-11.png"
 width="1025"
 height="725"
-srcset="https://blog.letout.cn/p/razer-blade-base-hackintosh/6-11_hu1c5f5c37fa8eeab89aecaea9b074d8a6_267651_480x0_resize_box_3.png 480w, https://blog.letout.cn/p/razer-blade-base-hackintosh/6-11_hu1c5f5c37fa8eeab89aecaea9b074d8a6_267651_1024x0_resize_box_3.png 1024w"
+srcset="https://www.letout.cn/p/razer-blade-base-hackintosh/6-11_hu1c5f5c37fa8eeab89aecaea9b074d8a6_267651_480x0_resize_box_3.png 480w, https://www.letout.cn/p/razer-blade-base-hackintosh/6-11_hu1c5f5c37fa8eeab89aecaea9b074d8a6_267651_1024x0_resize_box_3.png 1024w"
 loading="lazy"
 alt="6-11"
 class="gallery-image"
@@ -814,10 +814,10 @@ data-flex-basis="339px"
 &lt;pre tabindex="0" class="chroma">&lt;code class="language-txt" data-lang="txt">&lt;span class="line">&lt;span class="cl">Method (_OFF, 0, Serialized) // _OFF: Power Off
 &lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
 &lt;/div>
-&lt;/div>&lt;p>&lt;img src="https://blog.letout.cn/p/razer-blade-base-hackintosh/6-12.png"
+&lt;/div>&lt;p>&lt;img src="https://www.letout.cn/p/razer-blade-base-hackintosh/6-12.png"
 width="1025"
 height="725"
-srcset="https://blog.letout.cn/p/razer-blade-base-hackintosh/6-12_hu2676900d025708aa224f75aaa3467a9c_159091_480x0_resize_box_3.png 480w, https://blog.letout.cn/p/razer-blade-base-hackintosh/6-12_hu2676900d025708aa224f75aaa3467a9c_159091_1024x0_resize_box_3.png 1024w"
+srcset="https://www.letout.cn/p/razer-blade-base-hackintosh/6-12_hu2676900d025708aa224f75aaa3467a9c_159091_480x0_resize_box_3.png 480w, https://www.letout.cn/p/razer-blade-base-hackintosh/6-12_hu2676900d025708aa224f75aaa3467a9c_159091_1024x0_resize_box_3.png 1024w"
 loading="lazy"
 alt="6-12"
 class="gallery-image"
@@ -856,10 +856,10 @@ data-flex-basis="339px"
 &lt;/div>
 &lt;/div>&lt;p>[6-5-6]&lt;/p>
 &lt;p>点击编译，出现一个错误。&lt;/p>
-&lt;p>&lt;img src="https://blog.letout.cn/p/razer-blade-base-hackintosh/6-13.png"
+&lt;p>&lt;img src="https://www.letout.cn/p/razer-blade-base-hackintosh/6-13.png"
 width="1025"
 height="725"
-srcset="https://blog.letout.cn/p/razer-blade-base-hackintosh/6-13_hua74e3ca4eeedf7cfd113fba4cc112dcf_385932_480x0_resize_box_3.png 480w, https://blog.letout.cn/p/razer-blade-base-hackintosh/6-13_hua74e3ca4eeedf7cfd113fba4cc112dcf_385932_1024x0_resize_box_3.png 1024w"
+srcset="https://www.letout.cn/p/razer-blade-base-hackintosh/6-13_hua74e3ca4eeedf7cfd113fba4cc112dcf_385932_480x0_resize_box_3.png 480w, https://www.letout.cn/p/razer-blade-base-hackintosh/6-13_hua74e3ca4eeedf7cfd113fba4cc112dcf_385932_1024x0_resize_box_3.png 1024w"
 loading="lazy"
 alt="6-13"
 class="gallery-image"
@@ -876,10 +876,10 @@ data-flex-basis="339px"
 &lt;pre tabindex="0" class="chroma">&lt;code class="language-shell" data-lang="shell">&lt;span class="line">&lt;span class="cl">External &lt;span class="o">(&lt;/span>_SB_.PCI0.PEG0.TGPC, IntObj&lt;span class="o">)&lt;/span> // &lt;span class="o">(&lt;/span>from opcode&lt;span class="o">)&lt;/span>
 &lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
 &lt;/div>
-&lt;/div>&lt;p>&lt;img src="https://blog.letout.cn/p/razer-blade-base-hackintosh/6-14.png"
+&lt;/div>&lt;p>&lt;img src="https://www.letout.cn/p/razer-blade-base-hackintosh/6-14.png"
 width="1025"
 height="725"
-srcset="https://blog.letout.cn/p/razer-blade-base-hackintosh/6-14_huc397bebb9da1198e3070ace5d1200979_429156_480x0_resize_box_3.png 480w, https://blog.letout.cn/p/razer-blade-base-hackintosh/6-14_huc397bebb9da1198e3070ace5d1200979_429156_1024x0_resize_box_3.png 1024w"
+srcset="https://www.letout.cn/p/razer-blade-base-hackintosh/6-14_huc397bebb9da1198e3070ace5d1200979_429156_480x0_resize_box_3.png 480w, https://www.letout.cn/p/razer-blade-base-hackintosh/6-14_huc397bebb9da1198e3070ace5d1200979_429156_1024x0_resize_box_3.png 1024w"
 loading="lazy"
 alt="6-10"
 class="gallery-image"
@@ -888,10 +888,10 @@ data-flex-basis="339px"
 >&lt;/p>
 &lt;p>[6-5-8]&lt;/p>
 &lt;p>点击 File -&amp;gt; Save As。将最终的 /aml 文件保存。&lt;/p>
-&lt;p>&lt;img src="https://blog.letout.cn/p/razer-blade-base-hackintosh/6-15.png"
+&lt;p>&lt;img src="https://www.letout.cn/p/razer-blade-base-hackintosh/6-15.png"
 width="1025"
 height="725"
-srcset="https://blog.letout.cn/p/razer-blade-base-hackintosh/6-15_huc397bebb9da1198e3070ace5d1200979_427498_480x0_resize_box_3.png 480w, https://blog.letout.cn/p/razer-blade-base-hackintosh/6-15_huc397bebb9da1198e3070ace5d1200979_427498_1024x0_resize_box_3.png 1024w"
+srcset="https://www.letout.cn/p/razer-blade-base-hackintosh/6-15_huc397bebb9da1198e3070ace5d1200979_427498_480x0_resize_box_3.png 480w, https://www.letout.cn/p/razer-blade-base-hackintosh/6-15_huc397bebb9da1198e3070ace5d1200979_427498_1024x0_resize_box_3.png 1024w"
 loading="lazy"
 alt="6-11"
 class="gallery-image"
@@ -906,10 +906,10 @@ data-flex-basis="339px"
 &lt;h3 id="6-7-复制提供的的-aml-文件">[6-7] 复制提供的的 .aml 文件&lt;/h3>
 &lt;p>将文件夹中的 SSDT-PNLF.aml，SSDT-UIAC-ALL.aml，SSDT-USBX.aml，SSDT-XOSI.aml 同上面修补的两个文件一同放入 patched 文件夹中，最后 patched 文件夹中应该有如下6个文件。&lt;/p>
 &lt;p>&lt;strong>如果 type-c 转视频接口无信号，请删除SSDT-12-OptTabl.aml&lt;/strong>&lt;/p>
-&lt;p>&lt;img src="https://blog.letout.cn/p/razer-blade-base-hackintosh/6-16.png"
+&lt;p>&lt;img src="https://www.letout.cn/p/razer-blade-base-hackintosh/6-16.png"
 width="618"
 height="293"
-srcset="https://blog.letout.cn/p/razer-blade-base-hackintosh/6-16_hu06ceecd71981737f4621cc2ff5d5371e_32019_480x0_resize_box_3.png 480w, https://blog.letout.cn/p/razer-blade-base-hackintosh/6-16_hu06ceecd71981737f4621cc2ff5d5371e_32019_1024x0_resize_box_3.png 1024w"
+srcset="https://www.letout.cn/p/razer-blade-base-hackintosh/6-16_hu06ceecd71981737f4621cc2ff5d5371e_32019_480x0_resize_box_3.png 480w, https://www.letout.cn/p/razer-blade-base-hackintosh/6-16_hu06ceecd71981737f4621cc2ff5d5371e_32019_1024x0_resize_box_3.png 1024w"
 loading="lazy"
 alt="6-16"
 class="gallery-image"
@@ -921,10 +921,10 @@ data-flex-basis="506px"
 &lt;p>在网上找过拆机图，网卡附近的位置还是挺多的，我的选择是拆机的 &lt;code>BCM94360cs2&lt;/code> + 转接卡，可直接免驱使用。&lt;/p>
 &lt;p>相比使用原装的网卡位置稍有点高，压在一根的排线上，但是不影响，如选择同款网卡，请注意绝缘，建议上螺丝的时候不要拧太紧，不松动即可。装上之后的效果如图。&lt;/p>
 &lt;p>**小提示: **拧螺丝前最好把易碎贴给清理干净。这个贴纸分量太足，卡在螺丝孔中导致一直滑丝。&lt;/p>
-&lt;p>&lt;img src="https://blog.letout.cn/p/razer-blade-base-hackintosh/7-1.png"
+&lt;p>&lt;img src="https://www.letout.cn/p/razer-blade-base-hackintosh/7-1.png"
 width="574"
 height="668"
-srcset="https://blog.letout.cn/p/razer-blade-base-hackintosh/7-1_hu1161da1d8dba47d941a13aa6ae79cf52_787645_480x0_resize_box_3.png 480w, https://blog.letout.cn/p/razer-blade-base-hackintosh/7-1_hu1161da1d8dba47d941a13aa6ae79cf52_787645_1024x0_resize_box_3.png 1024w"
+srcset="https://www.letout.cn/p/razer-blade-base-hackintosh/7-1_hu1161da1d8dba47d941a13aa6ae79cf52_787645_480x0_resize_box_3.png 480w, https://www.letout.cn/p/razer-blade-base-hackintosh/7-1_hu1161da1d8dba47d941a13aa6ae79cf52_787645_1024x0_resize_box_3.png 1024w"
 loading="lazy"
 alt="7-1"
 class="gallery-image"
@@ -992,10 +992,10 @@ data-flex-basis="206px"
 &lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
 &lt;/div>
 &lt;/div>&lt;p>完成后系统会进行一次重启。&lt;/p>
-&lt;p>&lt;img src="https://blog.letout.cn/p/razer-blade-base-hackintosh/8-1.png"
+&lt;p>&lt;img src="https://www.letout.cn/p/razer-blade-base-hackintosh/8-1.png"
 width="597"
 height="392"
-srcset="https://blog.letout.cn/p/razer-blade-base-hackintosh/8-1_hu7ef8c94d672dd32ca37ffb306a046a5c_44030_480x0_resize_box_3.png 480w, https://blog.letout.cn/p/razer-blade-base-hackintosh/8-1_hu7ef8c94d672dd32ca37ffb306a046a5c_44030_1024x0_resize_box_3.png 1024w"
+srcset="https://www.letout.cn/p/razer-blade-base-hackintosh/8-1_hu7ef8c94d672dd32ca37ffb306a046a5c_44030_480x0_resize_box_3.png 480w, https://www.letout.cn/p/razer-blade-base-hackintosh/8-1_hu7ef8c94d672dd32ca37ffb306a046a5c_44030_1024x0_resize_box_3.png 1024w"
 loading="lazy"
 alt="8-1"
 class="gallery-image"
@@ -1020,20 +1020,20 @@ data-flex-basis="365px"
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">sudo mkdir /var/vm/sleepimage
 &lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
 &lt;/div>
-&lt;/div>&lt;p>&lt;img src="https://blog.letout.cn/p/razer-blade-base-hackintosh/8-2.png"
+&lt;/div>&lt;p>&lt;img src="https://www.letout.cn/p/razer-blade-base-hackintosh/8-2.png"
 width="668"
 height="447"
-srcset="https://blog.letout.cn/p/razer-blade-base-hackintosh/8-2_hud42e2df37bc11de06acd6253c0889518_56255_480x0_resize_box_3.png 480w, https://blog.letout.cn/p/razer-blade-base-hackintosh/8-2_hud42e2df37bc11de06acd6253c0889518_56255_1024x0_resize_box_3.png 1024w"
+srcset="https://www.letout.cn/p/razer-blade-base-hackintosh/8-2_hud42e2df37bc11de06acd6253c0889518_56255_480x0_resize_box_3.png 480w, https://www.letout.cn/p/razer-blade-base-hackintosh/8-2_hud42e2df37bc11de06acd6253c0889518_56255_1024x0_resize_box_3.png 1024w"
 loading="lazy"
 alt="8-2"
 class="gallery-image"
 data-flex-grow="149"
 data-flex-basis="358px"
 >&lt;/p>
-&lt;p>&lt;img src="https://blog.letout.cn/p/razer-blade-base-hackintosh/8-3.png"
+&lt;p>&lt;img src="https://www.letout.cn/p/razer-blade-base-hackintosh/8-3.png"
 width="668"
 height="447"
-srcset="https://blog.letout.cn/p/razer-blade-base-hackintosh/8-3_hu811770682d9683eef53048df303f786e_59426_480x0_resize_box_3.png 480w, https://blog.letout.cn/p/razer-blade-base-hackintosh/8-3_hu811770682d9683eef53048df303f786e_59426_1024x0_resize_box_3.png 1024w"
+srcset="https://www.letout.cn/p/razer-blade-base-hackintosh/8-3_hu811770682d9683eef53048df303f786e_59426_480x0_resize_box_3.png 480w, https://www.letout.cn/p/razer-blade-base-hackintosh/8-3_hu811770682d9683eef53048df303f786e_59426_1024x0_resize_box_3.png 1024w"
 loading="lazy"
 alt="8-3"
 class="gallery-image"
