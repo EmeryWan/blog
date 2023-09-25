@@ -971,15 +971,15 @@ data-flex-basis="642px"
 &lt;/span>&lt;span class="lnt">9
 &lt;/span>&lt;/code>&lt;/pre>&lt;/td>
 &lt;td class="lntd">
-&lt;pre tabindex="0" class="chroma">&lt;code class="language-conf" data-lang="conf">&lt;span class="line">&lt;span class="cl">&lt;span class="err">[&lt;/span>&lt;span class="nv">Desktop&lt;/span> &lt;span class="nv">Entry&lt;/span>&lt;span class="err">]&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nv">Name&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="nv">Clash&lt;/span> &lt;span class="nv">for&lt;/span> &lt;span class="nv">Linux&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nv">Icon&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="err">/&lt;/span>&lt;span class="nv">home&lt;/span>&lt;span class="err">/&lt;/span>&lt;span class="nv">emery&lt;/span>&lt;span class="err">/&lt;/span>&lt;span class="nv">Applications&lt;/span>&lt;span class="err">/&lt;/span>&lt;span class="nv">icon&lt;/span>&lt;span class="err">/&lt;/span>&lt;span class="nv">clash_icon.png&lt;/span> &lt;span class="c"># 替换为自己的目录
-&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c">&lt;/span>&lt;span class="nv">Comment&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="nv">Clash&lt;/span> &lt;span class="nv">for&lt;/span> &lt;span class="nv">Linux&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nv">Exec&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s">&amp;#34;/home/emery/Applications/Clash/clash&amp;#34;&lt;/span> &lt;span class="err">%&lt;/span>&lt;span class="nv">u&lt;/span> &lt;span class="c"># 替换为自己的目录
-&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c">&lt;/span>&lt;span class="nv">Type&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="nv">Application&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nv">Categories&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="nv">Network&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nv">Terminal&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="kc">false&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nv">StartupNotify&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="kc">true&lt;/span>
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-fallback" data-lang="fallback">&lt;span class="line">&lt;span class="cl">[Desktop Entry]
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">Name=Clash for Linux
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">Icon=/home/emery/Applications/icon/clash_icon.png # 替换为自己的目录
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">Comment=Clash for Linux
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">Exec=&amp;#34;/home/emery/Applications/Clash/clash&amp;#34; %u # 替换为自己的目录
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">Type=Application
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">Categories=Network
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">Terminal=false
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">StartupNotify=true
 &lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
 &lt;/div>
 &lt;/div></description></item><item><title>在 Ubuntu 中搭建 CUDA 环境</title><link>https://emerywan.github.io/blog/p/cuda/</link><pubDate>Mon, 02 May 2022 02:02:02 +0800</pubDate><guid>https://emerywan.github.io/blog/p/cuda/</guid><description>&lt;img src="https://emerywan.github.io/blog/imgs/11.jpeg" alt="Featured image of post 在 Ubuntu 中搭建 CUDA 环境" />&lt;h2 id="nvdia-驱动">Nvdia 驱动&lt;/h2>
